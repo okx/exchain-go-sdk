@@ -7,3 +7,5 @@ type KVPair struct {
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
+
+type KVPairs []KVPair

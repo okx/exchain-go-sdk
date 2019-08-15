@@ -59,11 +59,6 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "RNnUkbA/UA9aeEKCi5frxogtKrA=",
-			"path": "github.com/tendermint/tendermint/crypto/secp256k1/btcec",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "tgdLEblUdcvjbS9d4h09nbBN9lk=",
 			"path": "github.com/tendermint/tendermint/crypto/secp256k1/internal/secp256k1",
 			"revision": ""
@@ -114,6 +109,18 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "3NmIgYMBeJhIU1hZV+S2ZAnoYE8=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "q+XI9g44wd9mYvf3S5Wo8YZjAus=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
 			"checksumSHA1": "2LpxYGSf068307b7bhAuVjvzLLc=",
 			"path": "golang.org/x/crypto/ed25519",
 			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
@@ -126,10 +133,58 @@
 			"revisionTime": "2019-04-16T00:04:41Z"
 		},
 		{
+			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
+			"path": "golang.org/x/crypto/internal/subtle",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "/D0Q9baFJAeXy2an6mwni/FJHzw=",
+			"path": "golang.org/x/crypto/nacl/secretbox",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "olOKkhrdkYQHZ0lf1orrFQPQrv4=",
+			"path": "golang.org/x/crypto/openpgp/armor",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "rlxVSaGgqdAgwblsErxTxIfuGfg=",
+			"path": "golang.org/x/crypto/openpgp/errors",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "1MGpGDQqnUoRpv7VEcQrXOBydXE=",
+			"path": "golang.org/x/crypto/pbkdf2",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "vEQUUlb4vRR6zD4mDwZMKV/QP+M=",
+			"path": "golang.org/x/crypto/poly1305",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
 			"checksumSHA1": "UAbH5s3v5AfEvbGMEQAyzSFCMU0=",
 			"path": "golang.org/x/crypto/ripemd160",
 			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
 			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "yQNckVsxPX36aYbCk1ftg2w9ufw=",
+			"path": "golang.org/x/crypto/salsa20/salsa",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "NaPKWo2/NhJLk/+GrsBiAL/V6J4=",
+			"path": "golang.org/x/sys/cpu",
+			"revision": "4c4f7f33c9ed00de01c4c741d2177abfcfe19307",
+			"revisionTime": "2019-05-25T10:09:16Z"
 		}
 	],
 	"rootPath": "github.com/ok-chain/ok-gosdk"

@@ -5,7 +5,7 @@ package secp256k1
 import (
 	"math/big"
 
-	secp256k1 "github.com/tendermint/tendermint/crypto/secp256k1/btcec"
+	secp256k1 "github.com/ok-chain/ok-gosdk/crypto/btcsuite/btcd/btcec"
 
 	"github.com/tendermint/tendermint/crypto"
 )

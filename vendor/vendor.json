@@ -1,6 +1,136 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "VKx/YhlIAbIJ9dXAxCCHOkjom4U=",
+			"path": "github.com/gorilla/websocket",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "I7hloldMJZTqUx6hbVDp5nk9fZQ=",
+			"path": "github.com/pkg/errors",
+			"revision": "27936f6d90f9c8e1145f11ed52ffffbfdb9e0af7",
+			"revisionTime": "2019-02-27T00:00:51Z"
+		},
+		{
+			"checksumSHA1": "6W43MzcujswzG6m41ORYSR9+1K8=",
+			"path": "github.com/tendermint/go-amino",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "shjQwgnVXiwbc63MDoDjN5zudrs=",
+			"path": "github.com/tendermint/tendermint/abci/types",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "QXbJt6Bc1ndOKl7ZUDvJGkyJGm0=",
+			"path": "github.com/tendermint/tendermint/crypto",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "Lfce40xOAjDsM6nnaRlhX/HBz8Y=",
+			"path": "github.com/tendermint/tendermint/crypto/ed25519",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "qQ0nzeelKNICu1RVRrzkr0IOgNI=",
+			"path": "github.com/tendermint/tendermint/crypto/encoding/amino",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "Zzfv9PJd/qRBT1qLjZY0pb1N6EA=",
+			"path": "github.com/tendermint/tendermint/crypto/merkle",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "h4oMzqFnFd38AhqddEnhpmyG9EE=",
+			"path": "github.com/tendermint/tendermint/crypto/multisig",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "I0+6skvCeXibA7vGz95m+8ROuxg=",
+			"path": "github.com/tendermint/tendermint/crypto/multisig/bitarray",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "RvfF1UdIi8gxwCeB+4AXnL8til4=",
+			"path": "github.com/tendermint/tendermint/crypto/secp256k1",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "RNnUkbA/UA9aeEKCi5frxogtKrA=",
+			"path": "github.com/tendermint/tendermint/crypto/secp256k1/btcec",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "tgdLEblUdcvjbS9d4h09nbBN9lk=",
+			"path": "github.com/tendermint/tendermint/crypto/secp256k1/internal/secp256k1",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "R6D/PcChwYX+Nxlm0xSn4LYcCpQ=",
+			"path": "github.com/tendermint/tendermint/crypto/tmhash",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "YzyYBV0pZXOAiPRjQ+oPbsw1zBI=",
+			"path": "github.com/tendermint/tendermint/libs/common",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "MdTBhFWuTr9yS2Xv5r9d2cSKwhM=",
+			"path": "github.com/tendermint/tendermint/libs/log",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "SaWms8XlHyZ9ff4b0GzZmGQsyD4=",
+			"path": "github.com/tendermint/tendermint/rpc/client",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "YkvtN0gRIyZY2he0gCZy1R1iQHA=",
+			"path": "github.com/tendermint/tendermint/rpc/core/types",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "MoCMdZ6g0vaj/inA+vCcNDEHgFs=",
+			"path": "github.com/tendermint/tendermint/rpc/lib/client",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "e+8dd+byAeNaaKuHhavnUoNwYkI=",
+			"path": "github.com/tendermint/tendermint/rpc/lib/types",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "A24QGencIw3FmihAl44AYlEnNdI=",
+			"path": "github.com/tendermint/tendermint/types",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "PKnFCJZAVzQS/l9zv7VqLnA0vq0=",
+			"path": "github.com/tendermint/tendermint/version",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "2LpxYGSf068307b7bhAuVjvzLLc=",
+			"path": "golang.org/x/crypto/ed25519",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "0JTAFXPkankmWcZGQJGScLDiaN8=",
+			"path": "golang.org/x/crypto/ed25519/internal/edwards25519",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		},
+		{
+			"checksumSHA1": "UAbH5s3v5AfEvbGMEQAyzSFCMU0=",
+			"path": "golang.org/x/crypto/ripemd160",
+			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
+			"revisionTime": "2019-04-16T00:04:41Z"
+		}
+	],
 	"rootPath": "github.com/ok-chain/ok-gosdk"
 }

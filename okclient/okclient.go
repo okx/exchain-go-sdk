@@ -1,7 +1,7 @@
 package okclient
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/ok-chain/ok-gosdk/common/libs/cosmos/cosmos-sdk/codec"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )
 
@@ -10,7 +10,6 @@ var (
 )
 
 func init() {
-
 
 }
 

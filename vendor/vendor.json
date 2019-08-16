@@ -179,12 +179,6 @@
 			"path": "golang.org/x/crypto/salsa20/salsa",
 			"revision": "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7",
 			"revisionTime": "2019-04-16T00:04:41Z"
-		},
-		{
-			"checksumSHA1": "NaPKWo2/NhJLk/+GrsBiAL/V6J4=",
-			"path": "golang.org/x/sys/cpu",
-			"revision": "4c4f7f33c9ed00de01c4c741d2177abfcfe19307",
-			"revisionTime": "2019-05-25T10:09:16Z"
 		}
 	],
 	"rootPath": "github.com/ok-chain/ok-gosdk"

@@ -6,9 +6,9 @@
 
 package poly1305
 
-import (
-	"golang.org/x/sys/cpu"
-)
+//import (
+//	"golang.org/x/sys/cpu"
+//)
 
 // poly1305vx is an assembly implementation of Poly1305 that uses vector
 // instructions. It must only be called if the vector facility (vx) is
@@ -25,18 +25,18 @@ func poly1305vmsl(out *[16]byte, m *byte, mlen uint64, key *[32]byte)
 // Sum generates an authenticator for m using a one-time key and puts the
 // 16-byte result into out. Authenticating two different messages with the same
 // key allows an attacker to forge messages at will.
-func Sum(out *[16]byte, m []byte, key *[32]byte) {
-	if cpu.S390X.HasVX {
-		var mPtr *byte
-		if len(m) > 0 {
-			mPtr = &m[0]
-		}
-		if cpu.S390X.HasVXE && len(m) > 256 {
-			poly1305vmsl(out, mPtr, uint64(len(m)), key)
-		} else {
-			poly1305vx(out, mPtr, uint64(len(m)), key)
-		}
-	} else {
-		sumGeneric(out, m, key)
-	}
-}
+//func Sum(out *[16]byte, m []byte, key *[32]byte) {
+//	if cpu.S390X.HasVX {
+//		var mPtr *byte
+//		if len(m) > 0 {
+//			mPtr = &m[0]
+//		}
+//		if cpu.S390X.HasVXE && len(m) > 256 {
+//			poly1305vmsl(out, mPtr, uint64(len(m)), key)
+//		} else {
+//			poly1305vx(out, mPtr, uint64(len(m)), key)
+//		}
+//	} else {
+//		sumGeneric(out, m, key)
+//	}
+//}

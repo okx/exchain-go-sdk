@@ -48,6 +48,45 @@ func TestGetTokenInfo(t *testing.T) {
 	fmt.Println(tokenInfo)
 }
 
+func TestGetProductsInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	productsList, err := okCli.GetProductsInfo()
+	assertNotEqual(t, err, nil)
+	for _, p := range productsList {
+		fmt.Println(p)
+	}
+}
+
+func TestGetDepthbookInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	depthbook, err := okCli.GetDepthbookInfo("xxb_okb")
+	assertNotEqual(t, err, nil)
+	for _, ask := range depthbook.Asks {
+		fmt.Println(ask)
+	}
+	for _, bid := range depthbook.Bids {
+		fmt.Println(bid)
+	}
+
+}
+
+func TestGetCandlesInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	candles, err := okCli.GetCandlesInfo("xxb_okb", 60, 100)
+	assertNotEqual(t, err, nil)
+	for _, line := range candles {
+		fmt.Println(line)
+	}
+}
+
+func TestGetTickersInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	tickers, err := okCli.GetTickersInfo(10)
+	assertNotEqual(t, err, nil)
+	for _, ticker := range tickers {
+		fmt.Println(ticker)
+	}
+}
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {
 		t.Errorf("test failed: %s", a)

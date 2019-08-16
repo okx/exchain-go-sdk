@@ -18,3 +18,12 @@ type Token struct {
 	Owner          AccAddress `json:"owner"`
 	Mintable       bool       `json:"mintable"`
 }
+
+type TokenPair struct {
+	BaseAssetSymbol  string `json:"baseAssetSymbol"`
+	QuoteAssetSymbol string `json:"quoteAssetSymbol"`
+	InitPrice        Dec    `json:"price"`
+	MaxPriceDigit    int64  `json:"maxPriceDigit"`
+	MaxQuantityDigit int64  `json:"maxSizeDigit"`
+	MinQuantity      Dec    `json:"minTradeSize"`
+}

@@ -2,6 +2,7 @@ package okclient
 
 import (
 	"errors"
+
 	"github.com/ok-chain/ok-gosdk/crypto/encoding/codec"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"

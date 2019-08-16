@@ -9,3 +9,4 @@ var(
 func AddressStoreKey(addr types.AccAddress) []byte {
 	return append(AddressStoreKeyPrefix, addr.Bytes()...)
 }
+

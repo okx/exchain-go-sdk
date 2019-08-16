@@ -16,12 +16,10 @@ const (
 func TestNewClient(t *testing.T) {
 	okCli := NewClient(RPC_URL)
 
-	accountParam := queryParams.AccTokenParam{
-		Symbol: "",
-		Show:   "all",
-	}
+	accountParams := queryParams.NewQueryAccTokenParams("","all")
 
-	jsonBytes, err := okCli.cdc.MarshalJSON(accountParam)
+
+	jsonBytes, err := okCli.cdc.MarshalJSON(accountParams)
 	assertNotEqual(t, err, nil)
 
 	//fmt.Println(jsonBytes)

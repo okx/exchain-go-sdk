@@ -7,8 +7,8 @@ import (
 	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
 	"github.com/ok-chain/ok-gosdk/crypto/btcsuite/btcd/btcec"
 
-	"github.com/ok-chain/ok-gosdk/common/libs/cosmos/cosmos-sdk/types"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/hd"
+	"github.com/ok-chain/ok-gosdk/types"
 
 	tmbtcec "github.com/tendermint/btcd/btcec"
 	tmcrypto "github.com/tendermint/tendermint/crypto"

@@ -2,7 +2,7 @@ package keys
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/common/libs/cosmos/cosmos-sdk/types"
+	"github.com/ok-chain/ok-gosdk/types"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/hd"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/multisig"

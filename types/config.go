@@ -97,11 +97,11 @@ func (config *Config) GetBech32AccountAddrPrefix() string {
 //	return config.bech32AddressPrefix["consensus_addr"]
 //}
 //
-//// GetBech32AccountPubPrefix returns the Bech32 prefix for account public key
-//func (config *Config) GetBech32AccountPubPrefix() string {
-//	return config.bech32AddressPrefix["account_pub"]
-//}
-//
+// GetBech32AccountPubPrefix returns the Bech32 prefix for account public key
+func (config *Config) GetBech32AccountPubPrefix() string {
+	return config.bech32AddressPrefix["account_pub"]
+}
+
 //// GetBech32ValidatorPubPrefix returns the Bech32 prefix for validator public key
 //func (config *Config) GetBech32ValidatorPubPrefix() string {
 //	return config.bech32AddressPrefix["validator_pub"]

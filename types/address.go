@@ -10,7 +10,7 @@ import (
 	"errors"
 	"fmt"
 
-	//"github.com/tendermint/tendermint/crypto"
+	"github.com/tendermint/tendermint/crypto"
 	//"github.com/tendermint/tendermint/crypto/encoding/amino"
 	//
 	"github.com/tendermint/tendermint/libs/bech32"
@@ -463,27 +463,27 @@ func (aa AccAddress) Format(s fmt.State, verb rune) {
 //	}
 //}
 //
-//// ----------------------------------------------------------------------------
-//// auxiliary
-//// ----------------------------------------------------------------------------
-//
-//// Bech32ifyAccPub returns a Bech32 encoded string containing the
-//// Bech32PrefixAccPub prefix for a given account PubKey.
-//func Bech32ifyAccPub(pub crypto.PubKey) (string, error) {
-//	bech32PrefixAccPub := GetConfig().GetBech32AccountPubPrefix()
-//	return bech32.ConvertAndEncode(bech32PrefixAccPub, pub.Bytes())
-//}
-//
-//// MustBech32ifyAccPub returns the result of Bech32ifyAccPub panicing on failure.
-//func MustBech32ifyAccPub(pub crypto.PubKey) string {
-//	enc, err := Bech32ifyAccPub(pub)
-//	if err != nil {
-//		panic(err)
-//	}
-//
-//	return enc
-//}
-//
+// ----------------------------------------------------------------------------
+// auxiliary
+// ----------------------------------------------------------------------------
+
+// Bech32ifyAccPub returns a Bech32 encoded string containing the
+// Bech32PrefixAccPub prefix for a given account PubKey.
+func Bech32ifyAccPub(pub crypto.PubKey) (string, error) {
+	bech32PrefixAccPub := GetConfig().GetBech32AccountPubPrefix()
+	return bech32.ConvertAndEncode(bech32PrefixAccPub, pub.Bytes())
+}
+
+// MustBech32ifyAccPub returns the result of Bech32ifyAccPub panicing on failure.
+func MustBech32ifyAccPub(pub crypto.PubKey) string {
+	enc, err := Bech32ifyAccPub(pub)
+	if err != nil {
+		panic(err)
+	}
+
+	return enc
+}
+
 //// Bech32ifyValPub returns a Bech32 encoded string containing the
 //// Bech32PrefixValPub prefix for a given validator operator's PubKey.
 //func Bech32ifyValPub(pub crypto.PubKey) (string, error) {

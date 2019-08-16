@@ -63,8 +63,8 @@ func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, erro
 		fmt.Println("Default passWd : \"12345678\"")
 	}
 
-	if !bip39.IsMnemonicValid(mnemo){
-		return nil,"",errors.New("err : mnemonic is not valid")
+	if !bip39.IsMnemonicValid(mnemo) {
+		return nil, "", errors.New("err : mnemonic is not valid")
 	}
 
 	info, err := Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
@@ -74,3 +74,5 @@ func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, erro
 
 	return info, mnemo, nil
 }
+
+

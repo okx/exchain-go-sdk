@@ -35,14 +35,14 @@ func TestCreateAccountWithMnemo(t *testing.T) {
 	fmt.Println(mnemo)
 }
 
-func assertNotEqual(t *testing.T, err, b interface{}) {
-	if err != b {
-		t.Errorf("test failed: %s", err)
+func assertNotEqual(t *testing.T, a, b interface{}) {
+	if a != b {
+		t.Errorf("test failed: %s", a)
 	}
 }
 
-func assertEqual(t *testing.T, err, b interface{}) {
-	if err == b {
-		t.Errorf("test failed: %s", err)
+func assertEqual(t *testing.T, a, b interface{}) {
+	if a == b {
+		t.Errorf("test failed: %s", a)
 	}
 }

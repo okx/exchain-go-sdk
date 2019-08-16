@@ -1,16 +1,18 @@
 package okclient
 
 import (
-	"github.com/ok-chain/ok-gosdk/common/libs/cosmos/cosmos-sdk/codec"
+	"errors"
+	"github.com/ok-chain/ok-gosdk/crypto/encoding/codec"
+	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )
 
 var (
-	cdc = codec.New()
+	cdc *codec.Codec
 )
 
 func init() {
-
+	cdc = codec.Cdc
 }
 
 type OKClient struct {
@@ -25,4 +27,24 @@ func NewClient(rpcUrl string) OKClient {
 		cli:    rpcCli.NewHTTP(rpcUrl, "/websocket"),
 		cdc:    cdc,
 	}
+}
+
+func (okCli *OKClient) query(path string, key cmn.HexBytes) ([]byte, error) {
+	opts := rpcCli.ABCIQueryOptions{
+		Height: 0,
+		Prove:  false,
+	}
+
+	result, err := okCli.cli.ABCIQueryWithOptions(path, key, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := result.Response
+	if !resp.IsOK() {
+		return nil, errors.New(resp.Log)
+	}
+
+	return resp.Value, nil
+
 }

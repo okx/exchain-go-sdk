@@ -15,7 +15,6 @@ const (
 
 func TestNewClient(t *testing.T) {
 	okCli := NewClient(RPC_URL)
-	//fmt.Println(okCli)
 
 	accountParam := queryParams.AccountParam{
 		Symbol: "",
@@ -23,7 +22,7 @@ func TestNewClient(t *testing.T) {
 	}
 
 	jsonBytes, err := okCli.cdc.MarshalJSON(accountParam)
-	assertEqual(t, err, nil)
+	assertNotEqual(t, err, nil)
 
 	//fmt.Println(jsonBytes)
 	path := "custom/token/accounts/okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
@@ -32,7 +31,7 @@ func TestNewClient(t *testing.T) {
 		Prove:  false,
 	}
 	result, err := okCli.cli.ABCIQueryWithOptions(path, jsonBytes, opts)
-	assertEqual(t, err, nil)
+	assertNotEqual(t, err, nil)
 	//fmt.Println(result)
 	resp := result.Response
 	if !resp.IsOK() {
@@ -41,15 +40,9 @@ func TestNewClient(t *testing.T) {
 
 	var accountResponse response.AccountResponse
 	if err = okCli.cdc.UnmarshalJSON(resp.Value, &accountResponse); err != nil {
-		assertEqual(t, err, nil)
+		assertNotEqual(t, err, nil)
 	}
 
 	fmt.Println(accountResponse)
 
-}
-
-func assertEqual(t *testing.T, err, b interface{}) {
-	if err != b {
-		t.Errorf("test failed: %s", err)
-	}
 }

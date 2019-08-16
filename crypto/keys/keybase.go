@@ -9,11 +9,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/ok-chain/ok-gosdk/common/libs/cosmos/cosmos-sdk/types"
 	"github.com/ok-chain/ok-gosdk/crypto"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/hd"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/keyerror"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/mintkey"
+	"github.com/ok-chain/ok-gosdk/types"
 
 	"github.com/ok-chain/ok-gosdk/crypto/go-bip39"
 

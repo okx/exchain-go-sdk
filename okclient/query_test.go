@@ -3,6 +3,7 @@ package okclient
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 const (
@@ -87,6 +88,19 @@ func TestGetTickersInfo(t *testing.T) {
 		fmt.Println(ticker)
 	}
 }
+
+func TestGetRecentTxRecord(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	records, err := okCli.GetRecentTxRecord("xxb_okb", 0, int(time.Now().Unix()), 0, 10)
+	assertNotEqual(t, err, nil)
+	for _, record := range records {
+		fmt.Println(record)
+	}
+}
+
+
+
+
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {
 		t.Errorf("test failed: %s", a)

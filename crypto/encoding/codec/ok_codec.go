@@ -47,6 +47,41 @@ func UnmarshalBaseResponse(bz []byte, ptr interface{}) error {
 		return err
 	}
 	// br.Data contains float64 and go-amino doesn't support float
+	if err := Cdc.UnmarshalJSON(jsonBytes, ptr); err != nil {
+		return err
+	}
+	return nil
+}
+
+// TODO inefficient BaseResponse unmarshal
+func UnmarshalJsonBaseResponse(bz []byte, ptr interface{}) error {
+	var br common.BaseResponse
+	if err := json.Unmarshal(bz, &br); err != nil {
+		return err
+	}
+	// r.Data is interface{} —— first Marshal then Unmarshal, it's inefficient
+
+	jsonBytes, err := json.Marshal(br.Data)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal(jsonBytes, ptr); err != nil {
+		return err
+	}
+	return nil
+}
+
+func UnmarshalListResponse(bz []byte, ptr interface{}) error {
+	var lr common.ListResponse
+	if err := json.Unmarshal(bz, &lr); err != nil {
+		return err
+	}
+
+	jsonBytes, err := json.Marshal(lr.Data.Data)
+	if err != nil {
+		return err
+	}
+
 	if err := json.Unmarshal(jsonBytes, ptr); err != nil {
 		return err
 	}

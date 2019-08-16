@@ -18,6 +18,7 @@ const (
 	depthbookInfoPath     = "custom/order/depthbook"
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
+	recentTxRecordPath    = "custom/backend/matches"
 )
 
 func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -174,9 +175,29 @@ func (okCli *OKClient) GetTickersInfo(count int) (types.Tickers, error) {
 	}
 
 	var tickers types.Tickers
-	if err = codec.UnmarshalBaseResponse(res, &tickers); err != nil {
+	if err = codec.UnmarshalJsonBaseResponse(res, &tickers); err != nil {
 		return nil, fmt.Errorf("tickers unmarshaled failed from BaseResponse : %s", err.Error())
 	}
 
 	return tickers, nil
+}
+
+func (okCli *OKClient) GetRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error) {
+	params := queryParams.NewQueryMatchParams(product, int64(start), int64(end), page, perPage)
+	jsonBytes, err := okCli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryMatchParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(recentTxRecordPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var records []types.MatchResult
+	if err = codec.UnmarshalListResponse(res, &records); err != nil {
+		return nil, fmt.Errorf("tx records unmarshaled failed from BaseResponse : %s", err.Error())
+	}
+
+	return records, nil
 }

@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	addr     = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
-	rpcUrl   = "localhost:26657"
+	addr   = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
+	rpcUrl = "localhost:26657"
 )
 
 func TestGetAccountInfoByAddr(t *testing.T) {
@@ -25,10 +25,25 @@ func TestGetTokensInfoByAddr(t *testing.T) {
 	fmt.Println(tokensInfo)
 }
 
-
 func TestGetTokenInfoByAddr(t *testing.T) {
 	okCli := NewClient(rpcUrl)
-	tokenInfo, err := okCli.GetTokenInfoByAddr(addr,"okb")
+	tokenInfo, err := okCli.GetTokenInfoByAddr(addr, "okb")
+	assertNotEqual(t, err, nil)
+	fmt.Println(tokenInfo)
+}
+
+func TestGetTokensInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	tokensInfo, err := okCli.GetTokensInfo()
+	assertNotEqual(t, err, nil)
+	for _, t := range tokensInfo {
+		fmt.Println(t)
+	}
+}
+
+func TestGetTokenInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	tokenInfo, err := okCli.GetTokenInfo("okb")
 	assertNotEqual(t, err, nil)
 	fmt.Println(tokenInfo)
 }

@@ -11,6 +11,8 @@ import (
 const (
 	accountPath       = "/store/acc/key"
 	accountTokensPath = "custom/token/accounts/"
+	tokensPath        = "custom/token/tokens"
+	tokenPath         = "custom/token/info/"
 )
 
 func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -76,4 +78,32 @@ func (okCli *OKClient) GetTokenInfoByAddr(addr, symbol string) (types.AccountTok
 		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
 	}
 	return accTokenInfo, nil
+}
+
+func (okCli *OKClient) GetTokensInfo() ([]types.Token, error) {
+	res, err := okCli.query(tokensPath, nil)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var tokensList []types.Token
+	if err = okCli.cdc.UnmarshalJSON(res, &tokensList); err != nil {
+		return nil, fmt.Errorf("err : %s", err.Error())
+	}
+
+	return tokensList, nil
+}
+
+func (okCli *OKClient) GetTokenInfo(symbol string) (types.Token, error) {
+	res, err := okCli.query(tokenPath+symbol, nil)
+	if err != nil {
+		return types.Token{}, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var token types.Token
+	if err = okCli.cdc.UnmarshalJSON(res, &token); err != nil {
+		return types.Token{}, fmt.Errorf("err : %s", err.Error())
+	}
+
+	return token, nil
 }

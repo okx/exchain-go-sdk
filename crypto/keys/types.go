@@ -2,8 +2,8 @@ package keys
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/types"
 	"github.com/ok-chain/ok-gosdk/crypto/keys/hd"
+	"github.com/ok-chain/ok-gosdk/types"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/multisig"
 )

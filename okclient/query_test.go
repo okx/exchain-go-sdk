@@ -16,7 +16,6 @@ func TestGetAccountInfoByAddr(t *testing.T) {
 	acc, err := okCli.GetAccountInfoByAddr(addr)
 	assertNotEqual(t, err, nil)
 	fmt.Println(acc)
-
 }
 
 func TestGetTokensInfoByAddr(t *testing.T) {

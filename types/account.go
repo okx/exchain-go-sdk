@@ -110,3 +110,8 @@ func (acc *BaseAccount) SpendableCoins(_ time.Time) Coins {
 	return acc.GetCoins()
 }
 
+
+type AccountTokensInfo struct{
+	Address    string    `json:"address"`
+	Currencies CoinsInfo `json:"currencies"`
+}

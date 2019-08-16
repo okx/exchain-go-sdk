@@ -1,8 +1,7 @@
 package queryParams
 
 
-
-type AccountParam struct {
+type AccTokenParam struct {
 	Symbol string `json:"symbol"`
 	Show   string `json:"show"`
 }

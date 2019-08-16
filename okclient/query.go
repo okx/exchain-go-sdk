@@ -3,12 +3,14 @@ package okclient
 import (
 	"errors"
 	"fmt"
+	"github.com/ok-chain/ok-gosdk/common/queryParams"
 	"github.com/ok-chain/ok-gosdk/types"
 	"github.com/ok-chain/ok-gosdk/utils"
 )
 
 const (
-	accountPath = "/store/acc/key"
+	accountPath       = "/store/acc/key"
+	accountTokensPath = "custom/token/accounts/"
 )
 
 func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -19,7 +21,7 @@ func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) 
 
 	res, err := okCli.query(accountPath, utils.AddressStoreKey(accAddr))
 	if err != nil {
-		return nil, fmt.Errorf("ok cliemt query error : %s", err.Error())
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
 	}
 
 	var account types.Account
@@ -28,4 +30,50 @@ func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) 
 	}
 
 	return account, nil
+}
+
+func (okCli *OKClient) GetTokensInfoByAddr(addr string) (types.AccountTokensInfo, error) {
+	accountParam := queryParams.AccTokenParam{
+		Symbol: "",
+		Show:   "all",
+	}
+
+	jsonBytes, err := okCli.cdc.MarshalJSON(accountParam)
+	if err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("error : AccTokenParam failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(accountTokensPath+addr, jsonBytes)
+	if err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var accTokensInfo types.AccountTokensInfo
+	if err = okCli.cdc.UnmarshalJSON(res, &accTokensInfo); err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
+	}
+	return accTokensInfo, nil
+}
+
+func (okCli *OKClient) GetTokenInfoByAddr(addr, symbol string) (types.AccountTokensInfo, error) {
+	accountParam := queryParams.AccTokenParam{
+		Symbol: symbol,
+		Show:   "partial",
+	}
+
+	jsonBytes, err := okCli.cdc.MarshalJSON(accountParam)
+	if err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("error : AccTokenParam failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(accountTokensPath+addr, jsonBytes)
+	if err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var accTokenInfo types.AccountTokensInfo
+	if err = okCli.cdc.UnmarshalJSON(res, &accTokenInfo); err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
+	}
+	return accTokenInfo, nil
 }

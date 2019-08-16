@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var (
+const (
 	name     = "alice"
 	passWd   = "12345678"
 	mnemonic = "sustain hole urban away boy core lazy brick wait drive tiger tell"

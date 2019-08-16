@@ -1,4 +1,5 @@
-package response
+package types
+
 
 type CoinsInfo []CoinInfo
 
@@ -7,9 +8,4 @@ type CoinInfo struct {
 	Available string `json:"available"`
 	Freeze    string `json:"freeze"`
 	Locked    string `json:"locked"`
-}
-
-type AccountResponse struct {
-	Address    string    `json:"address"`
-	Currencies CoinsInfo `json:"currencies"`
 }

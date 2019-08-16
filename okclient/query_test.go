@@ -5,10 +5,7 @@ import (
 	"testing"
 )
 
-var (
-	name     = "alice"
-	passWd   = "12345678"
-	mnemonic = "sustain hole urban away boy core lazy brick wait drive tiger tell"
+const (
 	addr     = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
 	rpcUrl   = "localhost:26657"
 )
@@ -19,6 +16,21 @@ func TestGetAccountInfoByAddr(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(acc)
 
+}
+
+func TestGetTokensInfoByAddr(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	tokensInfo, err := okCli.GetTokensInfoByAddr(addr)
+	assertNotEqual(t, err, nil)
+	fmt.Println(tokensInfo)
+}
+
+
+func TestGetTokenInfoByAddr(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	tokenInfo, err := okCli.GetTokenInfoByAddr(addr,"okb")
+	assertNotEqual(t, err, nil)
+	fmt.Println(tokenInfo)
 }
 
 func assertNotEqual(t *testing.T, a, b interface{}) {

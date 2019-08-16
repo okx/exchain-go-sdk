@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ok-chain/ok-gosdk/common/queryParams"
-	"github.com/ok-chain/ok-gosdk/types/response"
+	"github.com/ok-chain/ok-gosdk/types"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 	"testing"
 )
@@ -16,7 +16,7 @@ const (
 func TestNewClient(t *testing.T) {
 	okCli := NewClient(RPC_URL)
 
-	accountParam := queryParams.AccountParam{
+	accountParam := queryParams.AccTokenParam{
 		Symbol: "",
 		Show:   "all",
 	}
@@ -38,7 +38,7 @@ func TestNewClient(t *testing.T) {
 		t.Error(errors.New(resp.Log))
 	}
 
-	var accountResponse response.AccountResponse
+	var accountResponse types.AccountTokensInfo
 	if err = okCli.cdc.UnmarshalJSON(resp.Value, &accountResponse); err != nil {
 		assertNotEqual(t, err, nil)
 	}

@@ -127,6 +127,35 @@ func TestGetClosedOrders(t *testing.T) {
 	}
 }
 
+func TestGetDealsInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+
+	product := "xxb_okb"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	dealsInfo, err := okCli.GetDealsInfo(addr, product, side, start, end, page, perPage)
+	assertNotEqual(t, err, nil)
+	for _, deal := range dealsInfo {
+		fmt.Println(deal)
+	}
+}
+
+func TestGetTransactionsInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+
+	type_ := 1
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	transactionsInfo, err := okCli.GetTransactionsInfo(addr, type_, start, end, page, perPage)
+	assertNotEqual(t, err, nil)
+	for _, tx := range transactionsInfo {
+		fmt.Println(tx)
+	}
+}
+
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {
 		t.Errorf("test failed: %s", a)

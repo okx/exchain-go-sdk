@@ -4,8 +4,8 @@ import "time"
 
 const (
 	DefaultBookSize = 200
-	DefaultPage    = 1
-	DefaultPerPage = 50
+	DefaultPage     = 1
+	DefaultPerPage  = 50
 )
 
 type QueryAccTokenParams struct {
@@ -115,5 +115,56 @@ func NewQueryOrderListParams(addr, product, side string, page, perPage int, star
 		End:        end,
 		Side:       side,
 		HideNoFill: hideNoFill,
+	}
+}
+
+type QueryDealsParams struct {
+	Address string
+	Product string
+	Start   int64
+	End     int64
+	Page    int
+	PerPage int
+	Side    string
+}
+
+func NewQueryDealsParams(addr, product string, start, end int64, page, perPage int, side string) QueryDealsParams {
+	if page == 0 && perPage == 0 {
+		page = DefaultPage
+		perPage = DefaultPerPage
+	}
+	return QueryDealsParams{
+		Address: addr,
+		Product: product,
+		Start:   start,
+		End:     end,
+		Page:    page,
+		PerPage: perPage,
+		Side:    side,
+	}
+}
+
+type QueryTxListParams struct {
+	Address   string
+	TxType    int64
+	StartTime int64
+	EndTime   int64
+	Page      int
+	PerPage   int
+}
+
+// creates a new instance of NewQueryOrderListParams
+func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, perPage int) QueryTxListParams {
+	if page == 0 && perPage == 0 {
+		page = DefaultPage
+		perPage = DefaultPerPage
+	}
+	return QueryTxListParams{
+		Address:   addr,
+		TxType:    txType,
+		StartTime: startTime,
+		EndTime:   endTime,
+		Page:      page,
+		PerPage:   perPage,
 	}
 }

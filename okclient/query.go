@@ -21,6 +21,8 @@ const (
 	recentTxRecordPath    = "custom/backend/matches"
 	openOrdersPath        = "custom/backend/orders/open"
 	closedOrdersPath      = "custom/backend/orders/closed"
+	dealsInfoPath         = "custom/backend/deals"
+	transactionsInfoPath  = "custom/backend/txs"
 )
 
 func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -248,4 +250,46 @@ func (okCli *OKClient) GetClosedOrders(addr, product, side string, start, end, p
 
 	return closedOrdersList, nil
 
+}
+
+func (okCli *OKClient) GetDealsInfo(addr, product, side string, start, end, page, perPage int) ([]types.Deal, error) {
+	params := queryParams.NewQueryDealsParams(addr, product, int64(start), int64(end), page, perPage, side)
+	jsonBytes, err := okCli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryDealsParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(dealsInfoPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var dealsInfo []types.Deal
+
+	if err = codec.UnmarshalListResponse(res, &dealsInfo); err != nil {
+		return nil, fmt.Errorf("deals Info list unmarshaled failed from BaseResponse : %s", err.Error())
+	}
+
+	return dealsInfo, nil
+}
+
+func (okCli *OKClient) GetTransactionsInfo(addr string, type_, start, end, page, perPage int) ([]types.Transaction, error) {
+	params := queryParams.NewQueryTxListParams(addr, int64(type_), int64(start), int64(end), page, perPage)
+	jsonBytes, err := okCli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryTxListParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(transactionsInfoPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var transactionsInfo []types.Transaction
+
+	if err = codec.UnmarshalListResponse(res, &transactionsInfo); err != nil {
+		return nil, fmt.Errorf("transactions Info list unmarshaled failed from BaseResponse : %s", err.Error())
+	}
+
+	return transactionsInfo, nil
 }

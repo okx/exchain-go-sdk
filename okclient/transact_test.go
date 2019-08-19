@@ -1,8 +1,9 @@
 package okclient
 
 import (
+	"encoding/json"
 	"fmt"
-	//"fmt"
+	"github.com/ok-chain/ok-gosdk/types"
 	"github.com/ok-chain/ok-gosdk/utils"
 
 	"testing"
@@ -48,4 +49,24 @@ func TestCancelOrder(t *testing.T) {
 	res, err := okCli.CancelOrder(fromInfo, passWd, "ID0000177104-1", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
+}
+
+func TestMultiSend(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	assertNotEqual(t, err, nil)
+	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	assertNotEqual(t, err, nil)
+
+	// build the json string for multisend
+	var transfers []types.Transfer
+	transfers = append(transfers, types.Transfer{addr1, "5okb"}, types.Transfer{addr2, "20okb"})
+	transJSONBytes, err := json.Marshal(transfers)
+	assertNotEqual(t, err, nil)
+
+	// transact multisend
+	res, err := okCli.MultiSend(fromInfo, passWd, string(transJSONBytes), "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	assertNotEqual(t, err, nil)
+	fmt.Println(res)
+
 }

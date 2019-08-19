@@ -8,7 +8,7 @@ import (
 
 func IsValidSendParams(fromInfo keys.Info, passWd, toAddr string) bool {
 	if fromInfo == nil {
-		fmt.Println("input invalid name")
+		fmt.Println("input invalid keys info")
 		return false
 	}
 	if len(passWd) == 0 {
@@ -24,7 +24,7 @@ func IsValidSendParams(fromInfo keys.Info, passWd, toAddr string) bool {
 
 func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, quantity, memo string) bool {
 	if fromInfo == nil {
-		fmt.Println("input invalid name")
+		fmt.Println("input invalid keys info")
 		return false
 	}
 	if len(passWd) == 0 {
@@ -52,11 +52,28 @@ func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, qua
 
 func IsValidCancelOrderParams(fromInfo keys.Info, passWd string) bool {
 	if fromInfo == nil {
-		fmt.Println("input invalid name")
+		fmt.Println("input invalid keys info")
 		return false
 	}
 	if len(passWd) == 0 {
 		fmt.Println("no password input")
+		return false
+	}
+	return true
+}
+
+func IsValidMultiSend(fromInfo keys.Info, passWd, transferStr string) bool {
+	if fromInfo == nil {
+		fmt.Println("input invalid keys info")
+		return false
+	}
+	if len(passWd) == 0 {
+		fmt.Println("no password input")
+		return false
+	}
+
+	if len(transferStr) == 0 {
+		fmt.Println("no transfer string input")
 		return false
 	}
 	return true

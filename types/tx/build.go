@@ -60,6 +60,8 @@ func RegisterMsgCdc(cdc *amino.Codec) {
 	cdc.RegisterConcrete(msg.MsgSend{}, "token/Send", nil)
 	cdc.RegisterConcrete(msg.MsgNewOrder{}, "order/new", nil)
 	cdc.RegisterConcrete(msg.MsgCancelOrder{}, "order/cancel", nil)
+	cdc.RegisterConcrete(msg.MsgMultiSend{}, "token/MultiSend", nil)
+
 	cdc.RegisterInterface((*types.Tx)(nil), nil)
 	cdc.RegisterConcrete(StdTx{}, "auth/StdTx", nil)
 }

@@ -1,8 +1,10 @@
 package types
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
-func MustSortJSON(toSortJSON []byte) []byte {
+func  MustSortJSON(toSortJSON []byte) []byte {
 	js, err := SortJSON(toSortJSON)
 	if err != nil {
 		panic(err)
@@ -22,3 +24,4 @@ func SortJSON(toSortJSON []byte) ([]byte, error) {
 	}
 	return js, nil
 }
+

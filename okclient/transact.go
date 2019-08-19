@@ -71,3 +71,23 @@ func (okCli *OKClient) CancelOrder(fromInfo keys.Info, passWd, orderID, memo str
 
 	return okCli.broadcast(stdBytes, BroadcastBlock)
 }
+
+func (okCli *OKClient) MultiSend(fromInfo keys.Info, passWd, transferStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+	if !transactParams.IsValidMultiSend(fromInfo, passWd, transferStr) {
+		return types.TxResponse{}, errors.New("err : params input to multi send are invalid")
+	}
+
+	transfers, err := utils.StrToTransfers(transferStr)
+	if err != nil {
+		return types.TxResponse{}, fmt.Errorf("parse Transfers [%s] error: %s", err, transferStr)
+	}
+
+	msg := msg.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
+
+	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
+	if err != nil {
+		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
+	}
+
+	return okCli.broadcast(stdBytes, BroadcastBlock)
+}

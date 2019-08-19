@@ -27,3 +27,14 @@ type TokenPair struct {
 	MaxQuantityDigit int64  `json:"maxSizeDigit"`
 	MinQuantity      Dec    `json:"minTradeSize"`
 }
+
+type Transfer struct {
+	To     string `json:"to"`
+	Amount string `json:"amount"`
+}
+
+type TransferUnit struct {
+	To    AccAddress `json:"to"`
+	Coins Coins      `json:"coins"`
+}
+

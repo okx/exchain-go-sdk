@@ -1,5 +1,7 @@
 package queryParams
 
+import "time"
+
 const (
 	DefaultBookSize = 200
 	DefaultPage    = 1
@@ -80,5 +82,38 @@ func NewQueryMatchParams(product string, start, end int64, page, perPage int) Qu
 		End:     end,
 		Page:    page,
 		PerPage: perPage,
+	}
+}
+
+type QueryOrderListParams struct {
+	Address    string
+	Product    string
+	Page       int
+	PerPage    int
+	Start      int64
+	End        int64
+	Side       string
+	HideNoFill bool
+}
+
+// creates a new instance of NewQueryOrderListParams
+func NewQueryOrderListParams(addr, product, side string, page, perPage int, start, end int64,
+	hideNoFill bool) QueryOrderListParams {
+	if page == 0 && perPage == 0 {
+		page = DefaultPage
+		perPage = DefaultPerPage
+	}
+	if start == 0 && end == 0 {
+		end = time.Now().Unix()
+	}
+	return QueryOrderListParams{
+		Address:    addr,
+		Product:    product,
+		Page:       page,
+		PerPage:    perPage,
+		Start:      start,
+		End:        end,
+		Side:       side,
+		HideNoFill: hideNoFill,
 	}
 }

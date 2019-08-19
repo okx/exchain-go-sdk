@@ -19,6 +19,7 @@ const (
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
 	recentTxRecordPath    = "custom/backend/matches"
+	openOrdersPath        = "custom/backend/orders/open"
 )
 
 func (okCli *OKClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -200,4 +201,27 @@ func (okCli *OKClient) GetRecentTxRecord(product string, start, end, page, perPa
 	}
 
 	return records, nil
+}
+
+func (okCli *OKClient) GetOpenOrders(addr, product, side string, start, end, page, perPage int) ([]types.Order, error) {
+	// field hideNoFill fixed by false
+	params := queryParams.NewQueryOrderListParams(addr, product, side, page, perPage, int64(start), int64(end), false)
+	jsonBytes, err := okCli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryOrderListParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := okCli.query(openOrdersPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var openOrdersList []types.Order
+
+	if err = codec.UnmarshalListResponse(res, &openOrdersList); err != nil {
+		return nil, fmt.Errorf("open orders list unmarshaled failed from BaseResponse : %s", err.Error())
+	}
+
+	return openOrdersList, nil
+
 }

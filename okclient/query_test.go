@@ -112,6 +112,21 @@ func TestGetOpenOrders(t *testing.T) {
 	}
 }
 
+func TestGetClosedOrders(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+
+	product := "xxb_okb"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	openOrdersList, err := okCli.GetClosedOrders(addr, product, side, start, end, page, perPage)
+	assertNotEqual(t, err, nil)
+	for _, order := range openOrdersList {
+		fmt.Println(order)
+	}
+}
+
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {
 		t.Errorf("test failed: %s", a)

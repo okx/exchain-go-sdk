@@ -6,7 +6,7 @@ import (
 	//
 	abci "github.com/tendermint/tendermint/abci/types"
 	//"github.com/tendermint/tendermint/crypto"
-	//cmn "github.com/tendermint/tendermint/libs/common"
+	cmn "github.com/tendermint/tendermint/libs/common"
 
 	//"github.com/tendermint/tendermint/p2p"
 	//"github.com/tendermint/tendermint/state"
@@ -143,23 +143,23 @@ import (
 //	RoundState json.RawMessage `json:"round_state"`
 //}
 //
-//// CheckTx result
-//type ResultBroadcastTx struct {
-//	Code uint32       `json:"code"`
-//	Data cmn.HexBytes `json:"data"`
-//	Log  string       `json:"log"`
-//
-//	Hash cmn.HexBytes `json:"hash"`
-//}
-//
-//// CheckTx and DeliverTx results
-//type ResultBroadcastTxCommit struct {
-//	CheckTx   abci.ResponseCheckTx   `json:"check_tx"`
-//	DeliverTx abci.ResponseDeliverTx `json:"deliver_tx"`
-//	Hash      cmn.HexBytes           `json:"hash"`
-//	Height    int64                  `json:"height"`
-//}
-//
+// CheckTx result
+type ResultBroadcastTx struct {
+	Code uint32       `json:"code"`
+	Data cmn.HexBytes `json:"data"`
+	Log  string       `json:"log"`
+
+	Hash cmn.HexBytes `json:"hash"`
+}
+
+// CheckTx and DeliverTx results
+type ResultBroadcastTxCommit struct {
+	CheckTx   abci.ResponseCheckTx   `json:"check_tx"`
+	DeliverTx abci.ResponseDeliverTx `json:"deliver_tx"`
+	Hash      cmn.HexBytes           `json:"hash"`
+	Height    int64                  `json:"height"`
+}
+
 //// Result of querying for a tx
 //type ResultTx struct {
 //	Hash     cmn.HexBytes           `json:"hash"`

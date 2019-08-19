@@ -14,7 +14,7 @@ import (
 	//tmpubsub "github.com/tendermint/tendermint/libs/pubsub"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	rpcclient "github.com/tendermint/tendermint/rpc/lib/client"
-	//"github.com/tendermint/tendermint/types"
+	"github.com/tendermint/tendermint/types"
 )
 
 /*
@@ -87,31 +87,31 @@ func (c *HTTP) ABCIQueryWithOptions(path string, data cmn.HexBytes, opts ABCIQue
 	return result, nil
 }
 
-//func (c *HTTP) BroadcastTxCommit(tx types.Tx) (*ctypes.ResultBroadcastTxCommit, error) {
-//	result := new(ctypes.ResultBroadcastTxCommit)
-//	_, err := c.rpc.Call("broadcast_tx_commit", map[string]interface{}{"tx": tx}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "broadcast_tx_commit")
-//	}
-//	return result, nil
-//}
-//
-//func (c *HTTP) BroadcastTxAsync(tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
-//	return c.broadcastTX("broadcast_tx_async", tx)
-//}
-//
-//func (c *HTTP) BroadcastTxSync(tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
-//	return c.broadcastTX("broadcast_tx_sync", tx)
-//}
-//
-//func (c *HTTP) broadcastTX(route string, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
-//	result := new(ctypes.ResultBroadcastTx)
-//	_, err := c.rpc.Call(route, map[string]interface{}{"tx": tx}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, route)
-//	}
-//	return result, nil
-//}
+func (c *HTTP) BroadcastTxCommit(tx types.Tx) (*ctypes.ResultBroadcastTxCommit, error) {
+	result := new(ctypes.ResultBroadcastTxCommit)
+	_, err := c.rpc.Call("broadcast_tx_commit", map[string]interface{}{"tx": tx}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "broadcast_tx_commit")
+	}
+	return result, nil
+}
+
+func (c *HTTP) BroadcastTxAsync(tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+	return c.broadcastTX("broadcast_tx_async", tx)
+}
+
+func (c *HTTP) BroadcastTxSync(tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+	return c.broadcastTX("broadcast_tx_sync", tx)
+}
+
+func (c *HTTP) broadcastTX(route string, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+	result := new(ctypes.ResultBroadcastTx)
+	_, err := c.rpc.Call(route, map[string]interface{}{"tx": tx}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, route)
+	}
+	return result, nil
+}
 //
 //func (c *HTTP) UnconfirmedTxs(limit int) (*ctypes.ResultUnconfirmedTxs, error) {
 //	result := new(ctypes.ResultUnconfirmedTxs)

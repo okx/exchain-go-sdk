@@ -99,18 +99,18 @@ type Tags cmn.KVPairs
 //}
 //
 //// Conversion function from a []byte tag to a string tag
-//func TagToStringTag(tag Tag) StringTag {
-//	return StringTag{
-//		Key:   string(tag.Key),
-//		Value: string(tag.Value),
-//	}
-//}
-//
-//// Conversion function from Tags to a StringTags
-//func TagsToStringTags(tags Tags) StringTags {
-//	var stringTags StringTags
-//	for _, tag := range tags {
-//		stringTags = append(stringTags, TagToStringTag(tag))
-//	}
-//	return stringTags
-//}
+func TagToStringTag(tag Tag) StringTag {
+	return StringTag{
+		Key:   string(tag.Key),
+		Value: string(tag.Value),
+	}
+}
+
+// Conversion function from Tags to a StringTags
+func TagsToStringTags(tags Tags) StringTags {
+	var stringTags StringTags
+	for _, tag := range tags {
+		stringTags = append(stringTags, TagToStringTag(tag))
+	}
+	return stringTags
+}

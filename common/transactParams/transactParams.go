@@ -1,38 +1,23 @@
 package transactParams
 
 import (
-	"errors"
+	"fmt"
 	"github.com/ok-chain/ok-gosdk/crypto/keys"
 	"strings"
 )
 
-type TransferParams struct {
-	fromInfo keys.Info
-	PassWd   string
-	ToAddr   string
-	CoinsStr string
-	Memo     string
-}
-
-func NewTransferParams(Info keys.Info, passWd, toAddr, coinsStr, memo string) TransferParams {
-	return TransferParams{
-		Info,
-		passWd,
-		toAddr,
-		coinsStr,
-		memo,
+func IsValidSendParams(fromInfo keys.Info, passWd, toAddr string) bool {
+	if fromInfo == nil {
+		fmt.Println("input invalid name")
+		return false
 	}
-}
-
-func (tp *TransferParams) IsValid() (bool, error) {
-	if tp.fromInfo == nil {
-		return false, errors.New("input invalid name")
+	if len(passWd) == 0 {
+		fmt.Println("no password input")
+		return false
 	}
-	if len(tp.PassWd) == 0 {
-		return false, errors.New("no password input")
+	if len(toAddr) != 46 || !strings.HasPrefix(toAddr, "okchain") {
+		fmt.Println("input invalid receiver address")
+		return false
 	}
-	if len(tp.ToAddr) != 46 || strings.HasPrefix(tp.ToAddr, "okchain") {
-		return false, errors.New("input invalid receiver address")
-	}
-	return true, nil
+	return true
 }

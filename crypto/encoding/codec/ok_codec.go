@@ -34,6 +34,8 @@ func goSDKRegisterAmino(cdc *amino.Codec) {
 
 }
 
+
+
 // TODO inefficient BaseResponse unmarshal
 func UnmarshalBaseResponse(bz []byte, ptr interface{}) error {
 	var br common.BaseResponse

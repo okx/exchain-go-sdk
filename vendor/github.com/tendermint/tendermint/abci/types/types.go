@@ -78,6 +78,29 @@ type ValidatorParams struct {
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
+type ResponseCheckTx struct {
+	Code                 uint32          `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Data                 []byte          `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Log                  string          `protobuf:"bytes,3,opt,name=log,proto3" json:"log,omitempty"`
+	Info                 string          `protobuf:"bytes,4,opt,name=info,proto3" json:"info,omitempty"`
+	GasWanted            int64           `protobuf:"varint,5,opt,name=gas_wanted,json=gasWanted,proto3" json:"gas_wanted,omitempty"`
+	GasUsed              int64           `protobuf:"varint,6,opt,name=gas_used,json=gasUsed,proto3" json:"gas_used,omitempty"`
+	Tags                 []common.KVPair `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
+	Codespace            string          `protobuf:"bytes,8,opt,name=codespace,proto3" json:"codespace,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+// IsOK returns true if Code is OK.
+func (r ResponseCheckTx) IsOK() bool {
+	return r.Code == CodeTypeOK
+}
+
+// IsErr returns true if Code is something other than OK.
+func (r ResponseCheckTx) IsErr() bool {
+	return r.Code != CodeTypeOK
+}
 
 type ResponseDeliverTx struct {
 	Code                 uint32          `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
@@ -91,6 +114,15 @@ type ResponseDeliverTx struct {
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
+}
+// IsOK returns true if Code is OK.
+func (r ResponseDeliverTx) IsOK() bool {
+	return r.Code == CodeTypeOK
+}
+
+// IsErr returns true if Code is something other than OK.
+func (r ResponseDeliverTx) IsErr() bool {
+	return r.Code != CodeTypeOK
 }
 
 type ResponseQuery struct {

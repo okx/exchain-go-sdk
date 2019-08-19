@@ -1,5 +1,12 @@
 package types
 
+import(
+	"encoding/hex"
+	"encoding/json"
+	ctypes "github.com/tendermint/tendermint/rpc/core/types"
+	"strings"
+)
+
 // Result is the union of ResponseFormat and ResponseCheckTx.
 type Result struct {
 	// Code is the response code, is stored back on the chain.
@@ -66,4 +73,96 @@ type StringTags []StringTag
 type StringTag struct {
 	Key   string `json:"key"`
 	Value string `json:"value,omitempty"`
+}
+
+// NewResponseFormatBroadcastTx returns a TxResponse given a ResultBroadcastTx from tendermint
+func NewResponseFormatBroadcastTx(res *ctypes.ResultBroadcastTx) TxResponse {
+	if res == nil {
+		return TxResponse{}
+	}
+
+	parsedLogs, _ := ParseABCILogs(res.Log)
+
+	return TxResponse{
+		Code:   res.Code,
+		Data:   res.Data.String(),
+		RawLog: res.Log,
+		Logs:   parsedLogs,
+		TxHash: res.Hash.String(),
+	}
+}
+
+// NewResponseFormatBroadcastTxCommit returns a TxResponse given a
+// ResultBroadcastTxCommit from tendermint.
+func NewResponseFormatBroadcastTxCommit(res *ctypes.ResultBroadcastTxCommit) TxResponse {
+	if res == nil {
+		return TxResponse{}
+	}
+
+	if !res.CheckTx.IsOK() {
+		return newTxResponseCheckTx(res)
+	}
+
+	return newTxResponseDeliverTx(res)
+}
+
+func newTxResponseCheckTx(res *ctypes.ResultBroadcastTxCommit) TxResponse {
+	if res == nil {
+		return TxResponse{}
+	}
+
+	var txHash string
+	if res.Hash != nil {
+		txHash = res.Hash.String()
+	}
+
+	parsedLogs, _ := ParseABCILogs(res.CheckTx.Log)
+
+	return TxResponse{
+		Height:    res.Height,
+		TxHash:    txHash,
+		Code:      res.CheckTx.Code,
+		Data:      strings.ToUpper(hex.EncodeToString(res.CheckTx.Data)),
+		RawLog:    res.CheckTx.Log,
+		Logs:      parsedLogs,
+		Info:      res.CheckTx.Info,
+		GasWanted: res.CheckTx.GasWanted,
+		GasUsed:   res.CheckTx.GasUsed,
+		Tags:      TagsToStringTags(res.CheckTx.Tags),
+		Codespace: res.CheckTx.Codespace,
+	}
+}
+
+func newTxResponseDeliverTx(res *ctypes.ResultBroadcastTxCommit) TxResponse {
+	if res == nil {
+		return TxResponse{}
+	}
+
+	var txHash string
+	if res.Hash != nil {
+		txHash = res.Hash.String()
+	}
+
+	parsedLogs, _ := ParseABCILogs(res.DeliverTx.Log)
+
+	return TxResponse{
+		Height:    res.Height,
+		TxHash:    txHash,
+		Code:      res.DeliverTx.Code,
+		Data:      strings.ToUpper(hex.EncodeToString(res.DeliverTx.Data)),
+		RawLog:    res.DeliverTx.Log,
+		Logs:      parsedLogs,
+		Info:      res.DeliverTx.Info,
+		GasWanted: res.DeliverTx.GasWanted,
+		GasUsed:   res.DeliverTx.GasUsed,
+		Tags:      TagsToStringTags(res.DeliverTx.Tags),
+		Codespace: res.DeliverTx.Codespace,
+	}
+}
+
+// ParseABCILogs attempts to parse a stringified ABCI tx log into a slice of
+// ABCIMessageLog types. It returns an error upon JSON decoding failure.
+func ParseABCILogs(logs string) (res ABCIMessageLogs, err error) {
+	err = json.Unmarshal([]byte(logs), &res)
+	return res, err
 }

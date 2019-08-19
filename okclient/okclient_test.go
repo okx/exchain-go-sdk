@@ -11,6 +11,7 @@ import (
 
 const (
 	RPC_URL = "localhost:26657"
+
 )
 
 func TestNewClient(t *testing.T) {

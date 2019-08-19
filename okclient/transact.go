@@ -12,7 +12,7 @@ import (
 )
 
 // broadcast mode
-const(
+const (
 	BroadcastBlock = "block"
 	BroadcastSync  = "sync"
 	BroadcastAsync = "async"
@@ -40,5 +40,20 @@ func (okCli *OKClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo s
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes,BroadcastBlock)
+	return okCli.broadcast(stdBytes, BroadcastBlock)
+}
+
+func (okCli *OKClient) NewOrder(fromInfo keys.Info, passWd, product, side, price, quantity, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+	if !transactParams.IsValidNewOrderParams(fromInfo, passWd, product, side, price, quantity, memo, ) {
+		return types.TxResponse{}, errors.New("err : params input to pend a order are invalid")
+	}
+	msg := msg.NewMsgNewOrder(fromInfo.GetAddress(), product, side, price, quantity)
+
+	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
+	if err != nil {
+		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
+	}
+
+	return okCli.broadcast(stdBytes, BroadcastBlock)
+
 }

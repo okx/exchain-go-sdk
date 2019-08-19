@@ -58,6 +58,7 @@ func RegisterMsgCdc(cdc *amino.Codec) {
 
 	cdc.RegisterInterface((*types.Msg)(nil), nil)
 	cdc.RegisterConcrete(msg.MsgSend{}, "token/Send", nil)
+	cdc.RegisterConcrete(msg.MsgNewOrder{}, "order/new", nil)
 	cdc.RegisterInterface((*types.Tx)(nil), nil)
 	cdc.RegisterConcrete(StdTx{}, "auth/StdTx", nil)
 }

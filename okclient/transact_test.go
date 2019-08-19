@@ -70,3 +70,14 @@ func TestMultiSend(t *testing.T) {
 	fmt.Println(res)
 
 }
+
+func TestMint(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	assertNotEqual(t, err, nil)
+	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	assertNotEqual(t, err, nil)
+	res, err := okCli.Mint(fromInfo, passWd, "gyc-3b3", 10000000, "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	assertNotEqual(t, err, nil)
+	fmt.Println(res)
+}

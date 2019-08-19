@@ -91,3 +91,19 @@ func (okCli *OKClient) MultiSend(fromInfo keys.Info, passWd, transferStr, memo s
 
 	return okCli.broadcast(stdBytes, BroadcastBlock)
 }
+
+func (okCli *OKClient) Mint(fromInfo keys.Info, passWd, symbol string, amount int64, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+	if !transactParams.IsValidMint(fromInfo, passWd, symbol, amount) {
+		return types.TxResponse{}, errors.New("err : params input to mint are invalid")
+	}
+
+	msg := msg.NewMsgMint(symbol, amount, fromInfo.GetAddress())
+
+	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
+	if err != nil {
+		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
+	}
+
+	return okCli.broadcast(stdBytes, BroadcastBlock)
+
+}

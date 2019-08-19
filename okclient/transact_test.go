@@ -36,5 +36,16 @@ func TestNewOrder(t *testing.T) {
 	res, err := okCli.NewOrder(fromInfo, passWd, "xxb_okb", "BUY", "11.1", "1.23", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
-	fmt.Println("orderId:",res.Tags[1].Value)
+	fmt.Println("orderId:", res.Tags[1].Value)
+}
+
+func TestCancelOrder(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	assertNotEqual(t, err, nil)
+	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	assertNotEqual(t, err, nil)
+	res, err := okCli.CancelOrder(fromInfo, passWd, "ID0000177104-1", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	assertNotEqual(t, err, nil)
+	fmt.Println(res)
 }

@@ -50,6 +50,18 @@ func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, qua
 	return true
 }
 
+func IsValidCancelOrderParams(fromInfo keys.Info, passWd string) bool {
+	if fromInfo == nil {
+		fmt.Println("input invalid name")
+		return false
+	}
+	if len(passWd) == 0 {
+		fmt.Println("no password input")
+		return false
+	}
+	return true
+}
+
 func checkAccuracyOfStr(num string, accuracy int) bool {
 	num = strings.TrimSpace(num)
 	strs := strings.Split(num, ".")

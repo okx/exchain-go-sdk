@@ -57,3 +57,17 @@ func (okCli *OKClient) NewOrder(fromInfo keys.Info, passWd, product, side, price
 	return okCli.broadcast(stdBytes, BroadcastBlock)
 
 }
+
+func (okCli *OKClient) CancelOrder(fromInfo keys.Info, passWd, orderID, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+	if !transactParams.IsValidCancelOrderParams(fromInfo, passWd) {
+		return types.TxResponse{}, errors.New("err : params input to cancel a order are invalid")
+	}
+
+	msg := msg.NewMsgCancelOrder(fromInfo.GetAddress(), orderID)
+	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
+	if err != nil {
+		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
+	}
+
+	return okCli.broadcast(stdBytes, BroadcastBlock)
+}

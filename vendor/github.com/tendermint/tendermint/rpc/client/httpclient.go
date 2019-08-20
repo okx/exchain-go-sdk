@@ -63,15 +63,15 @@ func NewHTTP(remote, wsEndpoint string) *HTTP {
 //	return result, nil
 //}
 //
-//func (c *HTTP) ABCIInfo() (*ctypes.ResultABCIInfo, error) {
-//	result := new(ctypes.ResultABCIInfo)
-//	_, err := c.rpc.Call("abci_info", map[string]interface{}{}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "ABCIInfo")
-//	}
-//	return result, nil
-//}
-//
+func (c *HTTP) ABCIInfo() (*ctypes.ResultABCIInfo, error) {
+	result := new(ctypes.ResultABCIInfo)
+	_, err := c.rpc.Call("abci_info", map[string]interface{}{}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "ABCIInfo")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) ABCIQuery(path string, data cmn.HexBytes) (*ctypes.ResultABCIQuery, error) {
 //	return c.ABCIQueryWithOptions(path, data, DefaultABCIQueryOptions)
 //}

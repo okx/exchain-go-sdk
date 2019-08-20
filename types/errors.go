@@ -6,10 +6,9 @@ import (
 	"fmt"
 	"strings"
 
+	abci "github.com/ok-chain/ok-gosdk/types/abci"
 	"github.com/pkg/errors"
 	cmn "github.com/tendermint/tendermint/libs/common"
-
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // CodeType - ABCI code identifier within codespace

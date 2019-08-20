@@ -19,11 +19,6 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "shjQwgnVXiwbc63MDoDjN5zudrs=",
-			"path": "github.com/tendermint/tendermint/abci/types",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "QXbJt6Bc1ndOKl7ZUDvJGkyJGm0=",
 			"path": "github.com/tendermint/tendermint/crypto",
 			"revision": ""

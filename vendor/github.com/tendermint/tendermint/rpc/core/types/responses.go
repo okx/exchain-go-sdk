@@ -4,7 +4,8 @@ import (
 	//"encoding/json"
 	//"time"
 	//
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/ok-chain/ok-gosdk/types/abci"
+
 	//"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
@@ -185,10 +186,10 @@ type ResultBroadcastTxCommit struct {
 //}
 //
 //// Info abci msg
-//type ResultABCIInfo struct {
-//	Response abci.ResponseInfo `json:"response"`
-//}
-//
+type ResultABCIInfo struct {
+	Response abci.ResponseInfo `json:"response"`
+}
+
 // Query abci msg
 type ResultABCIQuery struct {
 	Response abci.ResponseQuery `json:"response"`

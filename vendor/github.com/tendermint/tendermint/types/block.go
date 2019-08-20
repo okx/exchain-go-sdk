@@ -691,13 +691,13 @@ type Commit struct {
 //
 ////-----------------------------------------------------------------------------
 //
-//// SignedHeader is a header along with the commits that prove it.
-//// It is the basis of the lite client.
-//type SignedHeader struct {
-//	*Header `json:"header"`
-//	Commit  *Commit `json:"commit"`
-//}
-//
+// SignedHeader is a header along with the commits that prove it.
+// It is the basis of the lite client.
+type SignedHeader struct {
+	*Header `json:"header"`
+	Commit  *Commit `json:"commit"`
+}
+
 //// ValidateBasic does basic consistency checks and makes sure the header
 //// and commit are consistent.
 ////

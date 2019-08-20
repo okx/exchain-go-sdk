@@ -111,3 +111,13 @@ func TestQueryBlockchainInfo(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryCommit(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	var height int64 = 1024
+	resp, err := okCli.QueryCommit(&height)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

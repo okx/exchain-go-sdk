@@ -105,3 +105,11 @@ func (okCli *OKClient) QueryBlockchainInfo(minHeight,maxHeight int64) (*ctypes.R
 	}
 	return resp, nil
 }
+
+func (okCli *OKClient) QueryCommit(height *int64) (*ctypes.ResultCommit, error) {
+	resp, err := okCli.cli.Commit(height)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

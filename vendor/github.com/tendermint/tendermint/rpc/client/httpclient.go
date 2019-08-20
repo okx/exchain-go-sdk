@@ -205,15 +205,15 @@ func (c *HTTP) BlockResults(height *int64) (*ctypes.ResultBlockResults, error) {
 	return result, nil
 }
 
-//func (c *HTTP) Commit(height *int64) (*ctypes.ResultCommit, error) {
-//	result := new(ctypes.ResultCommit)
-//	_, err := c.rpc.Call("commit", map[string]interface{}{"height": height}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "Commit")
-//	}
-//	return result, nil
-//}
-//
+func (c *HTTP) Commit(height *int64) (*ctypes.ResultCommit, error) {
+	result := new(ctypes.ResultCommit)
+	_, err := c.rpc.Call("commit", map[string]interface{}{"height": height}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Commit")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) Tx(hash []byte, prove bool) (*ctypes.ResultTx, error) {
 //	result := new(ctypes.ResultTx)
 //	params := map[string]interface{}{

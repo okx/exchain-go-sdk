@@ -29,12 +29,12 @@ type ResultBlock struct {
 	Block     *types.Block     `json:"block"`
 }
 
-//// Commit and Header
-//type ResultCommit struct {
-//	types.SignedHeader `json:"signed_header"`
-//	CanonicalCommit    bool `json:"canonical"`
-//}
-//
+// Commit and Header
+type ResultCommit struct {
+	types.SignedHeader `json:"signed_header"`
+	CanonicalCommit    bool `json:"canonical"`
+}
+
 // ABCI results from a block
 type ResultBlockResults struct {
 	Height  int64                `json:"height"`

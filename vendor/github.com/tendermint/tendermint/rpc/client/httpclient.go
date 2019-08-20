@@ -130,15 +130,15 @@ func (c *HTTP) broadcastTX(route string, tx types.Tx) (*ctypes.ResultBroadcastTx
 //	}
 //	return result, nil
 //}
-//
-//func (c *HTTP) NetInfo() (*ctypes.ResultNetInfo, error) {
-//	result := new(ctypes.ResultNetInfo)
-//	_, err := c.rpc.Call("net_info", map[string]interface{}{}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "NetInfo")
-//	}
-//	return result, nil
-//}
+
+func (c *HTTP) NetInfo() (*ctypes.ResultNetInfo, error) {
+	result := new(ctypes.ResultNetInfo)
+	_, err := c.rpc.Call("net_info", map[string]interface{}{}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "NetInfo")
+	}
+	return result, nil
+}
 
 func (c *HTTP) DumpConsensusState() (*ctypes.ResultDumpConsensusState, error) {
 	result := new(ctypes.ResultDumpConsensusState)

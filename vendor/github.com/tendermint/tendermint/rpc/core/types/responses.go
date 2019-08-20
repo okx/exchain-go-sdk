@@ -9,7 +9,7 @@ import (
 	//"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
-	//"github.com/tendermint/tendermint/p2p"
+	"github.com/ok-chain/ok-gosdk/types/p2p"
 	//"github.com/tendermint/tendermint/state"
 	"github.com/tendermint/tendermint/types"
 )
@@ -88,14 +88,14 @@ import (
 //	return s.NodeInfo.Other.TxIndex == "on"
 //}
 //
-//// Info about peer connections
-//type ResultNetInfo struct {
-//	Listening bool     `json:"listening"`
-//	Listeners []string `json:"listeners"`
-//	NPeers    int      `json:"n_peers"`
-//	Peers     []Peer   `json:"peers"`
-//}
-//
+// Info about peer connections
+type ResultNetInfo struct {
+	Listening bool     `json:"listening"`
+	Listeners []string `json:"listeners"`
+	NPeers    int      `json:"n_peers"`
+	Peers     []Peer   `json:"peers"`
+}
+
 //// Log from dialing seeds
 //type ResultDialSeeds struct {
 //	Log string `json:"log"`
@@ -106,14 +106,14 @@ import (
 //	Log string `json:"log"`
 //}
 //
-//// A peer
-//type Peer struct {
-//	NodeInfo         p2p.DefaultNodeInfo  `json:"node_info"`
-//	IsOutbound       bool                 `json:"is_outbound"`
-//	ConnectionStatus p2p.ConnectionStatus `json:"connection_status"`
-//	RemoteIP         string               `json:"remote_ip"`
-//}
-//
+// A peer
+type Peer struct {
+	NodeInfo         p2p.DefaultNodeInfo  `json:"node_info"`
+	IsOutbound       bool                 `json:"is_outbound"`
+	ConnectionStatus p2p.ConnectionStatus `json:"connection_status"`
+	RemoteIP         string               `json:"remote_ip"`
+}
+
 //// Validators for a height
 //type ResultValidators struct {
 //	BlockHeight int64              `json:"block_height"`

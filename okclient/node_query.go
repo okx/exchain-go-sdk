@@ -19,3 +19,11 @@ func (okCli *OKClient) QueryConsenusState() ([]byte, error) {
 	}
 	return resp.RoundState, nil
 }
+
+func (okCli *OKClient) QueryDumpConsenusState() ([]byte, error) {
+	resp, err := okCli.cli.DumpConsensusState()
+	if err != nil {
+		return nil, err
+	}
+	return resp.RoundState, nil
+}

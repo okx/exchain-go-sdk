@@ -126,20 +126,17 @@ import (
 //	ConsensusParams types.ConsensusParams `json:"consensus_params"`
 //}
 //
-//// Info about the consensus state.
-//// UNSTABLE
-//type ResultDumpConsensusState struct {
-//	RoundState json.RawMessage `json:"round_state"`
-//	Peers      []PeerStateInfo `json:"peers"`
-//}
-//
-//// UNSTABLE
-//type PeerStateInfo struct {
-//	NodeAddress string          `json:"node_address"`
-//	PeerState   json.RawMessage `json:"peer_state"`
-//}
-//
-//// UNSTABLE
+// Info about the consensus state.
+type ResultDumpConsensusState struct {
+	RoundState json.RawMessage `json:"round_state"`
+	Peers      []PeerStateInfo `json:"peers"`
+}
+
+type PeerStateInfo struct {
+	NodeAddress string          `json:"node_address"`
+	PeerState   json.RawMessage `json:"peer_state"`
+}
+
 type ResultConsensusState struct {
 	RoundState json.RawMessage `json:"round_state"`
 }

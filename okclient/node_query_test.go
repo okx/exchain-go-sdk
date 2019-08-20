@@ -21,3 +21,10 @@ func TestQueryConsenusState(t *testing.T){
 	assertNotEqual(t,err,nil)
 	fmt.Println(string(resp))
 }
+
+func TestQueryDumpConsenusState(t *testing.T){
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryDumpConsenusState()
+	assertNotEqual(t,err,nil)
+	fmt.Println(string(resp))
+}

@@ -139,15 +139,15 @@ func (c *HTTP) broadcastTX(route string, tx types.Tx) (*ctypes.ResultBroadcastTx
 //	}
 //	return result, nil
 //}
-//
-//func (c *HTTP) DumpConsensusState() (*ctypes.ResultDumpConsensusState, error) {
-//	result := new(ctypes.ResultDumpConsensusState)
-//	_, err := c.rpc.Call("dump_consensus_state", map[string]interface{}{}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "DumpConsensusState")
-//	}
-//	return result, nil
-//}
+
+func (c *HTTP) DumpConsensusState() (*ctypes.ResultDumpConsensusState, error) {
+	result := new(ctypes.ResultDumpConsensusState)
+	_, err := c.rpc.Call("dump_consensus_state", map[string]interface{}{}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "DumpConsensusState")
+	}
+	return result, nil
+}
 
 func (c *HTTP) ConsensusState() (*ctypes.ResultConsensusState, error) {
 	result := new(ctypes.ResultConsensusState)

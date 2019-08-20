@@ -40,6 +40,12 @@ type Block struct {
 	Evidence   EvidenceData `json:"evidence"`
 	LastCommit *Commit      `json:"last_commit"`
 }
+
+// BlockMeta contains meta information about a block - namely, it's ID and Header.
+type BlockMeta struct {
+	BlockID BlockID `json:"block_id"` // the block hash and partsethash
+	Header  Header  `json:"header"`   // The block's Header
+}
 //
 //// MakeBlock returns a new block with an empty header, except what can be
 //// computed from itself.
@@ -365,22 +371,21 @@ type Header struct {
 
 	// prev block info
 	LastBlockID BlockID `json:"last_block_id"`
-	//===============================当前进程==========================================
 
-	//// hashes of block data
-	//LastCommitHash cmn.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
-	//DataHash       cmn.HexBytes `json:"data_hash"`        // transactions
-	//
-	//// hashes from the app output from the prev block
-	//ValidatorsHash     cmn.HexBytes `json:"validators_hash"`      // validators for the current block
-	//NextValidatorsHash cmn.HexBytes `json:"next_validators_hash"` // validators for the next block
-	//ConsensusHash      cmn.HexBytes `json:"consensus_hash"`       // consensus params for current block
-	//AppHash            cmn.HexBytes `json:"app_hash"`             // state after txs from the previous block
-	//LastResultsHash    cmn.HexBytes `json:"last_results_hash"`    // root hash of all results from the txs from the previous block
-	//
-	//// consensus info
-	//EvidenceHash    cmn.HexBytes `json:"evidence_hash"`    // evidence included in the block
-	//ProposerAddress Address      `json:"proposer_address"` // original proposer of the block
+	// hashes of block data
+	LastCommitHash cmn.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
+	DataHash       cmn.HexBytes `json:"data_hash"`        // transactions
+
+	// hashes from the app output from the prev block
+	ValidatorsHash     cmn.HexBytes `json:"validators_hash"`      // validators for the current block
+	NextValidatorsHash cmn.HexBytes `json:"next_validators_hash"` // validators for the next block
+	ConsensusHash      cmn.HexBytes `json:"consensus_hash"`       // consensus params for current block
+	AppHash            cmn.HexBytes `json:"app_hash"`             // state after txs from the previous block
+	LastResultsHash    cmn.HexBytes `json:"last_results_hash"`    // root hash of all results from the txs from the previous block
+
+	// consensus info
+	EvidenceHash    cmn.HexBytes `json:"evidence_hash"`    // evidence included in the block
+	ProposerAddress Address      `json:"proposer_address"` // original proposer of the block
 }
 //
 //// Populate the Header with state-derived data.

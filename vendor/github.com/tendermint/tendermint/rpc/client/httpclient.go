@@ -54,15 +54,15 @@ func NewHTTP(remote, wsEndpoint string) *HTTP {
 
 //var _ Client = (*HTTP)(nil)
 //
-//func (c *HTTP) Status() (*ctypes.ResultStatus, error) {
-//	result := new(ctypes.ResultStatus)
-//	_, err := c.rpc.Call("status", map[string]interface{}{}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "Status")
-//	}
-//	return result, nil
-//}
-//
+func (c *HTTP) Status() (*ctypes.ResultStatus, error) {
+	result := new(ctypes.ResultStatus)
+	_, err := c.rpc.Call("status", map[string]interface{}{}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Status")
+	}
+	return result, nil
+}
+
 func (c *HTTP) ABCIInfo() (*ctypes.ResultABCIInfo, error) {
 	result := new(ctypes.ResultABCIInfo)
 	_, err := c.rpc.Call("abci_info", map[string]interface{}{}, result)
@@ -72,9 +72,9 @@ func (c *HTTP) ABCIInfo() (*ctypes.ResultABCIInfo, error) {
 	return result, nil
 }
 
-//func (c *HTTP) ABCIQuery(path string, data cmn.HexBytes) (*ctypes.ResultABCIQuery, error) {
-//	return c.ABCIQueryWithOptions(path, data, DefaultABCIQueryOptions)
-//}
+func (c *HTTP) ABCIQuery(path string, data cmn.HexBytes) (*ctypes.ResultABCIQuery, error) {
+	return c.ABCIQueryWithOptions(path, data, DefaultABCIQueryOptions)
+}
 
 func (c *HTTP) ABCIQueryWithOptions(path string, data cmn.HexBytes, opts ABCIQueryOptions) (*ctypes.ResultABCIQuery, error) {
 	result := new(ctypes.ResultABCIQuery)
@@ -187,15 +187,15 @@ func (c *HTTP) Genesis() (*ctypes.ResultGenesis, error) {
 	return result, nil
 }
 
-//func (c *HTTP) Block(height *int64) (*ctypes.ResultBlock, error) {
-//	result := new(ctypes.ResultBlock)
-//	_, err := c.rpc.Call("block", map[string]interface{}{"height": height}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "Block")
-//	}
-//	return result, nil
-//}
-//
+func (c *HTTP) Block(height *int64) (*ctypes.ResultBlock, error) {
+	result := new(ctypes.ResultBlock)
+	_, err := c.rpc.Call("block", map[string]interface{}{"height": height}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Block")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) BlockResults(height *int64) (*ctypes.ResultBlockResults, error) {
 //	result := new(ctypes.ResultBlockResults)
 //	_, err := c.rpc.Call("block_results", map[string]interface{}{"height": height}, result)

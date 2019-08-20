@@ -2,11 +2,10 @@ package core_types
 
 import (
 	"encoding/json"
-	//"time"
-	//
 	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	"time"
 
-	//"github.com/tendermint/tendermint/crypto"
+	"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
 	"github.com/ok-chain/ok-gosdk/types/p2p"
@@ -25,12 +24,12 @@ type ResultGenesis struct {
 	Genesis *types.GenesisDoc `json:"genesis"`
 }
 
-//// Single block (with meta)
-//type ResultBlock struct {
-//	BlockMeta *types.BlockMeta `json:"block_meta"`
-//	Block     *types.Block     `json:"block"`
-//}
-//
+// Single block (with meta)
+type ResultBlock struct {
+	BlockMeta *types.BlockMeta `json:"block_meta"`
+	Block     *types.Block     `json:"block"`
+}
+
 //// Commit and Header
 //type ResultCommit struct {
 //	types.SignedHeader `json:"signed_header"`
@@ -57,29 +56,29 @@ type ResultGenesis struct {
 //	}
 //}
 //
-//// Info about the node's syncing state
-//type SyncInfo struct {
-//	LatestBlockHash   cmn.HexBytes `json:"latest_block_hash"`
-//	LatestAppHash     cmn.HexBytes `json:"latest_app_hash"`
-//	LatestBlockHeight int64        `json:"latest_block_height"`
-//	LatestBlockTime   time.Time    `json:"latest_block_time"`
-//	CatchingUp        bool         `json:"catching_up"`
-//}
-//
-//// Info about the node's validator
-//type ValidatorInfo struct {
-//	Address     cmn.HexBytes  `json:"address"`
-//	PubKey      crypto.PubKey `json:"pub_key"`
-//	VotingPower int64         `json:"voting_power"`
-//}
-//
-//// Node Status
-//type ResultStatus struct {
-//	NodeInfo      p2p.DefaultNodeInfo `json:"node_info"`
-//	SyncInfo      SyncInfo            `json:"sync_info"`
-//	ValidatorInfo ValidatorInfo       `json:"validator_info"`
-//}
-//
+// Info about the node's syncing state
+type SyncInfo struct {
+	LatestBlockHash   cmn.HexBytes `json:"latest_block_hash"`
+	LatestAppHash     cmn.HexBytes `json:"latest_app_hash"`
+	LatestBlockHeight int64        `json:"latest_block_height"`
+	LatestBlockTime   time.Time    `json:"latest_block_time"`
+	CatchingUp        bool         `json:"catching_up"`
+}
+
+// Info about the node's validator
+type ValidatorInfo struct {
+	Address     cmn.HexBytes  `json:"address"`
+	PubKey      crypto.PubKey `json:"pub_key"`
+	VotingPower int64         `json:"voting_power"`
+}
+
+// Node Status
+type ResultStatus struct {
+	NodeInfo      p2p.DefaultNodeInfo `json:"node_info"`
+	SyncInfo      SyncInfo            `json:"sync_info"`
+	ValidatorInfo ValidatorInfo       `json:"validator_info"`
+}
+
 //// Is TxIndexing enabled
 //func (s *ResultStatus) TxIndexEnabled() bool {
 //	if s == nil {

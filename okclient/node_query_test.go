@@ -64,3 +64,31 @@ func TestQueryUnconfirmedTxsNum(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryStateInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryStateInfo()
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}
+
+func TestQueryABCITokenpair(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryABCITokenpair()
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}
+
+func TestQueryBlock(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	var height int64 = 1024
+	resp, err := okCli.QueryBlock(&height)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

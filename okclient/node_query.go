@@ -6,6 +6,10 @@ import (
 	"github.com/tendermint/tendermint/types"
 )
 
+const (
+	abciTokenPairPath = "/custom/token/tokenpair"
+)
+
 func (okCli *OKClient) QueryABCIInfo() (abci.ResponseInfo, error) {
 	resp, err := okCli.cli.ABCIInfo()
 	if err != nil {
@@ -56,6 +60,30 @@ func (okCli *OKClient) QueryHealthInfo() (*ctypes.ResultHealth, error) {
 
 func (okCli *OKClient) QueryUnconfirmedTxsNum(limit int) (*ctypes.ResultUnconfirmedTxs, error) {
 	resp, err := okCli.cli.UnconfirmedTxs(limit)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (okCli *OKClient) QueryStateInfo() (*ctypes.ResultStatus, error) {
+	resp, err := okCli.cli.Status()
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (okCli *OKClient) QueryABCITokenpair() (abci.ResponseQuery, error) {
+	resp, err := okCli.cli.ABCIQuery(abciTokenPairPath, nil)
+	if err != nil {
+		return abci.ResponseQuery{}, err
+	}
+	return resp.Response, nil
+}
+
+func (okCli *OKClient) QueryBlock(height *int64) (*ctypes.ResultBlock, error) {
+	resp, err := okCli.cli.Block(height)
 	if err != nil {
 		return nil, err
 	}

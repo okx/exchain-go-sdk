@@ -3,7 +3,7 @@ package client
 import (
 	"sync"
 
-	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
+	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
 
 	"github.com/tendermint/go-amino"
 

@@ -2,13 +2,13 @@ package core_types
 
 import (
 	"encoding/json"
-	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	abci "github.com/ok-chain/gosdk/types/abci"
 	"time"
 
 	"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
-	"github.com/ok-chain/ok-gosdk/types/p2p"
+	"github.com/ok-chain/gosdk/types/p2p"
 	"github.com/tendermint/tendermint/types"
 )
 

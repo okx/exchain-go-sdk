@@ -8,7 +8,7 @@ import (
 
 const (
 	addr   = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
-	rpcUrl = "tcp://127.0.0.1:26657"
+	rpcUrl = "tcp://127.0.0.1:20157"
 )
 
 func TestGetAccountInfoByAddr(t *testing.T) {

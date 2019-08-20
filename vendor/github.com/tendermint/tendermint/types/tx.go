@@ -1,7 +1,7 @@
 package types
 
 import (
-	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	abci "github.com/ok-chain/gosdk/types/abci"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/crypto/merkle"
 

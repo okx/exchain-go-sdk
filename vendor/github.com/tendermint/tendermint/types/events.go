@@ -1,7 +1,7 @@
 package types
 
 import (
-	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	abci "github.com/ok-chain/gosdk/types/abci"
 	"github.com/tendermint/go-amino"
 )
 

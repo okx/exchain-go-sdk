@@ -45,3 +45,13 @@ func (okCli *OKClient) QueryGenesisFile() (*types.GenesisDoc, error) {
 	}
 	return resp.Genesis, nil
 }
+
+func (okCli *OKClient) QueryHealthInfo() (*ctypes.ResultHealth, error) {
+	resp, err := okCli.cli.Health()
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+

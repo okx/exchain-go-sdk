@@ -46,3 +46,12 @@ func TestQueryGenesisFile(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryHealthInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryHealthInfo()
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

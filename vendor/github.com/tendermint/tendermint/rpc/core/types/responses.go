@@ -192,14 +192,7 @@ type ResultABCIQuery struct {
 	Response abci.ResponseQuery `json:"response"`
 }
 
-//// empty results
-//type (
-//	ResultUnsafeFlushMempool struct{}
-//	ResultUnsafeProfile      struct{}
-//	ResultSubscribe          struct{}
-//	ResultUnsubscribe        struct{}
-//	ResultHealth             struct{}
-//)
+type ResultHealth struct{}
 
 // Event data from a subscription
 type ResultEvent struct {

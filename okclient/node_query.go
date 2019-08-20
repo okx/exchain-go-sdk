@@ -3,6 +3,7 @@ package okclient
 import (
 	abci "github.com/ok-chain/ok-gosdk/types/abci"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
+	"github.com/tendermint/tendermint/types"
 )
 
 func (okCli *OKClient) QueryABCIInfo() (abci.ResponseInfo, error) {
@@ -35,4 +36,12 @@ func (okCli *OKClient) QueryNetInfo() (*ctypes.ResultNetInfo, error) {
 		return nil, err
 	}
 	return resp, nil
+}
+
+func (okCli *OKClient) QueryGenesisFile() (*types.GenesisDoc, error) {
+	resp, err := okCli.cli.Genesis()
+	if err != nil {
+		return nil, err
+	}
+	return resp.Genesis, nil
 }

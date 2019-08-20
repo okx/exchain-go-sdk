@@ -5,6 +5,7 @@ import (
 	"github.com/tendermint/tendermint/version"
 	"time"
 )
+
 type DefaultNodeInfo struct {
 	ProtocolVersion ProtocolVersion `json:"protocol_version"`
 
@@ -36,8 +37,6 @@ type DefaultNodeInfoOther struct {
 	TxIndex    string `json:"tx_index"`
 	RPCAddress string `json:"rpc_address"`
 }
-
-
 
 type ConnectionStatus struct {
 	Duration    time.Duration

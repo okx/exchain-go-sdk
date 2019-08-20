@@ -177,16 +177,16 @@ func (c *HTTP) ConsensusState() (*ctypes.ResultConsensusState, error) {
 //	}
 //	return result, nil
 //}
-//
-//func (c *HTTP) Genesis() (*ctypes.ResultGenesis, error) {
-//	result := new(ctypes.ResultGenesis)
-//	_, err := c.rpc.Call("genesis", map[string]interface{}{}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "Genesis")
-//	}
-//	return result, nil
-//}
-//
+
+func (c *HTTP) Genesis() (*ctypes.ResultGenesis, error) {
+	result := new(ctypes.ResultGenesis)
+	_, err := c.rpc.Call("genesis", map[string]interface{}{}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Genesis")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) Block(height *int64) (*ctypes.ResultBlock, error) {
 //	result := new(ctypes.ResultBlock)
 //	_, err := c.rpc.Call("block", map[string]interface{}{"height": height}, result)

@@ -20,11 +20,11 @@ import (
 //	BlockMetas []*types.BlockMeta `json:"block_metas"`
 //}
 //
-//// Genesis file
-//type ResultGenesis struct {
-//	Genesis *types.GenesisDoc `json:"genesis"`
-//}
-//
+// Genesis file
+type ResultGenesis struct {
+	Genesis *types.GenesisDoc `json:"genesis"`
+}
+
 //// Single block (with meta)
 //type ResultBlock struct {
 //	BlockMeta *types.BlockMeta `json:"block_meta"`

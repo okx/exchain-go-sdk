@@ -1,4 +1,4 @@
-package okclient
+package client
 
 import (
 	"encoding/hex"
@@ -8,8 +8,8 @@ import (
 )
 
 func TestQueryABCIInfo(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryABCIInfo()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryABCIInfo()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -17,22 +17,22 @@ func TestQueryABCIInfo(t *testing.T) {
 }
 
 func TestQueryConsenusState(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryConsenusState()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryConsenusState()
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(resp))
 }
 
 func TestQueryDumpConsenusState(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryDumpConsenusState()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryDumpConsenusState()
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(resp))
 }
 
 func TestQueryNetInfo(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryNetInfo()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryNetInfo()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -40,8 +40,8 @@ func TestQueryNetInfo(t *testing.T) {
 }
 
 func TestQueryGenesisFile(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryGenesisFile()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryGenesisFile()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -49,8 +49,8 @@ func TestQueryGenesisFile(t *testing.T) {
 }
 
 func TestQueryHealthInfo(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryHealthInfo()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryHealthInfo()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -58,8 +58,8 @@ func TestQueryHealthInfo(t *testing.T) {
 }
 
 func TestQueryUnconfirmedTxsNum(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryUnconfirmedTxsNum(30)
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryUnconfirmedTxsNum(30)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -67,8 +67,8 @@ func TestQueryUnconfirmedTxsNum(t *testing.T) {
 }
 
 func TestQueryStateInfo(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryStateInfo()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryStateInfo()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -76,8 +76,8 @@ func TestQueryStateInfo(t *testing.T) {
 }
 
 func TestQueryABCITokenpair(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryABCITokenpair()
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryABCITokenpair()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -85,9 +85,9 @@ func TestQueryABCITokenpair(t *testing.T) {
 }
 
 func TestQueryBlock(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	var height int64 = 1024
-	resp, err := okCli.QueryBlock(&height)
+	resp, err := cli.QueryBlock(&height)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -95,9 +95,9 @@ func TestQueryBlock(t *testing.T) {
 }
 
 func TestQueryBlockResults(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	// input nil means query the latest block info
-	resp, err := okCli.QueryBlockResults(nil)
+	resp, err := cli.QueryBlockResults(nil)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -105,8 +105,8 @@ func TestQueryBlockResults(t *testing.T) {
 }
 
 func TestQueryBlockchainInfo(t *testing.T) {
-	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryBlockchainInfo(0, 10)
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryBlockchainInfo(0, 10)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -114,9 +114,9 @@ func TestQueryBlockchainInfo(t *testing.T) {
 }
 
 func TestQueryCommit(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	var height int64 = 1024
-	resp, err := okCli.QueryCommit(&height)
+	resp, err := cli.QueryCommit(&height)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -124,11 +124,11 @@ func TestQueryCommit(t *testing.T) {
 }
 
 func TestQueryTx(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	// get tx hash bytes
 	txHash, err := hex.DecodeString("12CF714D13D9B86EDCCBE41BF55845BF96613977AFF8E503C5A5349A50841F9A")
 	assertNotEqual(t, err, nil)
-	resp, err := okCli.QueryTx(txHash, true)
+	resp, err := cli.QueryTx(txHash, true)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -136,9 +136,9 @@ func TestQueryTx(t *testing.T) {
 }
 
 func TestQueryTxOnHeight(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	var queryStr  ="tx.height=202996"
-	resp, err := okCli.QueryTxOnHeight(queryStr, true,1,30)
+	resp, err := cli.QueryTxOnHeight(queryStr, true,1,30)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)

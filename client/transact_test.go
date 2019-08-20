@@ -1,4 +1,4 @@
-package okclient
+package client
 
 import (
 	"encoding/json"
@@ -18,44 +18,44 @@ const (
 )
 
 func TestSend(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	assertNotEqual(t, err, nil)
-	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
-	res, err := okCli.Send(fromInfo, passWd, addr1, "10.24okb", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := cli.Send(fromInfo, passWd, addr1, "10.24okb", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 }
 
 func TestNewOrder(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	assertNotEqual(t, err, nil)
-	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
-	res, err := okCli.NewOrder(fromInfo, passWd, "xxb_okb", "BUY", "11.1", "1.23", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := cli.NewOrder(fromInfo, passWd, "xxb_okb", "BUY", "11.1", "1.23", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 	fmt.Println("orderId:", res.Tags[1].Value)
 }
 
 func TestCancelOrder(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	assertNotEqual(t, err, nil)
-	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
-	res, err := okCli.CancelOrder(fromInfo, passWd, "ID0000177104-1", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := cli.CancelOrder(fromInfo, passWd, "ID0000177104-1", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 }
 
 func TestMultiSend(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	assertNotEqual(t, err, nil)
-	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
 
 	// build the json string for multisend
@@ -65,19 +65,19 @@ func TestMultiSend(t *testing.T) {
 	assertNotEqual(t, err, nil)
 
 	// transact multisend
-	res, err := okCli.MultiSend(fromInfo, passWd, string(transJSONBytes), "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := cli.MultiSend(fromInfo, passWd, string(transJSONBytes), "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 
 }
 
 func TestMint(t *testing.T) {
-	okCli := NewClient(rpcUrl)
+	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	assertNotEqual(t, err, nil)
-	accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
+	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
-	res, err := okCli.Mint(fromInfo, passWd, "gyc-3b3", 10000000, "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := cli.Mint(fromInfo, passWd, "gyc-3b3", 10000000, "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 }

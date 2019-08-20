@@ -1,4 +1,4 @@
-package okclient
+package client
 
 import (
 	"errors"
@@ -18,27 +18,27 @@ func init() {
 	cdc = codec.Cdc
 }
 
-type OKClient struct {
+type OKChainClient struct {
 	rpcUrl string
 	cli    *rpcCli.HTTP
 	cdc    *codec.Codec
 }
 
-func NewClient(rpcUrl string) OKClient {
-	return OKClient{
+func NewClient(rpcUrl string) OKChainClient {
+	return OKChainClient{
 		rpcUrl: rpcUrl,
 		cli:    rpcCli.NewHTTP(rpcUrl, "/websocket"),
 		cdc:    cdc,
 	}
 }
 
-func (okCli *OKClient) query(path string, key cmn.HexBytes) ([]byte, error) {
+func (cli *OKChainClient) query(path string, key cmn.HexBytes) ([]byte, error) {
 	opts := rpcCli.ABCIQueryOptions{
 		Height: 0,
 		Prove:  false,
 	}
 
-	result, err := okCli.cli.ABCIQueryWithOptions(path, key, opts)
+	result, err := cli.cli.ABCIQueryWithOptions(path, key, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -52,16 +52,16 @@ func (okCli *OKClient) query(path string, key cmn.HexBytes) ([]byte, error) {
 
 }
 
-func (okCli *OKClient) broadcast(txBytes []byte, broadcastMode string) (res types.TxResponse, err error) {
+func (cli *OKChainClient) broadcast(txBytes []byte, broadcastMode string) (res types.TxResponse, err error) {
 	switch broadcastMode {
 	case BroadcastSync:
-		res, err = doBroadcastTxSync(okCli.cli, txBytes)
+		res, err = doBroadcastTxSync(cli.cli, txBytes)
 
 	case BroadcastAsync:
-		res, err = doBroadcastTxAsync(okCli.cli, txBytes)
+		res, err = doBroadcastTxAsync(cli.cli, txBytes)
 
 	case BroadcastBlock:
-		res, err = doBroadcastTxCommit(okCli.cli, txBytes)
+		res, err = doBroadcastTxCommit(cli.cli, txBytes)
 	default:
 		err = fmt.Errorf("unsupported return broadcast mode %s; supported types: sync, async, block", broadcastMode)
 	}

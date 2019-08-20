@@ -1,4 +1,4 @@
-package okclient
+package client
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ const (
 	BroadcastAsync = "async"
 )
 
-func (okCli *OKClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo string, accNum, seqNum uint64) (resp types.TxResponse, err error) {
+func (cli *OKChainClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo string, accNum, seqNum uint64) (resp types.TxResponse, err error) {
 	if !transactParams.IsValidSendParams(fromInfo, passWd, toAddr) {
 		return types.TxResponse{}, errors.New("err : params input to send are invalid")
 	}
@@ -40,10 +40,10 @@ func (okCli *OKClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo s
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes, BroadcastBlock)
+	return cli.broadcast(stdBytes, BroadcastBlock)
 }
 
-func (okCli *OKClient) NewOrder(fromInfo keys.Info, passWd, product, side, price, quantity, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+func (cli *OKChainClient) NewOrder(fromInfo keys.Info, passWd, product, side, price, quantity, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
 	if !transactParams.IsValidNewOrderParams(fromInfo, passWd, product, side, price, quantity, memo, ) {
 		return types.TxResponse{}, errors.New("err : params input to pend a order are invalid")
 	}
@@ -54,11 +54,11 @@ func (okCli *OKClient) NewOrder(fromInfo keys.Info, passWd, product, side, price
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes, BroadcastBlock)
+	return cli.broadcast(stdBytes, BroadcastBlock)
 
 }
 
-func (okCli *OKClient) CancelOrder(fromInfo keys.Info, passWd, orderID, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+func (cli *OKChainClient) CancelOrder(fromInfo keys.Info, passWd, orderID, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
 	if !transactParams.IsValidCancelOrderParams(fromInfo, passWd) {
 		return types.TxResponse{}, errors.New("err : params input to cancel a order are invalid")
 	}
@@ -69,10 +69,10 @@ func (okCli *OKClient) CancelOrder(fromInfo keys.Info, passWd, orderID, memo str
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes, BroadcastBlock)
+	return cli.broadcast(stdBytes, BroadcastBlock)
 }
 
-func (okCli *OKClient) MultiSend(fromInfo keys.Info, passWd, transferStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+func (cli *OKChainClient) MultiSend(fromInfo keys.Info, passWd, transferStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
 	if !transactParams.IsValidMultiSend(fromInfo, passWd, transferStr) {
 		return types.TxResponse{}, errors.New("err : params input to multi send are invalid")
 	}
@@ -89,10 +89,10 @@ func (okCli *OKClient) MultiSend(fromInfo keys.Info, passWd, transferStr, memo s
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes, BroadcastBlock)
+	return cli.broadcast(stdBytes, BroadcastBlock)
 }
 
-func (okCli *OKClient) Mint(fromInfo keys.Info, passWd, symbol string, amount int64, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
+func (cli *OKChainClient) Mint(fromInfo keys.Info, passWd, symbol string, amount int64, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
 	if !transactParams.IsValidMint(fromInfo, passWd, symbol, amount) {
 		return types.TxResponse{}, errors.New("err : params input to mint are invalid")
 	}
@@ -104,6 +104,6 @@ func (okCli *OKClient) Mint(fromInfo keys.Info, passWd, symbol string, amount in
 		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
 	}
 
-	return okCli.broadcast(stdBytes, BroadcastBlock)
+	return cli.broadcast(stdBytes, BroadcastBlock)
 
 }

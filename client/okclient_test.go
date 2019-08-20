@@ -1,4 +1,4 @@
-package okclient
+package client
 
 import (
 	"errors"
@@ -15,12 +15,12 @@ const (
 )
 
 func TestNewClient(t *testing.T) {
-	okCli := NewClient(RPC_URL)
+	cli := NewClient(RPC_URL)
 
 	accountParams := queryParams.NewQueryAccTokenParams("","all")
 
 
-	jsonBytes, err := okCli.cdc.MarshalJSON(accountParams)
+	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
 	assertNotEqual(t, err, nil)
 
 	//fmt.Println(jsonBytes)
@@ -29,7 +29,7 @@ func TestNewClient(t *testing.T) {
 		Height: 0,
 		Prove:  false,
 	}
-	result, err := okCli.cli.ABCIQueryWithOptions(path, jsonBytes, opts)
+	result, err := cli.cli.ABCIQueryWithOptions(path, jsonBytes, opts)
 	assertNotEqual(t, err, nil)
 	//fmt.Println(result)
 	resp := result.Response
@@ -38,7 +38,7 @@ func TestNewClient(t *testing.T) {
 	}
 
 	var accountResponse types.AccountTokensInfo
-	if err = okCli.cdc.UnmarshalJSON(resp.Value, &accountResponse); err != nil {
+	if err = cli.cdc.UnmarshalJSON(resp.Value, &accountResponse); err != nil {
 		assertNotEqual(t, err, nil)
 	}
 

@@ -102,3 +102,12 @@ func TestQueryBlockResults(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryBlockchainInfo(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryBlockchainInfo(0,10)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

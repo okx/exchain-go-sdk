@@ -13,11 +13,11 @@ import (
 )
 
 //// List of blocks
-//type ResultBlockchainInfo struct {
-//	LastHeight int64              `json:"last_height"`
-//	BlockMetas []*types.BlockMeta `json:"block_metas"`
-//}
-//
+type ResultBlockchainInfo struct {
+	LastHeight int64              `json:"last_height"`
+	BlockMetas []*types.BlockMeta `json:"block_metas"`
+}
+
 // Genesis file
 type ResultGenesis struct {
 	Genesis *types.GenesisDoc `json:"genesis"`

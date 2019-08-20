@@ -97,3 +97,11 @@ func (okCli *OKClient) QueryBlockResults(height *int64) (*ctypes.ResultBlockResu
 	}
 	return resp, nil
 }
+
+func (okCli *OKClient) QueryBlockchainInfo(minHeight,maxHeight int64) (*ctypes.ResultBlockchainInfo, error) {
+	resp, err := okCli.cli.BlockchainInfo(minHeight,maxHeight)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

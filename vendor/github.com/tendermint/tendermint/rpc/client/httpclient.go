@@ -167,16 +167,16 @@ func (c *HTTP) Health() (*ctypes.ResultHealth, error) {
 	return result, nil
 }
 
-//func (c *HTTP) BlockchainInfo(minHeight, maxHeight int64) (*ctypes.ResultBlockchainInfo, error) {
-//	result := new(ctypes.ResultBlockchainInfo)
-//	_, err := c.rpc.Call("blockchain",
-//		map[string]interface{}{"minHeight": minHeight, "maxHeight": maxHeight},
-//		result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "BlockchainInfo")
-//	}
-//	return result, nil
-//}
+func (c *HTTP) BlockchainInfo(minHeight, maxHeight int64) (*ctypes.ResultBlockchainInfo, error) {
+	result := new(ctypes.ResultBlockchainInfo)
+	_, err := c.rpc.Call("blockchain",
+		map[string]interface{}{"minHeight": minHeight, "maxHeight": maxHeight},
+		result)
+	if err != nil {
+		return nil, errors.Wrap(err, "BlockchainInfo")
+	}
+	return result, nil
+}
 
 func (c *HTTP) Genesis() (*ctypes.ResultGenesis, error) {
 	result := new(ctypes.ResultGenesis)

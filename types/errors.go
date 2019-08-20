@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	abci "github.com/ok-chain/gosdk/types/abci"
 	"github.com/pkg/errors"
 	cmn "github.com/tendermint/tendermint/libs/common"
 )

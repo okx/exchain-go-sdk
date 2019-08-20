@@ -3,8 +3,8 @@ package okclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/types"
-	"github.com/ok-chain/ok-gosdk/utils"
+	"github.com/ok-chain/gosdk/types"
+	"github.com/ok-chain/gosdk/utils"
 
 	"testing"
 )

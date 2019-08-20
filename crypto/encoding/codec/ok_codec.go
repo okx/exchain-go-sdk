@@ -4,8 +4,8 @@ package codec
 
 import (
 	"encoding/json"
-	"github.com/ok-chain/ok-gosdk/common"
-	"github.com/ok-chain/ok-gosdk/types"
+	"github.com/ok-chain/gosdk/common"
+	"github.com/ok-chain/gosdk/types"
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto/encoding/amino"
 )

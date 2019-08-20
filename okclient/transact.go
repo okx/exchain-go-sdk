@@ -2,13 +2,13 @@ package okclient
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/ok-gosdk/common/transactParams"
-	"github.com/ok-chain/ok-gosdk/crypto/keys"
-	"github.com/ok-chain/ok-gosdk/types"
-	"github.com/ok-chain/ok-gosdk/types/msg"
-	"github.com/ok-chain/ok-gosdk/types/tx"
-	"github.com/ok-chain/ok-gosdk/utils"
+	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
+	"github.com/ok-chain/gosdk/common/transactParams"
+	"github.com/ok-chain/gosdk/crypto/keys"
+	"github.com/ok-chain/gosdk/types"
+	"github.com/ok-chain/gosdk/types/msg"
+	"github.com/ok-chain/gosdk/types/tx"
+	"github.com/ok-chain/gosdk/utils"
 )
 
 // broadcast mode

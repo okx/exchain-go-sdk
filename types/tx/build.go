@@ -2,10 +2,10 @@ package tx
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/crypto/encoding/codec"
-	"github.com/ok-chain/ok-gosdk/types"
-	"github.com/ok-chain/ok-gosdk/types/msg"
-	"github.com/ok-chain/ok-gosdk/utils"
+	"github.com/ok-chain/gosdk/crypto/encoding/codec"
+	"github.com/ok-chain/gosdk/types"
+	"github.com/ok-chain/gosdk/types/msg"
+	"github.com/ok-chain/gosdk/utils"
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"

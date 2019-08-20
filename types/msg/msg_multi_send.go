@@ -2,7 +2,7 @@ package msg
 
 import (
 	"encoding/json"
-	"github.com/ok-chain/ok-gosdk/types"
+	"github.com/ok-chain/gosdk/types"
 )
 
 type MsgMultiSend struct {

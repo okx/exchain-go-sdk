@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/ok-gosdk/crypto/go-bip39"
-	"github.com/ok-chain/ok-gosdk/crypto/keys"
+	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
+	"github.com/ok-chain/gosdk/crypto/go-bip39"
+	"github.com/ok-chain/gosdk/crypto/keys"
 )
 
 const mnemonicEntropySize = 128

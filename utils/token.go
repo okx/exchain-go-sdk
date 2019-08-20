@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/types"
+	"github.com/ok-chain/gosdk/types"
 	"regexp"
 	"strings"
 )

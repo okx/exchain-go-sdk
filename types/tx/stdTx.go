@@ -2,7 +2,7 @@ package tx
 
 import (
 	"encoding/json"
-	"github.com/ok-chain/ok-gosdk/types"
+	"github.com/ok-chain/gosdk/types"
 	"github.com/tendermint/tendermint/crypto"
 )
 

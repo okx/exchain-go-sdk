@@ -2,8 +2,8 @@ package tx
 
 import (
 	"encoding/json"
-	"github.com/ok-chain/ok-gosdk/crypto/keys"
-	"github.com/ok-chain/ok-gosdk/types"
+	"github.com/ok-chain/gosdk/crypto/keys"
+	"github.com/ok-chain/gosdk/types"
 )
 
 type StdSignMsg struct {

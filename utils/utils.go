@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/ok-chain/ok-gosdk/types"
+import "github.com/ok-chain/gosdk/types"
 
 var(
 	AddressStoreKeyPrefix = []byte{0x01}

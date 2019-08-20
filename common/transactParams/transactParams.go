@@ -2,7 +2,7 @@ package transactParams
 
 import (
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/crypto/keys"
+	"github.com/ok-chain/gosdk/crypto/keys"
 	"strings"
 )
 

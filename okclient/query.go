@@ -3,10 +3,10 @@ package okclient
 import (
 	"errors"
 	"fmt"
-	"github.com/ok-chain/ok-gosdk/common/queryParams"
-	"github.com/ok-chain/ok-gosdk/crypto/encoding/codec"
-	"github.com/ok-chain/ok-gosdk/types"
-	"github.com/ok-chain/ok-gosdk/utils"
+	"github.com/ok-chain/gosdk/common/queryParams"
+	"github.com/ok-chain/gosdk/crypto/encoding/codec"
+	"github.com/ok-chain/gosdk/types"
+	"github.com/ok-chain/gosdk/utils"
 )
 
 const (

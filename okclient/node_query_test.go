@@ -92,3 +92,13 @@ func TestQueryBlock(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryBlockResults(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	// input nil means query the latest block info
+	resp, err := okCli.QueryBlockResults(nil)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

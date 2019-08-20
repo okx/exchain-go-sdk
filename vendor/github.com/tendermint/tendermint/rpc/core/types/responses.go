@@ -9,7 +9,6 @@ import (
 	cmn "github.com/tendermint/tendermint/libs/common"
 
 	"github.com/ok-chain/ok-gosdk/types/p2p"
-	//"github.com/tendermint/tendermint/state"
 	"github.com/tendermint/tendermint/types"
 )
 
@@ -36,12 +35,12 @@ type ResultBlock struct {
 //	CanonicalCommit    bool `json:"canonical"`
 //}
 //
-//// ABCI results from a block
-//type ResultBlockResults struct {
-//	Height  int64                `json:"height"`
-//	Results *state.ABCIResponses `json:"results"`
-//}
-//
+// ABCI results from a block
+type ResultBlockResults struct {
+	Height  int64                `json:"height"`
+	Results *abci.ABCIResponses `json:"results"`
+}
+
 //// NewResultCommit is a helper to initialize the ResultCommit with
 //// the embedded struct
 //func NewResultCommit(header *types.Header, commit *types.Commit,

@@ -156,3 +156,9 @@ type ResponseInfo struct {
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
+
+type ABCIResponses struct {
+	DeliverTx  []*ResponseDeliverTx
+	EndBlock   *ResponseEndBlock
+	BeginBlock *ResponseBeginBlock
+}

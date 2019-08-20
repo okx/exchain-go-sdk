@@ -89,3 +89,11 @@ func (okCli *OKClient) QueryBlock(height *int64) (*ctypes.ResultBlock, error) {
 	}
 	return resp, nil
 }
+
+func (okCli *OKClient) QueryBlockResults(height *int64) (*ctypes.ResultBlockResults, error) {
+	resp, err := okCli.cli.BlockResults(height)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

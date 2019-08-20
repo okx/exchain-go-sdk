@@ -98,8 +98,8 @@ func (okCli *OKClient) QueryBlockResults(height *int64) (*ctypes.ResultBlockResu
 	return resp, nil
 }
 
-func (okCli *OKClient) QueryBlockchainInfo(minHeight,maxHeight int64) (*ctypes.ResultBlockchainInfo, error) {
-	resp, err := okCli.cli.BlockchainInfo(minHeight,maxHeight)
+func (okCli *OKClient) QueryBlockchainInfo(minHeight, maxHeight int64) (*ctypes.ResultBlockchainInfo, error) {
+	resp, err := okCli.cli.BlockchainInfo(minHeight, maxHeight)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +108,22 @@ func (okCli *OKClient) QueryBlockchainInfo(minHeight,maxHeight int64) (*ctypes.R
 
 func (okCli *OKClient) QueryCommit(height *int64) (*ctypes.ResultCommit, error) {
 	resp, err := okCli.cli.Commit(height)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (okCli *OKClient) QueryTx(txHash []byte, prove bool) (*ctypes.ResultTx, error) {
+	resp, err := okCli.cli.Tx(txHash, prove)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (okCli *OKClient) QueryTxOnHeight(queryStr string, prove bool, page, perPage int) (*ctypes.ResultTxSearch, error) {
+	resp, err := okCli.cli.TxSearch(queryStr, prove, page, perPage)
 	if err != nil {
 		return nil, err
 	}

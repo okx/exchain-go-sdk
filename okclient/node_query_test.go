@@ -1,6 +1,7 @@
 package okclient
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"testing"
@@ -105,7 +106,7 @@ func TestQueryBlockResults(t *testing.T) {
 
 func TestQueryBlockchainInfo(t *testing.T) {
 	okCli := NewClient(rpcUrl)
-	resp, err := okCli.QueryBlockchainInfo(0,10)
+	resp, err := okCli.QueryBlockchainInfo(0, 10)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)
@@ -116,6 +117,28 @@ func TestQueryCommit(t *testing.T) {
 	okCli := NewClient(rpcUrl)
 	var height int64 = 1024
 	resp, err := okCli.QueryCommit(&height)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}
+
+func TestQueryTx(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	// get tx hash bytes
+	txHash, err := hex.DecodeString("12CF714D13D9B86EDCCBE41BF55845BF96613977AFF8E503C5A5349A50841F9A")
+	assertNotEqual(t, err, nil)
+	resp, err := okCli.QueryTx(txHash, true)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}
+
+func TestQueryTxOnHeight(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	var queryStr  ="tx.height=202996"
+	resp, err := okCli.QueryTxOnHeight(queryStr, true,1,30)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)

@@ -214,34 +214,34 @@ func (c *HTTP) Commit(height *int64) (*ctypes.ResultCommit, error) {
 	return result, nil
 }
 
-//func (c *HTTP) Tx(hash []byte, prove bool) (*ctypes.ResultTx, error) {
-//	result := new(ctypes.ResultTx)
-//	params := map[string]interface{}{
-//		"hash":  hash,
-//		"prove": prove,
-//	}
-//	_, err := c.rpc.Call("tx", params, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "Tx")
-//	}
-//	return result, nil
-//}
-//
-//func (c *HTTP) TxSearch(query string, prove bool, page, perPage int) (*ctypes.ResultTxSearch, error) {
-//	result := new(ctypes.ResultTxSearch)
-//	params := map[string]interface{}{
-//		"query":    query,
-//		"prove":    prove,
-//		"page":     page,
-//		"per_page": perPage,
-//	}
-//	_, err := c.rpc.Call("tx_search", params, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "TxSearch")
-//	}
-//	return result, nil
-//}
-//
+func (c *HTTP) Tx(hash []byte, prove bool) (*ctypes.ResultTx, error) {
+	result := new(ctypes.ResultTx)
+	params := map[string]interface{}{
+		"hash":  hash,
+		"prove": prove,
+	}
+	_, err := c.rpc.Call("tx", params, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Tx")
+	}
+	return result, nil
+}
+
+func (c *HTTP) TxSearch(query string, prove bool, page, perPage int) (*ctypes.ResultTxSearch, error) {
+	result := new(ctypes.ResultTxSearch)
+	params := map[string]interface{}{
+		"query":    query,
+		"prove":    prove,
+		"page":     page,
+		"per_page": perPage,
+	}
+	_, err := c.rpc.Call("tx_search", params, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "TxSearch")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) Validators(height *int64) (*ctypes.ResultValidators, error) {
 //	result := new(ctypes.ResultValidators)
 //	_, err := c.rpc.Call("validators", map[string]interface{}{"height": height}, result)

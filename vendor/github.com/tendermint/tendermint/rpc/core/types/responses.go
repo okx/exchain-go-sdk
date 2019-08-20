@@ -156,22 +156,22 @@ type ResultBroadcastTxCommit struct {
 	Height    int64                  `json:"height"`
 }
 
-//// Result of querying for a tx
-//type ResultTx struct {
-//	Hash     cmn.HexBytes           `json:"hash"`
-//	Height   int64                  `json:"height"`
-//	Index    uint32                 `json:"index"`
-//	TxResult abci.ResponseDeliverTx `json:"tx_result"`
-//	Tx       types.Tx               `json:"tx"`
-//	Proof    types.TxProof          `json:"proof,omitempty"`
-//}
-//
-//// Result of searching for txs
-//type ResultTxSearch struct {
-//	Txs        []*ResultTx `json:"txs"`
-//	TotalCount int         `json:"total_count"`
-//}
-//
+// Result of querying for a tx
+type ResultTx struct {
+	Hash     cmn.HexBytes           `json:"hash"`
+	Height   int64                  `json:"height"`
+	Index    uint32                 `json:"index"`
+	TxResult abci.ResponseDeliverTx `json:"tx_result"`
+	Tx       types.Tx               `json:"tx"`
+	Proof    types.TxProof          `json:"proof,omitempty"`
+}
+
+// Result of searching for txs
+type ResultTxSearch struct {
+	Txs        []*ResultTx `json:"txs"`
+	TotalCount int         `json:"total_count"`
+}
+
 // List of mempool txs
 type ResultUnconfirmedTxs struct {
 	Count      int        `json:"n_txs"`

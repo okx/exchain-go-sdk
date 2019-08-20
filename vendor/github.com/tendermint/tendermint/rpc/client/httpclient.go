@@ -112,16 +112,16 @@ func (c *HTTP) broadcastTX(route string, tx types.Tx) (*ctypes.ResultBroadcastTx
 	}
 	return result, nil
 }
-//
-//func (c *HTTP) UnconfirmedTxs(limit int) (*ctypes.ResultUnconfirmedTxs, error) {
-//	result := new(ctypes.ResultUnconfirmedTxs)
-//	_, err := c.rpc.Call("unconfirmed_txs", map[string]interface{}{"limit": limit}, result)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "unconfirmed_txs")
-//	}
-//	return result, nil
-//}
-//
+
+func (c *HTTP) UnconfirmedTxs(limit int) (*ctypes.ResultUnconfirmedTxs, error) {
+	result := new(ctypes.ResultUnconfirmedTxs)
+	_, err := c.rpc.Call("unconfirmed_txs", map[string]interface{}{"limit": limit}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "unconfirmed_txs")
+	}
+	return result, nil
+}
+
 //func (c *HTTP) NumUnconfirmedTxs() (*ctypes.ResultUnconfirmedTxs, error) {
 //	result := new(ctypes.ResultUnconfirmedTxs)
 //	_, err := c.rpc.Call("num_unconfirmed_txs", map[string]interface{}{}, result)

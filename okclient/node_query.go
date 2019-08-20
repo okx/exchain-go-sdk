@@ -54,4 +54,10 @@ func (okCli *OKClient) QueryHealthInfo() (*ctypes.ResultHealth, error) {
 	return resp, nil
 }
 
-
+func (okCli *OKClient) QueryUnconfirmedTxsNum(limit int) (*ctypes.ResultUnconfirmedTxs, error) {
+	resp, err := okCli.cli.UnconfirmedTxs(limit)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

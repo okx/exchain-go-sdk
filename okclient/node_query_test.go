@@ -55,3 +55,12 @@ func TestQueryHealthInfo(t *testing.T) {
 	assertNotEqual(t, err, nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryUnconfirmedTxsNum(t *testing.T) {
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryUnconfirmedTxsNum(30)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}

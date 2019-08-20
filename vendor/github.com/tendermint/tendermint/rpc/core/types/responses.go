@@ -174,15 +174,15 @@ type ResultBroadcastTxCommit struct {
 //	TotalCount int         `json:"total_count"`
 //}
 //
-//// List of mempool txs
-//type ResultUnconfirmedTxs struct {
-//	Count      int        `json:"n_txs"`
-//	Total      int        `json:"total"`
-//	TotalBytes int64      `json:"total_bytes"`
-//	Txs        []types.Tx `json:"txs"`
-//}
-//
-//// Info abci msg
+// List of mempool txs
+type ResultUnconfirmedTxs struct {
+	Count      int        `json:"n_txs"`
+	Total      int        `json:"total"`
+	TotalBytes int64      `json:"total_bytes"`
+	Txs        []types.Tx `json:"txs"`
+}
+
+// Info abci msg
 type ResultABCIInfo struct {
 	Response abci.ResponseInfo `json:"response"`
 }

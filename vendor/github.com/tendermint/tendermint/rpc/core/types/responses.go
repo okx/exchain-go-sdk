@@ -1,7 +1,7 @@
 package core_types
 
 import (
-	//"encoding/json"
+	"encoding/json"
 	//"time"
 	//
 	abci "github.com/ok-chain/ok-gosdk/types/abci"
@@ -140,10 +140,10 @@ import (
 //}
 //
 //// UNSTABLE
-//type ResultConsensusState struct {
-//	RoundState json.RawMessage `json:"round_state"`
-//}
-//
+type ResultConsensusState struct {
+	RoundState json.RawMessage `json:"round_state"`
+}
+
 // CheckTx result
 type ResultBroadcastTx struct {
 	Code uint32       `json:"code"`

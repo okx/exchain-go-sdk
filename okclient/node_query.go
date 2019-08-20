@@ -11,3 +11,11 @@ func (okCli *OKClient) QueryABCIInfo() (abci.ResponseInfo, error) {
 	}
 	return resp.Response, nil
 }
+
+func (okCli *OKClient) QueryConsenusState() ([]byte, error) {
+	resp, err := okCli.cli.ConsensusState()
+	if err != nil {
+		return nil, err
+	}
+	return resp.RoundState, nil
+}

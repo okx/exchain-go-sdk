@@ -14,3 +14,10 @@ func TestQueryABCIInfo(t *testing.T){
 	assertNotEqual(t,err,nil)
 	fmt.Println(string(jsonBytes))
 }
+
+func TestQueryConsenusState(t *testing.T){
+	okCli := NewClient(rpcUrl)
+	resp, err := okCli.QueryConsenusState()
+	assertNotEqual(t,err,nil)
+	fmt.Println(string(resp))
+}

@@ -1,6 +1,8 @@
 package client
 
 import (
+	"fmt"
+	"github.com/ok-chain/gosdk/common/queryParams"
 	sdktypes "github.com/ok-chain/gosdk/types"
 	abci "github.com/ok-chain/gosdk/types/abci"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -9,6 +11,7 @@ import (
 
 const (
 	abciTokenPairPath = "/custom/token/tokenpair"
+	proposalsInfoPath = "custom/gov/proposals"
 )
 
 func (cli *OKChainClient) QueryABCIInfo() (abci.ResponseInfo, error) {
@@ -143,4 +146,25 @@ func (cli *OKChainClient) QueryCurrentValidators() (sdktypes.ResultValidatorsOut
 	}
 
 	return outputValidatorsRes, nil
+}
+
+func (cli *OKChainClient) QueryProposals() (sdktypes.Proposals, error) {
+	var proposalStatus queryParams.ProposalStatus
+	var voterAddr, depositorAddr sdktypes.AccAddress
+	var numLimit uint64
+	params := queryParams.NewQueryProposalsParams(proposalStatus, numLimit, voterAddr, depositorAddr)
+	jsonBytes, err := cli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryProposalsParams failed in json marshal : %s", err.Error())
+	}
+	res, err := cli.query(proposalsInfoPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+	var matchingProposals sdktypes.Proposals
+	if err := cli.cdc.UnmarshalJSON(res, &matchingProposals); err != nil {
+		return nil, fmt.Errorf("proposals unmarshaled failed : %s", err.Error())
+	}
+
+	return matchingProposals, nil
 }

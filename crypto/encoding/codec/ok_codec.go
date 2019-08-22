@@ -31,6 +31,11 @@ func New() *Codec {
 func goSDKRegisterAmino(cdc *amino.Codec) {
 	cdc.RegisterInterface((*types.Account)(nil), nil)
 	cdc.RegisterConcrete(&types.BaseAccount{}, "auth/Account", nil)
+	cdc.RegisterInterface((*types.Proposal)(nil), nil)
+	cdc.RegisterConcrete(&types.TextProposal{}, "okchain/gov/TextProposal", nil)
+	cdc.RegisterConcrete(&types.DexListProposal{}, "okchain/gov/DexListProposal", nil)
+	cdc.RegisterConcrete(&types.ParameterProposal{}, "okchain/gov/ParameterProposal", nil)
+	cdc.RegisterConcrete(&types.AppUpgradeProposal{}, "okchain/gov/AppUpgradeProposal", nil)
 
 }
 

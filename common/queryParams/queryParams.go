@@ -1,11 +1,20 @@
 package queryParams
 
-import "time"
+import (
+	"encoding/json"
+	"github.com/ok-chain/gosdk/types"
+	"time"
+)
 
 const (
 	DefaultBookSize = 200
 	DefaultPage     = 1
 	DefaultPerPage  = 50
+
+	StatusDepositPeriod ProposalStatus = 0x01
+	StatusVotingPeriod  ProposalStatus = 0x02
+	StatusPassed        ProposalStatus = 0x03
+	StatusRejected      ProposalStatus = 0x04
 )
 
 type QueryAccTokenParams struct {
@@ -166,5 +175,42 @@ func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, p
 		EndTime:   endTime,
 		Page:      page,
 		PerPage:   perPage,
+	}
+}
+
+type QueryProposalsParams struct {
+	Voter          types.AccAddress
+	Depositor      types.AccAddress
+	ProposalStatus ProposalStatus
+	Limit          uint64
+}
+
+type ProposalStatus byte
+
+func (status ProposalStatus) MarshalJSON() ([]byte, error) {
+	return json.Marshal(status.String())
+}
+
+func (status ProposalStatus) String() string {
+	switch status {
+	case StatusDepositPeriod:
+		return "DepositPeriod"
+	case StatusVotingPeriod:
+		return "VotingPeriod"
+	case StatusPassed:
+		return "Passed"
+	case StatusRejected:
+		return "Rejected"
+	default:
+		return ""
+	}
+}
+
+func NewQueryProposalsParams(status ProposalStatus, limit uint64, voter, depositor types.AccAddress) QueryProposalsParams {
+	return QueryProposalsParams{
+		Voter:          voter,
+		Depositor:      depositor,
+		ProposalStatus: status,
+		Limit:          limit,
 	}
 }

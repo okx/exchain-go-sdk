@@ -39,7 +39,7 @@ func TestCreateAccountWithPrivateKey(t *testing.T) {
 	privateKeyStr, err := GeneratePrivateKeyFromMnemo(mnemonic)
 	assertNotEqual(t, err, nil)
 	fmt.Println(privateKeyStr)
-	info, err := CreateAccountWithPrivateKey(privateKeyStr,name,passWd)
+	info, err := CreateAccountWithPrivateKey(privateKeyStr, name, passWd)
 	assertNotEqual(t, err, nil)
 	fmt.Println(info.GetAddress().String())
 	fmt.Println(info.GetName())
@@ -56,10 +56,6 @@ func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
 	privateKey, err := GeneratePrivateKeyFromMnemo(mnemonic)
 	assertNotEqual(t, err, nil)
 	fmt.Println(privateKey)
-}
-
-func TestGenerateKeyStore(t *testing.T) {
-	GenerateKeyStore("/Users/oker/code/src/github.com/ok-chain/gosdk", mnemonic, passWd)
 }
 
 func assertNotEqual(t *testing.T, a, b interface{}) {

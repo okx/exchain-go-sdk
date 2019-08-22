@@ -8,7 +8,6 @@ import (
 	"github.com/ok-chain/gosdk/crypto/keys"
 	"github.com/ok-chain/gosdk/crypto/keys/mintkey"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
-	"os"
 )
 
 const (
@@ -113,19 +112,4 @@ func GenerateMnemonic() (string, error) {
 		return "", fmt.Errorf("bip39.NewMnemonic err : %s", err.Error())
 	}
 	return mnemo, nil
-}
-
-func GenerateKeyStore(path, mnemo, passWd string) error {
-	if len(path) == 0 {
-		path = os.ExpandEnv("$HOME/.okchaincli")
-	}
-
-	//kb := keys.New(defaultKeyDBName, filepath.Join(path, "michael"))
-	//kb.CreateAccount("wgy", mnemo, "", passWd, 0, 0)
-
-	return nil
-}
-
-func RecoverPrivateKeyFromKeyStore(path, passWd string) (string, error) {
-	return "", nil
 }

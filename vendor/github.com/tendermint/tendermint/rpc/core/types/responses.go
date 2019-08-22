@@ -112,12 +112,12 @@ type Peer struct {
 	RemoteIP         string               `json:"remote_ip"`
 }
 
-//// Validators for a height
-//type ResultValidators struct {
-//	BlockHeight int64              `json:"block_height"`
-//	Validators  []*types.Validator `json:"validators"`
-//}
-//
+// Validators for a height
+type ResultValidators struct {
+	BlockHeight int64              `json:"block_height"`
+	Validators  []*types.Validator `json:"validators"`
+}
+
 //// ConsensusParams for given height
 //type ResultConsensusParams struct {
 //	BlockHeight     int64                 `json:"block_height"`

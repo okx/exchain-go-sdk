@@ -215,6 +215,15 @@ func (c *HTTP) TxSearch(query string, prove bool, page, perPage int) (*ctypes.Re
 	return result, nil
 }
 
+func (c *HTTP) Validators(height *int64) (*ctypes.ResultValidators, error) {
+	result := new(ctypes.ResultValidators)
+	_, err := c.rpc.Call("validators", map[string]interface{}{"height": height}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Validators")
+	}
+	return result, nil
+}
+
 type WSEvents struct {
 	cmn.BaseService
 	cdc      *amino.Codec

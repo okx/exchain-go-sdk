@@ -1,6 +1,7 @@
 package client
 
 import (
+	sdktypes "github.com/ok-chain/gosdk/types"
 	abci "github.com/ok-chain/gosdk/types/abci"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	"github.com/tendermint/tendermint/types"
@@ -128,4 +129,18 @@ func (cli *OKChainClient) QueryTxOnHeight(queryStr string, prove bool, page, per
 		return nil, err
 	}
 	return resp, nil
+}
+
+func (cli *OKChainClient) QueryCurrentValidators() (sdktypes.ResultValidatorsOutput, error) {
+	resp, err := cli.cli.Validators(nil)
+	if err != nil {
+		return sdktypes.ResultValidatorsOutput{}, err
+	}
+
+	outputValidatorsRes, err := sdktypes.NewResultValidatorsOutput(resp)
+	if err != nil {
+		return sdktypes.ResultValidatorsOutput{}, err
+	}
+
+	return outputValidatorsRes, nil
 }

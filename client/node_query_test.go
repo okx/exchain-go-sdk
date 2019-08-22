@@ -137,8 +137,17 @@ func TestQueryTx(t *testing.T) {
 
 func TestQueryTxOnHeight(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	var queryStr  ="tx.height=202996"
-	resp, err := cli.QueryTxOnHeight(queryStr, true,1,30)
+	var queryStr = "tx.height=202996"
+	resp, err := cli.QueryTxOnHeight(queryStr, true, 1, 30)
+	assertNotEqual(t, err, nil)
+	jsonBytes, err := json.Marshal(resp)
+	assertNotEqual(t, err, nil)
+	fmt.Println(string(jsonBytes))
+}
+
+func TestQueryCurrentValidators(t *testing.T) {
+	cli := NewClient(rpcUrl)
+	resp, err := cli.QueryCurrentValidators()
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)
 	assertNotEqual(t, err, nil)

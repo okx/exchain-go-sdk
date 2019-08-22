@@ -55,8 +55,6 @@ type Keybase interface {
 	CloseDB()
 }
 
-
-
 // KeyType reflects a human-readable type for key listing.
 type KeyType uint
 
@@ -114,6 +112,10 @@ func newLocalInfo(name string, pub crypto.PubKey, privArmor string) Info {
 		PubKey:       pub,
 		PrivKeyArmor: privArmor,
 	}
+}
+
+func NewLocalInfo(name string, pub crypto.PubKey, privArmor string) Info {
+	return newLocalInfo(name, pub, privArmor)
 }
 
 func (i localInfo) GetType() KeyType {

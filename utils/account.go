@@ -1,15 +1,20 @@
 package utils
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
 	"github.com/ok-chain/gosdk/crypto/go-bip39"
 	"github.com/ok-chain/gosdk/crypto/keys"
+	"github.com/ok-chain/gosdk/crypto/keys/mintkey"
+	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"os"
 )
 
 const (
 	mnemonicEntropySize     = 128
 	bcryptSecurityParameter = 12
+	defaultKeyDBName        = "keys"
 )
 
 var (
@@ -78,9 +83,24 @@ func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, erro
 	return info, mnemo, nil
 }
 
-func CreateAccountWithPrivateKey(privateKey string) (keys.Info, error) {
-	return nil, nil
+func CreateAccountWithPrivateKey(privateKey, name, passWd string) (keys.Info, error) {
+	if len(privateKey) == 0 {
+		return nil, errors.New("Empty privateKey")
+	}
+	derivedPrivSlice, err := hex.DecodeString(privateKey)
+	if err != nil {
+		return nil, err
+	}
+	derivedPriv, err := slice2Array(derivedPrivSlice)
+	if err != nil {
+		return nil, err
+	}
+	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
+
+	privateKeyArmor := mintkey.EncryptArmorPrivKey(priv, passWd)
+	return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), nil
 }
+
 func GenerateMnemonic() (string, error) {
 	var entropySeed []byte
 	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
@@ -95,7 +115,14 @@ func GenerateMnemonic() (string, error) {
 	return mnemo, nil
 }
 
-func GenerateKeyStore(path, privateKey, passWd string) error {
+func GenerateKeyStore(path, mnemo, passWd string) error {
+	if len(path) == 0 {
+		path = os.ExpandEnv("$HOME/.okchaincli")
+	}
+
+	//kb := keys.New(defaultKeyDBName, filepath.Join(path, "michael"))
+	//kb.CreateAccount("wgy", mnemo, "", passWd, 0, 0)
+
 	return nil
 }
 

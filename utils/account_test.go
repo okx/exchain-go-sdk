@@ -35,6 +35,22 @@ func TestCreateAccountWithMnemo(t *testing.T) {
 	fmt.Println(mnemo)
 }
 
+func TestGenerateMnemonic(t *testing.T) {
+	mnemo, err := GenerateMnemonic()
+	assertNotEqual(t, err, nil)
+	fmt.Println(mnemo)
+}
+
+func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
+	privateKey, err := GeneratePrivateKeyFromMnemo(mnemonic, passWd)
+	assertNotEqual(t, err, nil)
+	fmt.Println(privateKey)
+}
+
+func TestGenerateKeyStore(t *testing.T) {
+
+}
+
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {
 		t.Errorf("test failed: %s", a)

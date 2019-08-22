@@ -7,7 +7,10 @@ import (
 	"github.com/ok-chain/gosdk/crypto/keys"
 )
 
-const mnemonicEntropySize = 128
+const (
+	mnemonicEntropySize     = 128
+	bcryptSecurityParameter = 12
+)
 
 var (
 	Kb keys.Keybase
@@ -75,4 +78,27 @@ func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, erro
 	return info, mnemo, nil
 }
 
+func CreateAccountWithPrivateKey(privateKey string) (keys.Info, error) {
+	return nil, nil
+}
+func GenerateMnemonic() (string, error) {
+	var entropySeed []byte
+	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
+	if err != nil {
+		return "", fmt.Errorf("bip39.NewEntropy err : %s", err.Error())
+	}
 
+	mnemo, err := bip39.NewMnemonic(entropySeed[:])
+	if err != nil {
+		return "", fmt.Errorf("bip39.NewMnemonic err : %s", err.Error())
+	}
+	return mnemo, nil
+}
+
+func GenerateKeyStore(path, privateKey, passWd string) error {
+	return nil
+}
+
+func RecoverPrivateKeyFromKeyStore(path, passWd string) (string, error) {
+	return "", nil
+}

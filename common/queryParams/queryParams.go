@@ -214,3 +214,14 @@ func NewQueryProposalsParams(status ProposalStatus, limit uint64, voter, deposit
 		Limit:          limit,
 	}
 }
+
+type QueryProposalParams struct {
+	ProposalID uint64
+}
+
+// creates a new instance of QueryProposalParams
+func NewQueryProposalParams(proposalID uint64) QueryProposalParams {
+	return QueryProposalParams{
+		ProposalID: proposalID,
+	}
+}

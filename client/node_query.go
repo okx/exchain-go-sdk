@@ -12,6 +12,7 @@ import (
 const (
 	abciTokenPairPath = "/custom/token/tokenpair"
 	proposalsInfoPath = "custom/gov/proposals"
+	proposalInfoPath  = "custom/gov/proposal"
 )
 
 func (cli *OKChainClient) QueryABCIInfo() (abci.ResponseInfo, error) {
@@ -167,4 +168,24 @@ func (cli *OKChainClient) QueryProposals() (sdktypes.Proposals, error) {
 	}
 
 	return matchingProposals, nil
+}
+
+func (cli *OKChainClient) QueryProposalByID(proposalID uint64) (sdktypes.Proposal, error) {
+	params := queryParams.NewQueryProposalParams(proposalID)
+	jsonBytes, err := cli.cdc.MarshalJSON(params)
+	if err != nil {
+		return nil, fmt.Errorf("error : QueryProposalParams failed in json marshal : %s", err.Error())
+	}
+	res, err := cli.query(proposalInfoPath, jsonBytes)
+	if err != nil {
+		return nil, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	var matchingProposal sdktypes.Proposal
+
+	if err := cli.cdc.UnmarshalJSON(res, &matchingProposal); err != nil {
+		return nil, fmt.Errorf("proposal unmarshaled failed : %s", err.Error())
+	}
+	return matchingProposal, nil
+
 }

@@ -8,7 +8,9 @@ import (
 
 const (
 	addr   = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
-	rpcUrl = "tcp://127.0.0.1:20157"
+	//rpcUrl = "http://127.0.0.1:20157"
+	rpcUrl = "http://kong-proxy.test-d-okex.svc.test.local:8443/okchain/v1/rpc"
+	//rpcUrl = "http://192.168.13.128:26657"
 )
 
 func TestGetAccountInfoByAddr(t *testing.T) {

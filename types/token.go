@@ -1,5 +1,7 @@
 package types
 
+import "encoding/json"
+
 type CoinsInfo []CoinInfo
 
 type CoinInfo struct {
@@ -17,6 +19,11 @@ type Token struct {
 	TotalSupply    int64      `json:"totalSupply"`
 	Owner          AccAddress `json:"owner"`
 	Mintable       bool       `json:"mintable"`
+}
+
+func (token Token) String() string {
+	b, _ := json.Marshal(token)
+	return string(b)
 }
 
 type TokenPair struct {

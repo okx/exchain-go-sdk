@@ -2,12 +2,10 @@ package utils
 
 import (
 	"encoding/hex"
-	"fmt"
 	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
 	"github.com/ok-chain/gosdk/crypto/go-bip39"
 	"github.com/ok-chain/gosdk/crypto/keys/hd"
 	"github.com/ok-chain/gosdk/types"
-	"os"
 )
 
 var (
@@ -38,14 +36,3 @@ func slice2Array(s []byte) (byteArray [32]byte, err error) {
 	}
 	return
 }
-
-func ensureDir(dir string, mode os.FileMode) error {
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err := os.MkdirAll(dir, mode)
-		if err != nil {
-			return fmt.Errorf("directory %v create failed. %v", dir, err)
-		}
-	}
-	return nil
-}
-

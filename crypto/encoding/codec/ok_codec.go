@@ -3,6 +3,7 @@ package codec
 // ok codec used specifically for ok client
 
 import (
+	"bytes"
 	"encoding/json"
 	"github.com/ok-chain/gosdk/common"
 	"github.com/ok-chain/gosdk/types"
@@ -39,40 +40,9 @@ func goSDKRegisterAmino(cdc *amino.Codec) {
 
 }
 
-
-
-// TODO inefficient BaseResponse unmarshal
-func UnmarshalBaseResponse(bz []byte, ptr interface{}) error {
-	var br common.BaseResponse
-	if err := json.Unmarshal(bz, &br); err != nil {
-		return err
-	}
-	// r.Data is interface{} —— first Marshal then Unmarshal, it's inefficient
-
-	jsonBytes, err := json.Marshal(br.Data)
-	if err != nil {
-		return err
-	}
-	// br.Data contains float64 and go-amino doesn't support float
-	if err := Cdc.UnmarshalJSON(jsonBytes, ptr); err != nil {
-		return err
-	}
-	return nil
-}
-
-// TODO inefficient BaseResponse unmarshal
-func UnmarshalJsonBaseResponse(bz []byte, ptr interface{}) error {
-	var br common.BaseResponse
-	if err := json.Unmarshal(bz, &br); err != nil {
-		return err
-	}
-	// r.Data is interface{} —— first Marshal then Unmarshal, it's inefficient
-
-	jsonBytes, err := json.Marshal(br.Data)
-	if err != nil {
-		return err
-	}
-	if err := json.Unmarshal(jsonBytes, ptr); err != nil {
+func GetDataFromBaseResponse(bz []byte, ptr interface{}) error {
+	dataBytes := getDataFromBaseResponse(bz)
+	if err := json.Unmarshal(dataBytes, ptr); err != nil {
 		return err
 	}
 	return nil
@@ -93,4 +63,10 @@ func UnmarshalListResponse(bz []byte, ptr interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func getDataFromBaseResponse(bz []byte) []byte {
+	preIndex := bytes.Index(bz, []byte("data"))
+	sufIndex := bytes.LastIndex(bz, []byte("detailMsg"))
+	return bz[preIndex+6 : sufIndex-2]
 }

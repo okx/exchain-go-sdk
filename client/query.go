@@ -164,7 +164,7 @@ func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) 
 	}
 
 	var candles [][]string
-	if err = codec.UnmarshalBaseResponse(res, &candles); err != nil {
+	if err = codec.GetDataFromBaseResponse(res, &candles); err != nil {
 		return nil, fmt.Errorf("candles unmarshaled failed from BaseResponse : %s", err.Error())
 	}
 
@@ -184,12 +184,15 @@ func (cli *OKChainClient) GetTickersInfo(count int) (types.Tickers, error) {
 	}
 
 	var tickers types.Tickers
-	if err = codec.UnmarshalJsonBaseResponse(res, &tickers); err != nil {
+	if err = codec.GetDataFromBaseResponse(res, &tickers); err != nil {
 		return nil, fmt.Errorf("tickers unmarshaled failed from BaseResponse : %s", err.Error())
 	}
 
 	return tickers, nil
 }
+
+
+
 
 func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error) {
 	params := queryParams.NewQueryMatchParams(product, int64(start), int64(end), page, perPage)

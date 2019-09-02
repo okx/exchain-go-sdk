@@ -33,6 +33,7 @@ type TokenPair struct {
 	MaxPriceDigit    int64  `json:"maxPriceDigit"`
 	MaxQuantityDigit int64  `json:"maxSizeDigit"`
 	MinQuantity      Dec    `json:"minTradeSize"`
+	TokenPairId      string `json:"tokenPairId"`
 }
 
 type Transfer struct {
@@ -44,4 +45,3 @@ type TransferUnit struct {
 	To    AccAddress `json:"to"`
 	Coins Coins      `json:"coins"`
 }
-

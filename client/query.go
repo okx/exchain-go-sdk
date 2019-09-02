@@ -3,6 +3,7 @@ package client
 import (
 	"errors"
 	"fmt"
+	"github.com/ok-chain/gosdk/common"
 	"github.com/ok-chain/gosdk/common/queryParams"
 	"github.com/ok-chain/gosdk/crypto/encoding/codec"
 	"github.com/ok-chain/gosdk/types"
@@ -45,6 +46,10 @@ func (cli *OKChainClient) GetAccountInfoByAddr(addr string) (types.Account, erro
 }
 
 func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensInfo, error) {
+	if !common.IsValidAccaddr(addr) {
+		return types.AccountTokensInfo{}, fmt.Errorf("err : invalid account address")
+	}
+
 	accountParams := queryParams.NewQueryAccTokenParams("", "all")
 
 	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)

@@ -171,12 +171,13 @@ func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) 
 	return candles, nil
 }
 
-func (cli *OKChainClient) GetTickersInfo(count int) (types.Tickers, error) {
-	if err := common.CheckParamsGetTickersInfo(count); err != nil {
+func (cli *OKChainClient) GetTickersInfo(count ...int) (types.Tickers, error) {
+	countTmp, err := checkParamsGetTickersInfo(count)
+	if err != nil {
 		return nil, err
 	}
 
-	params := queryParams.NewQueryTickerParams("", count, true)
+	params := queryParams.NewQueryTickerParams("", countTmp, true)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryTickerParams failed in json marshal : %s", err.Error())

@@ -172,6 +172,10 @@ func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) 
 }
 
 func (cli *OKChainClient) GetTickersInfo(count int) (types.Tickers, error) {
+	if err := common.CheckParamsGetTickersInfo(count); err != nil {
+		return nil, err
+	}
+
 	params := queryParams.NewQueryTickerParams("", count, true)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
@@ -191,9 +195,6 @@ func (cli *OKChainClient) GetTickersInfo(count int) (types.Tickers, error) {
 	return tickers, nil
 }
 
-
-
-
 func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error) {
 	params := queryParams.NewQueryMatchParams(product, int64(start), int64(end), page, perPage)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
@@ -207,6 +208,7 @@ func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, pe
 	}
 
 	var records []types.MatchResult
+	fmt.Println(string(res))
 	if err = codec.UnmarshalListResponse(res, &records); err != nil {
 		return nil, fmt.Errorf("tx records unmarshaled failed from BaseResponse : %s", err.Error())
 	}
@@ -249,7 +251,7 @@ func (cli *OKChainClient) GetClosedOrders(addr, product, side string, start, end
 	if err != nil {
 		return nil, fmt.Errorf("ok client query error : %s", err.Error())
 	}
-
+	fmt.Println(string(res))
 	var closedOrdersList []types.Order
 
 	if err = codec.UnmarshalListResponse(res, &closedOrdersList); err != nil {
@@ -294,7 +296,7 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 	}
 
 	var transactionsInfo []types.Transaction
-
+	fmt.Println(string(res))
 	if err = codec.UnmarshalListResponse(res, &transactionsInfo); err != nil {
 		return nil, fmt.Errorf("transactions Info list unmarshaled failed from BaseResponse : %s", err.Error())
 	}

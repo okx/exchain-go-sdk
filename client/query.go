@@ -37,6 +37,10 @@ func (cli *OKChainClient) GetAccountInfoByAddr(addr string) (types.Account, erro
 		return nil, fmt.Errorf("ok client query error : %s", err.Error())
 	}
 
+	if res == nil {
+		return nil, errors.New("your account has no record on the chain")
+	}
+
 	var account types.Account
 	if err = cli.cdc.UnmarshalBinaryBare(res, &account); err != nil {
 		return nil, fmt.Errorf("err : %s", err.Error())

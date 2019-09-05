@@ -98,6 +98,7 @@ func IsValidMint(fromInfo keys.Info, passWd, symbol string, amount int64) bool {
 	}
 	return true
 }
+
 func checkAccuracyOfStr(num string, accuracy int) bool {
 	num = strings.TrimSpace(num)
 	strs := strings.Split(num, ".")

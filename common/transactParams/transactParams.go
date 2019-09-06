@@ -22,7 +22,7 @@ func IsValidSendParams(fromInfo keys.Info, passWd, toAddr string) bool {
 	return true
 }
 
-func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, quantity, memo string) bool {
+func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side string) bool {
 	if fromInfo == nil {
 		fmt.Println("input invalid keys info")
 		return false
@@ -39,14 +39,7 @@ func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, qua
 		fmt.Println("side can only be \"BUY\" or \"SELL\"")
 		return false
 	}
-	if !checkAccuracyOfStr(price, 1) {
-		fmt.Println("input invalid price")
-		return false
-	}
-	if !checkAccuracyOfStr(quantity, 2) {
-		fmt.Println("input invalid quantity")
-		return false
-	}
+
 	return true
 }
 

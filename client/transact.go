@@ -44,7 +44,7 @@ func (cli *OKChainClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, mem
 }
 
 func (cli *OKChainClient) NewOrder(fromInfo keys.Info, passWd, product, side, price, quantity, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if !transactParams.IsValidNewOrderParams(fromInfo, passWd, product, side, price, quantity, memo, ) {
+	if !transactParams.IsValidNewOrderParams(fromInfo, passWd, product, side) {
 		return types.TxResponse{}, errors.New("err : params input to pend a order are invalid")
 	}
 	msg := msg.NewMsgNewOrder(fromInfo.GetAddress(), product, side, price, quantity)

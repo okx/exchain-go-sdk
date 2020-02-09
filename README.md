@@ -54,7 +54,7 @@ assertNotEqual(t, err, nil)
 accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 assertNotEqual(t, err, nil)
 // transfer okb to addr1
-res, err := okCli.Send(fromInfo, passWd, addr1, "10.24okb", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+res, err := okCli.Send(fromInfo, passWd, addr1, "10.24tokt", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
 assertNotEqual(t, err, nil)
 ```
 

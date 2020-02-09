@@ -9,7 +9,7 @@ import (
 
 func TestQueryBlock(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	var height int64 = 10
+	var height int64 = 1024
 	resp, err := cli.QueryBlock(&height)
 	assertNotEqual(t, err, nil)
 	jsonBytes, err := json.Marshal(resp)

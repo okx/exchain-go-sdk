@@ -1,5 +1,7 @@
 package types
 
+import "encoding/json"
+
 type CoinsInfo []CoinInfo
 
 type CoinInfo struct {
@@ -19,6 +21,11 @@ type Token struct {
 	Mintable       bool       `json:"mintable"`
 }
 
+func (token Token) String() string {
+	b, _ := json.Marshal(token)
+	return string(b)
+}
+
 type TokenPair struct {
 	BaseAssetSymbol  string `json:"baseAssetSymbol"`
 	QuoteAssetSymbol string `json:"quoteAssetSymbol"`
@@ -26,6 +33,7 @@ type TokenPair struct {
 	MaxPriceDigit    int64  `json:"maxPriceDigit"`
 	MaxQuantityDigit int64  `json:"maxSizeDigit"`
 	MinQuantity      Dec    `json:"minTradeSize"`
+	TokenPairId      string `json:"tokenPairId"`
 }
 
 type Transfer struct {
@@ -37,4 +45,3 @@ type TransferUnit struct {
 	To    AccAddress `json:"to"`
 	Coins Coins      `json:"coins"`
 }
-

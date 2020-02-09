@@ -2,13 +2,13 @@ package core_types
 
 import (
 	"encoding/json"
-	abci "github.com/ok-chain/ok-gosdk/types/abci"
+	abci "github.com/ok-chain/gosdk/types/abci"
 	"time"
 
 	"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
-	"github.com/ok-chain/ok-gosdk/types/p2p"
+	"github.com/ok-chain/gosdk/types/p2p"
 	"github.com/tendermint/tendermint/types"
 )
 
@@ -112,12 +112,12 @@ type Peer struct {
 	RemoteIP         string               `json:"remote_ip"`
 }
 
-//// Validators for a height
-//type ResultValidators struct {
-//	BlockHeight int64              `json:"block_height"`
-//	Validators  []*types.Validator `json:"validators"`
-//}
-//
+// Validators for a height
+type ResultValidators struct {
+	BlockHeight int64              `json:"block_height"`
+	Validators  []*types.Validator `json:"validators"`
+}
+
 //// ConsensusParams for given height
 //type ResultConsensusParams struct {
 //	BlockHeight     int64                 `json:"block_height"`

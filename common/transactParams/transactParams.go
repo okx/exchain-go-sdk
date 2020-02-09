@@ -22,7 +22,7 @@ func IsValidSendParams(fromInfo keys.Info, passWd, toAddr string) bool {
 	return true
 }
 
-func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, quantity, memo string) bool {
+func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side string) bool {
 	if fromInfo == nil {
 		fmt.Println("input invalid keys info")
 		return false
@@ -39,14 +39,7 @@ func IsValidNewOrderParams(fromInfo keys.Info, passWd, product, side, price, qua
 		fmt.Println("side can only be \"BUY\" or \"SELL\"")
 		return false
 	}
-	if !checkAccuracyOfStr(price, 1) {
-		fmt.Println("input invalid price")
-		return false
-	}
-	if !checkAccuracyOfStr(quantity, 2) {
-		fmt.Println("input invalid quantity")
-		return false
-	}
+
 	return true
 }
 
@@ -62,42 +55,6 @@ func IsValidCancelOrderParams(fromInfo keys.Info, passWd string) bool {
 	return true
 }
 
-func IsValidMultiSend(fromInfo keys.Info, passWd, transferStr string) bool {
-	if fromInfo == nil {
-		fmt.Println("input invalid keys info")
-		return false
-	}
-	if len(passWd) == 0 {
-		fmt.Println("no password input")
-		return false
-	}
-
-	if len(transferStr) == 0 {
-		fmt.Println("no transfer string input")
-		return false
-	}
-	return true
-}
-
-func IsValidMint(fromInfo keys.Info, passWd, symbol string, amount int64) bool {
-	if fromInfo == nil {
-		fmt.Println("input invalid keys info")
-		return false
-	}
-	if len(passWd) == 0 {
-		fmt.Println("no password input")
-		return false
-	}
-	if len(symbol) == 0 {
-		fmt.Println("no symbol input")
-		return false
-	}
-	if amount<0 {
-		fmt.Println("input invalid amount. It should be positive.")
-		return false
-	}
-	return true
-}
 func checkAccuracyOfStr(num string, accuracy int) bool {
 	num = strings.TrimSpace(num)
 	strs := strings.Split(num, ".")

@@ -220,3 +220,8 @@ func GetFromBech32(bech32str, prefix string) ([]byte, error) {
 
 	return bz, nil
 }
+
+func Bech32ifyConsPub(pub crypto.PubKey) (string, error) {
+	bech32PrefixConsPub := GetConfig().GetBech32ConsensusPubPrefix()
+	return bech32.ConvertAndEncode(bech32PrefixConsPub, pub.Bytes())
+}

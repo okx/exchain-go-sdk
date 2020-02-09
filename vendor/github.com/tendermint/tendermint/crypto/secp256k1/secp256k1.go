@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/crypto/ripemd160"
 
-	secp256k1 "github.com/ok-chain/ok-gosdk/crypto/btcsuite/btcd/btcec"
+	secp256k1 "github.com/ok-chain/gosdk/crypto/btcsuite/btcd/btcec"
 
 	"github.com/tendermint/go-amino"
 

@@ -71,14 +71,16 @@ func makeHTTPDialer(remoteAddr string) (string, string, func(string, string) (ne
 // We overwrite the http.Client.Dial so we can do http over tcp or unix.
 // remoteAddr should be fully featured (eg. with tcp:// or unix://)
 func makeHTTPClient(remoteAddr string) (string, *http.Client) {
-	protocol, address, dialer := makeHTTPDialer(remoteAddr)
-	return protocol + "://" + address, &http.Client{
-		Transport: &http.Transport{
-			// Set to true to prevent GZIP-bomb DoS attacks
-			DisableCompression: true,
-			Dial:               dialer,
-		},
-	}
+	//protocol, address, dialer := makeHTTPDialer(remoteAddr)
+	//return protocol + "://" + address, &http.Client{
+	//	Transport: &http.Transport{
+	//		// Set to true to prevent GZIP-bomb DoS attacks
+	//		DisableCompression: true,
+	//		Dial:               dialer,
+	//	},
+	//}
+	// deal for rpc ,just like : rpcUrl = "http://xxx.xxx.xxx:8080/xxx/xx/xx"
+	return remoteAddr, &http.Client{}
 }
 
 //------------------------------------------------------------------------------------

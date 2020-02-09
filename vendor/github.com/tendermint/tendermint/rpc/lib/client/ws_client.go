@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/ok-chain/ok-gosdk/common/libs/go-metrics"
+	"github.com/ok-chain/gosdk/common/libs/go-metrics"
 
 	"github.com/tendermint/go-amino"
 	cmn "github.com/tendermint/tendermint/libs/common"

@@ -9,13 +9,10 @@ import (
 	"testing"
 )
 
-const (
-	RPC_URL = "localhost:26657"
 
-)
 
 func TestNewClient(t *testing.T) {
-	cli := NewClient(RPC_URL)
+	cli := NewClient(rpcUrl)
 
 	accountParams := queryParams.NewQueryAccTokenParams("","all")
 
@@ -31,7 +28,6 @@ func TestNewClient(t *testing.T) {
 	}
 	result, err := cli.cli.ABCIQueryWithOptions(path, jsonBytes, opts)
 	assertNotEqual(t, err, nil)
-	//fmt.Println(result)
 	resp := result.Response
 	if !resp.IsOK() {
 		t.Error(errors.New(resp.Log))

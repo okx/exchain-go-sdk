@@ -1,8 +1,8 @@
 package bech32
 
 import (
-	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/ok-gosdk/crypto/btcsuite/btcutil/bech32"
+	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
+	"github.com/ok-chain/gosdk/crypto/btcsuite/btcutil/bech32"
 )
 
 //ConvertAndEncode converts from a base64 encoded byte string to base32 encoded byte string and then to bech32

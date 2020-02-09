@@ -3,7 +3,7 @@ package client
 import (
 	"sync"
 
-	"github.com/ok-chain/ok-gosdk/common/libs/pkg/errors"
+	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
 
 	"github.com/tendermint/go-amino"
 
@@ -211,6 +211,15 @@ func (c *HTTP) TxSearch(query string, prove bool, page, perPage int) (*ctypes.Re
 	_, err := c.rpc.Call("tx_search", params, result)
 	if err != nil {
 		return nil, errors.Wrap(err, "TxSearch")
+	}
+	return result, nil
+}
+
+func (c *HTTP) Validators(height *int64) (*ctypes.ResultValidators, error) {
+	result := new(ctypes.ResultValidators)
+	_, err := c.rpc.Call("validators", map[string]interface{}{"height": height}, result)
+	if err != nil {
+		return nil, errors.Wrap(err, "Validators")
 	}
 	return result, nil
 }

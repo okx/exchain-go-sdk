@@ -13,17 +13,17 @@ type BookResItem struct {
 type Tickers []Ticker
 
 type Ticker struct {
-	Symbol           string  `json:"symbol"`
-	Product          string  `json:"product"`
-	Timestamp        int64   `json:"timestamp"`
-	Open             float64 `json:"open"`
-	Close            float64 `json:"close"`
-	High             float64 `json:"high"`
-	Low              float64 `json:"low"`
-	Price            float64 `json:"price"`
-	Volume           float64 `json:"volume"`
-	Change           float64 `json:"change"`
-	ChangePercentage string  `json:"changePercentage"`
+	Symbol           string `json:"symbol"`
+	Product          string `json:"product"`
+	Timestamp        string `json:"timestamp"`
+	Open             string `json:"open"`
+	Close            string `json:"close"`
+	High             string `json:"high"`
+	Low              string `json:"low"`
+	Price            string `json:"price"`
+	Volume           string `json:"volume"`
+	Change           string `json:"change"`
+	ChangePercentage string `json:"changePercentage"`
 }
 
 type MatchResult struct {

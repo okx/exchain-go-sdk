@@ -1,6 +1,6 @@
 ## OKChain Go SDK
 
-The OKChain Go SDK seems like a useful lightweight Go library to interact with OKChain.The api functions of querying and transacting are exposed to the ones who installed the SDK. The Go SDK supports synchronous , asynchronous and blockmode requests.
+The OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
 ### 1. Components
 

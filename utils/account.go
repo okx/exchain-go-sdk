@@ -3,10 +3,10 @@ package utils
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/gosdk/crypto/go-bip39"
-	"github.com/ok-chain/gosdk/crypto/keys"
-	"github.com/ok-chain/gosdk/crypto/keys/mintkey"
+	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
+	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/okex/okchain-go-sdk/crypto/keys"
+	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 

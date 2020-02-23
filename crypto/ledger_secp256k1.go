@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/gosdk/crypto/btcsuite/btcd/btcec"
+	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
+	"github.com/okex/okchain-go-sdk/crypto/btcsuite/btcd/btcec"
 
-	"github.com/ok-chain/gosdk/crypto/keys/hd"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
+	"github.com/okex/okchain-go-sdk/types"
 
 	tmbtcec "github.com/tendermint/btcd/btcec"
 	tmcrypto "github.com/tendermint/tendermint/crypto"

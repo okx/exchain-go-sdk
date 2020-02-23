@@ -9,13 +9,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/ok-chain/gosdk/crypto"
-	"github.com/ok-chain/gosdk/crypto/keys/hd"
-	"github.com/ok-chain/gosdk/crypto/keys/keyerror"
-	"github.com/ok-chain/gosdk/crypto/keys/mintkey"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/crypto"
+	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
+	"github.com/okex/okchain-go-sdk/crypto/keys/keyerror"
+	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
+	"github.com/okex/okchain-go-sdk/types"
 
-	"github.com/ok-chain/gosdk/crypto/go-bip39"
+	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
 
 	tmcrypto "github.com/tendermint/tendermint/crypto"
 	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"

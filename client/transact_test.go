@@ -2,7 +2,7 @@ package client
 
 import (
 	"fmt"
-	"github.com/ok-chain/gosdk/utils"
+	"github.com/okex/okchain-go-sdk/utils"
 
 	"testing"
 )

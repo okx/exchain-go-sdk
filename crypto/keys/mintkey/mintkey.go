@@ -13,7 +13,7 @@ import (
 
 	cmn "github.com/tendermint/tendermint/libs/common"
 
-	"github.com/ok-chain/gosdk/crypto/keys/keyerror"
+	"github.com/okex/okchain-go-sdk/crypto/keys/keyerror"
 )
 
 const (

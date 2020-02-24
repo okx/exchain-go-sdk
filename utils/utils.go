@@ -2,10 +2,10 @@ package utils
 
 import (
 	"encoding/hex"
-	"github.com/ok-chain/gosdk/common/libs/pkg/errors"
-	"github.com/ok-chain/gosdk/crypto/go-bip39"
-	"github.com/ok-chain/gosdk/crypto/keys/hd"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
+	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
+	"github.com/okex/okchain-go-sdk/types"
 )
 
 var (

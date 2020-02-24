@@ -2,7 +2,7 @@ package msg
 
 import (
 	"encoding/json"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/types"
 )
 
 type MsgCancelOrder struct {

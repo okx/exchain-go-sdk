@@ -3,11 +3,11 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/ok-chain/gosdk/common"
-	"github.com/ok-chain/gosdk/common/queryParams"
-	"github.com/ok-chain/gosdk/crypto/encoding/codec"
-	"github.com/ok-chain/gosdk/types"
-	"github.com/ok-chain/gosdk/utils"
+	"github.com/okex/okchain-go-sdk/common"
+	"github.com/okex/okchain-go-sdk/common/queryParams"
+	"github.com/okex/okchain-go-sdk/crypto/encoding/codec"
+	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 const (

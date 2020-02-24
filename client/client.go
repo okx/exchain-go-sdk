@@ -3,9 +3,9 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/types"
 
-	"github.com/ok-chain/gosdk/crypto/encoding/codec"
+	"github.com/okex/okchain-go-sdk/crypto/encoding/codec"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )

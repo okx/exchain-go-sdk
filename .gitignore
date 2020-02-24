@@ -4,7 +4,6 @@
 *.swo
 .vscode
 .idea
-okchain_data
 # Build
 # vendor
 .vendor-new
@@ -12,40 +11,14 @@ build
 # IDE
 .idea/
 *.iml
-#vendor/*
-dev/cache
-dev/okdexd
-dev/okdexcli
-cmd/tiger/tiger
-okdexd.0.log
-home_gaiacli
-dev/testnet/cache
-home_gaiad
+vendor/*
 *.bz2
-home
-v3.0.2.tar.gz
 Dockerfile
-__home
-iavl.1*
-tendermint.1*
-cosmos-sdk.1*
+vendor
 built-in-stubs.jar
-press_cache
-go*.linux-amd64.tar.gz
 dev2
 *.log
 *.json
-profile.cov
-profile_tmp.cov
-coverage.html
-x/backend/test.db
 *.db
 leveldb-*
-v1.20.tar.gz
-scripts/load_test/useraccount
-scripts/load_test/*accounts.txt
-dev/okdex_testnet/load_test/useraccount
-doc/statik/statik.go
-unittest/tmp
-tmp/
 nohup.out

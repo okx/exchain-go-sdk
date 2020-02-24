@@ -2,7 +2,7 @@ package client
 
 import (
 	"errors"
-	"github.com/ok-chain/gosdk/common"
+	"github.com/okex/okchain-go-sdk/common"
 )
 
 const (

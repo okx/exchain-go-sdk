@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ok-chain/gosdk/common/libs/davecgh/go-spew/spew"
+	"github.com/okex/okchain-go-sdk/common/libs/davecgh/go-spew/spew"
 )
 
 // custom type to test Stinger interface on non-pointer receiver.

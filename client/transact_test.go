@@ -11,7 +11,7 @@ const (
 	name     = "alice"
 	passWd   = "12345678"
 	mnemonic = "sustain hole urban away boy core lazy brick wait drive tiger tell"
-	addr1    = "okchain1dycww54mz20sfakx7hqtkf2ghdlx6tjry977gy"
+	addr1    = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
 )
 
 func TestSend(t *testing.T) {

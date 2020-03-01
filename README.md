@@ -45,7 +45,7 @@ okCli 	 := NewClient(rpcUrl)
 name     := "alice"
 passWd   := "12345678"
 mnemonic := "sustain hole urban away boy core lazy brick wait drive tiger tell"
-addr1    := "okchain1dycww54mz20sfakx7hqtkf2ghdlx6tjry977gy"
+addr1    := "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
 
 // create your account key info by 'name','passWd' and 'mnemonic'
 fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
@@ -54,7 +54,7 @@ assertNotEqual(t, err, nil)
 accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 assertNotEqual(t, err, nil)
 // transfer okb to addr1
-res, err := okCli.Send(fromInfo, passWd, addr1, "10.24tokt", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+res, err := okCli.Send(fromInfo, passWd, addr1, "10.24tokt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
 assertNotEqual(t, err, nil)
 ```
 

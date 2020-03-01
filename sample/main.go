@@ -4,15 +4,19 @@ import (
 	"fmt"
 	"github.com/okex/okchain-go-sdk/client"
 	"github.com/okex/okchain-go-sdk/utils"
-	"github.com/prometheus/common/log"
+	"log"
 )
 
 const (
-	rpcUrl   = "3.13.150.20:26657"
-	name     = "alice"
+	rpcUrl = "3.13.150.20:26657"
+	// user's name
+	name = "alice"
+	// user's mnemonic
 	mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
-	passWd   = "12345678"
-	addr     = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	// user's password
+	passWd = "12345678"
+	// target address
+	addr = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
 )
 
 func main() {
@@ -34,7 +38,9 @@ func main() {
 	fmt.Println(accInfo)
 
 	/* 3. transfer to other address */
-	res, err := cli.Send(fromInfo, passWd, addr, "1tokt", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	// sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
+	sequenceNum := accInfo.GetSequence()
+	res, err := cli.Send(fromInfo, passWd, addr, "1tokt", "my memo", accInfo.GetAccountNumber(), sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +48,8 @@ func main() {
 	fmt.Println(res)
 
 	/* 4. place an order on OK Dex */
-	res, err = cli.NewOrder(fromInfo, passWd, "tokt_tusdk", "BUY", "1", "1", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	sequenceNum++
+	res, err = cli.NewOrder(fromInfo, passWd, "tokt_tusdk", "BUY", "1", "1", "my memo", accInfo.GetAccountNumber(), sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +60,8 @@ func main() {
 	fmt.Println("orderId:", orderId)
 
 	/* 5. cancel the order on OK Dex by orderID */
-	res, err = cli.CancelOrder(fromInfo, passWd, orderId, "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	sequenceNum++
+	res, err = cli.CancelOrder(fromInfo, passWd, orderId, "my memo", accInfo.GetAccountNumber(), sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}

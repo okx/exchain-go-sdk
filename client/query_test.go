@@ -8,8 +8,7 @@ import (
 
 const (
 	addr   = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
-	//rpcUrl = "http://127.0.0.1:20157"
-	rpcUrl = "http://127.0.0.1:26657"
+	rpcUrl = "3.13.150.20:26657"
 
 )
 

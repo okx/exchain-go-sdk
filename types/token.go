@@ -14,9 +14,9 @@ type CoinInfo struct {
 type Token struct {
 	Desc           string     `json:"desc"`
 	Symbol         string     `json:"symbol"`
-	OriginalSymbol string     `json:"originalSymbol"`
-	WholeName      string     `json:"wholeName"`
-	TotalSupply    int64      `json:"totalSupply"`
+	OriginalSymbol string     `json:"original_symbol"`
+	WholeName      string     `json:"whole_name"`
+	TotalSupply    int64      `json:"total_supply"`
 	Owner          AccAddress `json:"owner"`
 	Mintable       bool       `json:"mintable"`
 }
@@ -27,13 +27,13 @@ func (token Token) String() string {
 }
 
 type TokenPair struct {
-	BaseAssetSymbol  string `json:"baseAssetSymbol"`
-	QuoteAssetSymbol string `json:"quoteAssetSymbol"`
+	BaseAssetSymbol  string `json:"base_asset_symbol"`
+	QuoteAssetSymbol string `json:"quote_asset_symbol"`
 	InitPrice        Dec    `json:"price"`
-	MaxPriceDigit    int64  `json:"maxPriceDigit"`
-	MaxQuantityDigit int64  `json:"maxSizeDigit"`
-	MinQuantity      Dec    `json:"minTradeSize"`
-	TokenPairId      string `json:"tokenPairId"`
+	MaxPriceDigit    int64  `json:"max_price_digit"`
+	MaxQuantityDigit int64  `json:"max_size_digit"`
+	MinQuantity      Dec    `json:"min_trade_size"`
+	TokenPairId      string `json:"token_pair_id"`
 }
 
 type Transfer struct {

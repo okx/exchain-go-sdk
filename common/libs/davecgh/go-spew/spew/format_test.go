@@ -72,7 +72,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/ok-chain/gosdk/common/libs/davecgh/go-spew/spew"
+	"github.com/okex/okchain-go-sdk/common/libs/davecgh/go-spew/spew"
 )
 
 // formatterTest is used to describe a test to be performed against NewFormatter.

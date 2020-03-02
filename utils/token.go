@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/types"
 	"regexp"
 	"strings"
 )

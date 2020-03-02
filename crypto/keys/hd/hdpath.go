@@ -22,7 +22,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ok-chain/gosdk/crypto/btcsuite/btcd/btcec"
+	"github.com/okex/okchain-go-sdk/crypto/btcsuite/btcd/btcec"
 )
 
 // BIP44Prefix is the parts of the BIP32 HD path that are fixed by what we used during the fundraiser.

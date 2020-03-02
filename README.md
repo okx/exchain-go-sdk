@@ -1,6 +1,6 @@
 ## OKChain Go SDK
 
-The OKChain Go SDK seems like a useful lightweight Go library to interact with OKChain.The api functions of querying and transacting are exposed to the ones who installed the SDK. The Go SDK supports synchronous , asynchronous and blockmode requests.
+The OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
 ### 1. Components
 
@@ -20,11 +20,11 @@ There are some test modules in path `okclient` and `utils` as well. The develope
 
 Go version above 1.12 is required.
 
-The developer can install the OKChain Go SDK by `git clone` from github : xxxxxxxx(address in github)
+The developer can install the OKChain Go SDK by `git clone` from github : https://github.com/okex/okchain-go-sdk
 
 ### 3. API
 
-The api functions of querying and transacting are in the files 'okclient/query,go'  and `okclient/transact.go`. You can find more details on the wiki : xxxxxxxxxx(okchain wiki address)
+The api functions of querying and transacting are in the files 'okclient/query,go'  and `okclient/transact.go`. You can find more details in okchain-docs : https://okchain-docs.readthedocs.io/zh_CN/latest/api/sdk/go-sdk.html
 
 ### 4. Node query
 
@@ -32,7 +32,7 @@ The api functions of querying and transacting are in the files 'okclient/query,g
 
 The node query functions could be found in file `okclient/node_query.go `. The module of them are in file `okclient/node_query_test.go`. The develop could make it through and get clear that how to invoke them.
 
-More details of node querying from OKChain on wiki : xxxxxxxxxx(okchain wiki, Part :node rpc address)
+More details of node querying from OKChain in okchain-docs : https://okchain-docs.readthedocs.io/zh_CN/latest/api/node_rpc.html
 
 ### 5. Example
 
@@ -40,12 +40,12 @@ Every operation by using Go SDK needs `okclient`. Here are the examples :
 
 ```go
 // rpcUrl can be modified according to the actual situation
-rpcUrl	 := "tcp://127.0.0.1:26657"
+rpcUrl	 := "3.13.150.20:26657"
 okCli 	 := NewClient(rpcUrl)
 name     := "alice"
 passWd   := "12345678"
 mnemonic := "sustain hole urban away boy core lazy brick wait drive tiger tell"
-addr1    := "okchain1dycww54mz20sfakx7hqtkf2ghdlx6tjry977gy"
+addr1    := "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
 
 // create your account key info by 'name','passWd' and 'mnemonic'
 fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
@@ -54,7 +54,7 @@ assertNotEqual(t, err, nil)
 accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 assertNotEqual(t, err, nil)
 // transfer okb to addr1
-res, err := okCli.Send(fromInfo, passWd, addr1, "10.24okb", "I love OK", accInfo.GetAccountNumber(), accInfo.GetSequence())
+res, err := okCli.Send(fromInfo, passWd, addr1, "10.24tokt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
 assertNotEqual(t, err, nil)
 ```
 

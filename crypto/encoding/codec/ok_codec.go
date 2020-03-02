@@ -5,8 +5,8 @@ package codec
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/ok-chain/gosdk/common"
-	"github.com/ok-chain/gosdk/types"
+	"github.com/okex/okchain-go-sdk/common"
+	"github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto/encoding/amino"
 )
@@ -67,6 +67,6 @@ func UnmarshalListResponse(bz []byte, ptr interface{}) error {
 
 func getDataFromBaseResponse(bz []byte) []byte {
 	preIndex := bytes.Index(bz, []byte("data"))
-	sufIndex := bytes.LastIndex(bz, []byte("detailMsg"))
+	sufIndex := bytes.LastIndex(bz, []byte("detail_msg"))
 	return bz[preIndex+6 : sufIndex-2]
 }

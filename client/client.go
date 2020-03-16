@@ -20,7 +20,7 @@ func init() {
 
 type OKChainClient struct {
 	rpcUrl string
-	cli    *rpcCli.HTTP
+	cli    rpcCli.Client
 	cdc    *codec.Codec
 }
 
@@ -31,6 +31,15 @@ func NewClient(rpcUrl string) OKChainClient {
 		cdc:    cdc,
 	}
 }
+
+func (cli *OKChainClient) SetClient(client rpcCli.Client) {
+	cli.cli = client
+}
+
+func (cli *OKChainClient) GetCdc() *codec.Codec {
+	return cli.cdc
+}
+
 
 func (cli *OKChainClient) query(path string, key cmn.HexBytes) ([]byte, error) {
 	opts := rpcCli.ABCIQueryOptions{
@@ -68,17 +77,17 @@ func (cli *OKChainClient) broadcast(txBytes []byte, broadcastMode string) (res t
 	return res, err
 }
 
-func doBroadcastTxSync(cli *rpcCli.HTTP, txBytes []byte) (types.TxResponse, error) {
+func doBroadcastTxSync(cli rpcCli.Client, txBytes []byte) (types.TxResponse, error) {
 	retBroadcastTx, err := cli.BroadcastTxSync(txBytes)
 	return types.NewResponseFormatBroadcastTx(retBroadcastTx), err
 }
 
-func doBroadcastTxAsync(cli *rpcCli.HTTP, txBytes []byte) (types.TxResponse, error) {
+func doBroadcastTxAsync(cli rpcCli.Client, txBytes []byte) (types.TxResponse, error) {
 	retBroadcastTx, err := cli.BroadcastTxAsync(txBytes)
 	return types.NewResponseFormatBroadcastTx(retBroadcastTx), err
 }
 
-func doBroadcastTxCommit(cli *rpcCli.HTTP, txBytes []byte) (types.TxResponse, error) {
+func doBroadcastTxCommit(cli rpcCli.Client, txBytes []byte) (types.TxResponse, error) {
 	retBroadcastTxCommit, err := cli.BroadcastTxCommit(txBytes)
 	if err != nil {
 		return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err

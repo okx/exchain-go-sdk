@@ -3,6 +3,9 @@ package client
 import (
 	"errors"
 	"github.com/okex/okchain-go-sdk/common"
+	"github.com/okex/okchain-go-sdk/types"
+	"github.com/tendermint/tendermint/crypto"
+	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"
 )
 
 const (
@@ -69,4 +72,20 @@ func checkParamsGetTransactionsInfo(addr string, type_, start, end, page, perPag
 
 	perPageRet, err = common.CheckParamsPaging(start, end, page, perPage)
 	return
+}
+
+
+func GetAccPubKeyBech32(pubkey string) (pk crypto.PubKey, err error) {
+	bech32PrefixAccPub := types.GetConfig().GetBech32AccountPubPrefix()
+	bz, err := types.GetFromBech32(pubkey, bech32PrefixAccPub)
+	if err != nil {
+		return nil, err
+	}
+
+	pk, err = cryptoAmino.PubKeyFromBytes(bz)
+	if err != nil {
+		return nil, err
+	}
+
+	return pk, nil
 }

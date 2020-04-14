@@ -43,6 +43,19 @@ func (coin DecCoin) IsNegative() bool {
 	return coin.Amount.Sign() == -1
 }
 
+// IsZero returns if the DecCoin amount is zero
+func (coin DecCoin) IsZero() bool {
+	return coin.Amount.IsZero()
+}
+
+// Add adds amounts of two decimal coins with same denom
+func (coin DecCoin) Add(coinB DecCoin) DecCoin {
+	if coin.Denom != coinB.Denom {
+		panic(fmt.Sprintf("coin denom different: %v %v\n", coin.Denom, coinB.Denom))
+	}
+	return DecCoin{coin.Denom, coin.Amount.Add(coinB.Amount)}
+}
+
 type DecCoins []DecCoin
 
 //nolint
@@ -107,4 +120,76 @@ func (coins DecCoins) IsAllPositive() bool {
 	}
 
 	return true
+}
+
+// Add adds two sets of DecCoins
+// NOTE: Add operates under the invariant that coins are sorted by
+// denominations.
+// CONTRACT: Add will never return Coins where one Coin has a non-positive
+// amount. In otherwords, IsValid will always return true.
+func (coins DecCoins) Add(coinsB DecCoins) DecCoins {
+	return coins.safeAdd(coinsB)
+}
+
+func (coins DecCoins) safeAdd(coinsB DecCoins) DecCoins {
+	sum := ([]DecCoin)(nil)
+	indexA, indexB := 0, 0
+	lenA, lenB := len(coins), len(coinsB)
+
+	for {
+		if indexA == lenA {
+			if indexB == lenB {
+				// return nil coins if both sets are empty
+				return sum
+			}
+
+			// return set B (excluding zero coins) if set A is empty
+			return append(sum, removeZeroDecCoins(coinsB[indexB:])...)
+		} else if indexB == lenB {
+			// return set A (excluding zero coins) if set B is empty
+			return append(sum, removeZeroDecCoins(coins[indexA:])...)
+		}
+
+		coinA, coinB := coins[indexA], coinsB[indexB]
+
+		switch strings.Compare(coinA.Denom, coinB.Denom) {
+		case -1: // coin A denom < coin B denom
+			if !coinA.IsZero() {
+				sum = append(sum, coinA)
+			}
+
+			indexA++
+
+		case 0: // coin A denom == coin B denom
+			res := coinA.Add(coinB)
+			if !res.IsZero() {
+				sum = append(sum, res)
+			}
+
+			indexA++
+			indexB++
+
+		case 1: // coin A denom > coin B denom
+			if !coinB.IsZero() {
+				sum = append(sum, coinB)
+			}
+
+			indexB++
+		}
+	}
+}
+
+func removeZeroDecCoins(coins DecCoins) DecCoins {
+	i, l := 0, len(coins)
+	for i < l {
+		if coins[i].IsZero() {
+			// remove coin
+			coins = append(coins[:i], coins[i+1:]...)
+			l--
+		} else {
+			i++
+		}
+	}
+
+	return coins[:i]
 }

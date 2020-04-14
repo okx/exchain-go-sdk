@@ -10,8 +10,6 @@ import (
 	"io/ioutil"
 )
 
-var AddressStoreKeyPrefix = []byte{0x01}
-
 // GetStdTxFromFile gets the instance of stdTx from a json file
 func GetStdTxFromFile(filePath string) (stdTx types.StdTx, err error) {
 	bytes, err := ioutil.ReadFile(filePath)
@@ -36,10 +34,6 @@ func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
 		}
 	}
 	return valAddrs, nil
-}
-
-func AddressStoreKey(addr types.AccAddress) []byte {
-	return append(AddressStoreKeyPrefix, addr.Bytes()...)
 }
 
 func GeneratePrivateKeyFromMnemo(mnemo string) (string, error) {

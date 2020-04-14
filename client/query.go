@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	accountInfoPath       = "/store/acc/key"
 	accountTokensInfoPath = "custom/token/accounts/"
 	tokensInfoPath        = "custom/token/tokens"
 	tokenInfoPath         = "custom/token/info/"

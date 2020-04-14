@@ -65,7 +65,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
 	}
 
-	delegator, undelegation := NewDelegator(delAddr), DefaultUndelegation()
+	delegator, undelegation := NewDelegator(delAddr), defaultUndelegation()
 	if len(resp) != 0 {
 		sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(resp, &delegator)
 	}

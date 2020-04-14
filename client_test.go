@@ -31,8 +31,12 @@ func TestNewClient(t *testing.T) {
 	client := NewClient(config)
 	vals, err := client.Staking().QueryValidators()
 	require.NoError(t, err)
-	for _,v:=range vals{
+	for _, v := range vals {
 		fmt.Println(v)
 	}
+
+	accInfo, err := client.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+	fmt.Println(accInfo)
 
 }

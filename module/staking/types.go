@@ -111,7 +111,7 @@ type Undelegation struct {
 }
 
 // DefaultUndelegation returns default entity for Undelegation
-func DefaultUndelegation() Undelegation {
+func defaultUndelegation() Undelegation {
 	return Undelegation{
 		nil, types.ZeroDec(), time.Unix(0, 0).UTC(),
 	}

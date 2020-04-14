@@ -27,6 +27,8 @@ type SDKCodec interface {
 	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
 	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
 
+	UnmarshalBinaryBare(bytes []byte, ptr interface{}) error
+
 	RegisterConcrete(o interface{}, name string)
 	RegisterInterface(ptr interface{})
 }
@@ -66,9 +68,6 @@ func RegisterBasicCodec(cdc SDKCodec) {
 	// stdTx
 	cdc.RegisterInterface((*Tx)(nil))
 	cdc.RegisterConcrete(StdTx{}, "cosmos-sdk/StdTx")
-	// account
-	cdc.RegisterInterface((*Account)(nil))
-	cdc.RegisterConcrete(&BaseAccount{}, "cosmos-sdk/Account")
 	// msg
 	cdc.RegisterInterface((*Msg)(nil))
 }

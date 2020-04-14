@@ -2,9 +2,10 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module"
-	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/exposed"
+	"github.com/okex/okchain-go-sdk/module"
+	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/types"
 )
 
@@ -17,7 +18,7 @@ type Client struct {
 // NewClient creates a new instance of Client
 func NewClient(config types.ClientConfig) Client {
 	cdc := types.NewCodec()
-	baseClient := module.NewBaseClient(cdc, config)
+	pBaseClient := module.NewBaseClient(cdc, config)
 
 	pClient := &Client{
 		cdc:     cdc,
@@ -25,7 +26,8 @@ func NewClient(config types.ClientConfig) Client {
 	}
 
 	pClient.registerModule(
-		staking.NewStakingClient(baseClient),
+		auth.NewAuthClient(pBaseClient),
+		staking.NewStakingClient(pBaseClient),
 	)
 
 	return *pClient
@@ -47,4 +49,7 @@ func (cli *Client) registerModule(modules ...types.Module) {
 // nolint
 func (cli *Client) Staking() exposed.Staking {
 	return cli.modules[staking.ModuleName].(exposed.Staking)
+}
+func (cli *Client) Auth() exposed.Auth {
+	return cli.modules[auth.ModuleName].(exposed.Auth)
 }

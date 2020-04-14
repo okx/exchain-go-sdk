@@ -2,7 +2,11 @@ package types
 
 import (
 	"github.com/tendermint/go-amino"
+	"github.com/tendermint/tendermint/crypto"
+	"github.com/tendermint/tendermint/crypto/ed25519"
 	cryptoamino "github.com/tendermint/tendermint/crypto/encoding/amino"
+	"github.com/tendermint/tendermint/crypto/multisig"
+	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 var MsgCdc = amino.NewCodec()
@@ -13,23 +17,70 @@ func init() {
 	MsgCdc.Seal()
 }
 
+// SDKCodec shows the expected behaviour of codec in okchain gosdk
+type SDKCodec interface {
+	MarshalJSON(o interface{}) ([]byte, error)
+	UnmarshalJSON(bytes []byte, ptr interface{}) error
+	MustMarshalJSON(o interface{}) []byte
+
+	//MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
+	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
+	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
+
+	RegisterConcrete(o interface{}, name string)
+	RegisterInterface(ptr interface{})
+}
+
+var _ SDKCodec = (*Codec)(nil)
+
+// SDKCodec defines the codec only for okchain gosdk
+type Codec struct {
+	*amino.Codec
+}
+
+// NewCodec creates a new instance of codec only for gosdk
+func NewCodec() SDKCodec {
+	return Codec{amino.NewCodec()}
+}
+
+// RegisterConcrete implements the SDKCodec interface
+func (cdc Codec) RegisterConcrete(o interface{}, name string) {
+	cdc.Codec.RegisterConcrete(o, name, nil)
+}
+
+// RegisterInterface implements the SDKCodec interface
+func (cdc Codec) RegisterInterface(ptr interface{}) {
+	cdc.Codec.RegisterInterface(ptr, nil)
+}
+
+// RegisterBasicCodec registers the basic data types for gosdk codec
+func RegisterBasicCodec(cdc SDKCodec) {
+	// amino
+	cdc.RegisterInterface((*crypto.PubKey)(nil))
+	cdc.RegisterConcrete(ed25519.PubKeyEd25519{}, ed25519.PubKeyAminoName)
+	cdc.RegisterConcrete(secp256k1.PubKeySecp256k1{}, secp256k1.PubKeyAminoName)
+	cdc.RegisterConcrete(multisig.PubKeyMultisigThreshold{}, multisig.PubKeyMultisigThresholdAminoRoute)
+	cdc.RegisterInterface((*crypto.PrivKey)(nil))
+	cdc.RegisterConcrete(ed25519.PrivKeyEd25519{}, ed25519.PrivKeyAminoName)
+	cdc.RegisterConcrete(secp256k1.PrivKeySecp256k1{}, secp256k1.PrivKeyAminoName)
+	// stdTx
+	cdc.RegisterInterface((*Tx)(nil))
+	cdc.RegisterConcrete(StdTx{}, "cosmos-sdk/StdTx")
+	// account
+	cdc.RegisterInterface((*Account)(nil))
+	cdc.RegisterConcrete(&BaseAccount{}, "cosmos-sdk/Account")
+	// msg
+	cdc.RegisterInterface((*Msg)(nil))
+}
+
 func RegisterMsgCdc(cdc *amino.Codec) {
-	cdc.RegisterInterface((*Msg)(nil), nil)
 	cdc.RegisterConcrete(MsgSend{}, "okchain/token/MsgTransfer", nil)
 	cdc.RegisterConcrete(MsgNewOrders{}, "okchain/order/MsgNew", nil)
 	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel", nil)
 	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer", nil)
 	cdc.RegisterConcrete(MsgMint{}, "okchain/token/MsgMint", nil)
-	cdc.RegisterConcrete(MsgDelegate{}, "okchain/staking/MsgDelegate", nil)
-	cdc.RegisterConcrete(MsgUndelegate{}, "okchain/staking/MsgUnDelegate", nil)
-	cdc.RegisterConcrete(MsgVote{}, "okchain/staking/MsgVote", nil)
-	cdc.RegisterConcrete(MsgDestroyValidator{}, "okchain/staking/MsgDestroyValidator", nil)
 	cdc.RegisterConcrete(MsgUnjail{}, "cosmos-sdk/MsgUnjail", nil)
-	cdc.RegisterConcrete(MsgCreateValidator{}, "okchain/staking/MsgCreateValidator", nil)
-	cdc.RegisterConcrete(MsgEditValidator{}, "okchain/staking/MsgEditValidator", nil)
-	cdc.RegisterConcrete(MsgRegProxy{}, "okchain/staking/MsgRegProxy", nil)
-	cdc.RegisterConcrete(MsgBindProxy{}, "okchain/staking/MsgBindProxy", nil)
-	cdc.RegisterConcrete(MsgUnbindProxy{}, "okchain/staking/MsgUnbindProxy", nil)
+
 	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList", nil)
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit", nil)
 	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw", nil)
@@ -37,6 +88,4 @@ func RegisterMsgCdc(cdc *amino.Codec) {
 
 	cdc.RegisterConcrete(MsgTokenIssue{}, "okchain/token/MsgIssue", nil)
 
-	cdc.RegisterInterface((*Tx)(nil), nil)
-	cdc.RegisterConcrete(StdTx{}, "cosmos-sdk/StdTx", nil)
 }

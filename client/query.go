@@ -23,8 +23,7 @@ const (
 	closedOrdersPath      = "custom/backend/orders/closed"
 	dealsInfoPath         = "custom/backend/deals"
 	transactionsInfoPath  = "custom/backend/txs"
-	validatorPath         = "custom/staking/validator"
-	unbondDelegationPath  = "custom/staking/unbondingDelegation"
+
 	productsPath          = "custom/dex/products"
 )
 
@@ -317,80 +316,6 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 	return transactionsInfo, nil
 }
 
-func (cli *OKChainClient) GetValidators() ([]types.Validator, error) {
-	resKVs, err := cli.querySubspace(types.ValidatorsKey, "staking")
-	if err != nil {
-		return nil, err
-	}
-
-	var vals []types.Validator
-	for _, kv := range resKVs {
-		var val types.Validator
-		cli.cdc.MustUnmarshalBinaryLengthPrefixed(kv.Value, &val)
-		vals = append(vals, val)
-	}
-
-	return vals, nil
-}
-
-func (cli *OKChainClient) GetValidator(valAddrStr string) (types.Validator, error) {
-	var val types.Validator
-	valAddr, err := types.ValAddressFromBech32(valAddrStr)
-	if err != nil {
-		return val, err
-	}
-
-	params := query_params.NewQueryValidatorParams(valAddr)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return val, fmt.Errorf("error : QueryValidatorParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(validatorPath, jsonBytes)
-	if err != nil {
-		return val, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	if err := cli.cdc.UnmarshalJSON(res, &val); err != nil {
-		return val, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
-	}
-
-	return val, nil
-}
-
-func (cli *OKChainClient) GetDelegator(delAddrStr string) (types.DelegatorResp, error) {
-	var delResp types.DelegatorResp
-	delAddr, err := types.AccAddressFromBech32(delAddrStr)
-	if err != nil {
-		return delResp, err
-	}
-
-	resp, err := cli.queryStore(types.GetDelegatorKey(delAddr), "staking", "key")
-	if err != nil {
-		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	delegator, undelegation := types.NewDelegator(delAddr), types.DefaultUndelegation()
-	if len(resp) != 0 {
-		cdc.MustUnmarshalBinaryLengthPrefixed(resp, &delegator)
-	}
-
-	// query for the undelegation info
-	jsonBytes, err := cdc.MarshalJSON(query_params.NewQueryDelegatorParams(delAddr))
-	if err != nil {
-		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(unbondDelegationPath, jsonBytes)
-	// if err!= nil , we treat it as there's no undelegation of the delegator
-	if err == nil {
-		if err := cdc.UnmarshalJSON(res, &undelegation); err != nil {
-			return delResp, err
-		}
-	}
-
-	return convertToDelegatorResp(delegator, undelegation), nil
-}
 
 // dex module
 

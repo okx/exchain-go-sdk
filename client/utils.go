@@ -12,21 +12,6 @@ const (
 	countDefault = 100
 )
 
-func convertToDelegatorResp(delegator types.Delegator, undelegation types.Undelegation,
-) types.DelegatorResp {
-	return types.DelegatorResp{
-		DelegatorAddress:     delegator.DelegatorAddress,
-		ValidatorAddresses:   delegator.ValidatorAddresses,
-		Shares:               delegator.Shares,
-		Tokens:               delegator.Tokens,
-		UnbondedTokens:       undelegation.Quantity,
-		CompletionTime:       undelegation.CompletionTime,
-		IsProxy:              delegator.IsProxy,
-		TotalDelegatedTokens: delegator.TotalDelegatedTokens,
-		ProxyAddress:         delegator.ProxyAddress,
-	}
-}
-
 func checkParamsGetTickersInfo(count []int) (countRet int, err error) {
 	if len(count) > 1 {
 		return 0, errors.New("invalid params input for 'GetTickersInfo'")

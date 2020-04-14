@@ -5,6 +5,16 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
+// const
+const (
+	BroadcastSync  BroadcastMode = "sync"
+	BroadcastAsync BroadcastMode = "async"
+	BroadcastBlock BroadcastMode = "commit"
+)
+
+// BroadcastMode defines different mode to broadcast
+type BroadcastMode string
+
 type StdTx struct {
 	Msgs       []Msg          `json:"msg"`
 	Fee        StdFee         `json:"-"`

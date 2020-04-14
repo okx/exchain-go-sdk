@@ -10,9 +10,7 @@ import (
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )
 
-var (
-	cdc *codec.Codec
-)
+var cdc *codec.Codec
 
 func init() {
 	cdc = codec.Cdc
@@ -30,6 +28,21 @@ func NewClient(rpcUrl string) OKChainClient {
 		cli:    rpcCli.NewHTTP(rpcUrl, "/websocket"),
 		cdc:    cdc,
 	}
+}
+
+func (cli *OKChainClient) querySubspace(subspace []byte, storeName string) (res []cmn.KVPair, err error) {
+	resRaw, err := cli.queryStore(subspace, storeName, "subspace")
+	if err != nil {
+		return res, err
+	}
+
+	cli.cdc.MustUnmarshalBinaryLengthPrefixed(resRaw, &res)
+	return
+}
+
+func (cli *OKChainClient) queryStore(key cmn.HexBytes, storeName, endPath string) ([]byte, error) {
+	path := fmt.Sprintf("/store/%s/%s", storeName, endPath)
+	return cli.query(path, key)
 }
 
 func (cli *OKChainClient) query(path string, key cmn.HexBytes) ([]byte, error) {

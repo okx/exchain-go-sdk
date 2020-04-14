@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/okex/okchain-go-sdk/types"
@@ -17,6 +16,60 @@ var (
 	ReDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
+func ParseDecCoins(coinsStr string) (types.DecCoins, error) {
+	coinsStr = strings.TrimSpace(coinsStr)
+	if len(coinsStr) == 0 {
+		return nil, nil
+	}
+
+	coinStrs := strings.Split(coinsStr, ",")
+	coins := make(types.DecCoins, len(coinStrs))
+	for i, coinStr := range coinStrs {
+		coin, err := ParseDecCoin(coinStr)
+		if err != nil {
+			return nil, err
+		}
+
+		coins[i] = coin
+	}
+
+	// sort coins for determinism
+	coins.Sort()
+
+	// validate coins before returning
+	if !coins.IsValid() {
+		return nil, fmt.Errorf("parsed decimal coins are invalid: %#v", coins)
+	}
+
+	return coins, nil
+}
+
+// ParseDecCoin parses a decimal coin from a string, returning an error if invalid
+// An empty string is considered invalid
+func ParseDecCoin(coinStr string) (coin types.DecCoin, err error) {
+	coinStr = strings.TrimSpace(coinStr)
+
+	matches := reDecCoin.FindStringSubmatch(coinStr)
+	if matches == nil {
+		return coin, fmt.Errorf("invalid decimal coin expression: %s", coinStr)
+	}
+
+	amountStr, denomStr := matches[1], matches[2]
+
+	amount, err := types.NewDecFromStr(amountStr)
+	if err != nil {
+		return coin, fmt.Errorf("failed to parse decimal coin amount: %s, %s", amountStr, err.Error())
+	}
+
+	if err := validateDenom(denomStr); err != nil {
+		return coin, fmt.Errorf("invalid denom cannot contain upper case characters or spaces: %s", err)
+	}
+
+	return types.NewDecCoinFromDec(denomStr, amount), nil
+}
+
+// ParseDecCoins will parse out a list of decimal coins separated by commas
+// If nothing is provided, it returns nil DecCoins. Returned decimal coins are sorted
 func ParseCoins(coinsStr string) (coins types.Coins, err error) {
 	coinsStr = strings.TrimSpace(coinsStr)
 	if len(coinsStr) == 0 {
@@ -67,30 +120,35 @@ func ParseCoin(coinStr string) (coin types.Coin, err error) {
 	return coin, nil
 }
 
-func StrToTransfers(str string) (transfers []types.TransferUnit, err error) {
-	var transfer []types.Transfer
-	err = json.Unmarshal([]byte(str), &transfer)
-	if err != nil {
-		return transfers, err
-	}
+// Example:
+// `addr1 1okt
+// 	addr2 2okt`
+func ParseTransfersStr(str string) ([]types.TransferUnit, error) {
+	strs := strings.Split(strings.TrimSpace(str), "\n")
+	transLen := len(strs)
+	transfers := make([]types.TransferUnit, transLen)
 
-	for _, trans := range transfer {
-		var t types.TransferUnit
-		to, err := types.AccAddressFromBech32(trans.To)
-		if err != nil {
-			return transfers, err
+	for i := 0; i < transLen; i++ {
+		s := strings.Split(strs[i], " ")
+		if len(s) != 2 {
+			return nil, errors.New("invalid text to parse")
 		}
-		t.To = to
-		t.Coins = AmountToCoins(trans.Amount)
-		transfers = append(transfers, t)
-	}
-	return transfers, nil
-}
+		addrStr, coinStr := s[0], s[1]
 
-func AmountToCoins(amount string) types.Coins {
-	var res types.Coins
-	res, _ = ParseCoins(amount)
-	return res
+		to, err := types.AccAddressFromBech32(addrStr)
+		if err != nil {
+			return nil, err
+		}
+
+		coins, err := ParseDecCoins(coinStr)
+		if err != nil {
+			return nil, err
+		}
+
+		transfers[i] = types.NewTransferUnit(to, coins)
+	}
+
+	return transfers, nil
 }
 
 func validateDenom(denom string) error {

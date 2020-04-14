@@ -1,4 +1,4 @@
-package queryParams
+package query_params
 
 import (
 	"encoding/json"
@@ -223,5 +223,26 @@ type QueryProposalParams struct {
 func NewQueryProposalParams(proposalID uint64) QueryProposalParams {
 	return QueryProposalParams{
 		ProposalID: proposalID,
+	}
+}
+
+type QueryValidatorParams struct {
+	ValidatorAddr types.ValAddress
+}
+
+func NewQueryValidatorParams(validatorAddr types.ValAddress) QueryValidatorParams {
+	return QueryValidatorParams{
+		ValidatorAddr: validatorAddr,
+	}
+}
+
+type QueryDelegatorParams struct {
+	DelegatorAddr types.AccAddress
+}
+
+// NewQueryDelegatorParams creates a new instance of QueryDelegatorParams
+func NewQueryDelegatorParams(delegatorAddr types.AccAddress) QueryDelegatorParams {
+	return QueryDelegatorParams{
+		DelegatorAddr: delegatorAddr,
 	}
 }

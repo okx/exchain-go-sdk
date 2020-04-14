@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/okex/okchain-go-sdk/common"
-	"github.com/okex/okchain-go-sdk/common/queryParams"
+	"github.com/okex/okchain-go-sdk/common/query_params"
 	"github.com/okex/okchain-go-sdk/crypto/encoding/codec"
 	"github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/utils"
@@ -24,6 +24,8 @@ const (
 	closedOrdersPath      = "custom/backend/orders/closed"
 	dealsInfoPath         = "custom/backend/deals"
 	transactionsInfoPath  = "custom/backend/txs"
+	validatorPath         = "custom/staking/validator"
+	unbondDelegationPath  = "custom/staking/unbondingDelegation"
 )
 
 func (cli *OKChainClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -54,7 +56,7 @@ func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensI
 		return types.AccountTokensInfo{}, fmt.Errorf("err : invalid account address")
 	}
 
-	accountParams := queryParams.NewQueryAccTokenParams("", "all")
+	accountParams := query_params.NewQueryAccTokenParams("", "all")
 
 	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
 	if err != nil {
@@ -74,7 +76,7 @@ func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensI
 }
 
 func (cli *OKChainClient) GetTokenInfoByAddr(addr, symbol string) (types.AccountTokensInfo, error) {
-	accountParams := queryParams.NewQueryAccTokenParams(symbol, "partial")
+	accountParams := query_params.NewQueryAccTokenParams(symbol, "partial")
 
 	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
 	if err != nil {
@@ -136,7 +138,7 @@ func (cli *OKChainClient) GetProductsInfo() ([]types.TokenPair, error) {
 }
 
 func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error) {
-	params := queryParams.NewQueryDepthBookParams(product, 200)
+	params := query_params.NewQueryDepthBookParams(product, 200)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return types.BookRes{}, fmt.Errorf("error : QueryDepthBookParams failed in json marshal : %s", err.Error())
@@ -156,7 +158,7 @@ func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error
 }
 
 func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) ([][]string, error) {
-	params := queryParams.NewQueryKlinesParams(product, granularity, size)
+	params := query_params.NewQueryKlinesParams(product, granularity, size)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryKlinesParams failed in json marshal : %s", err.Error())
@@ -181,7 +183,7 @@ func (cli *OKChainClient) GetTickersInfo(count ...int) (types.Tickers, error) {
 		return nil, err
 	}
 
-	params := queryParams.NewQueryTickerParams("", countTmp, true)
+	params := query_params.NewQueryTickerParams("", countTmp, true)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryTickerParams failed in json marshal : %s", err.Error())
@@ -206,7 +208,7 @@ func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, pe
 		return nil, err
 	}
 
-	params := queryParams.NewQueryMatchParams(product, int64(start), int64(end), page, perPageTmp)
+	params := query_params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageTmp)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryMatchParams failed in json marshal : %s", err.Error())
@@ -232,7 +234,7 @@ func (cli *OKChainClient) GetOpenOrders(addr, product, side string, start, end, 
 	}
 
 	// field hideNoFill fixed by false
-	params := queryParams.NewQueryOrderListParams(addr, product, side, page, perPageTmp, int64(start), int64(end), false)
+	params := query_params.NewQueryOrderListParams(addr, product, side, page, perPageTmp, int64(start), int64(end), false)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryOrderListParams failed in json marshal : %s", err.Error())
@@ -259,7 +261,7 @@ func (cli *OKChainClient) GetClosedOrders(addr, product, side string, start, end
 	}
 
 	// field hideNoFill fixed by false
-	params := queryParams.NewQueryOrderListParams(addr, product, side, page, perPageTmp, int64(start), int64(end), false)
+	params := query_params.NewQueryOrderListParams(addr, product, side, page, perPageTmp, int64(start), int64(end), false)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryOrderListParams failed in json marshal : %s", err.Error())
@@ -284,7 +286,7 @@ func (cli *OKChainClient) GetDealsInfo(addr, product, side string, start, end, p
 		return nil, err
 	}
 
-	params := queryParams.NewQueryDealsParams(addr, product, int64(start), int64(end), page, perPageTmp, side)
+	params := query_params.NewQueryDealsParams(addr, product, int64(start), int64(end), page, perPageTmp, side)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryDealsParams failed in json marshal : %s", err.Error())
@@ -310,7 +312,7 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 		return nil, err
 	}
 
-	params := queryParams.NewQueryTxListParams(addr, int64(type_), int64(start), int64(end), page, perPageTmp)
+	params := query_params.NewQueryTxListParams(addr, int64(type_), int64(start), int64(end), page, perPageTmp)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryTxListParams failed in json marshal : %s", err.Error())
@@ -327,4 +329,79 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 	}
 
 	return transactionsInfo, nil
+}
+
+func (cli *OKChainClient) GetValidators() ([]types.Validator, error) {
+	resKVs, err := cli.querySubspace(types.ValidatorsKey, "staking")
+	if err != nil {
+		return nil, err
+	}
+
+	var vals []types.Validator
+	for _, kv := range resKVs {
+		var val types.Validator
+		cli.cdc.MustUnmarshalBinaryLengthPrefixed(kv.Value, &val)
+		vals = append(vals, val)
+	}
+
+	return vals, nil
+}
+
+func (cli *OKChainClient) GetValidator(valAddrStr string) (types.Validator, error) {
+	var val types.Validator
+	valAddr, err := types.ValAddressFromBech32(valAddrStr)
+	if err != nil {
+		return val, err
+	}
+
+	params := query_params.NewQueryValidatorParams(valAddr)
+	jsonBytes, err := cli.cdc.MarshalJSON(params)
+	if err != nil {
+		return val, fmt.Errorf("error : QueryValidatorParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := cli.query(validatorPath, jsonBytes)
+	if err != nil {
+		return val, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	if err := cli.cdc.UnmarshalJSON(res, &val); err != nil {
+		return val, fmt.Errorf("err : %s", err.Error())
+	}
+
+	return val, nil
+}
+
+func (cli *OKChainClient) GetDelegator(delAddrStr string) (types.DelegatorResp, error) {
+	var delResp types.DelegatorResp
+	delAddr, err := types.AccAddressFromBech32(delAddrStr)
+	if err != nil {
+		return delResp, err
+	}
+
+	resp, err := cli.queryStore(types.GetDelegatorKey(delAddr), "staking", "key")
+	if err != nil {
+		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
+	}
+
+	delegator, undelegation := types.NewDelegator(delAddr), types.DefaultUndelegation()
+	if len(resp) != 0 {
+		cdc.MustUnmarshalBinaryLengthPrefixed(resp, &delegator)
+	}
+
+	// query for the undelegation info
+	jsonBytes, err := cdc.MarshalJSON(query_params.NewQueryDelegatorParams(delAddr))
+	if err != nil {
+		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
+	}
+
+	res, err := cli.query(unbondDelegationPath, jsonBytes)
+	// if err!= nil , we treat it as there's no undelegation of the delegator
+	if err == nil {
+		if err := cdc.UnmarshalJSON(res, &undelegation); err != nil {
+			return delResp, err
+		}
+	}
+
+	return convertToDelegatorResp(delegator, undelegation), nil
 }

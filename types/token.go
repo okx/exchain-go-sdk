@@ -12,11 +12,11 @@ type CoinInfo struct {
 }
 
 type Token struct {
-	Desc           string     `json:"desc"`
+	Desc           string     `json:"description"`
 	Symbol         string     `json:"symbol"`
 	OriginalSymbol string     `json:"original_symbol"`
 	WholeName      string     `json:"whole_name"`
-	TotalSupply    int64      `json:"total_supply"`
+	TotalSupply    Dec        `json:"total_supply"`
 	Owner          AccAddress `json:"owner"`
 	Mintable       bool       `json:"mintable"`
 }
@@ -36,12 +36,14 @@ type TokenPair struct {
 	TokenPairId      string `json:"token_pair_id"`
 }
 
-type Transfer struct {
-	To     string `json:"to"`
-	Amount string `json:"amount"`
-}
-
 type TransferUnit struct {
 	To    AccAddress `json:"to"`
-	Coins Coins      `json:"coins"`
+	Coins DecCoins   `json:"coins"`
+}
+
+func NewTransferUnit(addr AccAddress, coins DecCoins) TransferUnit {
+	return TransferUnit{
+		addr,
+		coins,
+	}
 }

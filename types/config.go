@@ -11,6 +11,7 @@ type Config struct {
 	sealed              bool
 	bech32AddressPrefix map[string]string
 	txEncoder           TxEncoder
+	addressVerifier     func([]byte) error
 }
 
 var (
@@ -47,4 +48,19 @@ func (config *Config) GetBech32AccountPubPrefix() string {
 // GetBech32ConsensusPubPrefix returns the Bech32 prefix for consensus node public key
 func (config *Config) GetBech32ConsensusPubPrefix() string {
 	return config.bech32AddressPrefix["consensus_pub"]
+}
+
+// GetBech32ValidatorAddrPrefix returns the Bech32 prefix for validator address
+func (config *Config) GetBech32ValidatorAddrPrefix() string {
+	return config.bech32AddressPrefix["validator_addr"]
+}
+
+// GetAddressVerifier returns the function to verify that addresses have the correct format
+func (config *Config) GetAddressVerifier() func([]byte) error {
+	return config.addressVerifier
+}
+
+// GetBech32ConsensusAddrPrefix returns the Bech32 prefix for consensus node address
+func (config *Config) GetBech32ConsensusAddrPrefix() string {
+	return config.bech32AddressPrefix["consensus_addr"]
 }

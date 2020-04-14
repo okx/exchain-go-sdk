@@ -7,6 +7,7 @@ import (
 	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
+	"github.com/okex/okchain-go-sdk/types/tx"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
@@ -15,14 +16,6 @@ const (
 	bcryptSecurityParameter = 12
 	defaultKeyDBName        = "keys"
 )
-
-var (
-	Kb keys.Keybase
-)
-
-func init() {
-	Kb = keys.NewInMemory()
-}
 
 func CreateAccount(name, passWd string) (keys.Info, string, error) {
 	if len(name) == 0 {
@@ -46,7 +39,7 @@ func CreateAccount(name, passWd string) (keys.Info, string, error) {
 		return nil, "", fmt.Errorf("bip39.NewMnemonic err : %s", err.Error())
 	}
 
-	info, err := Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
+	info, err := tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
 	if err != nil {
 		return nil, "", fmt.Errorf("Kb.CreateAccount err : %s", err.Error())
 	}
@@ -74,7 +67,7 @@ func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, erro
 		return nil, "", errors.New("err : mnemonic is not valid")
 	}
 
-	info, err := Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
+	info, err := tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
 	if err != nil {
 		return nil, "", fmt.Errorf("Kb.CreateAccount err : %s", err.Error())
 	}

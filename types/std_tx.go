@@ -1,19 +1,18 @@
-package tx
+package types
 
 import (
 	"encoding/json"
-	"github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
 )
 
 type StdTx struct {
-	Msgs       []types.Msg    `json:"msg"`
+	Msgs       []Msg          `json:"msg"`
 	Fee        StdFee         `json:"-"`
 	Signatures []StdSignature `json:"signatures"`
 	Memo       string         `json:"memo"`
 }
 
-func NewStdTx(msgs []types.Msg, fee StdFee, sigs []StdSignature, memo string) StdTx {
+func NewStdTx(msgs []Msg, fee StdFee, sigs []StdSignature, memo string) StdTx {
 	return StdTx{
 		Msgs:       msgs,
 		Fee:        fee,
@@ -23,11 +22,11 @@ func NewStdTx(msgs []types.Msg, fee StdFee, sigs []StdSignature, memo string) St
 }
 
 type StdFee struct {
-	Amount types.Coins `json:"amount"`
-	Gas    uint64      `json:"gas"`
+	Amount Coins  `json:"amount"`
+	Gas    uint64 `json:"gas"`
 }
 
-func NewStdFee(gas uint64, amount types.Coins) StdFee {
+func NewStdFee(gas uint64, amount Coins) StdFee {
 	return StdFee{
 		Amount: amount,
 		Gas:    gas,
@@ -36,7 +35,7 @@ func NewStdFee(gas uint64, amount types.Coins) StdFee {
 
 func (fee StdFee) Bytes() []byte {
 	if len(fee.Amount) == 0 {
-		fee.Amount = types.NewCoins()
+		fee.Amount = NewCoins()
 	}
 	bz, err := MsgCdc.MarshalJSON(fee) // TODO
 	if err != nil {
@@ -45,9 +44,18 @@ func (fee StdFee) Bytes() []byte {
 	return bz
 }
 
+// StdSignature is the struct of signature in stdTx
 type StdSignature struct {
 	crypto.PubKey `json:"pub_key"`
 	Signature     []byte `json:"signature"`
+}
+
+// NewStdSignature creates a new instance of std signature
+func NewStdSignature(pubkey crypto.PubKey, signature []byte) StdSignature {
+	return StdSignature{
+		PubKey:    pubkey,
+		Signature: signature,
+	}
 }
 
 type StdSignDoc struct {

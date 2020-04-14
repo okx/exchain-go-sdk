@@ -2,15 +2,41 @@ package utils
 
 import (
 	"encoding/hex"
+	"fmt"
 	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
 	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
 	"github.com/okex/okchain-go-sdk/types"
+	"io/ioutil"
 )
 
-var (
-	AddressStoreKeyPrefix = []byte{0x01}
-)
+var AddressStoreKeyPrefix = []byte{0x01}
+
+// GetStdTxFromFile gets the instance of stdTx from a json file
+func GetStdTxFromFile(filePath string) (stdTx types.StdTx, err error) {
+	bytes, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return
+	}
+
+	types.MsgCdc.MustUnmarshalJSON(bytes, &stdTx)
+
+	return
+}
+
+// parse validator address string to types.ValAddress
+func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
+	valLen := len(valAddrsStr)
+	valAddrs := make([]types.ValAddress, valLen)
+	var err error
+	for i := 0; i < valLen; i++ {
+		valAddrs[i], err = types.ValAddressFromBech32(valAddrsStr[i])
+		if err != nil {
+			return nil, fmt.Errorf("invalid validator address: %s", valAddrsStr[i])
+		}
+	}
+	return valAddrs, nil
+}
 
 func AddressStoreKey(addr types.AccAddress) []byte {
 	return append(AddressStoreKeyPrefix, addr.Bytes()...)

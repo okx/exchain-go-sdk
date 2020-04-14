@@ -29,8 +29,6 @@ type ValidatorOutput struct {
 	VotingPower      int64       `json:"voting_power"`
 }
 
-type ConsAddress []byte
-
 func bech32ValidatorOutput(validator *types.Validator) (ValidatorOutput, error) {
 	bechValPubkey, err := Bech32ifyConsPub(validator.PubKey)
 	if err != nil {

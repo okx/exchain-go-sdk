@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	rpcUrl = "3.13.150.20:26657"
+	rpcUrl = "127.0.0.1:26657"
 	// user's name
 	name = "alice"
 	// user's mnemonic
@@ -17,6 +17,9 @@ const (
 	passWd = "12345678"
 	// target address
 	addr = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	baseCoin = "okt"
+	product = "xxb_" + baseCoin
+
 )
 
 func main() {
@@ -40,7 +43,7 @@ func main() {
 	/* 3. transfer to other address */
 	// sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
 	sequenceNum := accInfo.GetSequence()
-	res, err := cli.Send(fromInfo, passWd, addr, "1tokt", "my memo", accInfo.GetAccountNumber(), sequenceNum)
+	res, err := cli.Send(fromInfo, passWd, addr, "1" + baseCoin, "my memo", accInfo.GetAccountNumber(), sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,13 +52,12 @@ func main() {
 
 	/* 4. place an order on OK Dex */
 	sequenceNum++
-	res, err = cli.NewOrder(fromInfo, passWd, "tokt_tusdk", "BUY", "1", "1", "my memo", accInfo.GetAccountNumber(), sequenceNum)
+	res, err = cli.NewOrder(fromInfo, passWd, product, "BUY", "1", "1", "my memo", accInfo.GetAccountNumber(), sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	orderId := res.Tags[1].Value
 	fmt.Println(res)
+	orderId := client.GetOrderIdFromResponse(&res)
 
 	fmt.Println("orderId:", orderId)
 

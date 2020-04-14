@@ -1,7 +1,8 @@
-package queryParams
+package query_params
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/okex/okchain-go-sdk/types"
 	"time"
 )
@@ -224,4 +225,56 @@ func NewQueryProposalParams(proposalID uint64) QueryProposalParams {
 	return QueryProposalParams{
 		ProposalID: proposalID,
 	}
+}
+
+type QueryValidatorParams struct {
+	ValidatorAddr types.ValAddress
+}
+
+func NewQueryValidatorParams(validatorAddr types.ValAddress) QueryValidatorParams {
+	return QueryValidatorParams{
+		ValidatorAddr: validatorAddr,
+	}
+}
+
+type QueryDelegatorParams struct {
+	DelegatorAddr types.AccAddress
+}
+
+// NewQueryDelegatorParams creates a new instance of QueryDelegatorParams
+func NewQueryDelegatorParams(delegatorAddr types.AccAddress) QueryDelegatorParams {
+	return QueryDelegatorParams{
+		DelegatorAddr: delegatorAddr,
+	}
+}
+
+// QueryDexInfoParams defines query params of dex info
+type QueryDexInfoParams struct {
+	Owner   string
+	Page    int
+	PerPage int
+}
+
+// NewQueryDexInfoParams creates query params of dex info
+func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams, error) {
+	if len(owner) == 0 {
+		owner = ""
+	} else {
+		_, err := types.AccAddressFromBech32(owner)
+		if err != nil {
+			return QueryDexInfoParams{}, fmt.Errorf("invalid address：%s", owner)
+		}
+	}
+
+	if page <= 0 {
+		return QueryDexInfoParams{}, fmt.Errorf("invalid page：%d", page)
+	}
+	if perPage <= 0 {
+		return QueryDexInfoParams{}, fmt.Errorf("invalid per-page：%d", perPage)
+	}
+	return QueryDexInfoParams{
+		Owner:   owner,
+		Page:    page,
+		PerPage: perPage,
+	}, nil
 }

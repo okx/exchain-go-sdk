@@ -359,3 +359,11 @@ func (i *Int) UnmarshalJSON(bz []byte) error {
 func IntEq(t *testing.T, exp, got Int) (*testing.T, bool, string, string, string) {
 	return t, exp.Equal(got), "expected:\t%v\ngot:\t\t%v", exp.String(), got.String()
 }
+
+// required by okchain
+
+// turn the Int to Dec by descending power 8
+// e.g : 123456789 -> 1.23456789
+func (i Int) StandardizeToDec() Dec {
+	return NewDecFromIntWithPrec(i, Precision)
+}

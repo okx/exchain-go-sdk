@@ -7,9 +7,7 @@ import (
 )
 
 const (
-	addr   = "okchain1mm43akh88a3qendlmlzjldf8lkeynq68r8l6ts"
-	rpcUrl = "3.13.150.20:26657"
-
+	rpcUrl = "tcp://127.0.0.1:10057"
 )
 
 func TestGetAccountInfoByAddr(t *testing.T) {
@@ -28,7 +26,7 @@ func TestGetTokensInfoByAddr(t *testing.T) {
 
 func TestGetTokenInfoByAddr(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	tokenInfo, err := cli.GetTokenInfoByAddr(addr, "tokt")
+	tokenInfo, err := cli.GetTokenInfoByAddr(addr, "okt")
 	assertNotEqual(t, err, nil)
 	fmt.Println(tokenInfo)
 }
@@ -44,23 +42,14 @@ func TestGetTokensInfo(t *testing.T) {
 
 func TestGetTokenInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	tokenInfo, err := cli.GetTokenInfo("tokt")
+	tokenInfo, err := cli.GetTokenInfo("okt")
 	assertNotEqual(t, err, nil)
 	fmt.Println(tokenInfo)
 }
 
-func TestGetProductsInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	productsList, err := cli.GetProductsInfo()
-	assertNotEqual(t, err, nil)
-	for _, p := range productsList {
-		fmt.Println(p)
-	}
-}
-
 func TestGetDepthbookInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	depthbook, err := cli.GetDepthbookInfo("xxb_tokt")
+	depthbook, err := cli.GetDepthbookInfo("xxb_okt")
 	assertNotEqual(t, err, nil)
 	for _, ask := range depthbook.Asks {
 		fmt.Println(ask)
@@ -73,7 +62,7 @@ func TestGetDepthbookInfo(t *testing.T) {
 
 func TestGetCandlesInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
-	candles, err := cli.GetCandlesInfo("xxb_tokt", 60, 100)
+	candles, err := cli.GetCandlesInfo("xxb_okt", 60, 100)
 	assertNotEqual(t, err, nil)
 	for _, line := range candles {
 		fmt.Println(line)
@@ -155,6 +144,39 @@ func TestGetTransactionsInfo(t *testing.T) {
 	for _, tx := range transactionsInfo {
 		fmt.Println(tx)
 	}
+}
+
+func TestGetValidators(t *testing.T) {
+	cli := NewClient(rpcUrl)
+
+	vals, err := cli.GetValidators()
+	assertNotEqual(t, err, nil)
+	for _, val := range vals {
+		fmt.Println(val)
+	}
+}
+
+func TestGetValidator(t *testing.T) {
+	cli := NewClient(rpcUrl)
+
+	valAddrStr := "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
+	val, err := cli.GetValidator(valAddrStr)
+	assertNotEqual(t, err, nil)
+	fmt.Println(val)
+}
+
+func TestGetDelegator(t *testing.T) {
+	cli := NewClient(rpcUrl)
+	delResp, err := cli.GetDelegator("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
+	assertNotEqual(t, err, nil)
+	fmt.Println(delResp)
+}
+
+func TestOKChainClient_QueryProducts(t *testing.T) {
+	cli := NewClient(rpcUrl)
+	tokenPairs, err := cli.QueryProducts("", 1, 50)
+	assertNotEqual(t, err, nil)
+	fmt.Println(tokenPairs)
 }
 
 func assertNotEqual(t *testing.T, a, b interface{}) {

@@ -23,7 +23,7 @@ type Ticker struct {
 	Price            string `json:"price"`
 	Volume           string `json:"volume"`
 	Change           string `json:"change"`
-	ChangePercentage string `json:"changePercentage"`
+	ChangePercentage string `json:"change_percentage"`
 }
 
 type MatchResult struct {

@@ -26,16 +26,6 @@ func (token Token) String() string {
 	return string(b)
 }
 
-type TokenPair struct {
-	BaseAssetSymbol  string `json:"base_asset_symbol"`
-	QuoteAssetSymbol string `json:"quote_asset_symbol"`
-	InitPrice        Dec    `json:"price"`
-	MaxPriceDigit    int64  `json:"max_price_digit"`
-	MaxQuantityDigit int64  `json:"max_size_digit"`
-	MinQuantity      Dec    `json:"min_trade_size"`
-	TokenPairId      string `json:"token_pair_id"`
-}
-
 type TransferUnit struct {
 	To    AccAddress `json:"to"`
 	Coins DecCoins   `json:"coins"`

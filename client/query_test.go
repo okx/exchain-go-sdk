@@ -47,15 +47,6 @@ func TestGetTokenInfo(t *testing.T) {
 	fmt.Println(tokenInfo)
 }
 
-func TestGetProductsInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	productsList, err := cli.GetProductsInfo()
-	assertNotEqual(t, err, nil)
-	for _, p := range productsList {
-		fmt.Println(p)
-	}
-}
-
 func TestGetDepthbookInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	depthbook, err := cli.GetDepthbookInfo("xxb_okt")
@@ -179,6 +170,13 @@ func TestGetDelegator(t *testing.T) {
 	delResp, err := cli.GetDelegator("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
 	assertNotEqual(t, err, nil)
 	fmt.Println(delResp)
+}
+
+func TestOKChainClient_QueryProducts(t *testing.T) {
+	cli := NewClient(rpcUrl)
+	tokenPairs, err := cli.QueryProducts("", 1, 50)
+	assertNotEqual(t, err, nil)
+	fmt.Println(tokenPairs)
 }
 
 func assertNotEqual(t *testing.T, a, b interface{}) {

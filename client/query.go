@@ -15,7 +15,6 @@ const (
 	accountTokensInfoPath = "custom/token/accounts/"
 	tokensInfoPath        = "custom/token/tokens"
 	tokenInfoPath         = "custom/token/info/"
-	productsInfoPath      = "custom/token/products"
 	depthbookInfoPath     = "custom/order/depthbook"
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
@@ -26,6 +25,7 @@ const (
 	transactionsInfoPath  = "custom/backend/txs"
 	validatorPath         = "custom/staking/validator"
 	unbondDelegationPath  = "custom/staking/unbondingDelegation"
+	productsPath          = "custom/dex/products"
 )
 
 func (cli *OKChainClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
@@ -121,20 +121,6 @@ func (cli *OKChainClient) GetTokenInfo(symbol string) (types.Token, error) {
 	}
 
 	return token, nil
-}
-
-func (cli *OKChainClient) GetProductsInfo() ([]types.TokenPair, error) {
-	res, err := cli.query(productsInfoPath, nil)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var productsList []types.TokenPair
-	if err = cli.cdc.UnmarshalJSON(res, &productsList); err != nil {
-		return nil, fmt.Errorf("err : %s", err.Error())
-	}
-
-	return productsList, nil
 }
 
 func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error) {
@@ -366,7 +352,7 @@ func (cli *OKChainClient) GetValidator(valAddrStr string) (types.Validator, erro
 	}
 
 	if err := cli.cdc.UnmarshalJSON(res, &val); err != nil {
-		return val, fmt.Errorf("err : %s", err.Error())
+		return val, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
 	}
 
 	return val, nil
@@ -404,4 +390,30 @@ func (cli *OKChainClient) GetDelegator(delAddrStr string) (types.DelegatorResp, 
 	}
 
 	return convertToDelegatorResp(delegator, undelegation), nil
+}
+
+// dex module
+
+// QueryProducts gets token pair info
+func (cli *OKChainClient) QueryProducts(ownerAddr string, page, perPage int) (tokenPairs []types.TokenPair, err error) {
+	queryParams, err := query_params.NewQueryDexInfoParams(ownerAddr, page, perPage)
+	if err != nil {
+		return
+	}
+
+	jsonBytes, err := cdc.MarshalJSON(queryParams)
+	if err != nil {
+		return
+	}
+
+	res, err := cli.query(productsPath, jsonBytes)
+	if err != nil {
+		return
+	}
+
+	if err = cli.cdc.UnmarshalJSON(res, &tokenPairs); err != nil {
+		return tokenPairs, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
+	}
+
+	return
 }

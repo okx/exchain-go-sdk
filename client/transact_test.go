@@ -292,7 +292,7 @@ func TestOKChainClient_List(t *testing.T) {
 	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
 
-	res, err := cli.List(fromInfo, passWd, "btc-e68", "okt", "0.02", "my memo",
+	res, err := cli.List(fromInfo, passWd, "btc-216", "okt", "0.02", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
@@ -305,7 +305,7 @@ func TestOKChainClient_Deposit(t *testing.T) {
 	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
 
-	res, err := cli.Deposit(fromInfo, passWd, "btc-e68_okt", "1024.2048okt", "my memo",
+	res, err := cli.Deposit(fromInfo, passWd, "btc-216_okt", "1024.2048okt", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
@@ -318,7 +318,7 @@ func TestOKChainClient_Withdraw(t *testing.T) {
 	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
 	assertNotEqual(t, err, nil)
 
-	res, err := cli.Withdraw(fromInfo, passWd, "btc-e68_okt", "0.2408okt", "my memo",
+	res, err := cli.Withdraw(fromInfo, passWd, "btc-216_okt", "0.2408okt", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
@@ -326,7 +326,7 @@ func TestOKChainClient_Withdraw(t *testing.T) {
 
 func TestOKChainClient_TransferOwnership(t *testing.T) {
 	// 1.generate unsigned transfer-ownership tx file
-	err := utils.GenerateUnsignedTransferOwnershipTx("btc-e68_okt", addr, addr1, "my memo", "./unsignedTx.json")
+	err := utils.GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, addr1, "my memo", "./unsignedTx.json")
 	require.NoError(t, err)
 
 	// 2.multi-sign the stdTx by the receiver

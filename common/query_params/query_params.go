@@ -2,6 +2,7 @@ package query_params
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/okex/okchain-go-sdk/types"
 	"time"
 )
@@ -245,4 +246,35 @@ func NewQueryDelegatorParams(delegatorAddr types.AccAddress) QueryDelegatorParam
 	return QueryDelegatorParams{
 		DelegatorAddr: delegatorAddr,
 	}
+}
+
+// QueryDexInfoParams defines query params of dex info
+type QueryDexInfoParams struct {
+	Owner   string
+	Page    int
+	PerPage int
+}
+
+// NewQueryDexInfoParams creates query params of dex info
+func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams, error) {
+	if len(owner) == 0 {
+		owner = ""
+	} else {
+		_, err := types.AccAddressFromBech32(owner)
+		if err != nil {
+			return QueryDexInfoParams{}, fmt.Errorf("invalid address：%s", owner)
+		}
+	}
+
+	if page <= 0 {
+		return QueryDexInfoParams{}, fmt.Errorf("invalid page：%d", page)
+	}
+	if perPage <= 0 {
+		return QueryDexInfoParams{}, fmt.Errorf("invalid per-page：%d", perPage)
+	}
+	return QueryDexInfoParams{
+		Owner:   owner,
+		Page:    page,
+		PerPage: perPage,
+	}, nil
 }

@@ -326,11 +326,22 @@ func TestWithdraw(t *testing.T) {
 }
 
 func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("", BroadcastBlock)
 	client := NewClient(config)
 	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
 	require.NoError(t, err)
 }
+
+
+func TestMultiSign(t *testing.T) {
+	config := NewClientConfig("", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	err = client.Dex().MultiSign(fromInfo, passWd, "./unsignedTx.json", "./signedTx.json")
+	require.NoError(t, err)
+}
+
 
 //func TestTransferOwnership(t *testing.T) {
 //	// 1.generate unsigned transfer-ownership tx file

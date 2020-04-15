@@ -6,29 +6,28 @@ import (
 	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
 	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
-	"github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 	"io/ioutil"
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(filePath string) (stdTx types.StdTx, err error) {
+func GetStdTxFromFile(codec sdk.SDKCodec, filePath string) (stdTx sdk.StdTx, err error) {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return
 	}
 
-	types.MsgCdc.MustUnmarshalJSON(bytes, &stdTx)
-
+	codec.MustUnmarshalJSON(bytes, &stdTx)
 	return
 }
 
 // ParseValAddresses parses validator address string to types.ValAddress
-func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
+func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 	valLen := len(valAddrsStr)
-	valAddrs := make([]types.ValAddress, valLen)
+	valAddrs := make([]sdk.ValAddress, valLen)
 	var err error
 	for i := 0; i < valLen; i++ {
-		valAddrs[i], err = types.ValAddressFromBech32(valAddrsStr[i])
+		valAddrs[i], err = sdk.ValAddressFromBech32(valAddrsStr[i])
 		if err != nil {
 			return nil, fmt.Errorf("invalid validator address: %s", valAddrsStr[i])
 		}

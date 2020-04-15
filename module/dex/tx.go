@@ -64,7 +64,7 @@ func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath stri
 		return
 	}
 
-	stdTx, err := utils.GetStdTxFromFile(inputPath)
+	stdTx, err := utils.GetStdTxFromFile(dc.GetCodec(), inputPath)
 	if err != nil {
 		return
 	}

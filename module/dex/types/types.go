@@ -14,6 +14,7 @@ var (
 )
 
 func init() {
+	sdk.RegisterBasicCodec(msgCdc)
 	RegisterCodec(msgCdc)
 }
 

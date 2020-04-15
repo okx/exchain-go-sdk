@@ -184,6 +184,21 @@ func TestUnbindProxy(t *testing.T) {
 
 }
 
+func TestUnjail(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.129:21157", BroadcastBlock)
+	client := NewClient(config)
+
+	remoteValMnemo := "buzz solution music normal mom evolve online oxygen fox enhance atom fluid"
+	fromInfo, _, err := utils.CreateAccountWithMnemo(remoteValMnemo, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	res, err := client.Slashing().Unjail(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+}
+
 // query test
 
 func TestQueryValidators(t *testing.T) {

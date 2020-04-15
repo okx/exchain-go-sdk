@@ -21,6 +21,7 @@ func (stakingClient) Name() string {
 	return ModuleName
 }
 
+// NewStakingClient creates a new instance of staking client as implement
 func NewStakingClient(baseClient types.BaseClient) exposed.Staking {
 	return stakingClient{baseClient}
 }

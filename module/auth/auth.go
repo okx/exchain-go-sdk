@@ -22,6 +22,7 @@ func (authClient) Name() string {
 	return ModuleName
 }
 
+// NewAuthClient creates a new instance of auth client as implement
 func NewAuthClient(baseClient types.BaseClient) exposed.Auth {
 	return authClient{baseClient}
 }

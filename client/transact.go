@@ -86,24 +86,6 @@ func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, mem
 	return cli.broadcast(stdBytes, BroadcastBlock)
 }
 
-// staking module
-
-// Unjail unjails the own validator which was jailed by slashing module
-func (cli *OKChainClient) Unjail(fromInfo keys.Info, passWd string, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	msg := types.NewMsgUnjail(types.ValAddress(fromInfo.GetAddress()))
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
-
 // token module
 
 // MultiSend multi-sends coins to several receivers

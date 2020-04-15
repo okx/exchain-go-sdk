@@ -8,6 +8,7 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
+// MsgDelegate - structure for delegating to exchange the votes
 type MsgDelegate struct {
 	DelegatorAddress types.AccAddress `json:"delegator_address"`
 	Amount           types.DecCoin    `json:"quantity"`
@@ -32,6 +33,7 @@ func (MsgDelegate) Type() string                   { return "" }
 func (MsgDelegate) ValidateBasic() types.Error     { return nil }
 func (MsgDelegate) GetSigners() []types.AccAddress { return nil }
 
+// MsgUndelegate - structure for delegating to exchange the votes
 type MsgUndelegate struct {
 	DelegatorAddress types.AccAddress `json:"delegator_address" `
 	Amount           types.DecCoin    `json:"quantity"`
@@ -56,6 +58,7 @@ func (MsgUndelegate) Type() string                   { return "" }
 func (MsgUndelegate) ValidateBasic() types.Error     { return nil }
 func (MsgUndelegate) GetSigners() []types.AccAddress { return nil }
 
+// MsgVote - structure for voting transactions
 type MsgVote struct {
 	DelAddr  types.AccAddress   `json:"delegator_address"`
 	ValAddrs []types.ValAddress `json:"validator_addresses"`
@@ -80,6 +83,7 @@ func (MsgVote) Type() string                   { return "" }
 func (MsgVote) ValidateBasic() types.Error     { return nil }
 func (MsgVote) GetSigners() []types.AccAddress { return nil }
 
+// MsgDestroyValidator - structure to deregister a validator
 type MsgDestroyValidator struct {
 	DelAddr types.AccAddress `json:"delegator_address"`
 }
@@ -102,6 +106,7 @@ func (MsgDestroyValidator) Type() string                   { return "" }
 func (MsgDestroyValidator) ValidateBasic() types.Error     { return nil }
 func (MsgDestroyValidator) GetSigners() []types.AccAddress { return nil }
 
+// MsgCreateValidator - structure for creating a validator
 type MsgCreateValidator struct {
 	Description       exposed.Description `json:"description"`
 	MinSelfDelegation types.DecCoin       `json:"min_self_delegation"`
@@ -157,6 +162,7 @@ func (MsgCreateValidator) Type() string                   { return "" }
 func (MsgCreateValidator) ValidateBasic() types.Error     { return nil }
 func (MsgCreateValidator) GetSigners() []types.AccAddress { return nil }
 
+// MsgEditValidator - structure for editing the info of a validator
 type MsgEditValidator struct {
 	exposed.Description
 	ValidatorAddress types.ValAddress `json:"address"`
@@ -181,6 +187,8 @@ func (MsgEditValidator) Type() string                   { return "" }
 func (MsgEditValidator) ValidateBasic() types.Error     { return nil }
 func (MsgEditValidator) GetSigners() []types.AccAddress { return nil }
 
+// MsgRegProxy - structure to register delegator as proxy or unregister proxy to delegator
+// if Reg == true, action is reg, otherwise action is unreg
 type MsgRegProxy struct {
 	ProxyAddress types.AccAddress `json:"proxy_address"`
 	Reg          bool             `json:"reg"`
@@ -205,6 +213,7 @@ func (MsgRegProxy) Type() string                   { return "" }
 func (MsgRegProxy) ValidateBasic() types.Error     { return nil }
 func (MsgRegProxy) GetSigners() []types.AccAddress { return nil }
 
+// MsgBindProxy - structure for binding proxy relationship between voters and voting proxy
 type MsgBindProxy struct {
 	DelAddr      types.AccAddress `json:"delegator_address"`
 	ProxyAddress types.AccAddress `json:"proxy_address"`
@@ -229,6 +238,7 @@ func (MsgBindProxy) Type() string                   { return "" }
 func (MsgBindProxy) ValidateBasic() types.Error     { return nil }
 func (MsgBindProxy) GetSigners() []types.AccAddress { return nil }
 
+// MsgUnbindProxy - structure for unbinding proxy relationship between voters and proxy
 type MsgUnbindProxy struct {
 	DelAddr types.AccAddress `json:"delegator_address"`
 }

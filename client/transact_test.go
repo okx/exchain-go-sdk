@@ -33,19 +33,6 @@ const (
 
 
 
-func TestOKChainClient_Withdraw(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Withdraw(fromInfo, passWd, "btc-216_okt", "0.2408okt", "my memo",
-		accInfo.GetAccountNumber(), accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
 func TestOKChainClient_TransferOwnership(t *testing.T) {
 	// 1.generate unsigned transfer-ownership tx file
 	err := utils.GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, addr1, "my memo", "./unsignedTx.json")

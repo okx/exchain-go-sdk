@@ -38,3 +38,21 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+// Withdraw withdraws some tokens from a specific product
+func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckProduct(fromInfo, passWd, product); err != nil {
+		return
+	}
+
+	amount, err := utils.ParseDecCoin(amountStr)
+	if err != nil {
+		return
+	}
+	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), product, amount)
+
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}
+

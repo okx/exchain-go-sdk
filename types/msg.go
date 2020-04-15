@@ -49,33 +49,6 @@ type TxEncoder func(tx Tx) ([]byte, error)
 
 
 
-// MsgWithdraw is a msg struct to withdraw from a product
-type MsgWithdraw struct {
-	Product   string     `json:"product"`
-	Amount    DecCoin    `json:"amount"`
-	Depositor AccAddress `json:"depositor"`
-}
-
-// NewMsgWithdraw creates a msg of withdrawing
-func NewMsgWithdraw(depositor AccAddress, product string, amount DecCoin) MsgWithdraw {
-	return MsgWithdraw{
-		Product:   product,
-		Amount:    amount,
-		Depositor: depositor,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgWithdraw) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgWithdraw) Route() string            { return "" }
-func (MsgWithdraw) Type() string             { return "" }
-func (MsgWithdraw) ValidateBasic() Error     { return nil }
-func (MsgWithdraw) GetSigners() []AccAddress { return nil }
-
 // MsgTransferOwnership is a msg struct to change the owner of the product
 type MsgTransferOwnership struct {
 	FromAddress AccAddress   `json:"from_address"`

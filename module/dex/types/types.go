@@ -21,6 +21,6 @@ func init() {
 func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList")
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit")
-	//cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw")
+	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw")
 	//cdc.RegisterConcrete(MsgTransferOwnership{}, "okchain/dex/MsgTransferTradingPairOwnership")
 }

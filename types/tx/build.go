@@ -19,6 +19,7 @@ func BuildUnsignedStdTxOffline(msgs []types.Msg, memo string) types.StdTx {
 	return types.NewStdTx(msgs, Fee, nil, memo)
 }
 
+// BuildTx builds a common std tx with all the params
 func BuildTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) (types.StdTx, error) {
 	signMsg := StdSignMsg{
 		ChainID:       "okchain",

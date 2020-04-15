@@ -9,6 +9,7 @@ import (
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
+// MsgCdc is the codec for signing
 var MsgCdc = amino.NewCodec()
 
 func init() {

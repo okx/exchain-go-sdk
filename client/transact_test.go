@@ -76,18 +76,6 @@ func TestOKChainClient_CancelOrders(t *testing.T) {
 	fmt.Println(res)
 }
 
-func TestOKChainClient_DestroyValidator(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(valMnemonic, valName, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.DestroyValidator(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
 
 func TestOKChainClient_Unjail(t *testing.T) {
 	cli := NewClient(rpcUrl)
@@ -115,21 +103,6 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 
 	res, err := cli.MultiSend(fromInfo, passWd, transfers, "my memo", accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
-func TestOKChainClient_CreateValidator(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	pubkeyStr := "okchainvalconspub1zcjduepqghrtvkngejwese62wg49ewskz4r93vkyj3md5mg5rf7twcc6jduqpqw66q"
-	res, err := cli.CreateValidator(fromInfo, passWd, pubkeyStr, "my moniker", "my identity",
-		"my website", "my details", "1okt", "my memo",
-		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	assertNotEqual(t, err, nil)
 	fmt.Println(res)
 }

@@ -72,7 +72,7 @@ func TestVote(t *testing.T) {
 	accInfo, err := client.Auth().QueryAccount(addr)
 	require.NoError(t, err)
 
-	valsToVoted := []string{"okchainvaloper1pulagmyd5ceml0475sx8pgjrah5g3yrtpxsu98", "okchainvaloper19n4tcc87xxz2z7s2vn7rlrf9tx2ceusrlsk4h0"}
+	valsToVoted := []string{"okchainvaloper1dcsxvxgj374dv3wt9szflf9nz6342juz7grk2y", "okchainvaloper1fntm5xy7umzwmj6uxkateygmuhqf23e3uur68s"}
 	resp, err := client.Staking().Vote(fromInfo, passWd, valsToVoted, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(resp)
@@ -90,4 +90,19 @@ func TestDestroyValidator(t *testing.T) {
 	resp, err := client.Staking().DestroyValidator(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(resp)
+}
+
+func TestCreateValidator(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+
+	pubkeyStr := "okchainvalconspub1zcjduepqghrtvkngejwese62wg49ewskz4r93vkyj3md5mg5rf7twcc6jduqpqw66q"
+	res, err := client.Staking().CreateValidator(fromInfo, passWd, pubkeyStr, "my moniker", "my identity",
+		"my website", "my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
 }

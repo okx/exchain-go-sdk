@@ -13,6 +13,8 @@ const (
 
 	validatorPath        = "custom/staking/validator"
 	unbondDelegationPath = "custom/staking/unbondingDelegation"
+
+	defaultMinSelfDelegation = "0.001okt"
 )
 
 var (

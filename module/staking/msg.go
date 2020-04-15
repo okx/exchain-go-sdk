@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/tendermint/tendermint/crypto"
 )
 
@@ -102,31 +103,35 @@ func (MsgDestroyValidator) ValidateBasic() types.Error     { return nil }
 func (MsgDestroyValidator) GetSigners() []types.AccAddress { return nil }
 
 type MsgCreateValidator struct {
-	Description       exposed.Description      `json:"description"`
-	MinSelfDelegation types.DecCoin    `json:"min_self_delegation"`
-	DelegatorAddress  types.AccAddress `json:"delegator_address"`
-	ValidatorAddress  types.ValAddress `json:"validator_address"`
-	PubKey            crypto.PubKey    `json:"pubkey"`
+	Description       exposed.Description `json:"description"`
+	MinSelfDelegation types.DecCoin       `json:"min_self_delegation"`
+	DelegatorAddress  types.AccAddress    `json:"delegator_address"`
+	ValidatorAddress  types.ValAddress    `json:"validator_address"`
+	PubKey            crypto.PubKey       `json:"pubkey"`
 }
 
 type msgCreateValidatorJSON struct {
-	Description       exposed.Description      `json:"description"`
-	MinSelfDelegation types.DecCoin    `json:"min_self_delegation"`
-	DelegatorAddress  types.AccAddress `json:"delegator_address"`
-	ValidatorAddress  types.ValAddress `json:"validator_address"`
-	PubKey            string           `json:"pubkey"`
+	Description       exposed.Description `json:"description"`
+	MinSelfDelegation types.DecCoin       `json:"min_self_delegation"`
+	DelegatorAddress  types.AccAddress    `json:"delegator_address"`
+	ValidatorAddress  types.ValAddress    `json:"validator_address"`
+	PubKey            string              `json:"pubkey"`
 }
 
 // NewMsgCreateValidator creates a msg of create-validator
 // Delegator address and validator address are the same
 func NewMsgCreateValidator(valAddr types.ValAddress, pubKey crypto.PubKey, description exposed.Description,
-	minSelfDelegation types.DecCoin) MsgCreateValidator {
+) MsgCreateValidator {
+	minSelfDelegationCoin, err := utils.ParseDecCoin(defaultMinSelfDelegation)
+	if err != nil {
+		panic(err)
+	}
 	return MsgCreateValidator{
 		Description:       description,
 		DelegatorAddress:  types.AccAddress(valAddr),
 		ValidatorAddress:  valAddr,
 		PubKey:            pubKey,
-		MinSelfDelegation: minSelfDelegation,
+		MinSelfDelegation: minSelfDelegationCoin,
 	}
 }
 

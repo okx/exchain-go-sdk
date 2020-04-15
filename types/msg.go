@@ -42,38 +42,3 @@ type TxDecoder func(txBytes []byte) (Tx, Error)
 
 // TxEncoder marshals transaction to bytes
 type TxEncoder func(tx Tx) ([]byte, error)
-
-//__________________________________________________________
-// msgs of okchain's tx
-
-
-
-
-// MsgTransferOwnership is a msg struct to change the owner of the product
-type MsgTransferOwnership struct {
-	FromAddress AccAddress   `json:"from_address"`
-	ToAddress   AccAddress   `json:"to_address"`
-	Product     string       `json:"product"`
-	ToSignature StdSignature `json:"to_signature"`
-}
-
-// NewMsgTransferOwnership creates a msg of changing product's owner
-func NewMsgTransferOwnership(from, to AccAddress, product string) MsgTransferOwnership {
-	return MsgTransferOwnership{
-		FromAddress: from,
-		ToAddress:   to,
-		Product:     product,
-		ToSignature: StdSignature{},
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgTransferOwnership) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgTransferOwnership) Route() string            { return "" }
-func (MsgTransferOwnership) Type() string             { return "" }
-func (MsgTransferOwnership) ValidateBasic() Error     { return nil }
-func (MsgTransferOwnership) GetSigners() []AccAddress { return nil }

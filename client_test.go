@@ -13,9 +13,11 @@ const (
 	name   = "alice"
 	passWd = "12345678"
 	// sender's mnemonic
-	mnemonic   = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
-	addr       = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
-	targetAddr = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	mnemonic = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	addr     = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
+	// target mnemonic
+	targetMnemonic = "pepper basket run install fury scheme journey worry tumble toddler swap change"
+	targetAddr     = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
 )
 
 // transact tx
@@ -319,6 +321,31 @@ func TestWithdraw(t *testing.T) {
 
 	res, err := client.Dex().Withdraw(fromInfo, passWd, "btc-216_okt", "0.2048okt", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+}
+
+func TestOKChainClient_TransferOwnership(t *testing.T) {
+	// 1.generate unsigned transfer-ownership tx file
+	err := utils.GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
+	require.NoError(t, err)
+
+	// 2.multi-sign the stdTx by the receiver
+	recvInfo, _, err := utils.CreateAccountWithMnemo(targetMnemonic, name, passWd)
+	require.NoError(t, err)
+	err = utils.MultiSign(recvInfo, passWd, "./unsignedTx.json", "./signedTx.json")
+	require.NoError(t, err)
+
+	// 3.transfer ownership with the signed tx file
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	ownInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(ownInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	res, err := client.Dex().TransferOwnership(ownInfo, passWd, "./signedTx.json", accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(res)
 }

@@ -18,6 +18,7 @@ type DexTx interface {
 		sdk.TxResponse, error)
 	Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
 // DexQuery shows the expected query behavior for inner dex client

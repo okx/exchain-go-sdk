@@ -78,7 +78,6 @@ func RegisterMsgCdc(cdc *amino.Codec) {
 	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel", nil)
 	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer", nil)
 	cdc.RegisterConcrete(MsgMint{}, "okchain/token/MsgMint", nil)
-	cdc.RegisterConcrete(MsgUnjail{}, "cosmos-sdk/MsgUnjail", nil)
 
 	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList", nil)
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit", nil)

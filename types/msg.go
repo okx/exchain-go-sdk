@@ -171,28 +171,6 @@ func (MsgMint) ValidateBasic() Error     { return nil }
 func (MsgMint) GetSigners() []AccAddress { return nil }
 
 
-type MsgUnjail struct {
-	ValidatorAddr ValAddress `json:"address"`
-}
-
-// NewMsgUnjail creates a msg of unjailing
-func NewMsgUnjail(validatorAddr ValAddress) MsgUnjail {
-	return MsgUnjail{
-		ValidatorAddr: validatorAddr,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgUnjail) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgUnjail) Route() string            { return "" }
-func (MsgUnjail) Type() string             { return "" }
-func (MsgUnjail) ValidateBasic() Error     { return nil }
-func (MsgUnjail) GetSigners() []AccAddress { return nil }
-
 // MsgList is a msg struct to list a trading pair on dex
 type MsgList struct {
 	Owner      AccAddress `json:"owner"`

@@ -83,7 +83,7 @@ func CreateAccountWithPrivateKey(privateKey, name, passWd string) (keys.Info, er
 	if err != nil {
 		return nil, err
 	}
-	derivedPriv, err := slice2Array(derivedPrivSlice)
+	derivedPriv, err := sliceToArray(derivedPrivSlice)
 	if err != nil {
 		return nil, err
 	}

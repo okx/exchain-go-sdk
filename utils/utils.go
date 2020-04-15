@@ -22,7 +22,7 @@ func GetStdTxFromFile(filePath string) (stdTx types.StdTx, err error) {
 	return
 }
 
-// parse validator address string to types.ValAddress
+// ParseValAddresses parses validator address string to types.ValAddress
 func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
 	valLen := len(valAddrsStr)
 	valAddrs := make([]types.ValAddress, valLen)
@@ -36,20 +36,21 @@ func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
 	return valAddrs, nil
 }
 
-func GeneratePrivateKeyFromMnemo(mnemo string) (string, error) {
+// GeneratePrivateKeyFromMnemo converts mnemonic to private key
+func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
 	hdPath := hd.NewFundraiserParams(0, 0)
 	seed, err := bip39.NewSeedWithErrorChecking(mnemo, "")
 	if err != nil {
-		return "", err
+		return
 	}
 	masterPrivateKey, ch := hd.ComputeMastersFromSeed(seed)
 	derivedPrivateKey, err := hd.DerivePrivateKeyForPath(masterPrivateKey, ch, hdPath.String())
 	return hex.EncodeToString(derivedPrivateKey[:]), nil
 }
 
-func slice2Array(s []byte) (byteArray [32]byte, err error) {
+func sliceToArray(s []byte) (byteArray [32]byte, err error) {
 	if len(s) != 32 {
-		return byteArray, errors.New("byte slice's length is not 32")
+		return byteArray, errors.New("failed. byte slice's length is not 32")
 	}
 	for i := 0; i < 32; i++ {
 		byteArray[i] = s[i]

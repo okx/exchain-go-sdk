@@ -81,5 +81,5 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		}
 	}
 
-	return convertToDelegatorResp(delegator, undelegation), err
+	return convertToDelegatorResp(delegator, undelegation), nil
 }

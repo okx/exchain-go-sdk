@@ -196,18 +196,19 @@ func TestQueryValidators(t *testing.T) {
 	}
 }
 
-func TestGetValidator(t *testing.T) {
+func TestQueryValidator(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
-	valAddr:="okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"
+	valAddr := "okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"
 	val, err := client.Staking().QueryValidator(valAddr)
 	require.NoError(t, err)
 	fmt.Println(val)
 }
 
-//func TestGetDelegator(t *testing.T) {
-//	cli := NewClient(rpcUrl)
-//	delResp, err := cli.GetDelegator("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
-//	assertNotEqual(t, err, nil)
-//	fmt.Println(delResp)
-//}
+func TestQueryDelegator(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	delResp, err := client.Staking().QueryDelegator(addr)
+	require.NoError(t, err)
+	fmt.Println(delResp)
+}

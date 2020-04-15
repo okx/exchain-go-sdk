@@ -75,8 +75,6 @@ func RegisterBasicCodec(cdc SDKCodec) {
 }
 
 func RegisterMsgCdc(cdc *amino.Codec) {
-	cdc.RegisterConcrete(MsgNewOrders{}, "okchain/order/MsgNew", nil)
-	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel", nil)
 
 	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList", nil)
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit", nil)

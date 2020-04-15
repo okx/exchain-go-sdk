@@ -46,54 +46,6 @@ type TxEncoder func(tx Tx) ([]byte, error)
 //__________________________________________________________
 // msgs of okchain's tx
 
-type MsgNewOrders struct {
-	Sender     AccAddress  `json:"sender"`
-	OrderItems []OrderItem `json:"order_items"`
-}
-
-// NewMsgNewOrders is a constructor function for MsgNewOrders
-func NewMsgNewOrders(sender AccAddress, orderItems []OrderItem) MsgNewOrders {
-	return MsgNewOrders{
-		Sender:     sender,
-		OrderItems: orderItems,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgNewOrders) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgNewOrders) Route() string            { return "" }
-func (MsgNewOrders) Type() string             { return "" }
-func (MsgNewOrders) ValidateBasic() Error     { return nil }
-func (MsgNewOrders) GetSigners() []AccAddress { return nil }
-
-type MsgCancelOrders struct {
-	Sender   AccAddress `json:"sender"`
-	OrderIds []string   `json:"order_ids"`
-}
-
-// NewMsgCancelOrders is a constructor function for MsgCancelOrders
-func NewMsgCancelOrders(sender AccAddress, orderIdItems []string) MsgCancelOrders {
-	return MsgCancelOrders{
-		Sender:   sender,
-		OrderIds: orderIdItems,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgCancelOrders) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgCancelOrders) Route() string            { return "" }
-func (MsgCancelOrders) Type() string             { return "" }
-func (MsgCancelOrders) ValidateBasic() Error     { return nil }
-func (MsgCancelOrders) GetSigners() []AccAddress { return nil }
-
 
 // MsgList is a msg struct to list a trading pair on dex
 type MsgList struct {

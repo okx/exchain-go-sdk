@@ -19,30 +19,7 @@ const (
 )
 
 
-// order module
 
-// NewOrders places orders with some detail info
-func (cli *OKChainClient) NewOrders(fromInfo keys.Info, passWd, products, sides, prices, quantities, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	productStrs := strings.Split(products, ",")
-	sideStrs := strings.Split(sides, ",")
-	priceStrs := strings.Split(prices, ",")
-	quantityStrs := strings.Split(quantities, ",")
-	if err := params.CheckNewOrderParams(fromInfo, passWd, productStrs, sideStrs, priceStrs, quantityStrs);
-		err != nil {
-		return types.TxResponse{}, err
-	}
-
-	orderItems := types.BuildOrderItems(productStrs, sideStrs, priceStrs, quantityStrs)
-	msg := types.NewMsgNewOrders(fromInfo.GetAddress(), orderItems)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-
-}
 
 // CancelOrders cancels orders by orderIds
 func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, memo string, accNum, seqNum uint64) (types.TxResponse, error) {

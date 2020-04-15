@@ -5,7 +5,6 @@ import (
 	"github.com/okex/okchain-go-sdk/common/transact_params"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/tx"
 	"github.com/okex/okchain-go-sdk/utils"
 )
 
@@ -22,12 +21,7 @@ func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo stri
 
 	msg := NewMsgDelegate(fromInfo.GetAddress(), coin)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 }
 
 // Unbond unbonds the delegation on okchain
@@ -43,12 +37,8 @@ func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string
 
 	msg := NewMsgUndelegate(fromInfo.GetAddress(), coin)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
 }
 
 // Vote votes to the some specific validators
@@ -64,12 +54,8 @@ func (sc stakingClient) Vote(fromInfo keys.Info, passWd string, valAddrsStr []st
 
 	msg := NewMsgVote(fromInfo.GetAddress(), valAddrs)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
 }
 
 // DestroyValidator deregisters the validator and unbond the min-self-delegation
@@ -80,12 +66,7 @@ func (sc stakingClient) DestroyValidator(fromInfo keys.Info, passWd string, memo
 
 	msg := NewMsgDestroyValidator(fromInfo.GetAddress())
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 }
 
 // CreateValidator creates a new validator
@@ -108,12 +89,8 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 
 	msg := NewMsgCreateValidator(types.ValAddress(fromInfo.GetAddress()), pubkey, description, minSelfDelegationCoin)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
 }
 
 // EditValidator edits the description on a validator by the owner
@@ -126,12 +103,7 @@ func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, ident
 
 	msg := NewMsgEditValidator(types.ValAddress(fromInfo.GetAddress()), description)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
 }
 
@@ -143,12 +115,7 @@ func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, a
 
 	msg := NewMsgRegProxy(fromInfo.GetAddress(), true)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
 }
 
@@ -160,12 +127,7 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 
 	msg := NewMsgRegProxy(fromInfo.GetAddress(), false)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
 }
 
@@ -183,12 +145,7 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 
 	msg := NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
 }
 
@@ -201,11 +158,6 @@ func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, acc
 
 	msg := NewMsgUnbindProxy(fromInfo.GetAddress())
 
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return sc.Broadcast(stdBytes, sc.GetConfig().BroadcastMode)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
 
 }

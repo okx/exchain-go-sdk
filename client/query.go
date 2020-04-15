@@ -1,13 +1,11 @@
 package client
 
 import (
-	"errors"
 	"fmt"
 	"github.com/okex/okchain-go-sdk/common"
 	"github.com/okex/okchain-go-sdk/common/query_params"
 	"github.com/okex/okchain-go-sdk/crypto/encoding/codec"
 	"github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
 )
 
 const (
@@ -25,29 +23,6 @@ const (
 
 	productsPath          = "custom/dex/products"
 )
-
-func (cli *OKChainClient) GetAccountInfoByAddr(addr string) (types.Account, error) {
-	accAddr, err := types.AccAddressFromBech32(addr)
-	if err != nil {
-		return nil, errors.New("err : AccAddress converted from Bech32 Failed")
-	}
-
-	res, err := cli.query(accountInfoPath, utils.AddressStoreKey(accAddr))
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	if res == nil {
-		return nil, errors.New("your account has no record on the chain")
-	}
-
-	var account types.Account
-	if err = cli.cdc.UnmarshalBinaryBare(res, &account); err != nil {
-		return nil, fmt.Errorf("err : %s", err.Error())
-	}
-
-	return account, nil
-}
 
 func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensInfo, error) {
 	if !common.IsValidAccaddr(addr) {

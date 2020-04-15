@@ -23,7 +23,7 @@ type SDKCodec interface {
 	UnmarshalJSON(bytes []byte, ptr interface{}) error
 	MustMarshalJSON(o interface{}) []byte
 
-	//MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
+	MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
 	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
 	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
 

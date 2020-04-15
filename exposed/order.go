@@ -16,6 +16,7 @@ type Order interface {
 type OrderTx interface {
 	NewOrders(fromInfo keys.Info, passWd, products, sides, prices, quantities, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, error)
+	CancelOrders(fromInfo keys.Info, passWd, orderIDs, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
 // OrderQuery shows the expected query behavior for inner order client

@@ -25,3 +25,17 @@ func (oc orderClient) NewOrders(fromInfo keys.Info, passWd, products, sides, pri
 	return oc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+// CancelOrders cancels orders by orderIDs
+func (oc orderClient) CancelOrders(fromInfo keys.Info, passWd, orderIDs, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	orderIDStrs := strings.Split(orderIDs, ",")
+	if err = params.CheckCancelOrderParams(fromInfo, passWd, orderIDStrs); err != nil {
+		return
+	}
+
+	msg := types.NewMsgCancelOrders(fromInfo.GetAddress(), orderIDStrs)
+
+	return oc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

@@ -248,6 +248,20 @@ func TestIssue(t *testing.T) {
 
 }
 
+func TestList(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	res, err := client.Dex().List(fromInfo, passWd, "btc-216", "okt", "0.02", "my memo",
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+}
+
 func TestNewOrders(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
@@ -256,11 +270,21 @@ func TestNewOrders(t *testing.T) {
 	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
+	//res, err := client.Order().NewOrders(
+	//	fromInfo,
+	//	passWd,
+	//	"btc-9ec_okt,btc-9ec_okt,btc-9ec_okt",
+	//	"BUY,SELL,BUY",
+	//	"11.2,22.3,33.4",
+	//	"1.23,2.34,3.45",
+	//	"my memo",
+	//	accInfo.GetAccountNumber(),
+	//	accInfo.GetSequence())
 	res, err := client.Order().NewOrders(
 		fromInfo,
 		passWd,
-		"btc-9ec_okt,btc-9ec_okt,btc-9ec_okt",
-		"BUY,SELL,BUY",
+		"btc-216_okt,btc-216_okt,btc-216_okt",
+		"BUY,BUY,BUY",
 		"11.2,22.3,33.4",
 		"1.23,2.34,3.45",
 		"my memo",
@@ -271,7 +295,7 @@ func TestNewOrders(t *testing.T) {
 	fmt.Println("orderIds:", utils.GetOrderIDsFromResponse(&res))
 }
 
-func TestList(t *testing.T) {
+func TestCancelOrders(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
@@ -279,7 +303,8 @@ func TestList(t *testing.T) {
 	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
-	res, err := client.Dex().List(fromInfo, passWd, "btc-9ec", "okt", "0.02", "my memo",
+	orderIDs := "ID0000000055-1,ID0000000055-2,ID0000000055-3"
+	res, err := client.Order().CancelOrders(fromInfo, passWd, orderIDs, "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(res)

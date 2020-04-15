@@ -18,31 +18,6 @@ const (
 	BroadcastAsync = "async"
 )
 
-
-
-
-// CancelOrders cancels orders by orderIds
-func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	orderIdStrs := strings.Split(orderIds, ",")
-	if err := params.CheckCancelOrderParams(fromInfo, passWd, orderIdStrs); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	msg := types.NewMsgCancelOrders(fromInfo.GetAddress(), orderIdStrs)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
-
-// token module
-
-
-// dex module
-
 // Deposit deposits some tokens to a specific product
 func (cli *OKChainClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {

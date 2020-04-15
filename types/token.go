@@ -25,15 +25,3 @@ func (token Token) String() string {
 	b, _ := json.Marshal(token)
 	return string(b)
 }
-
-type TransferUnit struct {
-	To    AccAddress `json:"to"`
-	Coins DecCoins   `json:"coins"`
-}
-
-func NewTransferUnit(addr AccAddress, coins DecCoins) TransferUnit {
-	return TransferUnit{
-		addr,
-		coins,
-	}
-}

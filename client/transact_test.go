@@ -27,19 +27,6 @@ const (
 	valName     = "validator"
 )
 
-func TestOKChainClient_Send(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Send(fromInfo, passWd, addr1, "10.24okt", "my memo", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
 func TestOKChainClient_NewOrders(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)

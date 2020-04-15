@@ -7,6 +7,8 @@ import (
 	"github.com/okex/okchain-go-sdk/module/auth"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
+	"github.com/okex/okchain-go-sdk/module/token"
+	types2 "github.com/okex/okchain-go-sdk/module/token/types"
 	"github.com/okex/okchain-go-sdk/types"
 )
 
@@ -30,6 +32,7 @@ func NewClient(config types.ClientConfig) Client {
 		auth.NewAuthClient(pBaseClient),
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
+		token.NewTokenClient(pBaseClient),
 	)
 
 	return *pClient
@@ -57,4 +60,7 @@ func (cli *Client) Staking() exposed.Staking {
 }
 func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashing.ModuleName].(exposed.Slashing)
+}
+func (cli *Client) Token() exposed.Token {
+	return cli.modules[types2.ModuleName].(exposed.Token)
 }

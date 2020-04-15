@@ -18,31 +18,6 @@ const (
 	BroadcastAsync = "async"
 )
 
-// Send transfers coins to others
-func (cli *OKChainClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckSendParams(fromInfo, passWd, toAddr); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	to, err := types.AccAddressFromBech32(toAddr)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : parse Address [%s] error: %s", toAddr, err)
-	}
-
-	coins, err := utils.ParseDecCoins(coinsStr)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : parse DecCoins [%s] error: %s", coinsStr, err)
-	}
-
-	msg := types.NewMsgTokenSend(fromInfo.GetAddress(), to, coins)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
 
 // order module
 

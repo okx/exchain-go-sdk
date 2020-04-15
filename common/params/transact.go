@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types"
+	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"strings"
 )
 
@@ -61,7 +61,7 @@ func CheckTokenIssue(fromInfo keys.Info, passWd, orgSymbol, wholeName, tokenDesc
 	return nil
 }
 
-func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []types.TransferUnit) error {
+func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []tokentypes.TransferUnit) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}

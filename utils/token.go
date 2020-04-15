@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"github.com/okex/okchain-go-sdk/types"
 	"regexp"
 	"strings"
@@ -123,10 +124,10 @@ func ParseCoin(coinStr string) (coin types.Coin, err error) {
 // Example:
 // `addr1 1okt
 // 	addr2 2okt`
-func ParseTransfersStr(str string) ([]types.TransferUnit, error) {
+func ParseTransfersStr(str string) ([]tokentypes.TransferUnit, error) {
 	strs := strings.Split(strings.TrimSpace(str), "\n")
 	transLen := len(strs)
-	transfers := make([]types.TransferUnit, transLen)
+	transfers := make([]tokentypes.TransferUnit, transLen)
 
 	for i := 0; i < transLen; i++ {
 		s := strings.Split(strs[i], " ")
@@ -145,7 +146,7 @@ func ParseTransfersStr(str string) ([]types.TransferUnit, error) {
 			return nil, err
 		}
 
-		transfers[i] = types.NewTransferUnit(to, coins)
+		transfers[i] = tokentypes.NewTransferUnit(to, coins)
 	}
 
 	return transfers, nil

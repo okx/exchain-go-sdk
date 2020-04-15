@@ -3,21 +3,21 @@ package staking
 import (
 	"fmt"
 	"github.com/okex/okchain-go-sdk/common/params"
-	"github.com/okex/okchain-go-sdk/exposed"
-	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/module/staking/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
 // QueryValidators gets all the validators info
-func (sc stakingClient) QueryValidators() (vals []exposed.Validator, err error) {
+func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
 	resKVs, err := sc.QuerySubspace(types.ValidatorsKey, ModuleName)
 	if err != nil {
 		return
 	}
 
 	for _, kv := range resKVs {
-		var innerVal validator
+		var innerVal types.ValidatorInner
 		sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &innerVal)
-		val, err := innerVal.standardize()
+		val, err := innerVal.Standardize()
 		if err != nil {
 			return nil, err
 		}
@@ -29,13 +29,13 @@ func (sc stakingClient) QueryValidators() (vals []exposed.Validator, err error) 
 }
 
 // QueryValidator gets the info of a specific validator
-func (sc stakingClient) QueryValidator(valAddrStr string) (val exposed.Validator, err error) {
-	valAddr, err := types.ValAddressFromBech32(valAddrStr)
+func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, err error) {
+	valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
 	if err != nil {
 		return
 	}
 
-	res, err := sc.QueryStore(getValidatorKey(valAddr), ModuleName, "key")
+	res, err := sc.QueryStore(types.GetValidatorKey(valAddr), ModuleName, "key")
 	if err != nil {
 		return
 	}
@@ -43,16 +43,16 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val exposed.Validator
 		return val, fmt.Errorf("failed. no validator found with address %s", valAddrStr)
 	}
 
-	var innerVal validator
+	var innerVal types.ValidatorInner
 	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(res, &innerVal)
 
-	return innerVal.standardize()
+	return innerVal.Standardize()
 
 }
 
 // QueryDelegator gets the detail info of a delegator
-func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.DelegatorResp, err error) {
-	delAddr, err := types.AccAddressFromBech32(delAddrStr)
+func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.DelegatorResp, err error) {
+	delAddr, err := sdk.AccAddressFromBech32(delAddrStr)
 	if err != nil {
 		return
 	}
@@ -62,7 +62,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
 	}
 
-	delegator, undelegation := NewDelegator(delAddr), defaultUndelegation()
+	delegator, undelegation := types.NewDelegator(delAddr), types.DefaultUndelegation()
 	if len(resp) != 0 {
 		sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(resp, &delegator)
 	}
@@ -73,7 +73,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
 	}
 
-	res, err := sc.Query(unbondDelegationPath, jsonBytes)
+	res, err := sc.Query(types.UnbondDelegationPath, jsonBytes)
 	// if err!= nil , we treat it as there's no undelegation of the delegator
 	if err == nil {
 		if err = sc.GetCodec().UnmarshalJSON(res, &undelegation); err != nil {
@@ -81,5 +81,5 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		}
 	}
 
-	return convertToDelegatorResp(delegator, undelegation), nil
+	return types.ConvertToDelegatorResp(delegator, undelegation), nil
 }

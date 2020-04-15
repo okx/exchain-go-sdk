@@ -1,8 +1,8 @@
 package sdk
 
 import (
-	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/staking"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -14,11 +14,12 @@ const (
 )
 
 var (
+	// NewClientConfig gives an easy way for the callers to set client config
 	NewClientConfig = sdk.NewClientConfig
 )
 
 type (
 	Account = auth.Account
-	Validator = exposed.Validator
-	DelegatorResp = exposed.DelegatorResp
+	Validator = staking.Validator
+	DelegatorResp = staking.DelegatorResp
 )

@@ -54,7 +54,7 @@ func TestVote(t *testing.T) {
 	accInfo, err := client.Auth().QueryAccount(addr)
 	require.NoError(t, err)
 
-	valsToVoted := []string{"okchainvaloper1dcsxvxgj374dv3wt9szflf9nz6342juz7grk2y", "okchainvaloper1fntm5xy7umzwmj6uxkateygmuhqf23e3uur68s"}
+	valsToVoted := []string{"okchainvaloper1n62v94azspas83uucwxg347jqmfma90fwx7nxt", "okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"}
 	resp, err := client.Staking().Vote(fromInfo, passWd, valsToVoted, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(resp)
@@ -64,9 +64,9 @@ func TestDestroyValidator(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(
-		"relief food aim snap pumpkin black ginger badge flock citizen agree stone", name, passWd)
+		"novel tomorrow scorpion cross immense photo wrap acquire midnight about what clean", name, passWd)
 	require.NoError(t, err)
-	accInfo, err := client.Auth().QueryAccount("okchain1yjsqpggz0tglf4mhtd40rwnwk3c08xrz908yge")
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
 	resp, err := client.Staking().DestroyValidator(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
@@ -93,9 +93,9 @@ func TestEditValidator(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(
-		"sand hour across excess rocket usage cotton used install orient piano where", name, passWd)
+		"ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren", name, passWd)
 	require.NoError(t, err)
-	accInfo, err := client.Auth().QueryAccount("okchain12gzxhpah2nulpeqx7kpf7fmfpgmp3hwhczf8pu")
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
 	resp, err := client.Staking().EditValidator(fromInfo, passWd, "my moniker", "my identity", "my website",
@@ -139,7 +139,7 @@ func TestUnregisterProxy(t *testing.T) {
 func TestBindProxy(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
-	valMnemo := "pride mystery melody cycle frog tag march style away dash they gold"
+	valMnemo := "ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren"
 	// validator becomes a proxy
 	valAcc, _, err := utils.CreateAccountWithMnemo(valMnemo, name, passWd)
 	require.NoError(t, err)

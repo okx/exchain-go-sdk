@@ -134,14 +134,14 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 
 // BindProxy binds the staking tokens to a proxy
 func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo string, accNum, seqNum uint64) (
-	types.TxResponse, error) {
-	if err := params.CheckSendParams(fromInfo, passWd, proxyAddrStr); err != nil {
-		return types.TxResponse{}, err
+	resp types.TxResponse,err  error) {
+	if err = params.CheckSendParams(fromInfo, passWd, proxyAddrStr); err != nil {
+		return
 	}
 
 	proxyAddr, err := types.AccAddressFromBech32(proxyAddrStr)
 	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : parse Address [%s] error: %s", proxyAddrStr, err)
+		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", proxyAddrStr, err)
 	}
 
 	msg := NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)

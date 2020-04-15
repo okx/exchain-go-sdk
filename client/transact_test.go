@@ -107,41 +107,6 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 	fmt.Println(res)
 }
 
-func TestOKChainClient_BindProxy(t *testing.T) {
-	cli := NewClient(rpcUrl)
-
-	// validator becomes a proxy
-	valAcc, _, err := utils.CreateAccountWithMnemo(valMnemonic, valName, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(valAcc.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	sequence := accInfo.GetSequence()
-	res, err := cli.Delegate(valAcc, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(), sequence)
-	assertNotEqual(t, err, nil)
-
-	sequence++
-	res, err = cli.RegisterProxy(valAcc, passWd, "my memo", accInfo.GetAccountNumber(), sequence)
-	assertNotEqual(t, err, nil)
-
-	// delegator tries to bind proxy
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err = cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	sequence = accInfo.GetSequence()
-	res, err = cli.Delegate(fromInfo, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(), sequence)
-	assertNotEqual(t, err, nil)
-
-	sequence++
-	res, err = cli.BindProxy(fromInfo, passWd, valAcc.GetAddress().String(), "my memo", accInfo.GetAccountNumber(),
-		sequence)
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-
-}
-
 func TestOKChainClient_UnbindProxy(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)

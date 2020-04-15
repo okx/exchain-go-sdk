@@ -19,7 +19,6 @@ const (
 	dealsInfoPath         = "custom/backend/deals"
 	transactionsInfoPath  = "custom/backend/txs"
 
-	productsPath          = "custom/dex/products"
 )
 
 func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensInfo, error) {
@@ -263,26 +262,3 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 
 // dex module
 
-// QueryProducts gets token pair info
-func (cli *OKChainClient) QueryProducts(ownerAddr string, page, perPage int) (tokenPairs []types.TokenPair, err error) {
-	queryParams, err := params.NewQueryDexInfoParams(ownerAddr, page, perPage)
-	if err != nil {
-		return
-	}
-
-	jsonBytes, err := cdc.MarshalJSON(queryParams)
-	if err != nil {
-		return
-	}
-
-	res, err := cli.query(productsPath, jsonBytes)
-	if err != nil {
-		return
-	}
-
-	if err = cli.cdc.UnmarshalJSON(res, &tokenPairs); err != nil {
-		return tokenPairs, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
-	}
-
-	return
-}

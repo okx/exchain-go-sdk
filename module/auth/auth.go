@@ -2,27 +2,28 @@ package auth
 
 import (
 	"github.com/okex/okchain-go-sdk/exposed"
-	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/module/auth/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
-var _ types.Module = (*authClient)(nil)
+var _ sdk.Module = (*authClient)(nil)
 
 type authClient struct {
-	types.BaseClient
+	sdk.BaseClient
 }
 
 // RegisterCodec registers the account type in auth module
-func (authClient) RegisterCodec(cdc types.SDKCodec) {
-	cdc.RegisterInterface((*exposed.Account)(nil))
-	cdc.RegisterConcrete(&exposed.BaseAccount{}, "cosmos-sdk/Account")
+func (authClient) RegisterCodec(cdc sdk.SDKCodec) {
+	cdc.RegisterInterface((*types.Account)(nil))
+	cdc.RegisterConcrete(&types.BaseAccount{}, "cosmos-sdk/Account")
 }
 
 // Name returns the module name
 func (authClient) Name() string {
-	return ModuleName
+	return types.ModuleName
 }
 
 // NewAuthClient creates a new instance of auth client as implement
-func NewAuthClient(baseClient types.BaseClient) exposed.Auth {
+func NewAuthClient(baseClient sdk.BaseClient) exposed.Auth {
 	return authClient{baseClient}
 }

@@ -31,15 +31,6 @@ func TestGetTokenInfoByAddr(t *testing.T) {
 	fmt.Println(tokenInfo)
 }
 
-func TestGetTokensInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	tokensInfo, err := cli.GetTokensInfo()
-	assertNotEqual(t, err, nil)
-	for _, t := range tokensInfo {
-		fmt.Println(t)
-	}
-}
-
 func TestGetTokenInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	tokenInfo, err := cli.GetTokenInfo("okt")

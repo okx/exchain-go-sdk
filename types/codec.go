@@ -21,7 +21,9 @@ func init() {
 type SDKCodec interface {
 	MarshalJSON(o interface{}) ([]byte, error)
 	UnmarshalJSON(bytes []byte, ptr interface{}) error
+
 	MustMarshalJSON(o interface{}) []byte
+	MustUnmarshalJSON(bytes []byte, ptr interface{})
 
 	MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
 	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
@@ -73,17 +75,11 @@ func RegisterBasicCodec(cdc SDKCodec) {
 }
 
 func RegisterMsgCdc(cdc *amino.Codec) {
-	cdc.RegisterConcrete(MsgSend{}, "okchain/token/MsgTransfer", nil)
 	cdc.RegisterConcrete(MsgNewOrders{}, "okchain/order/MsgNew", nil)
 	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel", nil)
-	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer", nil)
-	cdc.RegisterConcrete(MsgMint{}, "okchain/token/MsgMint", nil)
 
 	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList", nil)
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit", nil)
 	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw", nil)
 	cdc.RegisterConcrete(MsgTransferOwnership{}, "okchain/dex/MsgTransferTradingPairOwnership", nil)
-
-	cdc.RegisterConcrete(MsgTokenIssue{}, "okchain/token/MsgIssue", nil)
-
 }

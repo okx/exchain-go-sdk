@@ -2,30 +2,27 @@ package slashing
 
 import (
 	"github.com/okex/okchain-go-sdk/exposed"
-	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/module/slashing/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
-var _ types.Module = (*slashingClient)(nil)
+var _ sdk.Module = (*slashingClient)(nil)
 
 type slashingClient struct {
-	types.BaseClient
+	sdk.BaseClient
 }
 
 // RegisterCodec registers the msg type in slashing module
-func (sc slashingClient) RegisterCodec(cdc types.SDKCodec) {
-	registerCodec(cdc)
+func (sc slashingClient) RegisterCodec(cdc sdk.SDKCodec) {
+	types.RegisterCodec(cdc)
 }
 
 // Name returns the module name
 func (slashingClient) Name() string {
-	return ModuleName
+	return types.ModuleName
 }
 
 // NewSlashingClient creates a new instance of slashing client as implement
-func NewSlashingClient(baseClient types.BaseClient) exposed.Slashing {
+func NewSlashingClient(baseClient sdk.BaseClient) exposed.Slashing {
 	return slashingClient{baseClient}
-}
-
-func registerCodec(cdc types.SDKCodec) {
-	cdc.RegisterConcrete(MsgUnjail{}, "cosmos-sdk/MsgUnjail")
 }

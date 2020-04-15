@@ -12,7 +12,6 @@ import (
 var MsgCdc = amino.NewCodec()
 
 func init() {
-	RegisterMsgCdc(MsgCdc)
 	cryptoamino.RegisterAmino(MsgCdc)
 	MsgCdc.Seal()
 }
@@ -72,14 +71,4 @@ func RegisterBasicCodec(cdc SDKCodec) {
 	cdc.RegisterConcrete(StdTx{}, "cosmos-sdk/StdTx")
 	// msg
 	cdc.RegisterInterface((*Msg)(nil))
-}
-
-func RegisterMsgCdc(cdc *amino.Codec) {
-	cdc.RegisterConcrete(MsgNewOrders{}, "okchain/order/MsgNew", nil)
-	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel", nil)
-
-	cdc.RegisterConcrete(MsgList{}, "okchain/dex/MsgList", nil)
-	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit", nil)
-	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw", nil)
-	cdc.RegisterConcrete(MsgTransferOwnership{}, "okchain/dex/MsgTransferTradingPairOwnership", nil)
 }

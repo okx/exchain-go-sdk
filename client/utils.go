@@ -1,11 +1,8 @@
 package client
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/okex/okchain-go-sdk/common"
-	"github.com/okex/okchain-go-sdk/types"
 )
 
 const (
@@ -71,27 +68,5 @@ func checkParamsGetTransactionsInfo(addr string, type_, start, end, page, perPag
 	}
 
 	perPageRet, err = common.CheckParamsPaging(start, end, page, perPage)
-	return
-}
-
-func getOrderIdsFromResponse(txResp *types.TxResponse) (orderIds []string) {
-	for _, event := range txResp.Events {
-		if event.Type == "message" {
-			for _, attribute := range event.Attributes {
-				if attribute.Key == "orders" {
-					var orderRes []types.OrderResult
-					if err := json.Unmarshal([]byte(attribute.Value), &orderRes); err != nil {
-						fmt.Println(err)
-						return
-					}
-
-					for _, res := range orderRes {
-						orderIds = append(orderIds, res.OrderID)
-					}
-				}
-			}
-		}
-	}
-
 	return
 }

@@ -5,11 +5,9 @@ import (
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/module"
 	"github.com/okex/okchain-go-sdk/module/auth"
-	authtypes "github.com/okex/okchain-go-sdk/module/auth/types"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/module/token"
-	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"github.com/okex/okchain-go-sdk/types"
 )
 
@@ -54,7 +52,7 @@ func (cli *Client) registerModule(modules ...types.Module) {
 
 // nolint
 func (cli *Client) Auth() exposed.Auth {
-	return cli.modules[authtypes.ModuleName].(exposed.Auth)
+	return cli.modules[auth.ModuleName].(exposed.Auth)
 }
 func (cli *Client) Staking() exposed.Staking {
 	return cli.modules[staking.ModuleName].(exposed.Staking)
@@ -63,5 +61,5 @@ func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashing.ModuleName].(exposed.Slashing)
 }
 func (cli *Client) Token() exposed.Token {
-	return cli.modules[tokentypes.ModuleName].(exposed.Token)
+	return cli.modules[token.ModuleName].(exposed.Token)
 }

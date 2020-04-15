@@ -1,4 +1,4 @@
-package slashing
+package types
 
 import "github.com/okex/okchain-go-sdk/types"
 
@@ -24,3 +24,4 @@ func (MsgUnjail) Route() string                  { return "" }
 func (MsgUnjail) Type() string                   { return "" }
 func (MsgUnjail) ValidateBasic() types.Error     { return nil }
 func (MsgUnjail) GetSigners() []types.AccAddress { return nil }
+

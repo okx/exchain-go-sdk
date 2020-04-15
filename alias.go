@@ -2,7 +2,7 @@ package sdk
 
 import (
 	"github.com/okex/okchain-go-sdk/exposed"
-	authtypes "github.com/okex/okchain-go-sdk/module/auth/types"
+	"github.com/okex/okchain-go-sdk/module/auth"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -18,7 +18,7 @@ var (
 )
 
 type (
-	Account = authtypes.Account
+	Account = auth.Account
 	Validator = exposed.Validator
 	DelegatorResp = exposed.DelegatorResp
 )

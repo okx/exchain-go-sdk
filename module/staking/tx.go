@@ -134,7 +134,7 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 
 // BindProxy binds the staking tokens to a proxy
 func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo string, accNum, seqNum uint64) (
-	resp types.TxResponse,err  error) {
+	resp types.TxResponse, err error) {
 	if err = params.CheckSendParams(fromInfo, passWd, proxyAddrStr); err != nil {
 		return
 	}
@@ -152,9 +152,9 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 
 // UnbindProxy unbinds the staking tokens from a proxy
 func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (
-	types.TxResponse, error) {
-	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return types.TxResponse{}, err
+	resp types.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
 	}
 
 	msg := NewMsgUnbindProxy(fromInfo.GetAddress())

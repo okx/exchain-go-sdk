@@ -2,16 +2,16 @@ package staking
 
 import (
 	"fmt"
-	params2 "github.com/okex/okchain-go-sdk/common/params"
+	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/types"
 )
 
 // QueryValidators gets all the validators info
 func (sc stakingClient) QueryValidators() (vals []exposed.Validator, err error) {
-	resKVs, err := sc.QuerySubspace(types.ValidatorsKey, "staking")
+	resKVs, err := sc.QuerySubspace(types.ValidatorsKey, ModuleName)
 	if err != nil {
-		return vals, err
+		return
 	}
 
 	for _, kv := range resKVs {
@@ -25,6 +25,7 @@ func (sc stakingClient) QueryValidators() (vals []exposed.Validator, err error) 
 	}
 
 	return
+
 }
 
 // QueryValidator gets the info of a specific validator
@@ -34,23 +35,19 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val exposed.Validator
 		return
 	}
 
-	params := params2.NewQueryValidatorParams(valAddr)
-	jsonBytes, err := sc.GetCodec().MarshalJSON(params)
+	res, err := sc.QueryStore(getValidatorKey(valAddr), ModuleName, "key")
 	if err != nil {
-		return val, fmt.Errorf("error : QueryValidatorParams failed in json marshal : %s", err.Error())
+		return
 	}
-
-	res, err := sc.Query(validatorPath, jsonBytes)
-	if err != nil {
-		return val, fmt.Errorf("ok client query error : %s", err.Error())
+	if len(res) == 0 {
+		return val, fmt.Errorf("failed. no validator found with address %s", valAddrStr)
 	}
 
 	var innerVal validator
-	if err := sc.GetCodec().UnmarshalJSON(res, &innerVal); err != nil {
-		return val, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
-	}
+	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(res, &innerVal)
 
 	return innerVal.standardize()
+
 }
 
 // QueryDelegator gets the detail info of a delegator
@@ -60,7 +57,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 		return
 	}
 
-	resp, err := sc.QueryStore(types.GetDelegatorKey(delAddr), "staking", "key")
+	resp, err := sc.QueryStore(types.GetDelegatorKey(delAddr), ModuleName, "key")
 	if err != nil {
 		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
 	}
@@ -71,7 +68,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 	}
 
 	// query for the undelegation info
-	jsonBytes, err := sc.GetCodec().MarshalJSON(params2.NewQueryDelegatorParams(delAddr))
+	jsonBytes, err := sc.GetCodec().MarshalJSON(params.NewQueryDelegatorParams(delAddr))
 	if err != nil {
 		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
 	}

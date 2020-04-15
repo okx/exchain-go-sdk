@@ -2,6 +2,7 @@ package exposed
 
 import (
 	"github.com/okex/okchain-go-sdk/crypto/keys"
+	"github.com/okex/okchain-go-sdk/module/dex/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -30,4 +31,5 @@ type DexOffline interface {
 
 // DexQuery shows the expected query behavior for inner dex client
 type DexQuery interface {
+	QueryProducts(ownerAddr string, page, perPage int) ([]types.TokenPair, error)
 }

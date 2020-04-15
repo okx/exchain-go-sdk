@@ -332,7 +332,6 @@ func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	require.NoError(t, err)
 }
 
-
 func TestMultiSign(t *testing.T) {
 	config := NewClientConfig("", BroadcastBlock)
 	client := NewClient(config)
@@ -426,4 +425,12 @@ func TestQueryTokenInfo(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(tokens)
 
+}
+
+func TestQueryProducts(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	tokenPairs, err := client.Dex().QueryProducts("", 1, 50)
+	require.NoError(t, err)
+	fmt.Println(tokenPairs)
 }

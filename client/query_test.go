@@ -137,12 +137,6 @@ func TestGetTransactionsInfo(t *testing.T) {
 	}
 }
 
-func TestOKChainClient_QueryProducts(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	tokenPairs, err := cli.QueryProducts("", 1, 50)
-	assertNotEqual(t, err, nil)
-	fmt.Println(tokenPairs)
-}
 
 func assertNotEqual(t *testing.T, a, b interface{}) {
 	if a != b {

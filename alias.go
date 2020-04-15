@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/module/token"
 	sdk "github.com/okex/okchain-go-sdk/types"
@@ -24,4 +25,5 @@ type (
 	Validator = staking.Validator
 	DelegatorResp = staking.DelegatorResp
 	Token = token.Token
+	TokenPair = dex.TokenPair
 )

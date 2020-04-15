@@ -107,9 +107,10 @@ func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, ident
 }
 
 // RegisterProxy registers the identity of proxy
-func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return types.TxResponse{}, err
+func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (
+	resp types.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
 	}
 
 	msg := NewMsgRegProxy(fromInfo.GetAddress(), true)

@@ -47,35 +47,6 @@ type TxEncoder func(tx Tx) ([]byte, error)
 // msgs of okchain's tx
 
 
-// MsgList is a msg struct to list a trading pair on dex
-type MsgList struct {
-	Owner      AccAddress `json:"owner"`
-	ListAsset  string     `json:"list_asset"`
-	QuoteAsset string     `json:"quote_asset"`
-	InitPrice  Dec        `json:"init_price"`
-}
-
-// NewMsgList creates a msg of listing a trading pair on dex
-func NewMsgList(owner AccAddress, listAsset, quoteAsset string, initPrice Dec) MsgList {
-	return MsgList{
-		Owner:      owner,
-		ListAsset:  listAsset,
-		QuoteAsset: quoteAsset,
-		InitPrice:  initPrice,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgList) GetSignBytes() []byte {
-	return MustSortJSON(MsgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgList) Route() string            { return "" }
-func (MsgList) Type() string             { return "" }
-func (MsgList) ValidateBasic() Error     { return nil }
-func (MsgList) GetSigners() []AccAddress { return nil }
-
 // MsgList is a msg struct to deposit on a product
 type MsgDeposit struct {
 	Product   string     `json:"product"`

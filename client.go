@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/module"
 	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
@@ -34,6 +35,7 @@ func NewClient(config types.ClientConfig) Client {
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
 		order.NewOrderClient(pBaseClient),
+		dex.NewDexClient(pBaseClient),
 	)
 
 	return *pClient
@@ -67,4 +69,7 @@ func (cli *Client) Token() exposed.Token {
 }
 func (cli *Client) Order() exposed.Order {
 	return cli.modules[order.ModuleName].(exposed.Order)
+}
+func (cli *Client) Dex() exposed.Dex {
+	return cli.modules[dex.ModuleName].(exposed.Dex)
 }

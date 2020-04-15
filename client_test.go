@@ -259,7 +259,7 @@ func TestNewOrders(t *testing.T) {
 	res, err := client.Order().NewOrders(
 		fromInfo,
 		passWd,
-		"xxb-031_okt,xxb-031_okt,xxb-031_okt",
+		"btc-9ec_okt,btc-9ec_okt,btc-9ec_okt",
 		"BUY,SELL,BUY",
 		"11.2,22.3,33.4",
 		"1.23,2.34,3.45",
@@ -269,6 +269,20 @@ func TestNewOrders(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(res)
 	fmt.Println("orderIds:", utils.GetOrderIDsFromResponse(&res))
+}
+
+func TestList(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	res, err := client.Dex().List(fromInfo, passWd, "btc-9ec", "okt", "0.02", "my memo",
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
 }
 
 // query test

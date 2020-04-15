@@ -43,24 +43,6 @@ func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, mem
 
 // dex module
 
-// List lists a trading pair on dex
-func (cli *OKChainClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, initPriceStr, memo string, accNum,
-	seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckDexAssets(fromInfo, passWd, baseAsset, quoteAsset); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	initPrice := types.MustNewDecFromStr(initPriceStr)
-	msg := types.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
-
 // Deposit deposits some tokens to a specific product
 func (cli *OKChainClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {

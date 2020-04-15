@@ -63,22 +63,6 @@ func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, mem
 
 // token module
 
-// MultiSend multi-sends coins to several receivers
-func (cli *OKChainClient) MultiSend(fromInfo keys.Info, passWd string, transfers []types.TransferUnit, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckTransferUnitsParams(fromInfo, passWd, transfers); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	msg := types.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
-
 // Issue issues a kind of token
 func (cli *OKChainClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string,
 	mintable bool, accNum, seqNum uint64) (types.TxResponse, error) {

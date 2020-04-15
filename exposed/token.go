@@ -2,6 +2,7 @@ package exposed
 
 import (
 	"github.com/okex/okchain-go-sdk/crypto/keys"
+	"github.com/okex/okchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -14,4 +15,6 @@ type Token interface {
 // TokenTx shows the expected tx behavior for inner token client
 type TokenTx interface {
 	Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	MultiSend(fromInfo keys.Info, passWd string, transfers []types.TransferUnit, memo string, accNum, seqNum uint64) (
+		sdk.TxResponse, error)
 }

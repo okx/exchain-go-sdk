@@ -214,6 +214,25 @@ func TestSend(t *testing.T) {
 	fmt.Println(res)
 }
 
+func TestMultiSend(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	transStr := `okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k 1.024okt
+okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
+	transfers, err := utils.ParseTransfersStr(transStr)
+	require.NoError(t, err)
+
+	res, err := client.Token().MultiSend(fromInfo, passWd, transfers, "my memo", accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+}
+
 // query test
 
 func TestQueryValidators(t *testing.T) {

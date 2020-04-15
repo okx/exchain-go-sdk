@@ -63,23 +63,6 @@ func TestOKChainClient_CancelOrders(t *testing.T) {
 	fmt.Println(res)
 }
 
-func TestOKChainClient_MultiSend(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	transStr := `okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k 1.024okt
-okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
-	transfers, err := utils.ParseTransfersStr(transStr)
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.MultiSend(fromInfo, passWd, transfers, "my memo", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
 
 func TestOKChainClient_Issue(t *testing.T) {
 	cli := NewClient(rpcUrl)

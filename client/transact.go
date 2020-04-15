@@ -3,7 +3,7 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/transact_params"
+	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/tx"
@@ -20,7 +20,7 @@ const (
 
 // Send transfers coins to others
 func (cli *OKChainClient) Send(fromInfo keys.Info, passWd, toAddr, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckSendParams(fromInfo, passWd, toAddr); err != nil {
+	if err := params.CheckSendParams(fromInfo, passWd, toAddr); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -52,7 +52,7 @@ func (cli *OKChainClient) NewOrders(fromInfo keys.Info, passWd, products, sides,
 	sideStrs := strings.Split(sides, ",")
 	priceStrs := strings.Split(prices, ",")
 	quantityStrs := strings.Split(quantities, ",")
-	if err := transact_params.CheckNewOrderParams(fromInfo, passWd, productStrs, sideStrs, priceStrs, quantityStrs);
+	if err := params.CheckNewOrderParams(fromInfo, passWd, productStrs, sideStrs, priceStrs, quantityStrs);
 		err != nil {
 		return types.TxResponse{}, err
 	}
@@ -72,7 +72,7 @@ func (cli *OKChainClient) NewOrders(fromInfo keys.Info, passWd, products, sides,
 // CancelOrders cancels orders by orderIds
 func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
 	orderIdStrs := strings.Split(orderIds, ",")
-	if err := transact_params.CheckCancelOrderParams(fromInfo, passWd, orderIdStrs); err != nil {
+	if err := params.CheckCancelOrderParams(fromInfo, passWd, orderIdStrs); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -90,7 +90,7 @@ func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, mem
 
 // Unjail unjails the own validator which was jailed by slashing module
 func (cli *OKChainClient) Unjail(fromInfo keys.Info, passWd string, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -108,7 +108,7 @@ func (cli *OKChainClient) Unjail(fromInfo keys.Info, passWd string, memo string,
 
 // MultiSend multi-sends coins to several receivers
 func (cli *OKChainClient) MultiSend(fromInfo keys.Info, passWd string, transfers []types.TransferUnit, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckTransferUnitsParams(fromInfo, passWd, transfers); err != nil {
+	if err := params.CheckTransferUnitsParams(fromInfo, passWd, transfers); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -125,7 +125,7 @@ func (cli *OKChainClient) MultiSend(fromInfo keys.Info, passWd string, transfers
 // Issue issues a kind of token
 func (cli *OKChainClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string,
 	mintable bool, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckTokenIssue(fromInfo, passWd, orgSymbol, wholeName, tokenDesc); err != nil {
+	if err := params.CheckTokenIssue(fromInfo, passWd, orgSymbol, wholeName, tokenDesc); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -144,7 +144,7 @@ func (cli *OKChainClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName
 // List lists a trading pair on dex
 func (cli *OKChainClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, initPriceStr, memo string, accNum,
 	seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckDexAssets(fromInfo, passWd, baseAsset, quoteAsset); err != nil {
+	if err := params.CheckDexAssets(fromInfo, passWd, baseAsset, quoteAsset); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -162,7 +162,7 @@ func (cli *OKChainClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset
 // Deposit deposits some tokens to a specific product
 func (cli *OKChainClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {
-	if err := transact_params.CheckProduct(fromInfo, passWd, product); err != nil {
+	if err := params.CheckProduct(fromInfo, passWd, product); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -183,7 +183,7 @@ func (cli *OKChainClient) Deposit(fromInfo keys.Info, passWd, product, amountStr
 // Withdraw withdraws some tokens from a specific product
 func (cli *OKChainClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {
-	if err := transact_params.CheckProduct(fromInfo, passWd, product); err != nil {
+	if err := params.CheckProduct(fromInfo, passWd, product); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -204,7 +204,7 @@ func (cli *OKChainClient) Withdraw(fromInfo keys.Info, passWd, product, amountSt
 // TransferOwnership signs the multi-signed tx from a json file and broadcast
 func (cli *OKChainClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (
 	types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 

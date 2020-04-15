@@ -2,7 +2,7 @@ package staking
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/transact_params"
+	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/utils"
@@ -10,7 +10,7 @@ import (
 
 // Delegate delegates okt for voting
 func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -26,7 +26,7 @@ func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo stri
 
 // Unbond unbonds the delegation on okchain
 func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -43,7 +43,7 @@ func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string
 
 // Vote votes to the some specific validators
 func (sc stakingClient) Vote(fromInfo keys.Info, passWd string, valAddrsStr []string, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckVoteParams(fromInfo, passWd, valAddrsStr); err != nil {
+	if err := params.CheckVoteParams(fromInfo, passWd, valAddrsStr); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -60,7 +60,7 @@ func (sc stakingClient) Vote(fromInfo keys.Info, passWd string, valAddrsStr []st
 
 // DestroyValidator deregisters the validator and unbond the min-self-delegation
 func (sc stakingClient) DestroyValidator(fromInfo keys.Info, passWd string, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -71,7 +71,7 @@ func (sc stakingClient) DestroyValidator(fromInfo keys.Info, passWd string, memo
 
 // CreateValidator creates a new validator
 func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, moniker, identity, website, details, minSelfDelegationStr, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -95,7 +95,7 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 
 // EditValidator edits the description on a validator by the owner
 func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -109,7 +109,7 @@ func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, ident
 
 // RegisterProxy registers the identity of proxy
 func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -121,7 +121,7 @@ func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, a
 
 // UnregisterProxy registers the identity of proxy
 func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -134,7 +134,7 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 // BindProxy binds the staking tokens to a proxy
 func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {
-	if err := transact_params.CheckSendParams(fromInfo, passWd, proxyAddrStr); err != nil {
+	if err := params.CheckSendParams(fromInfo, passWd, proxyAddrStr); err != nil {
 		return types.TxResponse{}, err
 	}
 
@@ -152,7 +152,7 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 // UnbindProxy unbinds the staking tokens from a proxy
 func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, accNum, seqNum uint64) (
 	types.TxResponse, error) {
-	if err := transact_params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return types.TxResponse{}, err
 	}
 

@@ -2,7 +2,7 @@ package staking
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/query_params"
+	params2 "github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/types"
 )
@@ -34,7 +34,7 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val exposed.Validator
 		return
 	}
 
-	params := query_params.NewQueryValidatorParams(valAddr)
+	params := params2.NewQueryValidatorParams(valAddr)
 	jsonBytes, err := sc.GetCodec().MarshalJSON(params)
 	if err != nil {
 		return val, fmt.Errorf("error : QueryValidatorParams failed in json marshal : %s", err.Error())
@@ -71,7 +71,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp exposed.Deleg
 	}
 
 	// query for the undelegation info
-	jsonBytes, err := sc.GetCodec().MarshalJSON(query_params.NewQueryDelegatorParams(delAddr))
+	jsonBytes, err := sc.GetCodec().MarshalJSON(params2.NewQueryDelegatorParams(delAddr))
 	if err != nil {
 		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
 	}

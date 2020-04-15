@@ -76,53 +76,6 @@ func TestOKChainClient_CancelOrders(t *testing.T) {
 	fmt.Println(res)
 }
 
-func TestOKChainClient_Delegate(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Delegate(fromInfo, passWd, "1024.2048okt", "my memo", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
-func TestOKChainClient_Unbond(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Unbond(fromInfo, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
-func TestOKChainClient_Vote(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	// delegate first
-	sequence := accInfo.GetSequence()
-	_, err = cli.Delegate(fromInfo, passWd, "1024.2048okt", "my memo", accInfo.GetAccountNumber(),
-		sequence)
-	assertNotEqual(t, err, nil)
-
-	// vote then
-	sequence++
-	valsToVoted := []string{valAddr1, valAddr2, valAddr3, valAddr4}
-	res, err := cli.Vote(fromInfo, passWd, valsToVoted, "my memo", accInfo.GetAccountNumber(), sequence)
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
 func TestOKChainClient_DestroyValidator(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(valMnemonic, valName, passWd)

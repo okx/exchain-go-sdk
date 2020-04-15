@@ -140,3 +140,16 @@ func TestRegisterProxy(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(res)
 }
+
+func TestUnregisterProxy(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+
+	res, err := client.Staking().UnregisterProxy(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+}

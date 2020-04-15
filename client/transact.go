@@ -18,26 +18,6 @@ const (
 	BroadcastAsync = "async"
 )
 
-// Deposit deposits some tokens to a specific product
-func (cli *OKChainClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
-	types.TxResponse, error) {
-	if err := params.CheckProduct(fromInfo, passWd, product); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	amount, err := utils.ParseDecCoin(amountStr)
-	if err != nil {
-		return types.TxResponse{}, err
-	}
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), product, amount)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
 
 // Withdraw withdraws some tokens from a specific product
 func (cli *OKChainClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (

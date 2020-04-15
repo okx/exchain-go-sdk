@@ -32,18 +32,6 @@ const (
 
 
 
-func TestOKChainClient_Deposit(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Deposit(fromInfo, passWd, "btc-216_okt", "1024.2048okt", "my memo",
-		accInfo.GetAccountNumber(), accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
 
 func TestOKChainClient_Withdraw(t *testing.T) {
 	cli := NewClient(rpcUrl)

@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // List lists a trading pair on dex
@@ -16,6 +17,23 @@ func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, init
 
 	initPrice := sdk.MustNewDecFromStr(initPriceStr)
 	msg := types.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
+
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}
+
+// Deposit deposits some tokens to a specific product
+func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckProduct(fromInfo, passWd, product); err != nil {
+		return
+	}
+
+	amount, err := utils.ParseDecCoin(amountStr)
+	if err != nil {
+		return
+	}
+	msg := types.NewMsgDeposit(fromInfo.GetAddress(), product, amount)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 

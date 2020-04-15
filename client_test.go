@@ -101,8 +101,24 @@ func TestCreateValidator(t *testing.T) {
 	require.NoError(t, err)
 
 	pubkeyStr := "okchainvalconspub1zcjduepqghrtvkngejwese62wg49ewskz4r93vkyj3md5mg5rf7twcc6jduqpqw66q"
-	res, err := client.Staking().CreateValidator(fromInfo, passWd, pubkeyStr, "my moniker", "my identity",
+	resp, err := client.Staking().CreateValidator(fromInfo, passWd, pubkeyStr, "my moniker", "my identity",
 		"my website", "my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
-	fmt.Println(res)
+	fmt.Println(resp)
+}
+
+func TestEditValidator(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(
+		"sand hour across excess rocket usage cotton used install orient piano where", name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount("okchain12gzxhpah2nulpeqx7kpf7fmfpgmp3hwhczf8pu")
+	require.NoError(t, err)
+
+	resp, err := client.Staking().EditValidator(fromInfo, passWd, "my moniker", "my identity", "my website",
+		"my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(resp)
+
 }

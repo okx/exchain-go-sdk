@@ -93,13 +93,13 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 }
 
 // EditValidator edits the description on a validator by the owner
-func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return types.TxResponse{}, err
+func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum,
+	seqNum uint64) (resp types.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
 	}
 
 	description := NewDescription(moniker, identity, website, details)
-
 	msg := NewMsgEditValidator(types.ValAddress(fromInfo.GetAddress()), description)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)

@@ -16,8 +16,10 @@ type Staking interface {
 // StakingTx shows the expected tx behavior for inner staking client
 type StakingTx interface {
 	CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, moniker, identity, website, details, memo string, accNum,
-		seqNum uint64) (resp types.TxResponse, err error)
+		seqNum uint64) (types.TxResponse, error)
 	DestroyValidator(fromInfo keys.Info, passWd string, memo string, accNum, seqNum uint64) (types.TxResponse, error)
+	EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum, seqNum uint64) (
+		types.TxResponse, error)
 	Delegate(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error)
 	Unbond(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (types.TxResponse, error)
 	Vote(fromInfo keys.Info, passWd string, valAddrsStr []string, memo string, accNum, seqNum uint64) (types.TxResponse, error)

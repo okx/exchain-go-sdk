@@ -107,19 +107,6 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 	fmt.Println(res)
 }
 
-func TestOKChainClient_EditValidator(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(valMnemonic, valName, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.EditValidator(fromInfo, passWd, "my moniker", "my identity", "my website",
-		"my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-}
-
 func TestOKChainClient_RegisterProxy(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)

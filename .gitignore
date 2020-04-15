@@ -4,7 +4,6 @@
 *.swo
 .vscode
 .idea
-go.sum
 # Build
 # vendor
 .vendor-new

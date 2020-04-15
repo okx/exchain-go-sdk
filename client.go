@@ -47,9 +47,5 @@ func (cli *Client) registerModule(modules ...types.Module) {
 }
 
 // nolint
-func (cli *Client) Staking() exposed.Staking {
-	return cli.modules[staking.ModuleName].(exposed.Staking)
-}
-func (cli *Client) Auth() exposed.Auth {
-	return cli.modules[auth.ModuleName].(exposed.Auth)
-}
+func (cli *Client) Auth() exposed.Auth       { return cli.modules[auth.ModuleName].(exposed.Auth) }
+func (cli *Client) Staking() exposed.Staking { return cli.modules[staking.ModuleName].(exposed.Staking) }

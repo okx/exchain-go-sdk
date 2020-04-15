@@ -9,8 +9,14 @@ import (
 type BaseClient interface {
 	ClientQuery
 	ClientTx
+	TxHandler
 	GetCodec() SDKCodec
 	GetConfig() ClientConfig
+}
+
+// TxHandler shows the expected behavior to handle tx
+type TxHandler interface{
+	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64)(TxResponse, error)
 }
 
 // ClientQuery shows the expected query behavior

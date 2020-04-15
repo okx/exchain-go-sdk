@@ -1,7 +1,6 @@
 package tx
 
 import (
-	"fmt"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types"
 )
@@ -20,21 +19,7 @@ func BuildUnsignedStdTxOffline(msgs []types.Msg, memo string) types.StdTx {
 	return types.NewStdTx(msgs, Fee, nil, memo)
 }
 
-func BuildAndSignAndEncodeStdTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) ([]byte, error) {
-	stdTx, err := buildTx(fromName, passphrase, memo, msgs, accNumber, seqNumber)
-	if err != nil {
-		return nil, fmt.Errorf("build stdTx error: %s", err)
-	}
-
-	// amino encoded
-	txBytes, err := types.MsgCdc.MarshalBinaryLengthPrefixed(stdTx)
-	if err != nil {
-		return nil, fmt.Errorf("amino encoded stdTx error: %s", err)
-	}
-	return txBytes, nil
-}
-
-func buildTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) (types.StdTx, error) {
+func BuildTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) (types.StdTx, error) {
 	signMsg := StdSignMsg{
 		ChainID:       "okchain",
 		AccountNumber: accNumber,

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/tx"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )
@@ -87,7 +88,7 @@ func (bc *baseClient) Broadcast(txBytes []byte, broadcastMode types.BroadcastMod
 		return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err
 
 	default:
-		err = fmt.Errorf("unsupported return broadcast mode %s; supported types: sync, async, block", broadcastMode)
+		err = fmt.Errorf("failed. unsupported broadcast mode %s; supported types: sync, async, block", broadcastMode)
 	}
 	return
 }
@@ -100,4 +101,20 @@ func (bc *baseClient) GetCodec() types.SDKCodec {
 // GetConfig gets the client config
 func (bc *baseClient) GetConfig() types.ClientConfig {
 	return bc.config
+}
+
+// BuildAndBroadcast implements the TxHandler interface
+func (bc *baseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs []types.Msg, accNumber,
+	seqNumber uint64) (resp types.TxResponse, err error) {
+	stdTx, err := tx.BuildTx(fromName, passphrase, memo, msgs, accNumber, seqNumber)
+	if err != nil {
+		return resp, fmt.Errorf("failed. build stdTx error: %s", err)
+	}
+
+	bytes, err := bc.cdc.MarshalBinaryLengthPrefixed(stdTx)
+	if err != nil {
+		return resp, fmt.Errorf("failed. encoded stdTx error: %s", err)
+	}
+
+	return bc.Broadcast(bytes, bc.GetConfig().BroadcastMode)
 }

@@ -2,9 +2,12 @@ package sdk
 
 import (
 	"fmt"
+	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
+
+// just a temporary test
 
 const (
 	name   = "alice"
@@ -25,8 +28,7 @@ const (
 	valName     = "validator"
 )
 
-func TestNewClient(t *testing.T) {
-
+func TestQueryValidators(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	vals, err := client.Staking().QueryValidators()
@@ -34,9 +36,18 @@ func TestNewClient(t *testing.T) {
 	for _, v := range vals {
 		fmt.Println(v)
 	}
+}
 
+func TestDelegate(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
 	accInfo, err := client.Auth().QueryAccount(addr)
 	require.NoError(t, err)
-	fmt.Println(accInfo)
+
+	resp, err := client.Staking().Delegate(fromInfo, passWd, "1024.1024okt", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(resp)
 
 }

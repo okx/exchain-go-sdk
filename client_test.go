@@ -276,3 +276,20 @@ func TestQueryDelegator(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(delResp)
 }
+
+func TestQueryTokenInfo(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	tokens, err := client.Token().QueryTokenInfo(addr, "")
+	require.NoError(t, err)
+	fmt.Println(tokens)
+
+	tokens, err = client.Token().QueryTokenInfo("", "btc-32e")
+	require.NoError(t, err)
+	fmt.Println(tokens)
+
+	tokens, err = client.Token().QueryTokenInfo(addr+"123", "btc-9ec")
+	require.NoError(t, err)
+	fmt.Println(tokens)
+
+}

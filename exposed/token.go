@@ -10,6 +10,7 @@ import (
 type Token interface {
 	sdk.Module
 	TokenTx
+	TokenQuery
 }
 
 // TokenTx shows the expected tx behavior for inner token client
@@ -19,4 +20,9 @@ type TokenTx interface {
 		sdk.TxResponse, error)
 	Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string, mintable bool, accNum,
 		seqNum uint64) (sdk.TxResponse, error)
+}
+
+// TokenQuery shows the expected query behavior for inner token client
+type TokenQuery interface {
+	QueryTokenInfo(ownerAddr, symbol string) ([]types.Token, error)
 }

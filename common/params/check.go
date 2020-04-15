@@ -40,6 +40,15 @@ func CheckDexAssets(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) er
 	return nil
 }
 
+// CheckQueryTokenInfo gives a quick validaty check for the input params
+func CheckQueryTokenInfo(ownerAddr, symbol string) error {
+	if len(ownerAddr) == 0 && len(symbol) == 0 {
+		return errors.New("failed. empty input")
+	}
+
+	return nil
+}
+
 func CheckTokenIssue(fromInfo keys.Info, passWd, orgSymbol, wholeName, tokenDesc string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err

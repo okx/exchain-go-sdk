@@ -10,8 +10,6 @@ import (
 
 const (
 	accountTokensInfoPath = "custom/token/accounts/"
-	tokensInfoPath        = "custom/token/tokens"
-	tokenInfoPath         = "custom/token/info/"
 	depthbookInfoPath     = "custom/order/depthbook"
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
@@ -66,34 +64,6 @@ func (cli *OKChainClient) GetTokenInfoByAddr(addr, symbol string) (types.Account
 		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
 	}
 	return accTokenInfo, nil
-}
-
-func (cli *OKChainClient) GetTokensInfo() ([]types.Token, error) {
-	res, err := cli.query(tokensInfoPath, nil)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var tokensList []types.Token
-	if err = cli.cdc.UnmarshalJSON(res, &tokensList); err != nil {
-		return nil, fmt.Errorf("err : %s", err.Error())
-	}
-
-	return tokensList, nil
-}
-
-func (cli *OKChainClient) GetTokenInfo(symbol string) (types.Token, error) {
-	res, err := cli.query(tokenInfoPath+symbol, nil)
-	if err != nil {
-		return types.Token{}, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var token types.Token
-	if err = cli.cdc.UnmarshalJSON(res, &token); err != nil {
-		return types.Token{}, fmt.Errorf("err : %s", err.Error())
-	}
-
-	return token, nil
 }
 
 func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error) {

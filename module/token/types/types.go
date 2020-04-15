@@ -1,6 +1,8 @@
 package types
 
-import "github.com/okex/okchain-go-sdk/types"
+import (
+	sdk "github.com/okex/okchain-go-sdk/types"
+)
 
 // const
 const (
@@ -8,7 +10,7 @@ const (
 )
 
 var (
-	msgCdc = types.NewCodec()
+	msgCdc = sdk.NewCodec()
 )
 
 func init() {
@@ -16,7 +18,7 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for token module
-func RegisterCodec(cdc types.SDKCodec) {
+func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgSend{}, "okchain/token/MsgTransfer")
 	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer")
 	cdc.RegisterConcrete(MsgTokenIssue{}, "okchain/token/MsgIssue")
@@ -25,14 +27,26 @@ func RegisterCodec(cdc types.SDKCodec) {
 
 // TransferUnit - amount part for multi-send
 type TransferUnit struct {
-	To    types.AccAddress `json:"to"`
-	Coins types.DecCoins   `json:"coins"`
+	To    sdk.AccAddress `json:"to"`
+	Coins sdk.DecCoins   `json:"coins"`
 }
 
 // NewTransferUnit creates a new instance of TransferUnit
-func NewTransferUnit(addr types.AccAddress, coins types.DecCoins) TransferUnit {
+func NewTransferUnit(addr sdk.AccAddress, coins sdk.DecCoins) TransferUnit {
 	return TransferUnit{
 		To:    addr,
 		Coins: coins,
 	}
+}
+
+// Token - structure for detail info of a kind of token
+type Token struct {
+	Description         string         `json:"description"`
+	Symbol              string         `json:"symbol"`
+	OriginalSymbol      string         `json:"original_symbol"`
+	WholeName           string         `json:"whole_name"`
+	OriginalTotalSupply sdk.Dec        `json:"original_total_supply"`
+	TotalSupply         sdk.Dec        `json:"total_supply"`
+	Owner               sdk.AccAddress `json:"owner"`
+	Mintable            bool           `json:"mintable"`
 }

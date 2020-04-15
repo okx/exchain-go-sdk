@@ -21,7 +21,9 @@ func init() {
 type SDKCodec interface {
 	MarshalJSON(o interface{}) ([]byte, error)
 	UnmarshalJSON(bytes []byte, ptr interface{}) error
+
 	MustMarshalJSON(o interface{}) []byte
+	MustUnmarshalJSON(bytes []byte, ptr interface{})
 
 	MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
 	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error

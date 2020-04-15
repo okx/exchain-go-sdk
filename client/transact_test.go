@@ -64,20 +64,6 @@ func TestOKChainClient_CancelOrders(t *testing.T) {
 }
 
 
-func TestOKChainClient_Issue(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	accInfo, err := cli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-	assertNotEqual(t, err, nil)
-
-	res, err := cli.Issue(fromInfo, passWd, "btc", "BitCoin", "100000000",
-		"the token of Bitcoin", "my memo", true, accInfo.GetAccountNumber(), accInfo.GetSequence())
-	assertNotEqual(t, err, nil)
-	fmt.Println(res)
-
-}
-
 func TestOKChainClient_List(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)

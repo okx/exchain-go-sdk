@@ -233,6 +233,21 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 	fmt.Println(res)
 }
 
+func TestIssue(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
+	require.NoError(t, err)
+
+	res, err := client.Token().Issue(fromInfo, passWd, "btc", "BitCoin", "100000000",
+		"the token of Bitcoin", "my memo", true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(res)
+
+}
+
 // query test
 
 func TestQueryValidators(t *testing.T) {

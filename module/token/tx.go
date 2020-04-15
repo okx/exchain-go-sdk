@@ -44,3 +44,16 @@ func (tc tokenClient) MultiSend(fromInfo keys.Info, passWd string, transfers []t
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+// Issue issues a kind of token
+func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string,
+	mintable bool, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckTokenIssue(fromInfo, passWd, orgSymbol, wholeName, tokenDesc); err != nil {
+		return
+	}
+
+	msg := types.NewMsgTokenIssue(fromInfo.GetAddress(), tokenDesc, "", orgSymbol, wholeName, totalSupply, mintable)
+
+	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

@@ -63,22 +63,6 @@ func (cli *OKChainClient) CancelOrders(fromInfo keys.Info, passWd, orderIds, mem
 
 // token module
 
-// Issue issues a kind of token
-func (cli *OKChainClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string,
-	mintable bool, accNum, seqNum uint64) (types.TxResponse, error) {
-	if err := params.CheckTokenIssue(fromInfo, passWd, orgSymbol, wholeName, tokenDesc); err != nil {
-		return types.TxResponse{}, err
-	}
-
-	msg := types.NewMsgTokenIssue(fromInfo.GetAddress(), tokenDesc, "", orgSymbol, wholeName, totalSupply, mintable)
-
-	stdBytes, err := tx.BuildAndSignAndEncodeStdTx(fromInfo.GetName(), passWd, memo, []types.Msg{msg}, accNum, seqNum)
-	if err != nil {
-		return types.TxResponse{}, fmt.Errorf("err : build and sign stdTx error: %s", err.Error())
-	}
-
-	return cli.broadcast(stdBytes, BroadcastBlock)
-}
 
 // dex module
 

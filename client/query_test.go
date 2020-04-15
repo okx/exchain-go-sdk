@@ -146,32 +146,6 @@ func TestGetTransactionsInfo(t *testing.T) {
 	}
 }
 
-func TestGetValidators(t *testing.T) {
-	cli := NewClient(rpcUrl)
-
-	vals, err := cli.GetValidators()
-	assertNotEqual(t, err, nil)
-	for _, val := range vals {
-		fmt.Println(val)
-	}
-}
-
-func TestGetValidator(t *testing.T) {
-	cli := NewClient(rpcUrl)
-
-	valAddrStr := "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
-	val, err := cli.GetValidator(valAddrStr)
-	assertNotEqual(t, err, nil)
-	fmt.Println(val)
-}
-
-func TestGetDelegator(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	delResp, err := cli.GetDelegator("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
-	assertNotEqual(t, err, nil)
-	fmt.Println(delResp)
-}
-
 func TestOKChainClient_QueryProducts(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	tokenPairs, err := cli.QueryProducts("", 1, 50)

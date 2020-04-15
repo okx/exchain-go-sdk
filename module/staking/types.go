@@ -11,12 +11,14 @@ import (
 const (
 	ModuleName = "staking"
 
-	validatorPath        = "custom/staking/validator"
 	unbondDelegationPath = "custom/staking/unbondingDelegation"
+
+	defaultMinSelfDelegation = "0.001okt"
 )
 
 var (
-	msgCdc = types.NewCodec()
+	msgCdc        = types.NewCodec()
+	validatorsKey = []byte{0x21}
 )
 
 func init() {
@@ -110,9 +112,27 @@ type Undelegation struct {
 	CompletionTime   time.Time        `json:"completion_time"`
 }
 
-// DefaultUndelegation returns default entity for Undelegation
+// defaultUndelegation returns default entity for Undelegation
 func defaultUndelegation() Undelegation {
 	return Undelegation{
 		nil, types.ZeroDec(), time.Unix(0, 0).UTC(),
+	}
+}
+
+func getValidatorKey(valAddr types.ValAddress) []byte {
+	return append(validatorsKey, valAddr.Bytes()...)
+}
+
+func convertToDelegatorResp(delegator Delegator, undelegation Undelegation) exposed.DelegatorResp {
+	return exposed.DelegatorResp{
+		DelegatorAddress:     delegator.DelegatorAddress,
+		ValidatorAddresses:   delegator.ValidatorAddresses,
+		Shares:               delegator.Shares,
+		Tokens:               delegator.Tokens,
+		UnbondedTokens:       undelegation.Quantity,
+		CompletionTime:       undelegation.CompletionTime,
+		IsProxy:              delegator.IsProxy,
+		TotalDelegatedTokens: delegator.TotalDelegatedTokens,
+		ProxyAddress:         delegator.ProxyAddress,
 	}
 }

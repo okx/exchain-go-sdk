@@ -1,4 +1,4 @@
-package transact_params
+package params
 
 import (
 	"fmt"
@@ -67,13 +67,13 @@ func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []typ
 	}
 	transLen := len(transfers)
 	if transLen == 0 {
-		return errors.New("no receiver input")
+		return errors.New("failed. no receiver input")
 	}
 	for i := 0; i < 0; i++ {
 		if transfers[i].Coins.IsAllPositive() {
 			continue
 		} else {
-			return errors.New("only positive amount of coins is available")
+			return errors.New("failed. only positive amount of coins is available")
 		}
 	}
 
@@ -85,14 +85,14 @@ func CheckVoteParams(fromInfo keys.Info, passWd string, valAddrs []string) error
 		return err
 	}
 	if len(valAddrs) == 0 {
-		return errors.New("no validator address input")
+		return errors.New("failed. no validator address input")
 	}
 
 	// check duplicated
 	filter := make(map[string]struct{}, len(valAddrs))
 	for _, valAddr := range valAddrs {
 		if _, ok := filter[valAddr]; ok {
-			return fmt.Errorf("validator address: %s is duplicated", valAddr)
+			return fmt.Errorf("failed. validator address: %s is duplicated", valAddr)
 		}
 		filter[valAddr] = struct{}{}
 	}
@@ -102,10 +102,10 @@ func CheckVoteParams(fromInfo keys.Info, passWd string, valAddrs []string) error
 
 func CheckKeyParams(fromInfo keys.Info, passWd string) error {
 	if fromInfo == nil {
-		return errors.New("input invalid keys info")
+		return errors.New("failed. input invalid keys info")
 	}
 	if len(passWd) == 0 {
-		return errors.New("no password input")
+		return errors.New("failed. no password input")
 	}
 
 	return nil
@@ -116,7 +116,7 @@ func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 		return err
 	}
 	if len(toAddr) != 46 || !strings.HasPrefix(toAddr, "okchain") {
-		return errors.New("input invalid receiver address")
+		return errors.New("failed. invalid receiver address")
 	}
 
 	return nil
@@ -129,24 +129,24 @@ func CheckNewOrderParams(fromInfo keys.Info, passWd string, products, sides, pri
 
 	productsLen := len(products)
 	if productsLen == 0 {
-		return errors.New("no product input")
+		return errors.New("failed. no product input")
 	}
 
 	if len(sides) != productsLen {
-		return errors.New("invalid param side counts")
+		return errors.New("failed. invalid param side counts")
 	}
 
 	if len(prices) != productsLen {
-		return errors.New("invalid param price counts")
+		return errors.New("failed. invalid param price counts")
 	}
 
 	if len(quantities) != productsLen {
-		return errors.New("invalid param quantity counts")
+		return errors.New("failed. invalid param quantity counts")
 	}
 
 	for _, side := range sides {
 		if side != "BUY" && side != "SELL" {
-			return errors.New(`side must only be "BUY" or "SELL"`)
+			return errors.New(`failed. side must only be "BUY" or "SELL"`)
 		}
 	}
 
@@ -162,27 +162,11 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 	filter := make(map[string]struct{})
 	for _, id := range orderIds {
 		if _, ok := filter[id]; ok {
-			return fmt.Errorf("orderId: %s is duplicated", id)
+			return fmt.Errorf("failed. duplicated orderId: %s", id)
 		}
 
 		filter[id] = struct{}{}
 	}
 
 	return nil
-}
-
-func checkAccuracyOfStr(num string, accuracy int) bool {
-	num = strings.TrimSpace(num)
-	strs := strings.Split(num, ".")
-	if len(strs) > 2 || len(strs) == 0 {
-		return false
-	} else if len(strs) == 2 {
-		for i, v := range strs[1] {
-			if i > accuracy-1 && v != '0' {
-				fmt.Printf("the accuracy can't be larger than %d\n", accuracy)
-				return false
-			}
-		}
-	}
-	return true
 }

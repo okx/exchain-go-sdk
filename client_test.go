@@ -77,3 +77,17 @@ func TestVote(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(resp)
 }
+
+func TestDestroyValidator(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	fromInfo, _, err := utils.CreateAccountWithMnemo(
+		"relief food aim snap pumpkin black ginger badge flock citizen agree stone", name, passWd)
+	require.NoError(t, err)
+	accInfo, err := client.Auth().QueryAccount("okchain1yjsqpggz0tglf4mhtd40rwnwk3c08xrz908yge")
+	require.NoError(t, err)
+
+	resp, err := client.Staking().DestroyValidator(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	fmt.Println(resp)
+}

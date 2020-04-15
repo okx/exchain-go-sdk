@@ -10,6 +10,7 @@ type Dex interface {
 	sdk.Module
 	DexTx
 	DexQuery
+	DexOffline
 }
 
 // DexTx shows the expected tx behavior for inner dex client
@@ -19,6 +20,11 @@ type DexTx interface {
 	Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (sdk.TxResponse, error)
+}
+
+// DexOffline shows the expected tx behavior offline for inner dex client
+type DexOffline interface {
+	GenerateUnsignedTransferOwnershipTx(product, fromAddrStr, toAddrStr, memo, outputPath string) error
 }
 
 // DexQuery shows the expected query behavior for inner dex client

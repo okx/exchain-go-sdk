@@ -15,10 +15,6 @@ const (
 	addr1 = "okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k"
 )
 
-func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
-	err := GenerateUnsignedTransferOwnershipTx("btc-e68_okt", addr, addr1, "my memo", "./unsignedTx.json")
-	require.NoError(t, err)
-}
 
 func TestMultiSign(t *testing.T) {
 	fromInfo, _, err := CreateAccountWithMnemo(mnemonic, name, passWd)

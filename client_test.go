@@ -325,30 +325,37 @@ func TestWithdraw(t *testing.T) {
 	fmt.Println(res)
 }
 
-func TestOKChainClient_TransferOwnership(t *testing.T) {
-	// 1.generate unsigned transfer-ownership tx file
-	err := utils.GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
-	require.NoError(t, err)
-
-	// 2.multi-sign the stdTx by the receiver
-	recvInfo, _, err := utils.CreateAccountWithMnemo(targetMnemonic, name, passWd)
-	require.NoError(t, err)
-	err = utils.MultiSign(recvInfo, passWd, "./unsignedTx.json", "./signedTx.json")
-	require.NoError(t, err)
-
-	// 3.transfer ownership with the signed tx file
+func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
-	ownInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
 	require.NoError(t, err)
-	accInfo, err := client.Auth().QueryAccount(ownInfo.GetAddress().String())
-	require.NoError(t, err)
-
-	res, err := client.Dex().TransferOwnership(ownInfo, passWd, "./signedTx.json", accInfo.GetAccountNumber(),
-		accInfo.GetSequence())
-	require.NoError(t, err)
-	fmt.Println(res)
 }
+
+//func TestTransferOwnership(t *testing.T) {
+//	// 1.generate unsigned transfer-ownership tx file
+//	err := utils.GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
+//	require.NoError(t, err)
+//
+//	// 2.multi-sign the stdTx by the receiver
+//	recvInfo, _, err := utils.CreateAccountWithMnemo(targetMnemonic, name, passWd)
+//	require.NoError(t, err)
+//	err = utils.MultiSign(recvInfo, passWd, "./unsignedTx.json", "./signedTx.json")
+//	require.NoError(t, err)
+//
+//	// 3.transfer ownership with the signed tx file
+//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+//	client := NewClient(config)
+//	ownInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+//	require.NoError(t, err)
+//	accInfo, err := client.Auth().QueryAccount(ownInfo.GetAddress().String())
+//	require.NoError(t, err)
+//
+//	res, err := client.Dex().TransferOwnership(ownInfo, passWd, "./signedTx.json", accInfo.GetAccountNumber(),
+//		accInfo.GetSequence())
+//	require.NoError(t, err)
+//	fmt.Println(res)
+//}
 
 func TestCancelOrders(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)

@@ -2,9 +2,9 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"github.com/okex/okchain-go-sdk/module/auth/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // QueryAccount gets the account info
@@ -16,7 +16,7 @@ func (ac authClient) QueryAccount(accAddrStr string) (account types.Account, err
 
 	res, err := ac.Query(types.AccountInfoPath, types.AddressStoreKey(accAddr))
 	if err != nil {
-		return account, fmt.Errorf("failed. ok client query error : %s", err.Error())
+		return account, utils.ErrClientQuery(err.Error())
 	}
 
 	if res == nil {

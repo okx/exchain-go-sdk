@@ -4,52 +4,53 @@ import (
 	"fmt"
 	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/module/token/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // QueryAccountTokenInfo gets a specific available token info of an account
 func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (accTokensInfo types.AccountTokensInfo, err error) {
-	if !params.IsValidAccAddr(addrStr) {
-		return accTokensInfo, fmt.Errorf("failed. invalid account address")
+	if err = params.IsValidAccAddr(addrStr); err != nil {
+		return
 	}
 
 	accountParams := params.NewQueryAccTokenParams(symbol, "partial")
 
 	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
 	if err != nil {
-		return accTokensInfo, fmt.Errorf("failed. AccTokenParam failed in JSON marshal : %s", err.Error())
+		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
 	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
-		return accTokensInfo, fmt.Errorf("failed. ok client query error : %s", err.Error())
+		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}
 
 	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return accTokensInfo, fmt.Errorf("failed. unmarshal JSON error : %s", err.Error())
+		return accTokensInfo, utils.ErrUnmarshalJSON(err.Error())
 	}
 	return
 }
 
 // QueryAccountTokensInfo gets all the available tokens info of an account
 func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo types.AccountTokensInfo, err error) {
-	if !params.IsValidAccAddr(addrStr) {
-		return accTokensInfo, fmt.Errorf("failed. invalid account address")
+	if err = params.IsValidAccAddr(addrStr); err != nil {
+		return
 	}
 
 	accountParams := params.NewQueryAccTokenParams("", "all")
 
 	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
 	if err != nil {
-		return accTokensInfo, fmt.Errorf("failded. AccTokenParam failed in json marshal : %s", err.Error())
+		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
 	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
-		return accTokensInfo, fmt.Errorf("failed. ok client query error : %s", err.Error())
+		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}
 
 	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return accTokensInfo, fmt.Errorf("failed. unmarshal JSON error : %s", err.Error())
+		return accTokensInfo, utils.ErrUnmarshalJSON(err.Error())
 	}
 	return
 }

@@ -2,6 +2,7 @@ package exposed
 
 import (
 	"github.com/okex/okchain-go-sdk/crypto/keys"
+	"github.com/okex/okchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -21,4 +22,5 @@ type OrderTx interface {
 
 // OrderQuery shows the expected query behavior for inner order client
 type OrderQuery interface {
+	QueryDepthBook(product string) (types.BookRes, error)
 }

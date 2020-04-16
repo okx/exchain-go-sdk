@@ -19,18 +19,6 @@ func TestGetTokenInfo(t *testing.T) {
 	fmt.Println(tokenInfo)
 }
 
-func TestGetDepthbookInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	depthbook, err := cli.GetDepthbookInfo("xxb_okt")
-	assertNotEqual(t, err, nil)
-	for _, ask := range depthbook.Asks {
-		fmt.Println(ask)
-	}
-	for _, bid := range depthbook.Bids {
-		fmt.Println(bid)
-	}
-
-}
 
 func TestGetCandlesInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)

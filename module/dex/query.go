@@ -1,9 +1,9 @@
 package dex
 
 import (
-	"fmt"
 	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // QueryProducts gets token pair info
@@ -24,7 +24,7 @@ func (dc dexClient) QueryProducts(ownerAddr string, page, perPage int) (tokenPai
 	}
 
 	if err = dc.GetCodec().UnmarshalJSON(res, &tokenPairs); err != nil {
-		return tokenPairs, fmt.Errorf("failed. unmarshal JSON error: %s", err.Error())
+		return tokenPairs, utils.ErrUnmarshalJSON(err.Error())
 	}
 
 	return

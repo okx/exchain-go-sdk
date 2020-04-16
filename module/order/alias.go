@@ -6,3 +6,7 @@ import "github.com/okex/okchain-go-sdk/module/order/types"
 const (
 	ModuleName = types.ModuleName
 )
+
+type (
+	BookRes = types.BookRes
+)

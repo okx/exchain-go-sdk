@@ -14,7 +14,7 @@ import (
 	"github.com/okex/okchain-go-sdk/types"
 )
 
-// Client defines the main client of okchain gosdk
+// Client - structure of the main client of okchain gosdk
 type Client struct {
 	cdc     types.SDKCodec
 	modules map[string]types.Module
@@ -43,15 +43,15 @@ func NewClient(config types.ClientConfig) Client {
 	return *pClient
 }
 
-func (cli *Client) registerModule(modules ...types.Module) {
-	for _, module := range modules {
-		moduleName := module.Name()
-		if _, ok := cli.modules[module.Name()]; ok {
+func (cli *Client) registerModule(mods ...types.Module) {
+	for _, mod := range mods {
+		moduleName := mod.Name()
+		if _, ok := cli.modules[mod.Name()]; ok {
 			panic(fmt.Sprintf("duplicated module: %s", moduleName))
 		}
 		// register codec by each module
-		module.RegisterCodec(cli.cdc)
-		cli.modules[moduleName] = module
+		mod.RegisterCodec(cli.cdc)
+		cli.modules[moduleName] = mod
 	}
 	types.RegisterBasicCodec(cli.cdc)
 }

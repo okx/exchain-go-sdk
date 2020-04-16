@@ -7,6 +7,9 @@ import (
 // const
 const (
 	ModuleName = "token"
+
+	AccountTokensInfoPath = "custom/token/accounts/"
+
 )
 
 var (
@@ -49,4 +52,18 @@ type Token struct {
 	TotalSupply         sdk.Dec        `json:"total_supply"`
 	Owner               sdk.AccAddress `json:"owner"`
 	Mintable            bool           `json:"mintable"`
+}
+
+// AccountTokensInfo - structure for available tokens info of an account
+type AccountTokensInfo struct {
+	Address    string     `json:"address"`
+	Currencies []CoinInfo `json:"currencies"`
+}
+
+// CoinInfo - structure for a kind of currencies in AccountTokensInfo
+type CoinInfo struct {
+	Symbol    string `json:"symbol"`
+	Available string `json:"available"`
+	Freeze    string `json:"freeze"`
+	Locked    string `json:"locked"`
 }

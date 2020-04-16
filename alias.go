@@ -21,6 +21,7 @@ var (
 )
 
 type (
+	TxResponse = sdk.TxResponse
 	Account = auth.Account
 	Validator = staking.Validator
 	DelegatorResp = staking.DelegatorResp

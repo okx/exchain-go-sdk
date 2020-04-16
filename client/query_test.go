@@ -10,20 +10,6 @@ const (
 	rpcUrl = "tcp://127.0.0.1:10057"
 )
 
-func TestGetAccountInfoByAddr(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	acc, err := cli.GetAccountInfoByAddr(addr)
-	assertNotEqual(t, err, nil)
-	fmt.Println(acc)
-}
-
-func TestGetTokensInfoByAddr(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	tokensInfo, err := cli.GetTokensInfoByAddr(addr)
-	assertNotEqual(t, err, nil)
-	fmt.Println(tokensInfo)
-}
-
 func TestGetTokenInfoByAddr(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	tokenInfo, err := cli.GetTokenInfoByAddr(addr, "okt")

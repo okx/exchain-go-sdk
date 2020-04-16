@@ -434,3 +434,11 @@ func TestQueryProducts(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Println(tokenPairs)
 }
+
+func TestQueryAccountTokensInfo(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	client := NewClient(config)
+	tokensInfo, err := client.Token().QueryAccountTokensInfo(addr)
+	require.NoError(t, err)
+	fmt.Println(tokensInfo)
+}

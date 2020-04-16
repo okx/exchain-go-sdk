@@ -3,7 +3,6 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/types"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 	"testing"
@@ -12,7 +11,7 @@ import (
 func TestNewClient(t *testing.T) {
 	cli := NewClient(rpcUrl)
 
-	accountParams := params.NewQueryAccTokenParams("", "all")
+	accountParams := types.NewQueryAccTokenParams("", "all")
 
 	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
 	assertNotEqual(t, err, nil)

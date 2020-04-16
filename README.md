@@ -1,5 +1,12 @@
 ## OKChain Go SDK
 
+[![CircleCI](https://circleci.com/gh/okex/okchain-go-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/okex/okchain-go-sdk/tree/master)
+[![codecov](https://codecov.io/gh/okex/okchain-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/okex/okchain-go-sdk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/okex/okchain-go-sdk)](https://goreportcard.com/report/github.com/okex/okchain-go-sdk)
+[![license](https://img.shields.io/github/license/okex/okchain-go-sdk.svg)](https://github.com/okex/okchain-go-sdk/blob/master/LICENSE)
+[![LoC](https://tokei.rs/b1/github/okex/okchain-go-sdk)](https://github.com/okex/okchain-go-sdk)
+[![GolangCI](https://golangci.com/badges/github.com/okex/okchain-go-sdk.svg)](https://golangci.com/r/github.com/okex/okchain-go-sdk)
+
 The OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
 ### 1. Components

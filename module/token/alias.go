@@ -9,4 +9,5 @@ const (
 
 type (
 	Token = types.Token
+	AccountTokensInfo = types.AccountTokensInfo
 )

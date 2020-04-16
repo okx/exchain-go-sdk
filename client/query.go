@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	recentTxRecordPath    = "custom/backend/matches"
 	openOrdersPath        = "custom/backend/orders/open"
 	closedOrdersPath      = "custom/backend/orders/closed"
 	dealsInfoPath         = "custom/backend/deals"
@@ -17,30 +16,6 @@ const (
 )
 
 
-func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error) {
-	perPageTmp, err := checkParamsGetRecentTxRecord(product, start, end, page, perPage)
-	if err != nil {
-		return nil, err
-	}
-
-	params := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageTmp)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return nil, fmt.Errorf("error : QueryMatchParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(recentTxRecordPath, jsonBytes)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var records []types.MatchResult
-	if err = codec.UnmarshalListResponse(res, &records); err != nil {
-		return nil, fmt.Errorf("tx records unmarshaled failed from BaseResponse : %s", err.Error())
-	}
-
-	return records, nil
-}
 
 func (cli *OKChainClient) GetOpenOrders(addr, product, side string, start, end, page, perPage int) ([]types.Order, error) {
 	perPageTmp, err := checkParamsGetOpenClosedOrders(addr, product, side, start, end, page, perPage)

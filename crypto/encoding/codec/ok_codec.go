@@ -3,9 +3,6 @@ package codec
 // ok codec used specifically for ok client
 
 import (
-	"bytes"
-	"encoding/json"
-	"github.com/okex/okchain-go-sdk/common"
 	"github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto/encoding/amino"
@@ -29,8 +26,8 @@ func New() *Codec {
 }
 
 func goSDKRegisterAmino(cdc *amino.Codec) {
-	cdc.RegisterInterface((*types.Account)(nil), nil)
-	cdc.RegisterConcrete(&types.BaseAccount{}, "cosmos-sdk/Account", nil)
+	//cdc.RegisterInterface((*types.Account)(nil), nil)
+	//cdc.RegisterConcrete(&types.BaseAccount{}, "cosmos-sdk/Account", nil)
 	cdc.RegisterInterface((*types.Proposal)(nil), nil)
 	cdc.RegisterConcrete(&types.TextProposal{}, "okchain/gov/TextProposal", nil)
 	cdc.RegisterConcrete(&types.DexListProposal{}, "okchain/gov/DexListProposal", nil)
@@ -41,19 +38,3 @@ func goSDKRegisterAmino(cdc *amino.Codec) {
 
 
 
-func UnmarshalListResponse(bz []byte, ptr interface{}) error {
-	var lr common.ListResponse
-	if err := json.Unmarshal(bz, &lr); err != nil {
-		return err
-	}
-
-	jsonBytes, err := json.Marshal(lr.Data.Data)
-	if err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(jsonBytes, ptr); err != nil {
-		return err
-	}
-	return nil
-}

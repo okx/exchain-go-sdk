@@ -10,8 +10,9 @@ import (
 
 const (
 	tokenDescLenLimit = 256
-
-	countDefault = 100
+	countDefault      = 100
+	perPageDefault    = 50
+	perPageMax        = 200
 )
 
 func CheckProduct(fromInfo keys.Info, passWd, product string) error {
@@ -42,7 +43,7 @@ func CheckDexAssets(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) er
 	return nil
 }
 
-// CheckQueryTokenInfo gives a quick validaty check for the input params
+// CheckQueryTokenInfo gives a quick validity check for the input params
 func CheckQueryTokenInfo(ownerAddr, symbol string) error {
 	if len(ownerAddr) == 0 && len(symbol) == 0 {
 		return errors.New("failed. empty input")
@@ -182,7 +183,7 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 	return nil
 }
 
-// CheckQueryTickersParams gives a quick validaty check for the input params of query tickers
+// CheckQueryTickersParams gives a quick validity check for the input params of query tickers
 func CheckQueryTickersParams(count []int) (countRet int, err error) {
 	if len(count) > 1 {
 		return countRet, errors.New("failed. invalid params input for tickers query")
@@ -192,11 +193,40 @@ func CheckQueryTickersParams(count []int) (countRet int, err error) {
 		countRet = countDefault
 	} else {
 		if count[0] < 0 {
-			return countRet, errors.New(`failed. 'count' is negative`)
+			return countRet, errors.New(`failed. "count" is negative`)
 		}
 		countRet = count[0]
 	}
 	return
+}
+
+// CheckQueryRecentTxRecordParams gives a quick validity check for the input params of query recent tx record
+func CheckQueryRecentTxRecordParams(product string, start, end, page, perPage int) (perPageRet int, err error) {
+	if len(product) == 0 {
+		return perPageRet, errors.New("failed. empty product")
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
+func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error) {
+	if start < 0 || end < 0 || page < 0 || perPage < 0 {
+		return perPageRet, errors.New(`failed. "start","end","page","perPage" must be positive`)
+	}
+
+	if start > end {
+		return perPageRet, errors.New(`failed. "start" isn't allowed to be larger than "end"`)
+	}
+
+	if perPage == 0 {
+		perPageRet = perPageDefault
+	} else if perPage > perPageMax {
+		perPageRet = perPageMax
+	} else {
+		perPageRet = perPage
+	}
+	return
+
 }
 
 // IsValidAccAddr gives a quick validity check for an address string

@@ -50,3 +50,28 @@ func (bc backendClient) QueryTickers(count ...int) (tickers []types.Ticker, err 
 
 	return
 }
+
+// QueryRecentTxRecord gets the specific product's record of recent transactions
+func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, perPage int) (record []types.MatchResult, err error) {
+	perPageNum, err := params.CheckQueryRecentTxRecordParams(product, start, end, page, perPage)
+	if err != nil {
+		return
+	}
+
+	mathcParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(mathcParams)
+	if err != nil {
+		return record, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := bc.Query(types.RecentTxRecordPath, jsonBytes)
+	if err != nil {
+		return record, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = utils.UnmarshalListResponse(res, &record); err != nil {
+		return record, utils.ErrFilterDataFromListResponse("recent tx record", err.Error())
+	}
+
+	return
+}

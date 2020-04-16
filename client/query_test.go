@@ -15,15 +15,6 @@ const (
 
 
 
-func TestGetRecentTxRecord(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	records, err := cli.GetRecentTxRecord("xxb_okb", 0, int(time.Now().Unix()), 0, 10)
-	assertNotEqual(t, err, nil)
-	for _, record := range records {
-		fmt.Println(record)
-	}
-}
-
 func TestGetOpenOrders(t *testing.T) {
 	cli := NewClient(rpcUrl)
 

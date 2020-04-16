@@ -38,4 +38,5 @@ type (
 	BookRes = order.BookRes
 	// backend
 	Ticker = backend.Ticker
+	MatchResult = backend.MatchResult
 )

@@ -15,4 +15,5 @@ type Backend interface {
 type BackendQuery interface {
 	QueryCandles(product string, granularity, size int) ([][]string, error)
 	QueryTickers(count ...int) ([]types.Ticker, error)
+	QueryRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error)
 }

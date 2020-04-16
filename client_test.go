@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 // just a temporary test, it will be removed later
@@ -480,5 +481,15 @@ func TestQueryTickers(t *testing.T) {
 	require.NoError(t, err)
 	for _, t := range tickers {
 		fmt.Println(t)
+	}
+}
+
+func TestQueryRecentTxRecord(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
+	client := NewClient(config)
+	record, err := client.Backend().QueryRecentTxRecord("xxb_okb", 0, int(time.Now().Unix()), 0, 10)
+	require.NoError(t, err)
+	for _, res := range record {
+		fmt.Println(res)
 	}
 }

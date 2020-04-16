@@ -75,6 +75,7 @@ func NewQueryTickerParams(product string, count int, sort bool) QueryTickerParam
 	}
 }
 
+// QueryMatchParams - structure of params to query tx record
 type QueryMatchParams struct {
 	Product string
 	Start   int64
@@ -83,6 +84,7 @@ type QueryMatchParams struct {
 	PerPage int
 }
 
+// NewQueryMatchParams creates a new instance of QueryMatchParams
 func NewQueryMatchParams(product string, start, end int64, page, perPage int) QueryMatchParams {
 	if page == 0 && perPage == 0 {
 		page = DefaultPage

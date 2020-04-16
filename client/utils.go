@@ -7,14 +7,7 @@ import (
 
 
 
-func checkParamsGetRecentTxRecord(product string, start, end, page, perPage int) (perPageRet int, err error) {
-	if product == "" {
-		return 0, errors.New("'product' is empty")
-	}
 
-	perPageRet, err = common.CheckParamsPaging(start, end, page, perPage)
-	return
-}
 
 func checkParamsGetOpenClosedOrders(addr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
 	if !common.IsValidAccaddr(addr) {

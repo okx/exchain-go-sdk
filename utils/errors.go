@@ -21,3 +21,8 @@ func ErrClientQuery(errMsg string) error {
 func ErrFilterDataFromBaseResponse(kind, errMsg string) error {
 	return fmt.Errorf("failed. filter %s data from base response error: %s", kind, errMsg)
 }
+
+// ErrFilterDataFromListResponse returns an error when it failed to filter data from backend list response
+func ErrFilterDataFromListResponse(kind, errMsg string) error {
+	return fmt.Errorf("failed. filter %s data from list response error: %s", kind, errMsg)
+}

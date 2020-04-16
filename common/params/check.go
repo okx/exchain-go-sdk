@@ -179,3 +179,12 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 
 	return nil
 }
+
+// IsValidAccAddr gives a quick validity check for an address string
+func IsValidAccAddr(addr string) bool {
+	if len(addr) != 46 || !strings.HasPrefix(addr, "okchain") {
+		fmt.Println("address inputed is not valid")
+		return false
+	}
+	return true
+}

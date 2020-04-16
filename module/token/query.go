@@ -6,6 +6,31 @@ import (
 	"github.com/okex/okchain-go-sdk/module/token/types"
 )
 
+// QueryAccountTokensInfo gets all the available tokens info of an account
+func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo types.AccountTokensInfo, err error) {
+	if !params.IsValidAccAddr(addrStr) {
+		return accTokensInfo, fmt.Errorf("err : invalid account address")
+	}
+
+	accountParams := params.NewQueryAccTokenParams("", "all")
+
+	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
+	if err != nil {
+		return accTokensInfo, fmt.Errorf("failded. AccTokenParam failed in json marshal : %s", err.Error())
+	}
+
+	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	if err != nil {
+		return accTokensInfo, fmt.Errorf("failed. ok client query error : %s", err.Error())
+	}
+
+	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
+		return types.AccountTokensInfo{}, fmt.Errorf("failed. unmarshal JSON err : %s", err.Error())
+	}
+	return
+}
+
+// QueryTokenInfo gets token info with a specific symbol or the owner address
 func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.Token, err error) {
 	if err = params.CheckQueryTokenInfo(ownerAddr, symbol); err != nil {
 		return

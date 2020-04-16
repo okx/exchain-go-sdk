@@ -21,9 +21,15 @@ var (
 )
 
 type (
+	TxResponse = sdk.TxResponse
+
 	Account = auth.Account
+
 	Validator = staking.Validator
 	DelegatorResp = staking.DelegatorResp
+
 	Token = token.Token
+	AccountTokensInfo = token.AccountTokensInfo
+
 	TokenPair = dex.TokenPair
 )

@@ -11,13 +11,6 @@ const (
 	perPageMax     = 200
 )
 
-func IsValidAccaddr(addr string) bool {
-	if len(addr) != 46 || !strings.HasPrefix(addr, "okchain") {
-		fmt.Println("address inputed is not valid")
-		return false
-	}
-	return true
-}
 
 func IsValidSide(side string) bool {
 	if "BUY" != side && "SELL" != side {

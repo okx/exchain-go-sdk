@@ -9,7 +9,6 @@ import (
 )
 
 const (
-	accountTokensInfoPath = "custom/token/accounts/"
 	depthbookInfoPath     = "custom/order/depthbook"
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
@@ -21,29 +20,6 @@ const (
 
 )
 
-func (cli *OKChainClient) GetTokensInfoByAddr(addr string) (types.AccountTokensInfo, error) {
-	if !common.IsValidAccaddr(addr) {
-		return types.AccountTokensInfo{}, fmt.Errorf("err : invalid account address")
-	}
-
-	accountParams := params.NewQueryAccTokenParams("", "all")
-
-	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
-	if err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("error : AccTokenParam failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(accountTokensInfoPath+addr, jsonBytes)
-	if err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var accTokensInfo types.AccountTokensInfo
-	if err = cli.cdc.UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
-	}
-	return accTokensInfo, nil
-}
 
 func (cli *OKChainClient) GetTokenInfoByAddr(addr, symbol string) (types.AccountTokensInfo, error) {
 	accountParams := params.NewQueryAccTokenParams(symbol, "partial")

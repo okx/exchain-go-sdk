@@ -18,20 +18,6 @@ const (
 
 
 
-func TestGetDealsInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-
-	product := "xxb_okb"
-	side := "BUY"
-	start, end := 1, int(time.Now().Unix())
-	page, perPage := 0, 10
-
-	dealsInfo, err := cli.GetDealsInfo(addr, product, side, start, end, page, perPage)
-	assertNotEqual(t, err, nil)
-	for _, deal := range dealsInfo {
-		fmt.Println(deal)
-	}
-}
 
 func TestGetTransactionsInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)

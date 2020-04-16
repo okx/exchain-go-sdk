@@ -59,8 +59,8 @@ func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, pe
 		return
 	}
 
-	mathcParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(mathcParams)
+	matchParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(matchParams)
 	if err != nil {
 		return record, utils.ErrMarshalJSON(err.Error())
 	}
@@ -86,8 +86,8 @@ func (bc backendClient) QueryOpenOrders(addrStr, product, side string, start, en
 	}
 
 	// field hideNoFill fixed by false
-	orderParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(orderParams)
+	ordersParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(ordersParams)
 	if err != nil {
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
@@ -113,8 +113,8 @@ func (bc backendClient) QueryClosedOrders(addrStr, product, side string, start, 
 	}
 
 	// field hideNoFill fixed by false
-	orderParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(orderParams)
+	ordersParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(ordersParams)
 	if err != nil {
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
@@ -126,6 +126,31 @@ func (bc backendClient) QueryClosedOrders(addrStr, product, side string, start, 
 
 	if err = utils.UnmarshalListResponse(res, &orders); err != nil {
 		return orders, utils.ErrFilterDataFromListResponse("closed orders", err.Error())
+	}
+
+	return
+}
+
+// QueryDeals gets the deals info of a specific account
+func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, page, perPage int) (deals []types.Deal, err error) {
+	perPageNum, err := params.CheckQueryOrdersParams(addrStr, product, side, start, end, page, perPage)
+	if err != nil {
+		return
+	}
+
+	dealsParams := params.NewQueryDealsParams(addrStr, product, int64(start), int64(end), page, perPageNum, side)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(dealsParams)
+	if err != nil {
+		return deals, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := bc.Query(types.DealsPath, jsonBytes)
+	if err != nil {
+		return deals, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = utils.UnmarshalListResponse(res, &deals); err != nil {
+		return deals, utils.ErrUnmarshalJSON(err.Error())
 	}
 
 	return

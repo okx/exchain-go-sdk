@@ -2,17 +2,7 @@ package types
 
 
 
-type Deal struct {
-	Timestamp   int64   `gorm:"index;" json:"timestamp"`
-	BlockHeight int64   `gorm:"PRIMARY_KEY;type:bigint" json:"block_height"`
-	OrderId     string  `gorm:"PRIMARY_KEY;type:varchar(30)" json:"order_id"`
-	Sender      string  `gorm:"index;type:varchar(80)" json:"sender"`
-	Product     string  `gorm:"index;type:varchar(20)" json:"product"`
-	Side        string  `gorm:"type:varchar(10)" json:"side"`
-	Price       float64 `gorm:"type:DOUBLE" json:"price"`
-	Quantity    float64 `gorm:"type:DOUBLE" json:"volume"`
-	Fee         string  `gorm:"type:varchar(20)" json:"fee"`
-}
+
 
 
 type Transaction struct {

@@ -9,6 +9,7 @@ const (
 	RecentTxRecordPath = "custom/backend/matches"
 	OpenOrdersPath     = "custom/backend/orders/open"
 	ClosedOrdersPath   = "custom/backend/orders/closed"
+	DealsPath          = "custom/backend/deals"
 )
 
 // Ticker - structure of ticker's detail data
@@ -77,4 +78,17 @@ type Order struct {
 	FilledAvgPrice string `json:"filled_avg_price"`
 	RemainQuantity string `json:"remain_quantity"`
 	Timestamp      int64  `json:"timestamp"`
+}
+
+// Deal - structure of deal query result
+type Deal struct {
+	Timestamp   int64   `json:"timestamp"`
+	BlockHeight int64   `json:"block_height"`
+	OrderId     string  `json:"order_id"`
+	Sender      string  `json:"sender"`
+	Product     string  `json:"product"`
+	Side        string  `json:"side"`
+	Price       float64 `json:"price"`
+	Quantity    float64 `json:"volume"`
+	Fee         string  `json:"fee"`
 }

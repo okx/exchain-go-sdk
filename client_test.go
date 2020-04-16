@@ -525,3 +525,19 @@ func TestQueryClosedOrders(t *testing.T) {
 		fmt.Println(order)
 	}
 }
+
+func TestQueryDeals(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
+	client := NewClient(config)
+
+	product := "xxb_okb"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	deals, err := client.Backend().QueryDeals(addr, product, side, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, deal := range deals {
+		fmt.Println(deal)
+	}
+}

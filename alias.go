@@ -40,4 +40,5 @@ type (
 	Ticker = backend.Ticker
 	MatchResult = backend.MatchResult
 	Order = backend.Order
+	Deal = backend.Deal
 )

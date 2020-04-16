@@ -8,11 +8,6 @@ import (
 
 
 
-
-func checkParamsGetDealsInfo(addr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
-	return checkParamsGetOpenClosedOrders(addr, product, side, start, end, page, perPage)
-}
-
 func checkParamsGetTransactionsInfo(addr string, type_, start, end, page, perPage int) (perPageRet int, err error) {
 	if !common.IsValidAccaddr(addr) {
 		return 0, errors.New("invalid address input")

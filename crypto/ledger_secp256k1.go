@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
 	"github.com/okex/okchain-go-sdk/crypto/btcsuite/btcd/btcec"
+	"github.com/pkg/errors"
 
 	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
 	"github.com/okex/okchain-go-sdk/types"

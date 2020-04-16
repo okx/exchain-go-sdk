@@ -61,12 +61,14 @@ func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesPara
 	}
 }
 
+// QueryTickerParams - structure of params to query tickers
 type QueryTickerParams struct {
 	Product string `json:"product"`
 	Count   int    `json:"count"`
 	Sort    bool   `json:"sort"`
 }
 
+// NewQueryTickerParams creates a new instance of QueryTickerParams
 func NewQueryTickerParams(product string, count int, sort bool) QueryTickerParams {
 	return QueryTickerParams{
 		product,
@@ -75,6 +77,7 @@ func NewQueryTickerParams(product string, count int, sort bool) QueryTickerParam
 	}
 }
 
+// QueryMatchParams - structure of params to query tx record
 type QueryMatchParams struct {
 	Product string
 	Start   int64
@@ -83,6 +86,7 @@ type QueryMatchParams struct {
 	PerPage int
 }
 
+// NewQueryMatchParams creates a new instance of QueryMatchParams
 func NewQueryMatchParams(product string, start, end int64, page, perPage int) QueryMatchParams {
 	if page == 0 && perPage == 0 {
 		page = DefaultPage

@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/backend"
 	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/staking"
@@ -35,4 +36,9 @@ type (
 	TokenPair = dex.TokenPair
 	// order
 	BookRes = order.BookRes
+	// backend
+	Ticker = backend.Ticker
+	MatchResult = backend.MatchResult
+	Order = backend.Order
+	Deal = backend.Deal
 )

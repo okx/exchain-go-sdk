@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 // just a temporary test, it will be removed later
@@ -18,6 +19,8 @@ const (
 	// target mnemonic
 	targetMnemonic = "pepper basket run install fury scheme journey worry tumble toddler swap change"
 	targetAddr     = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
+
+	backendAddr = "okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya"
 )
 
 // transact tx
@@ -236,7 +239,7 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 }
 
 func TestIssue(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -251,21 +254,21 @@ func TestIssue(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
-	res, err := client.Dex().List(fromInfo, passWd, "btc-216", "okt", "0.02", "my memo",
+	res, err := client.Dex().List(fromInfo, passWd, "btc-65f", "okt", "0.02", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(res)
 }
 
 func TestNewOrders(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -285,7 +288,7 @@ func TestNewOrders(t *testing.T) {
 	res, err := client.Order().NewOrders(
 		fromInfo,
 		passWd,
-		"btc-216_okt,btc-216_okt,btc-216_okt",
+		"btc-65f_okt,btc-65f_okt,btc-65f_okt",
 		"BUY,BUY,BUY",
 		"11.2,22.3,33.4",
 		"1.23,2.34,3.45",
@@ -342,7 +345,7 @@ func TestMultiSign(t *testing.T) {
 }
 
 func TestTransferOwnership(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	// 1.generate unsigned transfer-ownership tx file
 	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
@@ -428,11 +431,13 @@ func TestQueryTokenInfo(t *testing.T) {
 }
 
 func TestQueryProducts(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
 	client := NewClient(config)
 	tokenPairs, err := client.Dex().QueryProducts("", 1, 50)
 	require.NoError(t, err)
-	fmt.Println(tokenPairs)
+	for _, v := range tokenPairs {
+		fmt.Println(v)
+	}
 }
 
 func TestQueryAccountTokensInfo(t *testing.T) {
@@ -451,10 +456,105 @@ func TestQueryAccountTokenInfo(t *testing.T) {
 	fmt.Println(tokensInfo)
 }
 
-func TestGetDepthBook(t *testing.T) {
+func TestQueryDepthBook(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	tokensInfo, err := client.Order().QueryDepthBook("btc-216_okt")
 	require.NoError(t, err)
 	fmt.Println(tokensInfo)
+}
+
+// need test
+
+func TestQueryCandles(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+	candles, err := client.Backend().QueryCandles("tbtc-44f_tusdk-0cd", 60, 100)
+	require.NoError(t, err)
+	for _, line := range candles {
+		fmt.Println(line)
+	}
+}
+
+func TestQueryTickers(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+	tickers, err := client.Backend().QueryTickers(10)
+	require.NoError(t, err)
+	for _, t := range tickers {
+		fmt.Println(t)
+	}
+}
+
+func TestQueryRecentTxRecord(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+	record, err := client.Backend().QueryRecentTxRecord("tbtc-44f_tusdk-0cd", 0, int(time.Now().Unix()), 0, 10)
+	require.NoError(t, err)
+	for _, res := range record {
+		fmt.Println(res)
+	}
+}
+
+func TestQueryOpenOrders(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+
+	product := "tbtc-44f_tusdk-0cd"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	openOrdersList, err := client.Backend().QueryOpenOrders(backendAddr, product, side, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, order := range openOrdersList {
+		fmt.Println(order)
+	}
+}
+
+func TestQueryClosedOrders(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+
+	product := "tbtc-44f_tusdk-0cd"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	closedOrdersList, err := client.Backend().QueryClosedOrders(backendAddr, product, side, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, order := range closedOrdersList {
+		fmt.Println(order)
+	}
+}
+
+func TestQueryDeals(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+
+	product := "tbtc-44f_tusdk-0cd"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	deals, err := client.Backend().QueryDeals(backendAddr, product, side, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, deal := range deals {
+		fmt.Println(deal)
+	}
+}
+
+func TestQueryTransactions(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	client := NewClient(config)
+
+	typeCode := 0
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	txs, err := client.Backend().QueryTransactions(backendAddr, typeCode, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, tx := range txs {
+		fmt.Println(tx)
+	}
 }

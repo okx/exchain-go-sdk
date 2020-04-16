@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/module"
 	"github.com/okex/okchain-go-sdk/module/auth"
+	"github.com/okex/okchain-go-sdk/module/backend"
 	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/slashing"
@@ -31,11 +32,12 @@ func NewClient(config types.ClientConfig) Client {
 
 	pClient.registerModule(
 		auth.NewAuthClient(pBaseClient),
+		backend.NewBackendClient(pBaseClient),
+		dex.NewDexClient(pBaseClient),
+		order.NewOrderClient(pBaseClient),
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
-		order.NewOrderClient(pBaseClient),
-		dex.NewDexClient(pBaseClient),
 	)
 
 	return *pClient
@@ -58,6 +60,15 @@ func (cli *Client) registerModule(modules ...types.Module) {
 func (cli *Client) Auth() exposed.Auth {
 	return cli.modules[auth.ModuleName].(exposed.Auth)
 }
+func (cli *Client) Backend() exposed.Backend {
+	return cli.modules[backend.ModuleName].(exposed.Backend)
+}
+func (cli *Client) Dex() exposed.Dex {
+	return cli.modules[dex.ModuleName].(exposed.Dex)
+}
+func (cli *Client) Order() exposed.Order {
+	return cli.modules[order.ModuleName].(exposed.Order)
+}
 func (cli *Client) Staking() exposed.Staking {
 	return cli.modules[staking.ModuleName].(exposed.Staking)
 }
@@ -66,10 +77,4 @@ func (cli *Client) Slashing() exposed.Slashing {
 }
 func (cli *Client) Token() exposed.Token {
 	return cli.modules[token.ModuleName].(exposed.Token)
-}
-func (cli *Client) Order() exposed.Order {
-	return cli.modules[order.ModuleName].(exposed.Order)
-}
-func (cli *Client) Dex() exposed.Dex {
-	return cli.modules[dex.ModuleName].(exposed.Dex)
 }

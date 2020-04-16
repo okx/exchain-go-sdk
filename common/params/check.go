@@ -10,6 +10,9 @@ import (
 
 const (
 	tokenDescLenLimit = 256
+	countDefault      = 100
+	perPageDefault    = 50
+	perPageMax        = 200
 )
 
 func CheckProduct(fromInfo keys.Info, passWd, product string) error {
@@ -40,7 +43,7 @@ func CheckDexAssets(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) er
 	return nil
 }
 
-// CheckQueryTokenInfo gives a quick validaty check for the input params
+// CheckQueryTokenInfo gives a quick validity check for the input params
 func CheckQueryTokenInfo(ownerAddr, symbol string) error {
 	if len(ownerAddr) == 0 && len(symbol) == 0 {
 		return errors.New("failed. empty input")
@@ -180,10 +183,95 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 	return nil
 }
 
+// CheckQueryTickersParams gives a quick validity check for the input params of query tickers
+func CheckQueryTickersParams(count []int) (countRet int, err error) {
+	if len(count) > 1 {
+		return countRet, errors.New("failed. invalid params input for tickers query")
+	}
+
+	if len(count) == 0 {
+		countRet = countDefault
+	} else {
+		if count[0] < 0 {
+			return countRet, errors.New(`failed. "count" is negative`)
+		}
+		countRet = count[0]
+	}
+	return
+}
+
+// CheckQueryRecentTxRecordParams gives a quick validity check for the input params of query recent tx record
+func CheckQueryRecentTxRecordParams(product string, start, end, page, perPage int) (perPageRet int, err error) {
+	if len(product) == 0 {
+		return perPageRet, errors.New("failed. empty product")
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
+// CheckQueryOrdersParams gives a quick validity check for the input params of query orders
+func CheckQueryOrdersParams(addrStr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
+	if err = IsValidAccAddr(addrStr); err != nil {
+		return
+	}
+
+	if len(product) == 0 {
+		return perPageRet, errors.New("failed. empty product")
+	}
+
+	if !isValidSide(side) {
+		return perPageRet, errors.New(`failed. "side" must only be "BUY" or "SELL"`)
+
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
+// CheckQueryTransactionsParams gives a quick validity check for the input params of query transactions
+func CheckQueryTransactionsParams(addrStr string, typeCode, start, end, page, perPage int) (perPageRet int, err error) {
+	if err = IsValidAccAddr(addrStr); err != nil {
+		return
+	}
+
+	if typeCode < 0 {
+		return perPageRet, errors.New("failed. type code isn't allowed to be negative")
+
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
 // IsValidAccAddr gives a quick validity check for an address string
 func IsValidAccAddr(addrStr string) error {
 	if len(addrStr) != 46 || !strings.HasPrefix(addrStr, "okchain") {
 		return fmt.Errorf("failed. invalid account address: %s", addrStr)
 	}
 	return nil
+}
+
+func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error) {
+	if start < 0 || end < 0 || page < 0 || perPage < 0 {
+		return perPageRet, errors.New(`failed. "start","end","page","perPage" must be positive`)
+	}
+
+	if start > end {
+		return perPageRet, errors.New(`failed. "start" isn't allowed to be larger than "end"`)
+	}
+
+	if perPage == 0 {
+		perPageRet = perPageDefault
+	} else if perPage > perPageMax {
+		perPageRet = perPageMax
+	} else {
+		perPageRet = perPage
+	}
+	return
+
+}
+
+func isValidSide(side string) bool {
+	if !(side == "BUY" || side == "SELL") {
+		return false
+	}
+	return true
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
+	"github.com/okex/okchain-go-sdk/module/tendermint"
 	"github.com/okex/okchain-go-sdk/module/token"
 	"github.com/okex/okchain-go-sdk/types"
 )
@@ -38,6 +39,7 @@ func NewClient(config types.ClientConfig) Client {
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
+		tendermint.NewTendermintClient(pBaseClient),
 	)
 
 	return *pClient

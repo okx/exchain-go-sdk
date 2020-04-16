@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/module/staking/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // QueryValidators gets all the validators info
@@ -59,7 +60,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 
 	resp, err := sc.QueryStore(types.GetDelegatorKey(delAddr), ModuleName, "key")
 	if err != nil {
-		return delResp, fmt.Errorf("ok client query error : %s", err.Error())
+		return delResp, utils.ErrClientQuery(err.Error())
 	}
 
 	delegator, undelegation := types.NewDelegator(delAddr), types.DefaultUndelegation()
@@ -70,7 +71,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 	// query for the undelegation info
 	jsonBytes, err := sc.GetCodec().MarshalJSON(params.NewQueryDelegatorParams(delAddr))
 	if err != nil {
-		return delResp, fmt.Errorf("error : QueryDelegatorParams failed in json marshal : %s", err.Error())
+		return delResp, utils.ErrMarshalJSON(err.Error())
 	}
 
 	res, err := sc.Query(types.UnbondDelegationPath, jsonBytes)

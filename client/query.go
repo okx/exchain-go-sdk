@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	depthbookInfoPath     = "custom/order/depthbook"
 	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
 	recentTxRecordPath    = "custom/backend/matches"
@@ -21,25 +20,6 @@ const (
 
 
 
-func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error) {
-	params := params.NewQueryDepthBookParams(product, 200)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return types.BookRes{}, fmt.Errorf("error : QueryDepthBookParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(depthbookInfoPath, jsonBytes)
-	if err != nil {
-		return types.BookRes{}, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var depthbook types.BookRes
-	if err = cli.cdc.UnmarshalJSON(res, &depthbook); err != nil {
-		return types.BookRes{}, fmt.Errorf("err : %s", err.Error())
-	}
-
-	return depthbook, nil
-}
 
 func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) ([][]string, error) {
 	params := params.NewQueryKlinesParams(product, granularity, size)

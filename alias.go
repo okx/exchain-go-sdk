@@ -3,6 +3,7 @@ package sdk
 import (
 	"github.com/okex/okchain-go-sdk/module/auth"
 	"github.com/okex/okchain-go-sdk/module/dex"
+	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/module/token"
 	sdk "github.com/okex/okchain-go-sdk/types"
@@ -22,14 +23,16 @@ var (
 
 type (
 	TxResponse = sdk.TxResponse
-
+	// auth
 	Account = auth.Account
-
+	// staking
 	Validator = staking.Validator
 	DelegatorResp = staking.DelegatorResp
-
+	// token
 	Token = token.Token
 	AccountTokensInfo = token.AccountTokensInfo
-
+	// dex
 	TokenPair = dex.TokenPair
+	// order
+	BookRes = order.BookRes
 )

@@ -1,14 +1,6 @@
 package types
 
-type BookRes struct {
-	Asks []BookResItem `json:"asks"`
-	Bids []BookResItem `json:"bids"`
-}
 
-type BookResItem struct {
-	Price    string `json:"price"`
-	Quantity string `json:"quantity"`
-}
 
 type Tickers []Ticker
 

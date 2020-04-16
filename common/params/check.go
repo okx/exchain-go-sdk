@@ -10,6 +10,8 @@ import (
 
 const (
 	tokenDescLenLimit = 256
+
+	countDefault = 100
 )
 
 func CheckProduct(fromInfo keys.Info, passWd, product string) error {
@@ -178,6 +180,23 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 	}
 
 	return nil
+}
+
+// CheckQueryTickersParams gives a quick validaty check for the input params of query tickers
+func CheckQueryTickersParams(count []int) (countRet int, err error) {
+	if len(count) > 1 {
+		return countRet, errors.New("failed. invalid params input for tickers query")
+	}
+
+	if len(count) == 0 {
+		countRet = countDefault
+	} else {
+		if count[0] < 0 {
+			return countRet, errors.New(`failed. 'count' is negative`)
+		}
+		countRet = count[0]
+	}
+	return
 }
 
 // IsValidAccAddr gives a quick validity check for an address string

@@ -461,12 +461,24 @@ func TestQueryDepthBook(t *testing.T) {
 	fmt.Println(tokensInfo)
 }
 
+// need test
+
 func TestQueryCandles(t *testing.T) {
 	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
 	client := NewClient(config)
-	candles, err := client.Backend().QueryCandles("btc-65f_okt", 60, 100)
+	candles, err := client.Backend().QueryCandles("eox-8d4_okt", 60, 100)
 	require.NoError(t, err)
 	for _, line := range candles {
 		fmt.Println(line)
+	}
+}
+
+func TestQueryTickers(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
+	client := NewClient(config)
+	tickers, err := client.Backend().QueryTickers(10)
+	require.NoError(t, err)
+	for _, t := range tickers {
+		fmt.Println(t)
 	}
 }

@@ -6,3 +6,7 @@ import "github.com/okex/okchain-go-sdk/module/backend/types"
 const (
 	ModuleName = types.ModuleName
 )
+
+type (
+	Ticker = types.Ticker
+)

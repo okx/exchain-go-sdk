@@ -13,14 +13,7 @@ const (
 
 
 
-func TestGetTickersInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	tickers, err := cli.GetTickersInfo(10)
-	assertNotEqual(t, err, nil)
-	for _, ticker := range tickers {
-		fmt.Println(ticker)
-	}
-}
+
 
 func TestGetRecentTxRecord(t *testing.T) {
 	cli := NewClient(rpcUrl)

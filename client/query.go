@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	tickersInfoPath       = "custom/backend/tickers"
 	recentTxRecordPath    = "custom/backend/matches"
 	openOrdersPath        = "custom/backend/orders/open"
 	closedOrdersPath      = "custom/backend/orders/closed"
@@ -17,31 +16,6 @@ const (
 
 )
 
-
-func (cli *OKChainClient) GetTickersInfo(count ...int) (types.Tickers, error) {
-	countTmp, err := checkParamsGetTickersInfo(count)
-	if err != nil {
-		return nil, err
-	}
-
-	params := params.NewQueryTickerParams("", countTmp, true)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return nil, fmt.Errorf("error : QueryTickerParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(tickersInfoPath, jsonBytes)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var tickers types.Tickers
-	if err = codec.GetDataFromBaseResponse(res, &tickers); err != nil {
-		return nil, fmt.Errorf("tickers unmarshaled failed from BaseResponse : %s", err.Error())
-	}
-
-	return tickers, nil
-}
 
 func (cli *OKChainClient) GetRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error) {
 	perPageTmp, err := checkParamsGetRecentTxRecord(product, start, end, page, perPage)

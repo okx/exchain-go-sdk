@@ -1,6 +1,7 @@
 package exposed
 
 import (
+	"github.com/okex/okchain-go-sdk/module/backend/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
@@ -13,4 +14,5 @@ type Backend interface {
 // BackendQuery shows the expected query behavior for inner backend client
 type BackendQuery interface {
 	QueryCandles(product string, granularity, size int) ([][]string, error)
+	QueryTickers(count ...int) ([]types.Ticker, error)
 }

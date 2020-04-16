@@ -39,4 +39,5 @@ type (
 	// backend
 	Ticker = backend.Ticker
 	MatchResult = backend.MatchResult
+	Order = backend.Order
 )

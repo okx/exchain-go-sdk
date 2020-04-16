@@ -7,6 +7,7 @@ const (
 	CandlesPath        = "custom/backend/candles"
 	TickersPath        = "custom/backend/tickers"
 	RecentTxRecordPath = "custom/backend/matches"
+	OpenOrdersPath     = "custom/backend/orders/open"
 )
 
 // Ticker - structure of ticker's detail data
@@ -60,4 +61,19 @@ type ListResponse struct {
 	Msg       string      `json:"msg"`
 	DetailMsg string      `json:"detail_msg"`
 	Data      ListDataRes `json:"data"`
+}
+
+// Order - structure of order query result
+type Order struct {
+	TxHash         string `json:"txhash"`
+	OrderId        string `json:"order_id"`
+	Sender         string `json:"sender"`
+	Product        string `json:"product"`
+	Side           string `json:"side"`
+	Price          string `json:"price"`
+	Quantity       string `json:"quantity"`
+	Status         int64  `json:"status"`
+	FilledAvgPrice string `json:"filled_avg_price"`
+	RemainQuantity string `json:"remain_quantity"`
+	Timestamp      int64  `json:"timestamp"`
 }

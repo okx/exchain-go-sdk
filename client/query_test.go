@@ -15,20 +15,7 @@ const (
 
 
 
-func TestGetOpenOrders(t *testing.T) {
-	cli := NewClient(rpcUrl)
 
-	product := "xxb_okb"
-	side := "BUY"
-	start, end := 1, int(time.Now().Unix())
-	page, perPage := 0, 10
-
-	openOrdersList, err := cli.GetOpenOrders(addr, product, side, start, end, page, perPage)
-	assertNotEqual(t, err, nil)
-	for _, order := range openOrdersList {
-		fmt.Println(order)
-	}
-}
 
 func TestGetClosedOrders(t *testing.T) {
 	cli := NewClient(rpcUrl)

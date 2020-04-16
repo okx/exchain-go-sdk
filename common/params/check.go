@@ -209,6 +209,32 @@ func CheckQueryRecentTxRecordParams(product string, start, end, page, perPage in
 	return checkParamsPaging(start, end, page, perPage)
 }
 
+// CheckQueryOrdersParams gives a quick validity check for the input params of query orders
+func CheckQueryOrdersParams(addrStr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
+	if err = IsValidAccAddr(addrStr); err != nil {
+		return
+	}
+
+	if len(product) == 0 {
+		return perPageRet, errors.New("failed. empty product")
+	}
+
+	if !isValidSide(side) {
+		return perPageRet, errors.New(`failed. "side" must only be "BUY" or "SELL"`)
+
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
+// IsValidAccAddr gives a quick validity check for an address string
+func IsValidAccAddr(addrStr string) error {
+	if len(addrStr) != 46 || !strings.HasPrefix(addrStr, "okchain") {
+		return fmt.Errorf("failed. invalid account address: %s", addrStr)
+	}
+	return nil
+}
+
 func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error) {
 	if start < 0 || end < 0 || page < 0 || perPage < 0 {
 		return perPageRet, errors.New(`failed. "start","end","page","perPage" must be positive`)
@@ -229,10 +255,9 @@ func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error
 
 }
 
-// IsValidAccAddr gives a quick validity check for an address string
-func IsValidAccAddr(addrStr string) error {
-	if len(addrStr) != 46 || !strings.HasPrefix(addrStr, "okchain") {
-		return fmt.Errorf("failed. invalid account address: %s", addrStr)
+func isValidSide(side string) bool {
+	if !(side == "BUY" || side == "SELL") {
+		return false
 	}
-	return nil
+	return true
 }

@@ -9,25 +9,6 @@ import (
 
 
 
-func checkParamsGetOpenClosedOrders(addr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
-	if !common.IsValidAccaddr(addr) {
-		return 0, errors.New("invalid address input")
-	}
-
-	if product == "" {
-		return 0, errors.New("'product' is empty")
-	}
-
-	if !common.IsValidSide(side) {
-		return 0, errors.New("'side' can only be 'BUY' or 'SELL'")
-
-	}
-
-	perPageRet, err = common.CheckParamsPaging(start, end, page, perPage)
-	return
-
-}
-
 func checkParamsGetDealsInfo(addr, product, side string, start, end, page, perPage int) (perPageRet int, err error) {
 	return checkParamsGetOpenClosedOrders(addr, product, side, start, end, page, perPage)
 }

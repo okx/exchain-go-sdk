@@ -10,4 +10,5 @@ const (
 type (
 	Ticker = types.Ticker
 	MatchResult = types.MatchResult
+	Order = types.Order
 )

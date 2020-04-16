@@ -493,3 +493,19 @@ func TestQueryRecentTxRecord(t *testing.T) {
 		fmt.Println(res)
 	}
 }
+
+func TestQueryOpenOrders(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
+	client := NewClient(config)
+
+	product := "xxb_okb"
+	side := "BUY"
+	start, end := 1, int(time.Now().Unix())
+	page, perPage := 0, 10
+
+	openOrdersList, err := client.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
+	require.NoError(t, err)
+	for _, order := range openOrdersList {
+		fmt.Println(order)
+	}
+}

@@ -6,7 +6,7 @@ import (
 	bkdtypes "github.com/okex/okchain-go-sdk/module/backend/types"
 )
 
-// UnmarshalListResponse unmarshals the list response from bytes data
+// UnmarshalListResponse unmarshals the list response from data bytes
 func UnmarshalListResponse(bz []byte, ptr interface{}) error {
 	var lr bkdtypes.ListResponse
 	if err := json.Unmarshal(bz, &lr); err != nil {

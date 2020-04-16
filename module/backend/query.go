@@ -52,7 +52,8 @@ func (bc backendClient) QueryTickers(count ...int) (tickers []types.Ticker, err 
 }
 
 // QueryRecentTxRecord gets the specific product's record of recent transactions
-func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, perPage int) (record []types.MatchResult, err error) {
+func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, perPage int) (record []types.MatchResult,
+	err error) {
 	perPageNum, err := params.CheckQueryRecentTxRecordParams(product, start, end, page, perPage)
 	if err != nil {
 		return
@@ -71,6 +72,33 @@ func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, pe
 
 	if err = utils.UnmarshalListResponse(res, &record); err != nil {
 		return record, utils.ErrFilterDataFromListResponse("recent tx record", err.Error())
+	}
+
+	return
+}
+
+// QueryOpenOrders gets the open orders of a specific account
+func (bc backendClient) QueryOpenOrders(addrStr, product, side string, start, end, page, perPage int) (orders []types.Order,
+	err error) {
+	perPageNum, err := params.CheckQueryOrdersParams(addrStr, product, side, start, end, page, perPage)
+	if err != nil {
+		return
+	}
+
+	// field hideNoFill fixed by false
+	orderParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(orderParams)
+	if err != nil {
+		return orders, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := bc.Query(types.OpenOrdersPath, jsonBytes)
+	if err != nil {
+		return orders, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = utils.UnmarshalListResponse(res, &orders); err != nil {
+		return orders, utils.ErrFilterDataFromListResponse("recent tx record", err.Error())
 	}
 
 	return

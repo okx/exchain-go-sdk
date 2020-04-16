@@ -26,8 +26,6 @@ func New() *Codec {
 }
 
 func goSDKRegisterAmino(cdc *amino.Codec) {
-	//cdc.RegisterInterface((*types.Account)(nil), nil)
-	//cdc.RegisterConcrete(&types.BaseAccount{}, "cosmos-sdk/Account", nil)
 	cdc.RegisterInterface((*types.Proposal)(nil), nil)
 	cdc.RegisterConcrete(&types.TextProposal{}, "okchain/gov/TextProposal", nil)
 	cdc.RegisterConcrete(&types.DexListProposal{}, "okchain/gov/DexListProposal", nil)

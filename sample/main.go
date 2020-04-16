@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	// TODO: link to mainnet of OKChain later
 	rpcUrl = "tcp://127.0.0.1:26657"
 	// user's name
 	name = "alice"

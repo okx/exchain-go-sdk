@@ -1,8 +1,8 @@
 package dex
 
 import (
-	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
+	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/okex/okchain-go-sdk/utils"
 )
 

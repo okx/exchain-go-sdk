@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-	params2 "github.com/okex/okchain-go-sdk/common/params"
 	sdktypes "github.com/okex/okchain-go-sdk/types"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
@@ -43,10 +42,10 @@ func (cli *OKChainClient) QueryCurrentValidators() (sdktypes.ResultValidatorsOut
 }
 
 func (cli *OKChainClient) QueryProposals() (sdktypes.Proposals, error) {
-	var proposalStatus params2.ProposalStatus
+	var proposalStatus sdktypes.ProposalStatus
 	var voterAddr, depositorAddr sdktypes.AccAddress
 	var numLimit uint64
-	params := params2.NewQueryProposalsParams(proposalStatus, numLimit, voterAddr, depositorAddr)
+	params := sdktypes.NewQueryProposalsParams(proposalStatus, numLimit, voterAddr, depositorAddr)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryProposalsParams failed in json marshal : %s", err.Error())
@@ -64,7 +63,7 @@ func (cli *OKChainClient) QueryProposals() (sdktypes.Proposals, error) {
 }
 
 func (cli *OKChainClient) QueryProposalByID(proposalID uint64) (sdktypes.Proposal, error) {
-	params := params2.NewQueryProposalParams(proposalID)
+	params := sdktypes.NewQueryProposalParams(proposalID)
 	jsonBytes, err := cli.cdc.MarshalJSON(params)
 	if err != nil {
 		return nil, fmt.Errorf("error : QueryProposalParams failed in json marshal : %s", err.Error())

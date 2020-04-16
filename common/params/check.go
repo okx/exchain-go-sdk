@@ -1,8 +1,8 @@
 package params
 
 import (
+	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"strings"

@@ -2,9 +2,9 @@ package utils
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
-	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/cosmos/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"io/ioutil"

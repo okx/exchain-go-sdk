@@ -2,13 +2,14 @@ package utils
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
-	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/cosmos/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
 	"github.com/okex/okchain-go-sdk/types/tx"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"log"
 )
 
 const (
@@ -17,92 +18,90 @@ const (
 	defaultKeyDBName        = "keys"
 )
 
-func CreateAccount(name, passWd string) (keys.Info, string, error) {
+// CreateAccount creates a random key info with the given name and password
+func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error) {
 	if len(name) == 0 {
-		name = "OKer"
-		fmt.Println("Default name : \"OKer\"")
+		name = "alice"
+		log.Println("Default name : \"OKer\"")
 	}
 
 	if len(passWd) == 0 {
 		passWd = "12345678"
-		fmt.Println("Default passWd : \"12345678\"")
+		log.Println("Default passWd : \"12345678\"")
 	}
 
-	var entropySeed []byte
-	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
+	mnemo, err = GenerateMnemonic()
 	if err != nil {
-		return nil, "", fmt.Errorf("bip39.NewEntropy err : %s", err.Error())
+		return
 	}
 
-	mnemo, err := bip39.NewMnemonic(entropySeed[:])
+	info, err = tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
 	if err != nil {
-		return nil, "", fmt.Errorf("bip39.NewMnemonic err : %s", err.Error())
+		return info, mnemo, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}
 
-	info, err := tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
-	if err != nil {
-		return nil, "", fmt.Errorf("Kb.CreateAccount err : %s", err.Error())
-	}
-
-	return info, mnemo, nil
+	return
 
 }
 
-func CreateAccountWithMnemo(mnemo, name, passWd string) (keys.Info, string, error) {
-	if len(mnemo) == 0 {
-		return nil, "", errors.New("err : no mnemo input")
+// CreateAccount creates the key info with the given mnemonic, name and password
+func CreateAccountWithMnemo(mnemonic, name, passWd string) (info keys.Info, mnemo string, err error) {
+	if len(mnemonic) == 0 {
+		return info, mnemo, errors.New("failed. no mnemonic input")
 	}
 
 	if len(name) == 0 {
-		name = "OKer"
-		fmt.Println("Default name : \"OKer\"")
+		name = "alice"
+		log.Println("Default name : \"alice\"")
 	}
 
 	if len(passWd) == 0 {
 		passWd = "12345678"
-		fmt.Println("Default passWd : \"12345678\"")
+		log.Println("Default passWd : \"12345678\"")
 	}
 
-	if !bip39.IsMnemonicValid(mnemo) {
-		return nil, "", errors.New("err : mnemonic is not valid")
+	if !bip39.IsMnemonicValid(mnemonic) {
+		return info, mnemo, errors.New("failed. mnemonic is invalid")
 	}
 
-	info, err := tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
+	info, err = tx.Kb.CreateAccount(name, mnemonic, "", passWd, 0, 0)
 	if err != nil {
-		return nil, "", fmt.Errorf("Kb.CreateAccount err : %s", err.Error())
+		return info, mnemonic, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}
 
-	return info, mnemo, nil
+	return info, mnemonic, err
 }
 
-func CreateAccountWithPrivateKey(privateKey, name, passWd string) (keys.Info, error) {
+// CreateAccountWithPrivateKey creates the key info with the given privateKey string, name and password
+func CreateAccountWithPrivateKey(privateKey, name, passWd string) (info keys.Info, err error) {
 	if len(privateKey) == 0 {
-		return nil, errors.New("Empty privateKey")
+		return info, errors.New("failed. empty privateKey")
 	}
 	derivedPrivSlice, err := hex.DecodeString(privateKey)
 	if err != nil {
-		return nil, err
+		return
 	}
 	derivedPriv, err := sliceToArray(derivedPrivSlice)
 	if err != nil {
-		return nil, err
+		return
 	}
 	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
 
 	privateKeyArmor := mintkey.EncryptArmorPrivKey(priv, passWd)
-	return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), nil
+	return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), err
 }
 
-func GenerateMnemonic() (string, error) {
-	var entropySeed []byte
+// GenerateMnemonic creates a random mnemonic
+func GenerateMnemonic() (mnemo string, err error) {
 	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
 	if err != nil {
-		return "", fmt.Errorf("bip39.NewEntropy err : %s", err.Error())
+		return mnemo, fmt.Errorf("failed. bip39.NewEntropy err : %s", err.Error())
 	}
 
-	mnemo, err := bip39.NewMnemonic(entropySeed[:])
+	mnemo, err = bip39.NewMnemonic(entropySeed[:])
 	if err != nil {
-		return "", fmt.Errorf("bip39.NewMnemonic err : %s", err.Error())
+		return mnemo, fmt.Errorf("failed. bip39.NewMnemonic err : %s", err.Error())
 	}
-	return mnemo, nil
+
+	return
 }

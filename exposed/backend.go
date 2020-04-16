@@ -17,4 +17,5 @@ type BackendQuery interface {
 	QueryTickers(count ...int) ([]types.Ticker, error)
 	QueryRecentTxRecord(product string, start, end, page, perPage int) ([]types.MatchResult, error)
 	QueryOpenOrders(addrStr, product, side string, start, end, page, perPage int) ([]types.Order, error)
+	QueryClosedOrders(addrStr, product, side string, start, end, page, perPage int) ([]types.Order, error)
 }

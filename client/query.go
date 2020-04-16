@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	closedOrdersPath      = "custom/backend/orders/closed"
 	dealsInfoPath         = "custom/backend/deals"
 	transactionsInfoPath  = "custom/backend/txs"
 
@@ -16,32 +15,6 @@ const (
 
 
 
-
-func (cli *OKChainClient) GetClosedOrders(addr, product, side string, start, end, page, perPage int) ([]types.Order, error) {
-	perPageTmp, err := checkParamsGetOpenClosedOrders(addr, product, side, start, end, page, perPage)
-	if err != nil {
-		return nil, err
-	}
-
-	// field hideNoFill fixed by false
-	params := params.NewQueryOrderListParams(addr, product, side, page, perPageTmp, int64(start), int64(end), false)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return nil, fmt.Errorf("error : QueryOrderListParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(closedOrdersPath, jsonBytes)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-	var closedOrdersList []types.Order
-	if err = codec.UnmarshalListResponse(res, &closedOrdersList); err != nil {
-		return nil, fmt.Errorf("closed orders list unmarshaled failed from BaseResponse : %s", err.Error())
-	}
-
-	return closedOrdersList, nil
-
-}
 
 func (cli *OKChainClient) GetDealsInfo(addr, product, side string, start, end, page, perPage int) ([]types.Deal, error) {
 	perPageTmp, err := checkParamsGetDealsInfo(addr, product, side, start, end, page, perPage)

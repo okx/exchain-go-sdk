@@ -8,6 +8,7 @@ const (
 	TickersPath        = "custom/backend/tickers"
 	RecentTxRecordPath = "custom/backend/matches"
 	OpenOrdersPath     = "custom/backend/orders/open"
+	ClosedOrdersPath   = "custom/backend/orders/closed"
 )
 
 // Ticker - structure of ticker's detail data

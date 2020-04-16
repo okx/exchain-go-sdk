@@ -6,10 +6,34 @@ import (
 	"github.com/okex/okchain-go-sdk/module/token/types"
 )
 
+// QueryAccountTokenInfo gets a specific available token info of an account
+func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (accTokensInfo types.AccountTokensInfo, err error) {
+	if !params.IsValidAccAddr(addrStr) {
+		return accTokensInfo, fmt.Errorf("failed. invalid account address")
+	}
+
+	accountParams := params.NewQueryAccTokenParams(symbol, "partial")
+
+	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
+	if err != nil {
+		return accTokensInfo, fmt.Errorf("failed. AccTokenParam failed in JSON marshal : %s", err.Error())
+	}
+
+	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	if err != nil {
+		return accTokensInfo, fmt.Errorf("failed. ok client query error : %s", err.Error())
+	}
+
+	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
+		return accTokensInfo, fmt.Errorf("failed. unmarshal JSON error : %s", err.Error())
+	}
+	return
+}
+
 // QueryAccountTokensInfo gets all the available tokens info of an account
 func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo types.AccountTokensInfo, err error) {
 	if !params.IsValidAccAddr(addrStr) {
-		return accTokensInfo, fmt.Errorf("err : invalid account address")
+		return accTokensInfo, fmt.Errorf("failed. invalid account address")
 	}
 
 	accountParams := params.NewQueryAccTokenParams("", "all")
@@ -25,7 +49,7 @@ func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo type
 	}
 
 	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("failed. unmarshal JSON err : %s", err.Error())
+		return accTokensInfo, fmt.Errorf("failed. unmarshal JSON error : %s", err.Error())
 	}
 	return
 }

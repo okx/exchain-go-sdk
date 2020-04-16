@@ -12,22 +12,6 @@ const (
 
 
 
-func TestGetTokenInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	tokenInfo, err := cli.GetTokenInfo("okt")
-	assertNotEqual(t, err, nil)
-	fmt.Println(tokenInfo)
-}
-
-
-func TestGetCandlesInfo(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	candles, err := cli.GetCandlesInfo("xxb_okt", 60, 100)
-	assertNotEqual(t, err, nil)
-	for _, line := range candles {
-		fmt.Println(line)
-	}
-}
 
 func TestGetTickersInfo(t *testing.T) {
 	cli := NewClient(rpcUrl)
@@ -113,8 +97,3 @@ func assertNotEqual(t *testing.T, a, b interface{}) {
 	}
 }
 
-func assertEqual(t *testing.T, a, b interface{}) {
-	if a == b {
-		t.Errorf("test failed: %s", a)
-	}
-}

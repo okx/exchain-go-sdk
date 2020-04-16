@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	candlesInfoPath       = "custom/backend/candles"
 	tickersInfoPath       = "custom/backend/tickers"
 	recentTxRecordPath    = "custom/backend/matches"
 	openOrdersPath        = "custom/backend/orders/open"
@@ -18,28 +17,6 @@ const (
 
 )
 
-
-
-
-func (cli *OKChainClient) GetCandlesInfo(product string, granularity, size int) ([][]string, error) {
-	params := params.NewQueryKlinesParams(product, granularity, size)
-	jsonBytes, err := cli.cdc.MarshalJSON(params)
-	if err != nil {
-		return nil, fmt.Errorf("error : QueryKlinesParams failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(candlesInfoPath, jsonBytes)
-	if err != nil {
-		return nil, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var candles [][]string
-	if err = codec.GetDataFromBaseResponse(res, &candles); err != nil {
-		return nil, fmt.Errorf("candles unmarshaled failed from BaseResponse : %s", err.Error())
-	}
-
-	return candles, nil
-}
 
 func (cli *OKChainClient) GetTickersInfo(count ...int) (types.Tickers, error) {
 	countTmp, err := checkParamsGetTickersInfo(count)
@@ -194,7 +171,3 @@ func (cli *OKChainClient) GetTransactionsInfo(addr string, type_, start, end, pa
 
 	return transactionsInfo, nil
 }
-
-
-// dex module
-

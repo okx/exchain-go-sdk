@@ -236,7 +236,7 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 }
 
 func TestIssue(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -251,21 +251,21 @@ func TestIssue(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
 	require.NoError(t, err)
 
-	res, err := client.Dex().List(fromInfo, passWd, "btc-216", "okt", "0.02", "my memo",
+	res, err := client.Dex().List(fromInfo, passWd, "btc-65f", "okt", "0.02", "my memo",
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	fmt.Println(res)
 }
 
 func TestNewOrders(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -285,7 +285,7 @@ func TestNewOrders(t *testing.T) {
 	res, err := client.Order().NewOrders(
 		fromInfo,
 		passWd,
-		"btc-216_okt,btc-216_okt,btc-216_okt",
+		"btc-65f_okt,btc-65f_okt,btc-65f_okt",
 		"BUY,BUY,BUY",
 		"11.2,22.3,33.4",
 		"1.23,2.34,3.45",
@@ -342,7 +342,7 @@ func TestMultiSign(t *testing.T) {
 }
 
 func TestTransferOwnership(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	// 1.generate unsigned transfer-ownership tx file
 	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
@@ -428,11 +428,13 @@ func TestQueryTokenInfo(t *testing.T) {
 }
 
 func TestQueryProducts(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
 	client := NewClient(config)
 	tokenPairs, err := client.Dex().QueryProducts("", 1, 50)
 	require.NoError(t, err)
-	fmt.Println(tokenPairs)
+	for _, v := range tokenPairs {
+		fmt.Println(v)
+	}
 }
 
 func TestQueryAccountTokensInfo(t *testing.T) {
@@ -451,10 +453,20 @@ func TestQueryAccountTokenInfo(t *testing.T) {
 	fmt.Println(tokensInfo)
 }
 
-func TestGetDepthBook(t *testing.T) {
+func TestQueryDepthBook(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 	client := NewClient(config)
 	tokensInfo, err := client.Order().QueryDepthBook("btc-216_okt")
 	require.NoError(t, err)
 	fmt.Println(tokensInfo)
+}
+
+func TestQueryCandles(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20057", BroadcastBlock)
+	client := NewClient(config)
+	candles, err := client.Backend().QueryCandles("btc-65f_okt", 60, 100)
+	require.NoError(t, err)
+	for _, line := range candles {
+		fmt.Println(line)
+	}
 }

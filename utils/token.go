@@ -121,6 +121,7 @@ func ParseCoin(coinStr string) (coin types.Coin, err error) {
 	return coin, nil
 }
 
+// ParseTransfersStr parses the whole multi-send info string into TransferUnit
 // Example:
 // `addr1 1okt
 // 	addr2 2okt`

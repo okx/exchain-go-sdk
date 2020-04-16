@@ -39,13 +39,7 @@ func goSDKRegisterAmino(cdc *amino.Codec) {
 
 }
 
-func GetDataFromBaseResponse(bz []byte, ptr interface{}) error {
-	dataBytes := getDataFromBaseResponse(bz)
-	if err := json.Unmarshal(dataBytes, ptr); err != nil {
-		return err
-	}
-	return nil
-}
+
 
 func UnmarshalListResponse(bz []byte, ptr interface{}) error {
 	var lr common.ListResponse
@@ -62,10 +56,4 @@ func UnmarshalListResponse(bz []byte, ptr interface{}) error {
 		return err
 	}
 	return nil
-}
-
-func getDataFromBaseResponse(bz []byte) []byte {
-	preIndex := bytes.Index(bz, []byte("data"))
-	//sufIndex := bytes.LastIndex(bz, []byte("detail_msg"))
-	return bz[preIndex+6 : len(bz)-1 ]
 }

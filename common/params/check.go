@@ -227,6 +227,20 @@ func CheckQueryOrdersParams(addrStr, product, side string, start, end, page, per
 	return checkParamsPaging(start, end, page, perPage)
 }
 
+// CheckQueryTransactionsParams gives a quick validity check for the input params of query transactions
+func CheckQueryTransactionsParams(addrStr string, typeCode, start, end, page, perPage int) (perPageRet int, err error) {
+	if err = IsValidAccAddr(addrStr); err != nil {
+		return
+	}
+
+	if typeCode < 0 {
+		return perPageRet, errors.New("failed. type code isn't allowed to be negative")
+
+	}
+
+	return checkParamsPaging(start, end, page, perPage)
+}
+
 // IsValidAccAddr gives a quick validity check for an address string
 func IsValidAccAddr(addrStr string) error {
 	if len(addrStr) != 46 || !strings.HasPrefix(addrStr, "okchain") {

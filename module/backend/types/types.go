@@ -10,6 +10,7 @@ const (
 	OpenOrdersPath     = "custom/backend/orders/open"
 	ClosedOrdersPath   = "custom/backend/orders/closed"
 	DealsPath          = "custom/backend/deals"
+	TransactionsPath   = "custom/backend/txs"
 )
 
 // Ticker - structure of ticker's detail data
@@ -91,4 +92,16 @@ type Deal struct {
 	Price       float64 `json:"price"`
 	Quantity    float64 `json:"volume"`
 	Fee         string  `json:"fee"`
+}
+
+// Transaction - structure of transaction query result
+type Transaction struct {
+	TxHash    string `json:"txhash"`
+	Type      int64  `json:"type"`
+	Address   string `json:"address"`
+	Symbol    string `json:"symbol"`
+	Side      int64  `json:"side"`
+	Quantity  string `json:"quantity"`
+	Fee       string `json:"fee"`
+	Timestamp int64  `json:"timestamp"`
 }

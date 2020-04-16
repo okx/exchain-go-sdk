@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"fmt"
 	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/module/backend/types"
 	"github.com/okex/okchain-go-sdk/utils"
@@ -44,6 +45,7 @@ func (bc backendClient) QueryTickers(count ...int) (tickers []types.Ticker, err 
 		return tickers, utils.ErrClientQuery(err.Error())
 	}
 
+	fmt.Println(string(res))
 	if err = utils.GetDataFromBaseResponse(res, &tickers); err != nil {
 		return tickers, utils.ErrFilterDataFromBaseResponse("tickers", err.Error())
 	}
@@ -151,6 +153,31 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 
 	if err = utils.UnmarshalListResponse(res, &deals); err != nil {
 		return deals, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}
+
+// QueryTransactions gets the transactions of a specific account
+func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) (transactions []types.Transaction, err error) {
+	perPageNum, err := params.CheckQueryTransactionsParams(addrStr, typeCode, start, end, page, perPage)
+	if err != nil {
+		return
+	}
+
+	transactionsParams := params.NewQueryTxListParams(addrStr, int64(typeCode), int64(start), int64(end), page, perPageNum)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(transactionsParams)
+	if err != nil {
+		return transactions, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := bc.Query(types.TransactionsPath, jsonBytes)
+	if err != nil {
+		return transactions, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = utils.UnmarshalListResponse(res, &transactions); err != nil {
+		return transactions, utils.ErrFilterDataFromListResponse("transactions", err.Error())
 	}
 
 	return

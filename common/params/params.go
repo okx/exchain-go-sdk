@@ -61,12 +61,14 @@ func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesPara
 	}
 }
 
+// QueryTickerParams - structure of params to query tickers
 type QueryTickerParams struct {
 	Product string `json:"product"`
 	Count   int    `json:"count"`
 	Sort    bool   `json:"sort"`
 }
 
+// NewQueryTickerParams creates a new instance of QueryTickerParams
 func NewQueryTickerParams(product string, count int, sort bool) QueryTickerParams {
 	return QueryTickerParams{
 		product,

@@ -19,4 +19,5 @@ type BackendQuery interface {
 	QueryOpenOrders(addrStr, product, side string, start, end, page, perPage int) ([]types.Order, error)
 	QueryClosedOrders(addrStr, product, side string, start, end, page, perPage int) ([]types.Order, error)
 	QueryDeals(addrStr, product, side string, start, end, page, perPage int) ([]types.Deal, error)
+	QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) ([]types.Transaction, error)
 }

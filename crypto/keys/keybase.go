@@ -15,7 +15,7 @@ import (
 	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
 	"github.com/okex/okchain-go-sdk/types"
 
-	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/cosmos/go-bip39"
 
 	tmcrypto "github.com/tendermint/tendermint/crypto"
 	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"

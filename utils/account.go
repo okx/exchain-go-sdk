@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
+	"github.com/cosmos/go-bip39"
 	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/crypto/keys/mintkey"
 	"github.com/okex/okchain-go-sdk/types/tx"

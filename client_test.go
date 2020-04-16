@@ -26,7 +26,7 @@ const (
 // transact tx
 
 func TestDelegate(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)

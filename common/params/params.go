@@ -18,11 +18,13 @@ const (
 	StatusRejected      ProposalStatus = 0x04
 )
 
+// QueryAccTokenParams - structure of params to query a specific token in an account
 type QueryAccTokenParams struct {
 	Symbol string `json:"symbol"`
 	Show   string `json:"show"`
 }
 
+// NewQueryAccTokenParams creates a new instance of QueryAccTokenParams
 func NewQueryAccTokenParams(symbol, show string) QueryAccTokenParams {
 	return QueryAccTokenParams{
 		symbol,

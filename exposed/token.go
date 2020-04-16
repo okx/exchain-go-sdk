@@ -26,4 +26,5 @@ type TokenTx interface {
 type TokenQuery interface {
 	QueryTokenInfo(ownerAddr, symbol string) ([]types.Token, error)
 	QueryAccountTokensInfo(addrStr string) (types.AccountTokensInfo, error)
+	QueryAccountTokenInfo(addrStr, symbol string) (types.AccountTokensInfo, error)
 }

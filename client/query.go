@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common"
 	"github.com/okex/okchain-go-sdk/common/params"
 	"github.com/okex/okchain-go-sdk/crypto/encoding/codec"
 	"github.com/okex/okchain-go-sdk/types"
@@ -21,25 +20,6 @@ const (
 )
 
 
-func (cli *OKChainClient) GetTokenInfoByAddr(addr, symbol string) (types.AccountTokensInfo, error) {
-	accountParams := params.NewQueryAccTokenParams(symbol, "partial")
-
-	jsonBytes, err := cli.cdc.MarshalJSON(accountParams)
-	if err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("error : AccTokenParam failed in json marshal : %s", err.Error())
-	}
-
-	res, err := cli.query(accountTokensInfoPath+addr, jsonBytes)
-	if err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("ok client query error : %s", err.Error())
-	}
-
-	var accTokenInfo types.AccountTokensInfo
-	if err = cli.cdc.UnmarshalJSON(res, &accTokenInfo); err != nil {
-		return types.AccountTokensInfo{}, fmt.Errorf("err : %s", err.Error())
-	}
-	return accTokenInfo, nil
-}
 
 func (cli *OKChainClient) GetDepthbookInfo(product string) (types.BookRes, error) {
 	params := params.NewQueryDepthBookParams(product, 200)

@@ -1,4 +1,4 @@
-package sdk
+package gosdk
 
 import (
 	"github.com/okex/okchain-go-sdk/module/auth"
@@ -6,6 +6,7 @@ import (
 	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/staking"
+	"github.com/okex/okchain-go-sdk/module/tendermint"
 	"github.com/okex/okchain-go-sdk/module/token"
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
@@ -41,4 +42,8 @@ type (
 	MatchResult = backend.MatchResult
 	Order = backend.Order
 	Deal = backend.Deal
+	// tendermint
+	Block = tendermint.Block
+	BlockResults = tendermint.BlockResults
+	ResultCommit = tendermint.ResultCommit
 )

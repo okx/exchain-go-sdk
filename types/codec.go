@@ -4,35 +4,30 @@ import (
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/ed25519"
-	cryptoamino "github.com/tendermint/tendermint/crypto/encoding/amino"
 	"github.com/tendermint/tendermint/crypto/multisig"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
-// MsgCdc is the codec for signing
-var MsgCdc = amino.NewCodec()
-
-func init() {
-	cryptoamino.RegisterAmino(MsgCdc)
-	MsgCdc.Seal()
-}
+// Cdc is the codec for signing
+var Cdc = NewCodec()
 
 // SDKCodec shows the expected behaviour of codec in okchain gosdk
 type SDKCodec interface {
 	MarshalJSON(o interface{}) ([]byte, error)
 	UnmarshalJSON(bytes []byte, ptr interface{}) error
-
 	MustMarshalJSON(o interface{}) []byte
 	MustUnmarshalJSON(bytes []byte, ptr interface{})
 
 	MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
-	//UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
+	UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
 	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
 
 	UnmarshalBinaryBare(bytes []byte, ptr interface{}) error
 
 	RegisterConcrete(o interface{}, name string)
 	RegisterInterface(ptr interface{})
+
+	Seal()
 }
 
 var _ SDKCodec = (*Codec)(nil)
@@ -55,6 +50,11 @@ func (cdc Codec) RegisterConcrete(o interface{}, name string) {
 // RegisterInterface implements the SDKCodec interface
 func (cdc Codec) RegisterInterface(ptr interface{}) {
 	cdc.Codec.RegisterInterface(ptr, nil)
+}
+
+// Seal implements the SDKCodec interface
+func (cdc Codec) Seal() {
+	cdc.Codec.Seal()
 }
 
 // RegisterBasicCodec registers the basic data types for gosdk codec

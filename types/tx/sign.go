@@ -19,12 +19,21 @@ func (msg StdSignMsg) Bytes() []byte {
 	return StdSignBytes(msg.ChainID, msg.AccountNumber, msg.Sequence, msg.Fee, msg.Msgs, msg.Memo)
 }
 
+type stdSignDoc struct {
+	AccountNumber uint64            `json:"account_number"`
+	ChainID       string            `json:"chain_id"`
+	Fee           json.RawMessage   `json:"fee"`
+	Memo          string            `json:"memo"`
+	Msgs          []json.RawMessage `json:"msgs"`
+	Sequence      uint64            `json:"sequence"`
+}
+
 func StdSignBytes(chainID string, accnum uint64, sequence uint64, fee types.StdFee, msgs []types.Msg, memo string) []byte {
 	var msgsBytes []json.RawMessage
 	for _, msg := range msgs {
 		msgsBytes = append(msgsBytes, json.RawMessage(msg.GetSignBytes()))
 	}
-	bz, err := types.MsgCdc.MarshalJSON(types.StdSignDoc{
+	bz, err := types.Cdc.MarshalJSON(stdSignDoc{
 		AccountNumber: accnum,
 		ChainID:       chainID,
 		Fee:           json.RawMessage(fee.Bytes()),
@@ -38,8 +47,7 @@ func StdSignBytes(chainID string, accnum uint64, sequence uint64, fee types.StdF
 	return types.MustSortJSON(bz)
 }
 
-func makeSignature(keybase keys.Keybase, name, passphrase string,
-	msg StdSignMsg) (sig types.StdSignature, err error) {
+func makeSignature(keybase keys.Keybase, name, passphrase string, msg StdSignMsg) (sig types.StdSignature, err error) {
 	sigBytes, pubkey, err := keybase.Sign(name, passphrase, msg.Bytes())
 	if err != nil {
 		return

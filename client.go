@@ -1,4 +1,4 @@
-package sdk
+package gosdk
 
 import (
 	"fmt"
@@ -17,6 +17,7 @@ import (
 
 // Client - structure of the main client of okchain gosdk
 type Client struct {
+	config  types.ClientConfig
 	cdc     types.SDKCodec
 	modules map[string]types.Module
 }
@@ -24,12 +25,12 @@ type Client struct {
 // NewClient creates a new instance of Client
 func NewClient(config types.ClientConfig) Client {
 	cdc := types.NewCodec()
-	pBaseClient := module.NewBaseClient(cdc, config)
-
 	pClient := &Client{
+		config:  config,
 		cdc:     cdc,
 		modules: make(map[string]types.Module),
 	}
+	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
 	pClient.registerModule(
 		auth.NewAuthClient(pBaseClient),
@@ -39,6 +40,7 @@ func NewClient(config types.ClientConfig) Client {
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
+		// NOTE: module tendermint only works when the node and gosdk are running on the same pc
 		tendermint.NewTendermintClient(pBaseClient),
 	)
 
@@ -56,6 +58,12 @@ func (cli *Client) registerModule(mods ...types.Module) {
 		cli.modules[moduleName] = mod
 	}
 	types.RegisterBasicCodec(cli.cdc)
+	cli.cdc.Seal()
+}
+
+// GetConfig returns the client config
+func (cli *Client) GetConfig() types.ClientConfig {
+	return cli.config
 }
 
 // nolint
@@ -79,4 +87,11 @@ func (cli *Client) Slashing() exposed.Slashing {
 }
 func (cli *Client) Token() exposed.Token {
 	return cli.modules[token.ModuleName].(exposed.Token)
+}
+func (cli *Client) Tendermint() exposed.Tendermint {
+	if !cli.config.IsNodeRunningOnTheSamePC {
+		panic("tendermint module is banned when the node and gosdk don't run on the same PC")
+	}
+
+	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }

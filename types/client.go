@@ -15,12 +15,13 @@ type BaseClient interface {
 }
 
 // TxHandler shows the expected behavior to handle tx
-type TxHandler interface{
-	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64)(TxResponse, error)
+type TxHandler interface {
+	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error)
 }
 
 // ClientQuery shows the expected query behavior
 type ClientQuery interface {
+	rpc.SignClient
 	Query(path string, key cmn.HexBytes) ([]byte, error)
 	QueryStore(key cmn.HexBytes, storeName, endPath string) ([]byte, error)
 	QuerySubspace(subspace []byte, storeName string) ([]cmn.KVPair, error)
@@ -41,12 +42,16 @@ type RPCClient interface {
 type ClientConfig struct {
 	NodeURI       string
 	BroadcastMode BroadcastMode
+	// if the node runs on the same pc with gosdk
+	// NOTE: module tendermint only works when the node and gosdk are running on the same pc
+	IsNodeRunningOnTheSamePC bool
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI string, broadcastMode BroadcastMode) ClientConfig {
+func NewClientConfig(nodeURI string, broadcastMode BroadcastMode, isNodeRunningOnTheSamePC bool) ClientConfig {
 	return ClientConfig{
-		nodeURI,
-		broadcastMode,
+		NodeURI:                  nodeURI,
+		BroadcastMode:            broadcastMode,
+		IsNodeRunningOnTheSamePC: isNodeRunningOnTheSamePC,
 	}
 }

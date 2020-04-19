@@ -74,6 +74,20 @@ func ParseTxResult(pTmTxResult *ctypes.ResultTx) types.ResultTx {
 	}
 }
 
+// ParseTxsResult converts raw tendermint txs result type to the one gosdk requires
+func ParseTxsResult(pTmTxsResult *ctypes.ResultTxSearch) types.ResultTxs {
+	txsLen := len(pTmTxsResult.Txs)
+	txsResult := make([]types.ResultTx, txsLen)
+	for i := 0; i < txsLen; i++ {
+		txsResult[i] = ParseTxResult(pTmTxsResult.Txs[i])
+	}
+
+	return types.ResultTxs{
+		Txs:        txsResult,
+		TotalCount: pTmTxsResult.TotalCount,
+	}
+}
+
 func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.ResponseDeliverTx {
 	return types.ResponseDeliverTx{
 		Code:      pTmRespDeliverTx.Code,

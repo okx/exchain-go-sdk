@@ -602,3 +602,13 @@ func TestQueryTxResult(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Printf("%+v\n", txRes)
 }
+
+func TestQueryTxsResult(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
+	client := NewClient(config)
+	// get searching string
+	searchStr := `message.sender=okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya`
+	txsRes, err := client.Tendermint().QueryTxsResult(searchStr, 1, 30)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", txsRes)
+}

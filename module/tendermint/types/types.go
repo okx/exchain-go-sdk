@@ -10,6 +10,8 @@ import (
 // const
 const (
 	ModuleName = "tendermint"
+
+	EventFormat = "{eventType}.{eventAttribute}={value}"
 )
 
 // Block - structure for the result of block query
@@ -164,4 +166,10 @@ type ResultTx struct {
 	TxResult ResponseDeliverTx
 	Tx       tmtypes.Tx
 	Proof    tmtypes.TxProof
+}
+
+// ResultTxs - structure of txs result by a specific searching string
+type ResultTxs struct {
+	Txs        []ResultTx
+	TotalCount int
 }

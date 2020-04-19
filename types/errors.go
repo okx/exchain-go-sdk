@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	abci "github.com/okex/okchain-go-sdk/types/abci"
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	"github.com/pkg/errors"
 	cmn "github.com/tendermint/tendermint/libs/common"
 )

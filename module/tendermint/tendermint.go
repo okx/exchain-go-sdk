@@ -6,7 +6,6 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
-// NOTE: module tendermint only works when the node and gosdk are running on the same pc
 var _ sdk.Module = (*tendermintClient)(nil)
 
 type tendermintClient struct {

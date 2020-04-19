@@ -40,7 +40,6 @@ func NewClient(config types.ClientConfig) Client {
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
-		// NOTE: module tendermint only works when the node and gosdk are running on the same pc
 		tendermint.NewTendermintClient(pBaseClient),
 	)
 
@@ -89,9 +88,5 @@ func (cli *Client) Token() exposed.Token {
 	return cli.modules[token.ModuleName].(exposed.Token)
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
-	if !cli.config.IsNodeRunningOnTheSamePC {
-		panic("tendermint module is banned when the node and gosdk don't run on the same PC")
-	}
-
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }

@@ -42,16 +42,12 @@ type RPCClient interface {
 type ClientConfig struct {
 	NodeURI       string
 	BroadcastMode BroadcastMode
-	// if the node runs on the same pc with gosdk
-	// NOTE: module tendermint only works when the node and gosdk are running on the same pc
-	IsNodeRunningOnTheSamePC bool
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI string, broadcastMode BroadcastMode, isNodeRunningOnTheSamePC bool) ClientConfig {
+func NewClientConfig(nodeURI string, broadcastMode BroadcastMode) ClientConfig {
 	return ClientConfig{
-		NodeURI:                  nodeURI,
-		BroadcastMode:            broadcastMode,
-		IsNodeRunningOnTheSamePC: isNodeRunningOnTheSamePC,
+		NodeURI:       nodeURI,
+		BroadcastMode: broadcastMode,
 	}
 }

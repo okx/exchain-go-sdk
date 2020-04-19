@@ -9,4 +9,5 @@ const (
 
 type (
 	Block = types.Block
+	BlockResults = types.BlockResults
 )

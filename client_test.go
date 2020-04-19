@@ -560,9 +560,17 @@ func TestQueryTransactions(t *testing.T) {
 }
 
 func TestQueryBlock(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, false)
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
 	client := NewClient(config)
 	block, err := client.Tendermint().QueryBlock(11)
 	require.NoError(t, err)
 	fmt.Printf("%+v\n", block)
+}
+
+func TestQueryBlockResults(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
+	client := NewClient(config)
+	blockRes, err := client.Tendermint().QueryBlockResults(11)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", blockRes)
 }

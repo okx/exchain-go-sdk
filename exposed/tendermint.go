@@ -14,4 +14,5 @@ type Tendermint interface {
 // TendermintQuery shows the expected query behavior for inner tendermint client
 type TendermintQuery interface {
 	QueryBlock(height int64) (types.Block, error)
+	QueryBlockResults(height int64) (types.BlockResults, error)
 }

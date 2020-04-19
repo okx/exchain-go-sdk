@@ -90,7 +90,7 @@ func (cli *Client) Token() exposed.Token {
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
 	if !cli.config.IsNodeRunningOnTheSamePC {
-		panic("tendermint module is banned when the node and gosdk don't run on the same pc")
+		panic("tendermint module is banned when the node and gosdk don't run on the same PC")
 	}
 
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)

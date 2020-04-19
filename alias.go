@@ -44,4 +44,5 @@ type (
 	Deal = backend.Deal
 	// tendermint
 	Block = tendermint.Block
+	BlockResults = tendermint.BlockResults
 )

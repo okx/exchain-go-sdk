@@ -1,4 +1,4 @@
-package sdk
+package gosdk
 
 import (
 	"fmt"
@@ -56,6 +56,7 @@ func (cli *Client) registerModule(mods ...types.Module) {
 		cli.modules[moduleName] = mod
 	}
 	types.RegisterBasicCodec(cli.cdc)
+	cli.cdc.Seal()
 }
 
 // nolint
@@ -76,6 +77,9 @@ func (cli *Client) Staking() exposed.Staking {
 }
 func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashing.ModuleName].(exposed.Slashing)
+}
+func (cli *Client) Tendermint() exposed.Tendermint {
+	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
 func (cli *Client) Token() exposed.Token {
 	return cli.modules[token.ModuleName].(exposed.Token)

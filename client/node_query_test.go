@@ -7,15 +7,6 @@ import (
 	"testing"
 )
 
-func TestQueryBlock(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	var height int64 = 1024
-	resp, err := cli.QueryBlock(&height)
-	assertNotEqual(t, err, nil)
-	jsonBytes, err := json.Marshal(resp)
-	assertNotEqual(t, err, nil)
-	fmt.Println(string(jsonBytes))
-}
 
 func TestQueryTx(t *testing.T) {
 	cli := NewClient(rpcUrl)

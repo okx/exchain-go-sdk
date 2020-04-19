@@ -11,14 +11,6 @@ const (
 	proposalInfoPath  = "custom/gov/proposal"
 )
 
-func (cli *OKChainClient) QueryBlock(height *int64) (*ctypes.ResultBlock, error) {
-	resp, err := cli.cli.Block(height)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
 func (cli *OKChainClient) QueryTx(txHash []byte, prove bool) (*ctypes.ResultTx, error) {
 	resp, err := cli.cli.Tx(txHash, prove)
 	if err != nil {

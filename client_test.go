@@ -1,4 +1,4 @@
-package sdk
+package gosdk
 
 import (
 	"fmt"
@@ -557,4 +557,12 @@ func TestQueryTransactions(t *testing.T) {
 	for _, tx := range txs {
 		fmt.Println(tx)
 	}
+}
+
+func TestQueryBlock(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
+	client := NewClient(config)
+	block, err := client.Tendermint().QueryBlock(11)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", block)
 }

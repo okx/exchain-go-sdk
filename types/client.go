@@ -15,12 +15,13 @@ type BaseClient interface {
 }
 
 // TxHandler shows the expected behavior to handle tx
-type TxHandler interface{
-	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64)(TxResponse, error)
+type TxHandler interface {
+	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error)
 }
 
 // ClientQuery shows the expected query behavior
 type ClientQuery interface {
+	rpc.SignClient
 	Query(path string, key cmn.HexBytes) ([]byte, error)
 	QueryStore(key cmn.HexBytes, storeName, endPath string) ([]byte, error)
 	QuerySubspace(subspace []byte, storeName string) ([]cmn.KVPair, error)

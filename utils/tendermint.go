@@ -54,6 +54,14 @@ func ParseCommitResult(pTmCommitResult *ctypes.ResultCommit) types.ResultCommit 
 	}
 }
 
+// ParseValidatorsResult converts raw tendermint validators result type to the one gosdk requires
+func ParseValidatorsResult(pTmValsResult *ctypes.ResultValidators) types.ResultValidators {
+	return types.ResultValidators{
+		BlockHeight: pTmValsResult.BlockHeight,
+		Validators:  parseValidators(pTmValsResult.Validators),
+	}
+}
+
 func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.ResponseDeliverTx {
 	return types.ResponseDeliverTx{
 		Code:      pTmRespDeliverTx.Code,
@@ -140,4 +148,19 @@ func parseConsensusParams(tmConsParams *abci.ConsensusParams) types.ConsensusPar
 			PubKeyTypes: tmConsParams.Validator.PubKeyTypes,
 		},
 	}
+}
+
+func parseValidators(tmValsP []*tmtypes.Validator) []types.Validator {
+	valsLen := len(tmValsP)
+	vals := make([]types.Validator, valsLen)
+	for i := 0; i < valsLen; i++ {
+		vals[i] = types.Validator{
+			Address:          tmValsP[i].Address,
+			PubKey:           tmValsP[i].PubKey,
+			VotingPower:      tmValsP[i].VotingPower,
+			ProposerPriority: tmValsP[i].ProposerPriority,
+		}
+	}
+
+	return vals
 }

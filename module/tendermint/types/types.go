@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/tendermint/tendermint/crypto"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -138,4 +139,18 @@ type ResultCommit struct {
 type SignedHeader struct {
 	tmtypes.Header
 	Commit tmtypes.Commit
+}
+
+// ResultValidators - structure for the validators info on a specific height
+type ResultValidators struct {
+	BlockHeight int64
+	Validators  []Validator
+}
+
+// Validator - structure of the volatile state for each Validator
+type Validator struct {
+	Address          tmtypes.Address
+	PubKey           crypto.PubKey
+	VotingPower      int64
+	ProposerPriority int64
 }

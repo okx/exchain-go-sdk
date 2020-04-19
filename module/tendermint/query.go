@@ -34,3 +34,13 @@ func (tc tendermintClient) QueryCommitResult(height int64) (commitResult types.R
 
 	return utils.ParseCommitResult(pTmCommitResult), err
 }
+
+// QueryValidatorsResult gets the validators info on a specific height
+func (tc tendermintClient) QueryValidatorsResult(height int64) (valsResult types.ResultValidators, err error) {
+	pTmValsResult, err := tc.Validators(&height)
+	if err != nil {
+		return
+	}
+
+	return utils.ParseValidatorsResult(pTmValsResult), err
+}

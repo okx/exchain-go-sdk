@@ -578,7 +578,15 @@ func TestQueryBlockResults(t *testing.T) {
 func TestQueryCommitResults(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
 	client := NewClient(config)
-	blockRes, err := client.Tendermint().QueryCommitResult(11)
+	commitRes, err := client.Tendermint().QueryCommitResult(11)
 	require.NoError(t, err)
-	fmt.Printf("%+v\n", blockRes)
+	fmt.Printf("%+v\n", commitRes)
+}
+
+func TestQueryValidatorResult(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
+	client := NewClient(config)
+	valsRes, err := client.Tendermint().QueryValidatorsResult(11)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", valsRes)
 }

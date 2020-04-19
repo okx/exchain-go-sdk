@@ -20,15 +20,6 @@ func TestQueryTx(t *testing.T) {
 	fmt.Println(string(jsonBytes))
 }
 
-func TestQueryCurrentValidators(t *testing.T) {
-	cli := NewClient(rpcUrl)
-	resp, err := cli.QueryCurrentValidators()
-	assertNotEqual(t, err, nil)
-	jsonBytes, err := json.Marshal(resp)
-	assertNotEqual(t, err, nil)
-	fmt.Println(string(jsonBytes))
-}
-
 func TestQueryProposals(t *testing.T) {
 	cli := NewClient(rpcUrl)
 	resp, err := cli.QueryProposals()

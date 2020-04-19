@@ -46,4 +46,5 @@ type (
 	Block = tendermint.Block
 	BlockResults = tendermint.BlockResults
 	ResultCommit = tendermint.ResultCommit
+	ResultValidators = tendermint.ResultValidators
 )

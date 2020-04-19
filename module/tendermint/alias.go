@@ -11,4 +11,5 @@ type (
 	Block = types.Block
 	BlockResults = types.BlockResults
 	ResultCommit = types.ResultCommit
+	ResultValidators = types.ResultValidators
 )

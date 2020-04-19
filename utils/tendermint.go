@@ -54,6 +54,40 @@ func ParseCommitResult(pTmCommitResult *ctypes.ResultCommit) types.ResultCommit 
 	}
 }
 
+// ParseValidatorsResult converts raw tendermint validators result type to the one gosdk requires
+func ParseValidatorsResult(pTmValsResult *ctypes.ResultValidators) types.ResultValidators {
+	return types.ResultValidators{
+		BlockHeight: pTmValsResult.BlockHeight,
+		Validators:  parseValidators(pTmValsResult.Validators),
+	}
+}
+
+// ParseTxResult converts raw tendermint tx result type to the one gosdk requires
+func ParseTxResult(pTmTxResult *ctypes.ResultTx) types.ResultTx {
+	return types.ResultTx{
+		Hash:     pTmTxResult.Hash,
+		Height:   pTmTxResult.Height,
+		Index:    pTmTxResult.Index,
+		TxResult: parseResponseDeliverTx(&pTmTxResult.TxResult),
+		Tx:       pTmTxResult.Tx,
+		Proof:    pTmTxResult.Proof,
+	}
+}
+
+// ParseTxsResult converts raw tendermint txs result type to the one gosdk requires
+func ParseTxsResult(pTmTxsResult *ctypes.ResultTxSearch) types.ResultTxs {
+	txsLen := len(pTmTxsResult.Txs)
+	txsResult := make([]types.ResultTx, txsLen)
+	for i := 0; i < txsLen; i++ {
+		txsResult[i] = ParseTxResult(pTmTxsResult.Txs[i])
+	}
+
+	return types.ResultTxs{
+		Txs:        txsResult,
+		TotalCount: pTmTxsResult.TotalCount,
+	}
+}
+
 func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.ResponseDeliverTx {
 	return types.ResponseDeliverTx{
 		Code:      pTmRespDeliverTx.Code,
@@ -140,4 +174,19 @@ func parseConsensusParams(tmConsParams *abci.ConsensusParams) types.ConsensusPar
 			PubKeyTypes: tmConsParams.Validator.PubKeyTypes,
 		},
 	}
+}
+
+func parseValidators(tmValsP []*tmtypes.Validator) []types.Validator {
+	valsLen := len(tmValsP)
+	vals := make([]types.Validator, valsLen)
+	for i := 0; i < valsLen; i++ {
+		vals[i] = types.Validator{
+			Address:          tmValsP[i].Address,
+			PubKey:           tmValsP[i].PubKey,
+			VotingPower:      tmValsP[i].VotingPower,
+			ProposerPriority: tmValsP[i].ProposerPriority,
+		}
+	}
+
+	return vals
 }

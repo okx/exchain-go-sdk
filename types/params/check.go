@@ -249,6 +249,23 @@ func IsValidAccAddr(addrStr string) error {
 	return nil
 }
 
+// CheckQueryTxResultParams gives a quick validity check for txs query by searching string
+func CheckQueryTxResultParams(tmEventStrs []string, page, perPage int) error {
+	if len(tmEventStrs) == 0 {
+		return errors.New("failed. empty event to search")
+	}
+
+	if page <= 0 {
+		return errors.New("failed. page must be greater than 0")
+	}
+
+	if perPage <= 0 {
+		return errors.New("failed. limit number in a page must be greater than 0")
+	}
+
+	return nil
+}
+
 func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error) {
 	if start < 0 || end < 0 || page < 0 || perPage < 0 {
 		return perPageRet, errors.New(`failed. "start","end","page","perPage" must be positive`)

@@ -1,8 +1,12 @@
 package tendermint
 
 import (
+	"fmt"
 	"github.com/okex/okchain-go-sdk/module/tendermint/types"
+	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/okex/okchain-go-sdk/utils"
+	tmtypes "github.com/tendermint/tendermint/types"
+	"strings"
 )
 
 // QueryBlock gets the block info of a specific height
@@ -33,4 +37,75 @@ func (tc tendermintClient) QueryCommitResult(height int64) (commitResult types.R
 	}
 
 	return utils.ParseCommitResult(pTmCommitResult), err
+}
+
+// QueryValidatorsResult gets the validators info on a specific height
+func (tc tendermintClient) QueryValidatorsResult(height int64) (valsResult types.ResultValidators, err error) {
+	pTmValsResult, err := tc.Validators(&height)
+	if err != nil {
+		return
+	}
+
+	return utils.ParseValidatorsResult(pTmValsResult), err
+}
+
+// QueryTxResult gets the detail info of a tx with its tx hash
+func (tc tendermintClient) QueryTxResult(txHash []byte, prove bool) (txResult types.ResultTx, err error) {
+	pTmTxResult, err := tc.Tx(txHash, prove)
+	if err != nil {
+		return
+	}
+
+	return utils.ParseTxResult(pTmTxResult), err
+}
+
+// QueryTxsResult gets txs result by a specific searching string
+// NOTE: QueryTxsResult assumes the node telling truth
+func (tc tendermintClient) QueryTxsResult(searchStr string, page, perPage int) (txsResult types.ResultTxs,
+	err error) {
+
+	tmEventStrs, err := parseSearchingStr(searchStr)
+	if err != nil {
+		return
+	}
+
+	if err = params.CheckQueryTxResultParams(tmEventStrs, page, perPage); err != nil {
+		return
+	}
+
+	queryStr := strings.Join(tmEventStrs, " AND ")
+
+	pTmTxsResult, err := tc.TxSearch(queryStr, false, page, perPage)
+	if err != nil {
+		return
+	}
+
+	return utils.ParseTxsResult(pTmTxsResult), err
+}
+
+func parseSearchingStr(searchStr string) (tmEventStrs []string, err error) {
+	var events []string
+	searchStr = strings.TrimSpace(searchStr)
+	if strings.Contains(searchStr, "&") {
+		events = strings.Split(searchStr, "&")
+	} else {
+		events = append(events, searchStr)
+	}
+
+	for _, event := range events {
+		if !strings.Contains(event, "=") || strings.Count(event, "=") > 1 {
+			return tmEventStrs, fmt.Errorf("failed. event %s should be of the format: %s", event, types.EventFormat)
+		}
+
+		tokens := strings.Split(event, "=")
+		if tokens[0] == tmtypes.TxHeightKey {
+			event = fmt.Sprintf("%s=%s", tokens[0], tokens[1])
+		} else {
+			event = fmt.Sprintf("%s='%s'", tokens[0], tokens[1])
+		}
+
+		tmEventStrs = append(tmEventStrs, event)
+	}
+
+	return
 }

@@ -2,12 +2,16 @@ package types
 
 import (
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/tendermint/tendermint/crypto"
+	cmn "github.com/tendermint/tendermint/libs/common"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // const
 const (
 	ModuleName = "tendermint"
+
+	EventFormat = "{eventType}.{eventAttribute}={value}"
 )
 
 // Block - structure for the result of block query
@@ -138,4 +142,34 @@ type ResultCommit struct {
 type SignedHeader struct {
 	tmtypes.Header
 	Commit tmtypes.Commit
+}
+
+// ResultValidators - structure for the validators info on a specific height
+type ResultValidators struct {
+	BlockHeight int64
+	Validators  []Validator
+}
+
+// Validator - structure of the volatile state for each Validator
+type Validator struct {
+	Address          tmtypes.Address
+	PubKey           crypto.PubKey
+	VotingPower      int64
+	ProposerPriority int64
+}
+
+// ResultTx - structure of querying result for a tx
+type ResultTx struct {
+	Hash     cmn.HexBytes
+	Height   int64
+	Index    uint32
+	TxResult ResponseDeliverTx
+	Tx       tmtypes.Tx
+	Proof    tmtypes.TxProof
+}
+
+// ResultTxs - structure of txs result by a specific searching string
+type ResultTxs struct {
+	Txs        []ResultTx
+	TotalCount int
 }

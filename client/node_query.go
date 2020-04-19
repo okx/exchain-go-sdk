@@ -11,14 +11,6 @@ const (
 	proposalInfoPath  = "custom/gov/proposal"
 )
 
-func (cli *OKChainClient) QueryTx(txHash []byte, prove bool) (*ctypes.ResultTx, error) {
-	resp, err := cli.cli.Tx(txHash, prove)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
 func (cli *OKChainClient) QueryProposals() (sdktypes.Proposals, error) {
 	var proposalStatus sdktypes.ProposalStatus
 	var voterAddr, depositorAddr sdktypes.AccAddress

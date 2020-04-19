@@ -44,3 +44,13 @@ func (tc tendermintClient) QueryValidatorsResult(height int64) (valsResult types
 
 	return utils.ParseValidatorsResult(pTmValsResult), err
 }
+
+// QueryTxResult gets the detail info of a tx with its tx hash
+func (tc tendermintClient) QueryTxResult(txHash []byte, prove bool) (txResult types.ResultTx, err error) {
+	pTmTxResult, err := tc.Tx(txHash, prove)
+	if err != nil {
+		return
+	}
+
+	return utils.ParseTxResult(pTmTxResult), err
+}

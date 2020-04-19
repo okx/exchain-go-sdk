@@ -3,6 +3,7 @@ package types
 import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
+	cmn "github.com/tendermint/tendermint/libs/common"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -153,4 +154,14 @@ type Validator struct {
 	PubKey           crypto.PubKey
 	VotingPower      int64
 	ProposerPriority int64
+}
+
+// ResultTx - structure of querying result for a tx
+type ResultTx struct {
+	Hash     cmn.HexBytes
+	Height   int64
+	Index    uint32
+	TxResult ResponseDeliverTx
+	Tx       tmtypes.Tx
+	Proof    tmtypes.TxProof
 }

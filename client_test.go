@@ -1,6 +1,7 @@
 package gosdk
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
@@ -589,4 +590,15 @@ func TestQueryValidatorResult(t *testing.T) {
 	valsRes, err := client.Tendermint().QueryValidatorsResult(11)
 	require.NoError(t, err)
 	fmt.Printf("%+v\n", valsRes)
+}
+
+func TestQueryTxResult(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
+	client := NewClient(config)
+	// get tx hash bytes
+	txHash, err := hex.DecodeString("184F5C27BB885B5DB21C8BEC2A521F72E4287721AD0CB04ACB6EC961668E4B11")
+	require.NoError(t, err)
+	txRes, err := client.Tendermint().QueryTxResult(txHash, true)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", txRes)
 }

@@ -62,6 +62,18 @@ func ParseValidatorsResult(pTmValsResult *ctypes.ResultValidators) types.ResultV
 	}
 }
 
+// ParseTxResult converts raw tendermint tx result type to the one gosdk requires
+func ParseTxResult(pTmTxResult *ctypes.ResultTx) types.ResultTx {
+	return types.ResultTx{
+		Hash:     pTmTxResult.Hash,
+		Height:   pTmTxResult.Height,
+		Index:    pTmTxResult.Index,
+		TxResult: parseResponseDeliverTx(&pTmTxResult.TxResult),
+		Tx:       pTmTxResult.Tx,
+		Proof:    pTmTxResult.Proof,
+	}
+}
+
 func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.ResponseDeliverTx {
 	return types.ResponseDeliverTx{
 		Code:      pTmRespDeliverTx.Code,

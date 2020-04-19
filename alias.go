@@ -45,4 +45,5 @@ type (
 	// tendermint
 	Block = tendermint.Block
 	BlockResults = tendermint.BlockResults
+	ResultCommit = tendermint.ResultCommit
 )

@@ -574,3 +574,11 @@ func TestQueryBlockResults(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Printf("%+v\n", blockRes)
 }
+
+func TestQueryCommitResults(t *testing.T) {
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, true)
+	client := NewClient(config)
+	blockRes, err := client.Tendermint().QueryCommitResult(11)
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", blockRes)
+}

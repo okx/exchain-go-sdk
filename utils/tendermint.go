@@ -43,6 +43,17 @@ func ParseBlockResults(pTmBlockResults *ctypes.ResultBlockResults) types.BlockRe
 	}
 }
 
+// ParseCommitResult converts raw tendermint commit result type to the one gosdk requires
+func ParseCommitResult(pTmCommitResult *ctypes.ResultCommit) types.ResultCommit {
+	return types.ResultCommit{
+		SignedHeader: types.SignedHeader{
+			Header: *pTmCommitResult.Header,
+			Commit: *pTmCommitResult.Commit,
+		},
+		CanonicalCommit: pTmCommitResult.CanonicalCommit,
+	}
+}
+
 func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.ResponseDeliverTx {
 	return types.ResponseDeliverTx{
 		Code:      pTmRespDeliverTx.Code,

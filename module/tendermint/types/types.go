@@ -71,7 +71,7 @@ type Event struct {
 	Attributes []KVPair
 }
 
-// KVPair - structure for the kv info in Event
+// KVPair - structure for the kv pair info in Event
 type KVPair struct {
 	Key   []byte
 	Value []byte
@@ -125,4 +125,17 @@ type EvidenceParams struct {
 // ValidatorParams - structure for limits on validators
 type ValidatorParams struct {
 	PubKeyTypes []string
+}
+
+// ResultCommit - structure for the commit info
+type ResultCommit struct {
+	SignedHeader
+	CanonicalCommit bool
+}
+
+// SignedHeader is a header along with the commits that prove it
+// It is the basis of the lite client
+type SignedHeader struct {
+	tmtypes.Header
+	Commit tmtypes.Commit
 }

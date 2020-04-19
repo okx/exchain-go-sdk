@@ -6,11 +6,11 @@ import (
 )
 
 // QueryBlock gets the block info of a specific height
-func (tb tendermintClient) QueryBlock(height int64) (block types.Block, err error) {
-	pBlockResult, err := tb.Block(&height)
+func (tc tendermintClient) QueryBlock(height int64) (block types.Block, err error) {
+	pBlockResult, err := tc.Block(&height)
 	if err != nil {
 		return
 	}
 
-	return utils.ParseBlock(tb.GetCodec(),pBlockResult.Block)
+	return utils.ParseBlock(tc.GetCodec(), pBlockResult.Block)
 }

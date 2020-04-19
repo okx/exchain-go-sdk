@@ -26,7 +26,7 @@ const (
 // transact tx
 
 func TestDelegate(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -39,7 +39,7 @@ func TestDelegate(t *testing.T) {
 }
 
 func TestUnbond(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -52,7 +52,7 @@ func TestUnbond(t *testing.T) {
 }
 
 func TestVote(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -66,7 +66,7 @@ func TestVote(t *testing.T) {
 }
 
 func TestDestroyValidator(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(
 		"novel tomorrow scorpion cross immense photo wrap acquire midnight about what clean", name, passWd)
@@ -80,7 +80,7 @@ func TestDestroyValidator(t *testing.T) {
 }
 
 func TestCreateValidator(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -95,7 +95,7 @@ func TestCreateValidator(t *testing.T) {
 }
 
 func TestEditValidator(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(
 		"ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren", name, passWd)
@@ -111,7 +111,7 @@ func TestEditValidator(t *testing.T) {
 }
 
 func TestRegisterProxy(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -129,7 +129,7 @@ func TestRegisterProxy(t *testing.T) {
 }
 
 func TestUnregisterProxy(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -142,7 +142,7 @@ func TestUnregisterProxy(t *testing.T) {
 }
 
 func TestBindProxy(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	valMnemo := "ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren"
 	// validator becomes a proxy
@@ -177,7 +177,7 @@ func TestBindProxy(t *testing.T) {
 }
 
 func TestUnbindProxy(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -191,7 +191,7 @@ func TestUnbindProxy(t *testing.T) {
 }
 
 func TestUnjail(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.129:21157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.129:21157", BroadcastBlock, false)
 	client := NewClient(config)
 
 	remoteValMnemo := "buzz solution music normal mom evolve online oxygen fox enhance atom fluid"
@@ -206,7 +206,7 @@ func TestUnjail(t *testing.T) {
 }
 
 func TestSend(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -220,7 +220,7 @@ func TestSend(t *testing.T) {
 }
 
 func TestMultiSend(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -239,7 +239,7 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 }
 
 func TestIssue(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -254,7 +254,7 @@ func TestIssue(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -268,7 +268,7 @@ func TestList(t *testing.T) {
 }
 
 func TestNewOrders(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -301,7 +301,7 @@ func TestNewOrders(t *testing.T) {
 }
 
 func TestDeposit(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -315,7 +315,7 @@ func TestDeposit(t *testing.T) {
 }
 
 func TestWithdraw(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -329,14 +329,14 @@ func TestWithdraw(t *testing.T) {
 }
 
 func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
-	config := NewClientConfig("", BroadcastBlock)
+	config := NewClientConfig("", BroadcastBlock, false)
 	client := NewClient(config)
 	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
 	require.NoError(t, err)
 }
 
 func TestMultiSign(t *testing.T) {
-	config := NewClientConfig("", BroadcastBlock)
+	config := NewClientConfig("", BroadcastBlock, false)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -345,7 +345,7 @@ func TestMultiSign(t *testing.T) {
 }
 
 func TestTransferOwnership(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock, true)
 	client := NewClient(config)
 	// 1.generate unsigned transfer-ownership tx file
 	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
@@ -370,7 +370,7 @@ func TestTransferOwnership(t *testing.T) {
 }
 
 func TestCancelOrders(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -387,7 +387,7 @@ func TestCancelOrders(t *testing.T) {
 // query test
 
 func TestQueryValidators(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	vals, err := client.Staking().QueryValidators()
 	require.NoError(t, err)
@@ -397,7 +397,7 @@ func TestQueryValidators(t *testing.T) {
 }
 
 func TestQueryValidator(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	valAddr := "okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"
 	val, err := client.Staking().QueryValidator(valAddr)
@@ -406,7 +406,7 @@ func TestQueryValidator(t *testing.T) {
 }
 
 func TestQueryDelegator(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	delResp, err := client.Staking().QueryDelegator(addr)
 	require.NoError(t, err)
@@ -414,7 +414,7 @@ func TestQueryDelegator(t *testing.T) {
 }
 
 func TestQueryTokenInfo(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	tokens, err := client.Token().QueryTokenInfo(addr, "")
 	require.NoError(t, err)
@@ -431,7 +431,7 @@ func TestQueryTokenInfo(t *testing.T) {
 }
 
 func TestQueryProducts(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock, false)
 	client := NewClient(config)
 	tokenPairs, err := client.Dex().QueryProducts("", 1, 50)
 	require.NoError(t, err)
@@ -441,7 +441,7 @@ func TestQueryProducts(t *testing.T) {
 }
 
 func TestQueryAccountTokensInfo(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	tokensInfo, err := client.Token().QueryAccountTokensInfo(addr)
 	require.NoError(t, err)
@@ -449,7 +449,7 @@ func TestQueryAccountTokensInfo(t *testing.T) {
 }
 
 func TestQueryAccountTokenInfo(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	tokensInfo, err := client.Token().QueryAccountTokenInfo(addr, "btc-e68")
 	require.NoError(t, err)
@@ -457,7 +457,7 @@ func TestQueryAccountTokenInfo(t *testing.T) {
 }
 
 func TestQueryDepthBook(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock, true)
 	client := NewClient(config)
 	tokensInfo, err := client.Order().QueryDepthBook("btc-216_okt")
 	require.NoError(t, err)
@@ -467,7 +467,7 @@ func TestQueryDepthBook(t *testing.T) {
 // need test
 
 func TestQueryCandles(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 	candles, err := client.Backend().QueryCandles("tbtc-44f_tusdk-0cd", 60, 100)
 	require.NoError(t, err)
@@ -477,7 +477,7 @@ func TestQueryCandles(t *testing.T) {
 }
 
 func TestQueryTickers(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 	tickers, err := client.Backend().QueryTickers(10)
 	require.NoError(t, err)
@@ -487,7 +487,7 @@ func TestQueryTickers(t *testing.T) {
 }
 
 func TestQueryRecentTxRecord(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 	record, err := client.Backend().QueryRecentTxRecord("tbtc-44f_tusdk-0cd", 0, int(time.Now().Unix()), 0, 10)
 	require.NoError(t, err)
@@ -497,7 +497,7 @@ func TestQueryRecentTxRecord(t *testing.T) {
 }
 
 func TestQueryOpenOrders(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 
 	product := "tbtc-44f_tusdk-0cd"
@@ -513,7 +513,7 @@ func TestQueryOpenOrders(t *testing.T) {
 }
 
 func TestQueryClosedOrders(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 
 	product := "tbtc-44f_tusdk-0cd"
@@ -529,7 +529,7 @@ func TestQueryClosedOrders(t *testing.T) {
 }
 
 func TestQueryDeals(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 
 	product := "tbtc-44f_tusdk-0cd"
@@ -545,7 +545,7 @@ func TestQueryDeals(t *testing.T) {
 }
 
 func TestQueryTransactions(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock, false)
 	client := NewClient(config)
 
 	typeCode := 0
@@ -560,7 +560,7 @@ func TestQueryTransactions(t *testing.T) {
 }
 
 func TestQueryBlock(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock, false)
 	client := NewClient(config)
 	block, err := client.Tendermint().QueryBlock(11)
 	require.NoError(t, err)

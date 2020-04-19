@@ -18,5 +18,5 @@ func ParseBlock(cdc sdk.SDKCodec, pTmBlock *tmtypes.Block) (block types.Block, e
 		stdTxs = append(stdTxs, stdTx)
 	}
 
-	return types.NewBlock(pTmBlock.Header, types.NewData(stdTxs), pTmBlock.Evidence, pTmBlock.LastCommit), err
+	return types.NewBlock(pTmBlock.Header, types.NewData(stdTxs), pTmBlock.Evidence, *pTmBlock.LastCommit), err
 }

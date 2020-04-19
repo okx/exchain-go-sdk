@@ -13,15 +13,15 @@ var _ types.BaseClient = (*baseClient)(nil)
 
 type baseClient struct {
 	types.RPCClient
-	config types.ClientConfig
+	config *types.ClientConfig
 	cdc    types.SDKCodec
 }
 
 // NewBaseClient creates a new instance of baseClient
-func NewBaseClient(cdc types.SDKCodec, config types.ClientConfig) *baseClient {
+func NewBaseClient(cdc types.SDKCodec, pConfig *types.ClientConfig) *baseClient {
 	return &baseClient{
-		RPCClient: rpcCli.NewHTTP(config.NodeURI, "/websocket"),
-		config:    config,
+		RPCClient: rpcCli.NewHTTP(pConfig.NodeURI, "/websocket"),
+		config:    pConfig,
 		cdc:       cdc,
 	}
 }
@@ -100,7 +100,7 @@ func (bc *baseClient) GetCodec() types.SDKCodec {
 
 // GetConfig gets the client config
 func (bc *baseClient) GetConfig() types.ClientConfig {
-	return bc.config
+	return *bc.config
 }
 
 // BuildAndBroadcast implements the TxHandler interface

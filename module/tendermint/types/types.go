@@ -15,16 +15,16 @@ type Block struct {
 	tmtypes.Header `json:"header"`
 	Data           `json:"data"`
 	Evidence       tmtypes.EvidenceData `json:"evidence"`
-	LastCommit     *tmtypes.Commit      `json:"last_commit"`
+	LastCommit     tmtypes.Commit       `json:"last_commit"`
 }
 
 // NewBlock creates a new instance of Block
-func NewBlock(header tmtypes.Header, data Data, evidence tmtypes.EvidenceData, pLastCommit *tmtypes.Commit) Block {
+func NewBlock(header tmtypes.Header, data Data, evidence tmtypes.EvidenceData, lastCommit tmtypes.Commit) Block {
 	return Block{
 		Header:     header,
 		Data:       data,
 		Evidence:   evidence,
-		LastCommit: pLastCommit,
+		LastCommit: lastCommit,
 	}
 }
 

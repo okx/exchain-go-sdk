@@ -1,9 +1,9 @@
 package exposed
 
 import (
-	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 )
 
 // Token shows the expected behavior for inner token client

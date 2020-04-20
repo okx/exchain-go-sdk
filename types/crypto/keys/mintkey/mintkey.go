@@ -3,6 +3,7 @@ package mintkey
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys/keyerror"
 
 	"github.com/tendermint/crypto/bcrypt"
 
@@ -12,8 +13,6 @@ import (
 	"github.com/tendermint/tendermint/crypto/xsalsa20symmetric"
 
 	cmn "github.com/tendermint/tendermint/libs/common"
-
-	"github.com/okex/okchain-go-sdk/crypto/keys/keyerror"
 )
 
 const (

@@ -2,14 +2,13 @@ package crypto
 
 import (
 	"fmt"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
 	"os"
 
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/pkg/errors"
 
-	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
 	"github.com/okex/okchain-go-sdk/types"
-
 	tmbtcec "github.com/tendermint/btcd/btcec"
 	tmcrypto "github.com/tendermint/tendermint/crypto"
 	tmsecp256k1 "github.com/tendermint/tendermint/crypto/secp256k1"

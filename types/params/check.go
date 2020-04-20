@@ -3,8 +3,8 @@ package params
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/crypto/keys"
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 	"strings"
 )
 

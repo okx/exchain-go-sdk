@@ -6,7 +6,6 @@ import (
 	"github.com/okex/okchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
 )
 
 // Send transfers coins to other receiver
@@ -21,7 +20,7 @@ func (tc tokenClient) Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo
 		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", toAddrStr, err)
 	}
 
-	coins, err := utils.ParseDecCoins(coinsStr)
+	coins, err := sdk.ParseDecCoins(coinsStr)
 	if err != nil {
 		return resp, fmt.Errorf("failed. parse DecCoins [%s] error: %s", coinsStr, err)
 	}

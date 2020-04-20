@@ -3,22 +3,22 @@ package module
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/tx"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )
 
-var _ types.BaseClient = (*baseClient)(nil)
+var _ sdk.BaseClient = (*baseClient)(nil)
 
 type baseClient struct {
-	types.RPCClient
-	config *types.ClientConfig
-	cdc    types.SDKCodec
+	sdk.RPCClient
+	config *sdk.ClientConfig
+	cdc    sdk.SDKCodec
 }
 
 // NewBaseClient creates a new instance of baseClient
-func NewBaseClient(cdc types.SDKCodec, pConfig *types.ClientConfig) *baseClient {
+func NewBaseClient(cdc sdk.SDKCodec, pConfig *sdk.ClientConfig) *baseClient {
 	return &baseClient{
 		RPCClient: rpcCli.NewHTTP(pConfig.NodeURI, "/websocket"),
 		config:    pConfig,
@@ -64,28 +64,28 @@ func (bc *baseClient) QuerySubspace(subspace []byte, storeName string) (res []cm
 }
 
 // Broadcast broadcasts by different modes
-func (bc *baseClient) Broadcast(txBytes []byte, broadcastMode types.BroadcastMode) (res types.TxResponse, err error) {
+func (bc *baseClient) Broadcast(txBytes []byte, broadcastMode sdk.BroadcastMode) (res sdk.TxResponse, err error) {
 	switch broadcastMode {
-	case types.BroadcastSync:
+	case sdk.BroadcastSync:
 		retBroadcastTx, err := bc.BroadcastTxSync(txBytes)
-		return types.NewResponseFormatBroadcastTx(retBroadcastTx), err
+		return sdk.NewResponseFormatBroadcastTx(retBroadcastTx), err
 
-	case types.BroadcastAsync:
+	case sdk.BroadcastAsync:
 		retBroadcastTx, err := bc.BroadcastTxAsync(txBytes)
-		return types.NewResponseFormatBroadcastTx(retBroadcastTx), err
+		return sdk.NewResponseFormatBroadcastTx(retBroadcastTx), err
 
-	case types.BroadcastBlock:
+	case sdk.BroadcastBlock:
 		retBroadcastTxCommit, err := bc.BroadcastTxCommit(txBytes)
 		if err != nil {
-			return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err
+			return sdk.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err
 		}
 		if !retBroadcastTxCommit.CheckTx.IsOK() {
-			return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), fmt.Errorf(retBroadcastTxCommit.CheckTx.Log)
+			return sdk.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), fmt.Errorf(retBroadcastTxCommit.CheckTx.Log)
 		}
 		if !retBroadcastTxCommit.DeliverTx.IsOK() {
-			return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), fmt.Errorf(retBroadcastTxCommit.DeliverTx.Log)
+			return sdk.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), fmt.Errorf(retBroadcastTxCommit.DeliverTx.Log)
 		}
-		return types.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err
+		return sdk.NewResponseFormatBroadcastTxCommit(retBroadcastTxCommit), err
 
 	default:
 		err = fmt.Errorf("failed. unsupported broadcast mode %s; supported types: sync, async, block", broadcastMode)
@@ -94,19 +94,19 @@ func (bc *baseClient) Broadcast(txBytes []byte, broadcastMode types.BroadcastMod
 }
 
 // GetCodec gets the codec of the base client
-func (bc *baseClient) GetCodec() types.SDKCodec {
+func (bc *baseClient) GetCodec() sdk.SDKCodec {
 	return bc.cdc
 }
 
 // GetConfig gets the client config
-func (bc *baseClient) GetConfig() types.ClientConfig {
+func (bc *baseClient) GetConfig() sdk.ClientConfig {
 	return *bc.config
 }
 
 // BuildAndBroadcast implements the TxHandler interface
-func (bc *baseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs []types.Msg, accNumber,
-	seqNumber uint64) (resp types.TxResponse, err error) {
-	stdTx, err := tx.BuildTx(fromName, passphrase, memo, msgs, accNumber, seqNumber)
+func (bc *baseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber,
+	seqNumber uint64) (resp sdk.TxResponse, err error) {
+	stdTx, err := bc.BuildStdTx(fromName, passphrase, memo, msgs, accNumber, seqNumber)
 	if err != nil {
 		return resp, fmt.Errorf("failed. build stdTx error: %s", err)
 	}
@@ -117,4 +117,29 @@ func (bc *baseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs 
 	}
 
 	return bc.Broadcast(bytes, bc.GetConfig().BroadcastMode)
+}
+
+// BuildAndSign builds std sign context and sign it
+func (bc *baseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (
+	stdTx sdk.StdTx, err error) {
+	config := bc.GetConfig()
+	if len(config.ChainID) == 0 {
+		return stdTx, errors.New("failed. empty chain ID")
+	}
+	// TODO: implements the gas price later
+	signMsg := sdk.StdSignMsg{
+		ChainID:       config.ChainID,
+		AccountNumber: accNumber,
+		Sequence:      seqNumber,
+		Memo:          memo,
+		Msgs:          msgs,
+		Fee:           sdk.NewStdFee(200000, config.Fees),
+	}
+
+	sigBytes, err := tx.MakeSignature(fromName, passphrase, signMsg)
+	if err != nil {
+		return
+	}
+
+	return sdk.NewStdTx(signMsg.Msgs, signMsg.Fee, []sdk.StdSignature{sigBytes}, signMsg.Memo), err
 }

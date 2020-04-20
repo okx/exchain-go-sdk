@@ -8,7 +8,11 @@ import (
 )
 
 var (
+	// Denominations can be 3 ~ 16 characters long
 	reDnmString = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
+	reDecAmt    = `[[:digit:]]*\.?[[:digit:]]+`
+	reSpc       = `[[:space:]]*`
+	reDecCoin   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
 	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
@@ -199,6 +203,59 @@ func NewDecCoins(coins ...DecCoin) DecCoins {
 	}
 
 	return newCoins
+}
+
+// ParseDecCoins parses DecCoins from string
+func ParseDecCoins(coinsStr string) (DecCoins, error) {
+	coinsStr = strings.TrimSpace(coinsStr)
+	if len(coinsStr) == 0 {
+		return nil, nil
+	}
+
+	coinStrs := strings.Split(coinsStr, ",")
+	coins := make(DecCoins, len(coinStrs))
+	for i, coinStr := range coinStrs {
+		coin, err := ParseDecCoin(coinStr)
+		if err != nil {
+			return nil, err
+		}
+
+		coins[i] = coin
+	}
+
+	// sort coins for determinism
+	coins.Sort()
+
+	// validate coins before returning
+	if !coins.IsValid() {
+		return nil, fmt.Errorf("parsed decimal coins are invalid: %#v", coins)
+	}
+
+	return coins, nil
+}
+
+// ParseDecCoin parses a decimal coin from a string, returning an error if invalid
+// An empty string is considered invalid
+func ParseDecCoin(coinStr string) (coin DecCoin, err error) {
+	coinStr = strings.TrimSpace(coinStr)
+
+	matches := reDecCoin.FindStringSubmatch(coinStr)
+	if matches == nil {
+		return coin, fmt.Errorf("invalid decimal coin expression: %s", coinStr)
+	}
+
+	amountStr, denomStr := matches[1], matches[2]
+
+	amount, err := NewDecFromStr(amountStr)
+	if err != nil {
+		return coin, fmt.Errorf("failed to parse decimal coin amount: %s, %s", amountStr, err.Error())
+	}
+
+	if err := validateDenom(denomStr); err != nil {
+		return coin, fmt.Errorf("invalid denom cannot contain upper case characters or spaces: %s", err)
+	}
+
+	return NewDecCoinFromDec(denomStr, amount), nil
 }
 
 func findDup(coins DecCoins) int {

@@ -17,6 +17,7 @@ type BaseClient interface {
 // TxHandler shows the expected behavior to handle tx
 type TxHandler interface {
 	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error)
+	BuildStdTx(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (signMsg StdTx, err error)
 }
 
 // ClientQuery shows the expected query behavior
@@ -42,12 +43,21 @@ type RPCClient interface {
 type ClientConfig struct {
 	NodeURI       string
 	BroadcastMode BroadcastMode
+	ChainID       string
+	Fees          DecCoins
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI string, broadcastMode BroadcastMode) ClientConfig {
+func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string) (cliConfig ClientConfig, err error) {
+	fees, err := ParseDecCoins(feesStr)
+	if err != nil {
+		return
+	}
+
 	return ClientConfig{
 		NodeURI:       nodeURI,
 		BroadcastMode: broadcastMode,
-	}
+		ChainID:       chainID,
+		Fees:          fees,
+	}, err
 }

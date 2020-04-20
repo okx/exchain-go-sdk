@@ -30,7 +30,7 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 		return
 	}
 
-	amount, err := utils.ParseDecCoin(amountStr)
+	amount, err := sdk.ParseDecCoin(amountStr)
 	if err != nil {
 		return
 	}
@@ -47,7 +47,7 @@ func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, mem
 		return
 	}
 
-	amount, err := utils.ParseDecCoin(amountStr)
+	amount, err := sdk.ParseDecCoin(amountStr)
 	if err != nil {
 		return
 	}

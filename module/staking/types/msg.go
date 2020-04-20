@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/json"
 	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/tendermint/tendermint/crypto"
 )
 
@@ -126,7 +125,7 @@ type msgCreateValidatorJSON struct {
 // Delegator address and validator address are the same
 func NewMsgCreateValidator(valAddr sdk.ValAddress, pubKey crypto.PubKey, description Description,
 ) MsgCreateValidator {
-	minSelfDelegationCoin, err := utils.ParseDecCoin(defaultMinSelfDelegation)
+	minSelfDelegationCoin, err := sdk.ParseDecCoin(defaultMinSelfDelegation)
 	if err != nil {
 		panic(err)
 	}

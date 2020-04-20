@@ -6,11 +6,10 @@ import (
 	"math/big"
 	"strconv"
 	"strings"
-	"testing"
 )
 
-// NOTE: never use new(Dec) or else we will panic unmarshalling into the
-// nil embedded big.Int
+// Dec - structure for the number with decimal values
+// NOTE: never use new(Dec) or else we will panic unmarshalling into the nil embedded big.Int
 type Dec struct {
 	*big.Int `json:"int"`
 }
@@ -69,26 +68,13 @@ func precisionMultiplier(prec int64) *big.Int {
 
 //______________________________________________________________________________________________
 
-// create a new Dec from integer assuming whole number
-func NewDec(i int64) Dec {
-	return NewDecWithPrec(i, 0)
-}
-
-// create a new Dec from integer with decimal place at prec
-// CONTRACT: prec <= Precision
-func NewDecWithPrec(i, prec int64) Dec {
-	return Dec{
-		new(big.Int).Mul(big.NewInt(i), precisionMultiplier(prec)),
-	}
-}
-
-// create a new Dec from big integer assuming whole numbers
+// NewDecFromBigInt creates a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
 func NewDecFromBigInt(i *big.Int) Dec {
 	return NewDecFromBigIntWithPrec(i, 0)
 }
 
-// create a new Dec from big integer assuming whole numbers
+// NewDecFromBigIntWithPrec creates a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
 func NewDecFromBigIntWithPrec(i *big.Int, prec int64) Dec {
 	return Dec{
@@ -96,13 +82,13 @@ func NewDecFromBigIntWithPrec(i *big.Int, prec int64) Dec {
 	}
 }
 
-// create a new Dec from big integer assuming whole numbers
+// NewDecFromInt creates a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
 func NewDecFromInt(i Int) Dec {
 	return NewDecFromIntWithPrec(i, 0)
 }
 
-// create a new Dec from big integer with decimal place at prec
+// NewDecFromIntWithPrec creates a new Dec from big integer with decimal place at prec
 // CONTRACT: prec <= Precision
 func NewDecFromIntWithPrec(i Int, prec int64) Dec {
 	return Dec{
@@ -110,7 +96,7 @@ func NewDecFromIntWithPrec(i Int, prec int64) Dec {
 	}
 }
 
-// create a decimal from an input decimal string.
+// NewDecFromStr creates a decimal from an input decimal string.
 // valid must come in the form:
 //   (-) whole integers (.) decimal integers
 // examples of acceptable input include:
@@ -174,7 +160,7 @@ func NewDecFromStr(str string) (d Dec, err Error) {
 	return Dec{combined}, nil
 }
 
-// Decimal from string, panic on error
+// MustNewDecFromStr parses decimal from string, panic on error
 func MustNewDecFromStr(s string) Dec {
 	dec, err := NewDecFromStr(s)
 	if err != nil {
@@ -183,7 +169,6 @@ func MustNewDecFromStr(s string) Dec {
 	return dec
 }
 
-//______________________________________________________________________________________________
 //nolint
 func (d Dec) IsNil() bool       { return d.Int == nil }                 // is decimal nil
 func (d Dec) IsZero() bool      { return (d.Int).Sign() == 0 }          // is equal to zero
@@ -197,7 +182,7 @@ func (d Dec) LTE(d2 Dec) bool   { return (d.Int).Cmp(d2.Int) <= 0 }     // less 
 func (d Dec) Neg() Dec          { return Dec{new(big.Int).Neg(d.Int)} } // reverse the decimal sign
 func (d Dec) Abs() Dec          { return Dec{new(big.Int).Abs(d.Int)} } // absolute value
 
-// addition
+// Add defines addition
 func (d Dec) Add(d2 Dec) Dec {
 	res := new(big.Int).Add(d.Int, d2.Int)
 
@@ -207,7 +192,7 @@ func (d Dec) Add(d2 Dec) Dec {
 	return Dec{res}
 }
 
-// subtraction
+// Sub defines subtraction
 func (d Dec) Sub(d2 Dec) Dec {
 	res := new(big.Int).Sub(d.Int, d2.Int)
 
@@ -217,7 +202,7 @@ func (d Dec) Sub(d2 Dec) Dec {
 	return Dec{res}
 }
 
-// multiplication
+// Mul defines multiplication
 func (d Dec) Mul(d2 Dec) Dec {
 	mul := new(big.Int).Mul(d.Int, d2.Int)
 	chopped := chopPrecisionAndRound(mul)
@@ -228,7 +213,7 @@ func (d Dec) Mul(d2 Dec) Dec {
 	return Dec{chopped}
 }
 
-// multiplication truncate
+// MulTruncate defines multiplication truncate
 func (d Dec) MulTruncate(d2 Dec) Dec {
 	mul := new(big.Int).Mul(d.Int, d2.Int)
 	chopped := chopPrecisionAndTruncate(mul)
@@ -239,7 +224,7 @@ func (d Dec) MulTruncate(d2 Dec) Dec {
 	return Dec{chopped}
 }
 
-// multiplication
+// MulInt defines multiplication with Int
 func (d Dec) MulInt(i Int) Dec {
 	mul := new(big.Int).Mul(d.Int, i.i)
 
@@ -249,7 +234,7 @@ func (d Dec) MulInt(i Int) Dec {
 	return Dec{mul}
 }
 
-// MulInt64 - multiplication with int64
+// MulInt64 defines multiplication with int64
 func (d Dec) MulInt64(i int64) Dec {
 	mul := new(big.Int).Mul(d.Int, big.NewInt(i))
 
@@ -259,7 +244,7 @@ func (d Dec) MulInt64(i int64) Dec {
 	return Dec{mul}
 }
 
-// quotient
+// Quo defines quotient
 func (d Dec) Quo(d2 Dec) Dec {
 
 	// multiply precision twice
@@ -275,7 +260,7 @@ func (d Dec) Quo(d2 Dec) Dec {
 	return Dec{chopped}
 }
 
-// quotient truncate
+// QuoTruncate defines quotient truncate
 func (d Dec) QuoTruncate(d2 Dec) Dec {
 
 	// multiply precision twice
@@ -291,7 +276,7 @@ func (d Dec) QuoTruncate(d2 Dec) Dec {
 	return Dec{chopped}
 }
 
-// quotient, round up
+// QuoRoundUp defines quotient, round up
 func (d Dec) QuoRoundUp(d2 Dec) Dec {
 	// multiply precision twice
 	mul := new(big.Int).Mul(d.Int, precisionReuse)
@@ -306,24 +291,24 @@ func (d Dec) QuoRoundUp(d2 Dec) Dec {
 	return Dec{chopped}
 }
 
-// quotient
+// QuoInt defines quotient
 func (d Dec) QuoInt(i Int) Dec {
 	mul := new(big.Int).Quo(d.Int, i.i)
 	return Dec{mul}
 }
 
-// QuoInt64 - quotient with int64
+// QuoInt64 defines quotient with int64
 func (d Dec) QuoInt64(i int64) Dec {
 	mul := new(big.Int).Quo(d.Int, big.NewInt(i))
 	return Dec{mul}
 }
 
-// is integer, e.g. decimals are zero
+// IsInteger checks whether it is integer, e.g. decimals are zero
 func (d Dec) IsInteger() bool {
 	return new(big.Int).Rem(d.Int, precisionReuse).Sign() == 0
 }
 
-// format decimal state
+// Format formats decimal state
 func (d Dec) Format(s fmt.State, verb rune) {
 	_, err := s.Write([]byte(d.String()))
 	if err != nil {
@@ -331,6 +316,7 @@ func (d Dec) Format(s fmt.State, verb rune) {
 	}
 }
 
+// String returns a human readable string representation of Dec
 func (d Dec) String() string {
 	if d.Int == nil {
 		return d.Int.String()
@@ -468,7 +454,7 @@ func (d Dec) RoundInt64() int64 {
 	return chopped.Int64()
 }
 
-// RoundInt round the decimal using bankers rounding
+// RoundInt rounds the decimal using bankers rounding
 func (d Dec) RoundInt() Int {
 	return NewIntFromBigInt(chopPrecisionAndRoundNonMutative(d.Int))
 }
@@ -504,8 +490,7 @@ func (d Dec) TruncateDec() Dec {
 	return NewDecFromBigInt(chopPrecisionAndTruncateNonMutative(d.Int))
 }
 
-// Ceil returns the smallest interger value (as a decimal) that is greater than
-// or equal to the given decimal.
+// Ceil returns the smallest interger value (as a decimal) that is greater than or equal to the given decimal
 func (d Dec) Ceil() Dec {
 	tmp := new(big.Int).Set(d.Int)
 
@@ -546,7 +531,7 @@ func init() {
 	}
 }
 
-// wraps d.MarshalText()
+// MarshalAmino wraps d.MarshalText()
 func (d Dec) MarshalAmino() (string, error) {
 	if d.Int == nil {
 		return nilAmino, nil
@@ -555,7 +540,7 @@ func (d Dec) MarshalAmino() (string, error) {
 	return string(bz), err
 }
 
-// requires a valid JSON string - strings quotes and calls UnmarshalText
+// UnmarshalAmino requires a valid JSON string - strings quotes and calls UnmarshalText
 func (d *Dec) UnmarshalAmino(text string) (err error) {
 	tempInt := new(big.Int)
 	err = tempInt.UnmarshalText([]byte(text))
@@ -593,42 +578,4 @@ func (d *Dec) UnmarshalJSON(bz []byte) error {
 	}
 	d.Int = newDec.Int
 	return nil
-}
-
-//___________________________________________________________________________________
-// helpers
-
-// test if two decimal arrays are equal
-func DecsEqual(d1s, d2s []Dec) bool {
-	if len(d1s) != len(d2s) {
-		return false
-	}
-
-	for i, d1 := range d1s {
-		if !d1.Equal(d2s[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-// minimum decimal between two
-func MinDec(d1, d2 Dec) Dec {
-	if d1.LT(d2) {
-		return d1
-	}
-	return d2
-}
-
-// maximum decimal between two
-func MaxDec(d1, d2 Dec) Dec {
-	if d1.LT(d2) {
-		return d2
-	}
-	return d1
-}
-
-// intended to be used with require/assert:  require.True(DecEq(...))
-func DecEq(t *testing.T, exp, got Dec) (*testing.T, bool, string, string, string) {
-	return t, exp.Equal(got), "expected:\t%v\ngot:\t\t%v", exp.String(), got.String()
 }

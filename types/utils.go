@@ -13,7 +13,7 @@ func MustSortJSON(toSortJSON []byte) []byte {
 	return js
 }
 
-// SortedJSON takes any JSON and returns it sorted by keys. Also, all white-spaces are removed
+// SortJSON takes any JSON and returns it sorted by keys. Also, all white-spaces are removed
 func SortJSON(toSortJSON []byte) ([]byte, error) {
 	var c interface{}
 	err := json.Unmarshal(toSortJSON, &c)

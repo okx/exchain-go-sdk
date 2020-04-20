@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math"
 	"strings"
 
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -37,6 +36,7 @@ type Result struct {
 	Events Events
 }
 
+// IsOK shows whether the result is successful
 // TODO: In the future, more codes may be OK
 func (res Result) IsOK() bool {
 	return res.Code.IsOK()
@@ -83,8 +83,7 @@ type TxResponse struct {
 	Tx        Tx              `json:"tx,omitempty"`
 	Timestamp string          `json:"timestamp,omitempty"`
 
-	// DEPRECATED: Remove in the next next major release in favor of using the
-	// ABCIMessageLog.Events field.
+	// DEPRECATED: Remove in the next next major release in favor of using the ABCIMessageLog.Events field
 	Events StringEvents `json:"events,omitempty"`
 }
 
@@ -111,7 +110,10 @@ func newTxResponseCheckTx(res *ctypes.ResultBroadcastTxCommit) TxResponse {
 		txHash = res.Hash.String()
 	}
 
-	parsedLogs, _ := ParseABCILogs(res.CheckTx.Log)
+	parsedLogs, err := ParseABCILogs(res.CheckTx.Log)
+	if err != nil {
+		log.Println(err)
+	}
 
 	return TxResponse{
 		Height:    res.Height,
@@ -138,7 +140,10 @@ func newTxResponseDeliverTx(res *ctypes.ResultBroadcastTxCommit) TxResponse {
 		txHash = res.Hash.String()
 	}
 
-	parsedLogs, _ := ParseABCILogs(res.DeliverTx.Log)
+	parsedLogs, err := ParseABCILogs(res.DeliverTx.Log)
+	if err != nil {
+		log.Println(err)
+	}
 
 	return TxResponse{
 		Height:    res.Height,
@@ -161,7 +166,10 @@ func NewResponseFormatBroadcastTx(res *ctypes.ResultBroadcastTx) TxResponse {
 		return TxResponse{}
 	}
 
-	parsedLogs, _ := ParseABCILogs(res.Log)
+	parsedLogs, err := ParseABCILogs(res.Log)
+	if err != nil {
+		log.Println(err)
+	}
 
 	return TxResponse{
 		Code:   res.Code,
@@ -172,28 +180,41 @@ func NewResponseFormatBroadcastTx(res *ctypes.ResultBroadcastTx) TxResponse {
 	}
 }
 
+// String returns a human readable string representation of TxResponse
 func (r TxResponse) String() string {
 	var sb strings.Builder
-	sb.WriteString("Response:\n")
+	if _, err := sb.WriteString("Response:\n"); err != nil {
+		log.Println(err)
+	}
 
 	if r.Height > 0 {
-		sb.WriteString(fmt.Sprintf("  Height: %d\n", r.Height))
+		if _, err := sb.WriteString(fmt.Sprintf("  Height: %d\n", r.Height)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.TxHash != "" {
-		sb.WriteString(fmt.Sprintf("  TxHash: %s\n", r.TxHash))
+		if _, err := sb.WriteString(fmt.Sprintf("  TxHash: %s\n", r.TxHash)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.Code > 0 {
-		sb.WriteString(fmt.Sprintf("  Code: %d\n", r.Code))
+		if _, err := sb.WriteString(fmt.Sprintf("  Code: %d\n", r.Code)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.Data != "" {
-		sb.WriteString(fmt.Sprintf("  Data: %s\n", r.Data))
+		if _, err := sb.WriteString(fmt.Sprintf("  Data: %s\n", r.Data)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.RawLog != "" {
-		sb.WriteString(fmt.Sprintf("  Raw Log: %s\n", r.RawLog))
+		if _, err := sb.WriteString(fmt.Sprintf("  Raw Log: %s\n", r.RawLog)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.Logs != nil {
@@ -204,7 +225,9 @@ func (r TxResponse) String() string {
 	}
 
 	if r.Info != "" {
-		sb.WriteString(fmt.Sprintf("  Info: %s\n", r.Info))
+		if _, err := sb.WriteString(fmt.Sprintf("  Info: %s\n", r.Info)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	//if r.GasWanted != 0 {
@@ -216,15 +239,21 @@ func (r TxResponse) String() string {
 	//}
 
 	if r.Codespace != "" {
-		sb.WriteString(fmt.Sprintf("  Codespace: %s\n", r.Codespace))
+		if _, err := sb.WriteString(fmt.Sprintf("  Codespace: %s\n", r.Codespace)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if r.Timestamp != "" {
-		sb.WriteString(fmt.Sprintf("  Timestamp: %s\n", r.Timestamp))
+		if _, err := sb.WriteString(fmt.Sprintf("  Timestamp: %s\n", r.Timestamp)); err != nil {
+			log.Println(err)
+		}
 	}
 
 	if len(r.Events) > 0 {
-		sb.WriteString(fmt.Sprintf("  Events: \n%s\n", r.Events.String()))
+		if _, err := sb.WriteString(fmt.Sprintf("  Events: \n%s\n", r.Events.String())); err != nil {
+			log.Println(err)
+		}
 	}
 
 	return strings.TrimSpace(sb.String())
@@ -243,17 +272,6 @@ type SearchTxsResult struct {
 	PageTotal  int          `json:"page_total"`  // Count of total pages
 	Limit      int          `json:"limit"`       // Max count txs per page
 	Txs        []TxResponse `json:"txs"`         // List of txs in current page
-}
-
-func NewSearchTxsResult(totalCount, count, page, limit int, txs []TxResponse) SearchTxsResult {
-	return SearchTxsResult{
-		TotalCount: totalCount,
-		Count:      count,
-		PageNumber: page,
-		PageTotal:  int(math.Ceil(float64(totalCount) / float64(limit))),
-		Limit:      limit,
-		Txs:        txs,
-	}
 }
 
 // ParseABCILogs attempts to parse a stringified ABCI tx log into a slice of ABCIMessageLog types

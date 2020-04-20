@@ -155,15 +155,20 @@ func (aa AccAddress) String() string {
 }
 
 // Format implements the fmt.Formatter interface.
-// nolint: errcheck
 func (aa AccAddress) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 's':
-		s.Write([]byte(aa.String()))
+		if _, err := s.Write([]byte(aa.String())); err != nil {
+			log.Println(err)
+		}
 	case 'p':
-		s.Write([]byte(fmt.Sprintf("%p", aa)))
+		if _, err := s.Write([]byte(fmt.Sprintf("%p", aa))); err != nil {
+			log.Println(err)
+		}
 	default:
-		s.Write([]byte(fmt.Sprintf("%X", []byte(aa))))
+		if _, err := s.Write([]byte(fmt.Sprintf("%X", []byte(aa)))); err != nil {
+			log.Println(err)
+		}
 	}
 }
 
@@ -294,7 +299,6 @@ func (va ValAddress) String() string {
 }
 
 // Format implements the fmt.Formatter interface
-// nolint: errcheck
 func (va ValAddress) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 's':
@@ -429,15 +433,21 @@ func (ca ConsAddress) String() string {
 }
 
 // Format implements the fmt.Formatter interface
-// nolint: errcheck
 func (ca ConsAddress) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 's':
-		s.Write([]byte(ca.String()))
+		if _, err := s.Write([]byte(ca.String())); err != nil {
+			log.Println(err)
+		}
 	case 'p':
-		s.Write([]byte(fmt.Sprintf("%p", ca)))
+		if _, err := s.Write([]byte(fmt.Sprintf("%p", ca))); err != nil {
+			log.Println(err)
+		}
 	default:
-		s.Write([]byte(fmt.Sprintf("%X", []byte(ca))))
+		if _, err := s.Write([]byte(fmt.Sprintf("%X", []byte(ca)))); err != nil {
+			log.Println(err)
+		}
+
 	}
 }
 

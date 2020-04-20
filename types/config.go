@@ -1,13 +1,8 @@
 package types
 
-import (
-	"sync"
-)
-
 // Config is the structure that holds the SDK configuration parameters.
 // This could be used to initialize certain configuration parameters for the SDK.
 type Config struct {
-	mtx                 sync.RWMutex
 	sealed              bool
 	bech32AddressPrefix map[string]string
 	txEncoder           TxEncoder

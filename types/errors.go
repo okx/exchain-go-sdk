@@ -56,6 +56,7 @@ func unknownCodeMsg(code CodeType) string {
 	return fmt.Sprintf("unknown code %d", code)
 }
 
+// CodeToDefaultMsg converts code to string message
 // NOTE: Don't stringer this, we'll put better messages in later.
 func CodeToDefaultMsg(code CodeType) string {
 	switch code {
@@ -110,7 +111,7 @@ func ErrUnknownRequest(msg string) Error {
 
 type cmnError = cmn.Error
 
-// sdk Error type
+// Error shows the expected behavior of a sdk error type
 type Error interface {
 	// Implements cmn.Error
 	// Error() string

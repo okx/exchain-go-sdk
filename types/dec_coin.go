@@ -12,6 +12,7 @@ var (
 	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
+// DecCoin defines a coin which can have additional decimal points
 type DecCoin struct {
 	Denom  string `json:"denom"`
 	Amount Dec    `json:"amount"`
@@ -54,6 +55,7 @@ func (coin DecCoin) Add(coinB DecCoin) DecCoin {
 	return DecCoin{coin.Denom, coin.Amount.Add(coinB.Amount)}
 }
 
+// DecCoins defines a slice of coins with decimal values
 type DecCoins []DecCoin
 
 //nolint
@@ -103,19 +105,6 @@ func (coins DecCoins) IsValid() bool {
 
 		return true
 	}
-}
-
-func mustValidateDenom(denom string) {
-	if err := validateDenom(denom); err != nil {
-		panic(err)
-	}
-}
-
-func validateDenom(denom string) error {
-	if !reDnm.MatchString(denom) {
-		return fmt.Errorf("invalid denom: %s", denom)
-	}
-	return nil
 }
 
 // IsAllPositive returns true if there is at least one coin and all currencies
@@ -190,21 +179,6 @@ func (coins DecCoins) safeAdd(coinsB DecCoins) DecCoins {
 	}
 }
 
-func removeZeroDecCoins(coins DecCoins) DecCoins {
-	i, l := 0, len(coins)
-	for i < l {
-		if coins[i].IsZero() {
-			// remove coin
-			coins = append(coins[:i], coins[i+1:]...)
-			l--
-		} else {
-			i++
-		}
-	}
-
-	return coins[:i]
-}
-
 // NewDecCoins creates a new instance of DecCoins
 func NewDecCoins(coins ...DecCoin) DecCoins {
 	// remove zeroes
@@ -241,4 +215,32 @@ func findDup(coins DecCoins) int {
 	}
 
 	return -1
+}
+
+func removeZeroDecCoins(coins DecCoins) DecCoins {
+	i, l := 0, len(coins)
+	for i < l {
+		if coins[i].IsZero() {
+			// remove coin
+			coins = append(coins[:i], coins[i+1:]...)
+			l--
+		} else {
+			i++
+		}
+	}
+
+	return coins[:i]
+}
+
+func mustValidateDenom(denom string) {
+	if err := validateDenom(denom); err != nil {
+		panic(err)
+	}
+}
+
+func validateDenom(denom string) error {
+	if !reDnm.MatchString(denom) {
+		return fmt.Errorf("invalid denom: %s", denom)
+	}
+	return nil
 }

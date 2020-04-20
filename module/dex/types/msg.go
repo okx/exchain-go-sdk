@@ -33,7 +33,7 @@ func (MsgList) Type() string                 { return "" }
 func (MsgList) ValidateBasic() sdk.Error     { return nil }
 func (MsgList) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgList - structure for depositing on a product
+// MsgDeposit - structure for depositing on a product
 type MsgDeposit struct {
 	Product   string         `json:"product"`
 	Amount    sdk.DecCoin    `json:"amount"`

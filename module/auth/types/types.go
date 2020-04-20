@@ -17,7 +17,8 @@ const (
 
 var addressStoreKeyPrefix = []byte{0x01}
 
-func AddressStoreKey(accAddr sdk.AccAddress) []byte {
+// GetAddressStoreKey gets the store key for an account
+func GetAddressStoreKey(accAddr sdk.AccAddress) []byte {
 	return append(addressStoreKeyPrefix, accAddr.Bytes()...)
 }
 
@@ -35,10 +36,10 @@ type Account interface {
 	GetSequence() uint64
 	SetSequence(uint64) error
 
-	GetCoins() sdk.Coins
-	SetCoins(sdk.Coins) error
+	GetCoins() sdk.DecCoins
+	SetCoins(sdk.DecCoins) error
 
-	SpendableCoins(blockTime time.Time) sdk.Coins
+	SpendableCoins(blockTime time.Time) sdk.DecCoins
 
 	String() string
 }
@@ -46,7 +47,7 @@ type Account interface {
 // BaseAccount - structure of account info
 type BaseAccount struct {
 	Address       sdk.AccAddress `json:"address"`
-	Coins         sdk.Coins      `json:"coins"`
+	Coins         sdk.DecCoins      `json:"coins"`
 	PubKey        crypto.PubKey  `json:"public_key"`
 	AccountNumber uint64         `json:"account_number"`
 	Sequence      uint64         `json:"sequence"`
@@ -96,12 +97,12 @@ func (acc *BaseAccount) SetPubKey(pubKey crypto.PubKey) error {
 }
 
 // GetCoins gets the coins that the account owns
-func (acc *BaseAccount) GetCoins() sdk.Coins {
+func (acc *BaseAccount) GetCoins() sdk.DecCoins {
 	return acc.Coins
 }
 
 // SetCoins sets the coins that the account owns
-func (acc *BaseAccount) SetCoins(coins sdk.Coins) error {
+func (acc *BaseAccount) SetCoins(coins sdk.DecCoins) error {
 	acc.Coins = coins
 	return nil
 }
@@ -129,6 +130,6 @@ func (acc *BaseAccount) SetSequence(seq uint64) error {
 }
 
 // SpendableCoins gets the spendable coins that the account owns
-func (acc *BaseAccount) SpendableCoins(_ time.Time) sdk.Coins {
+func (acc *BaseAccount) SpendableCoins(_ time.Time) sdk.DecCoins {
 	return acc.GetCoins()
 }

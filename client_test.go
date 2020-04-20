@@ -593,7 +593,7 @@ func TestQueryCommitResults(t *testing.T) {
 }
 
 func TestQueryValidatorResult(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:21257", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
 	client := NewClient(config)
 	valsRes, err := client.Tendermint().QueryValidatorsResult(10000)
 	require.NoError(t, err)
@@ -612,11 +612,20 @@ func TestQueryTxResult(t *testing.T) {
 }
 
 func TestQueryTxsResult(t *testing.T) {
-	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
 	client := NewClient(config)
 	// get searching string
 	searchStr := `message.sender=okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya`
 	txsRes, err := client.Tendermint().QueryTxsResult(searchStr, 1, 30)
 	require.NoError(t, err)
 	fmt.Printf("%+v\n", txsRes)
+}
+
+func TestQueryAccount(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
+	client := NewClient(config)
+
+	acc, err := client.Auth().QueryAccount("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", acc)
 }

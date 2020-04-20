@@ -8,10 +8,8 @@ import (
 )
 
 var (
-	reDecAmt    = `[[:digit:]]*\.?[[:digit:]]+`
-	reSpc       = `[[:space:]]*`
 	reDnmString = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
-	reDecCoin   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
+	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
 type DecCoin struct {
@@ -107,6 +105,19 @@ func (coins DecCoins) IsValid() bool {
 	}
 }
 
+func mustValidateDenom(denom string) {
+	if err := validateDenom(denom); err != nil {
+		panic(err)
+	}
+}
+
+func validateDenom(denom string) error {
+	if !reDnm.MatchString(denom) {
+		return fmt.Errorf("invalid denom: %s", denom)
+	}
+	return nil
+}
+
 // IsAllPositive returns true if there is at least one coin and all currencies
 func (coins DecCoins) IsAllPositive() bool {
 	if len(coins) == 0 {
@@ -192,4 +203,42 @@ func removeZeroDecCoins(coins DecCoins) DecCoins {
 	}
 
 	return coins[:i]
+}
+
+// NewDecCoins creates a new instance of DecCoins
+func NewDecCoins(coins ...DecCoin) DecCoins {
+	// remove zeroes
+	newCoins := removeZeroDecCoins(coins)
+	if len(newCoins) == 0 {
+		return DecCoins{}
+	}
+
+	newCoins.Sort()
+
+	// detect duplicate Denoms
+	if dupIndex := findDup(newCoins); dupIndex != -1 {
+		panic(fmt.Errorf("find duplicate denom: %s", newCoins[dupIndex]))
+	}
+
+	if !newCoins.IsValid() {
+		panic(fmt.Errorf("invalid dec coin set: %s", newCoins))
+	}
+
+	return newCoins
+}
+
+func findDup(coins DecCoins) int {
+	if len(coins) <= 1 {
+		return -1
+	}
+
+	prevDenom := coins[0].Denom
+	for i := 1; i < len(coins); i++ {
+		if coins[i].Denom == prevDenom {
+			return i
+		}
+		prevDenom = coins[i].Denom
+	}
+
+	return -1
 }

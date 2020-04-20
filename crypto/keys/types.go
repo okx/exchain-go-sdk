@@ -114,6 +114,7 @@ func newLocalInfo(name string, pub crypto.PubKey, privArmor string) Info {
 	}
 }
 
+// NewLocalInfo creates a new instance of localInfo
 func NewLocalInfo(name string, pub crypto.PubKey, privArmor string) Info {
 	return newLocalInfo(name, pub, privArmor)
 }
@@ -218,7 +219,7 @@ type multiInfo struct {
 	PubKeys   []multisigPubKeyInfo `json:"pubkeys"`
 }
 
-func NewMultiInfo(name string, pub crypto.PubKey) Info {
+func newMultiInfo(name string, pub crypto.PubKey) Info {
 	multiPK := pub.(multisig.PubKeyMultisigThreshold)
 
 	pubKeys := make([]multisigPubKeyInfo, len(multiPK.PubKeys))

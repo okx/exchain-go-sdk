@@ -2,9 +2,9 @@ package types
 
 import (
 	"bytes"
-	"encoding/hex"
 	"encoding/json"
 	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"
+	"log"
 	"strings"
 
 	"errors"
@@ -18,7 +18,7 @@ import (
 const (
 	// AddrLen defines a valid address length
 	AddrLen = 20
-	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
+	// Bech32MainPrefix defines the Bech32 prefix of an account's address
 	Bech32MainPrefix = "okchain"
 
 	// PrefixAccount is the prefix for account keys
@@ -57,23 +57,9 @@ type Address interface {
 	Format(s fmt.State, verb rune)
 }
 
-// AccAddress a wrapper around bytes meant to represent an account address.
-// When marshaled to a string or JSON, it uses Bech32.
+// AccAddress a wrapper around bytes meant to represent an account address
+// When marshaled to a string or JSON, it uses Bech32
 type AccAddress []byte
-
-// AccAddressFromHex creates an AccAddress from a hex string.
-func AccAddressFromHex(address string) (addr AccAddress, err error) {
-	if len(address) == 0 {
-		return addr, errors.New("decoding Bech32 address failed: must provide an address")
-	}
-
-	bz, err := hex.DecodeString(address)
-	if err != nil {
-		return nil, err
-	}
-
-	return AccAddress(bz), nil
-}
 
 // AccAddressFromBech32 creates an AccAddress from a Bech32 string.
 func AccAddressFromBech32(address string) (addr AccAddress, err error) {
@@ -89,13 +75,13 @@ func AccAddressFromBech32(address string) (addr AccAddress, err error) {
 	}
 
 	if len(bz) != AddrLen {
-		return nil, errors.New("Incorrect address length")
+		return nil, errors.New("incorrect address length")
 	}
 
 	return AccAddress(bz), nil
 }
 
-// Returns boolean for whether two AccAddresses are Equal
+// Equals returns boolean for whether two AccAddresses are Equal
 func (aa AccAddress) Equals(aa2 Address) bool {
 	if aa.Empty() && aa2.Empty() {
 		return true
@@ -104,7 +90,7 @@ func (aa AccAddress) Equals(aa2 Address) bool {
 	return bytes.Equal(aa.Bytes(), aa2.Bytes())
 }
 
-// Returns boolean for whether an AccAddress is empty
+// Empty returns boolean for whether an AccAddress is empty
 func (aa AccAddress) Empty() bool {
 	if aa == nil {
 		return true
@@ -114,14 +100,12 @@ func (aa AccAddress) Empty() bool {
 	return bytes.Equal(aa.Bytes(), aa2.Bytes())
 }
 
-// Marshal returns the raw address bytes. It is needed for protobuf
-// compatibility.
+// Marshal returns the raw address bytes. It is needed for protobuf compatibility
 func (aa AccAddress) Marshal() ([]byte, error) {
 	return aa, nil
 }
 
-// Unmarshal sets the address to the given data. It is needed for protobuf
-// compatibility.
+// Unmarshal sets the address to the given data. It is needed for protobuf compatibility
 func (aa *AccAddress) Unmarshal(data []byte) error {
 	*aa = data
 	return nil
@@ -218,6 +202,7 @@ func GetFromBech32(bech32str, prefix string) ([]byte, error) {
 	return bz, nil
 }
 
+// Bech32ifyConsPub returns a Bech32 encoded string containing the Bech32PrefixConsPub prefixfor a given consensus node's PubKey
 func Bech32ifyConsPub(pub crypto.PubKey) (string, error) {
 	bech32PrefixConsPub := GetConfig().GetBech32ConsensusPubPrefix()
 	return bech32.ConvertAndEncode(bech32PrefixConsPub, pub.Bytes())
@@ -231,6 +216,7 @@ func Bech32ifyConsPub(pub crypto.PubKey) (string, error) {
 // operator. When marshaled to a string or JSON, it uses Bech32.
 type ValAddress []byte
 
+// Equals returns boolean for whether two ValAddresses are Equal
 func (va ValAddress) Equals(va2 Address) bool {
 	if va.Empty() && va2.Empty() {
 		return true
@@ -239,6 +225,7 @@ func (va ValAddress) Equals(va2 Address) bool {
 	return bytes.Equal(va.Bytes(), va2.Bytes())
 }
 
+// Empty returns boolean for whether an ValAddress is empty
 func (va ValAddress) Empty() bool {
 	if va == nil {
 		return true
@@ -248,20 +235,26 @@ func (va ValAddress) Empty() bool {
 	return bytes.Equal(va.Bytes(), va2.Bytes())
 }
 
+// Marshal returns the raw address bytes
+// It is needed for protobuf compatibility
 func (va ValAddress) Marshal() ([]byte, error) {
 	return va, nil
 }
 
+// Unmarshal sets the address to the given data
+// It is needed for protobuf compatibility
 func (va *ValAddress) Unmarshal(data []byte) error {
 	*va = data
 	return nil
 }
 
+// MarshalJSON marshals to JSON using Bech32
 func (va ValAddress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(va.String())
 
 }
 
+// UnmarshalJSON unmarshals from JSON assuming Bech32 encoding
 func (va *ValAddress) UnmarshalJSON(data []byte) error {
 	var s string
 
@@ -279,10 +272,12 @@ func (va *ValAddress) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Bytes returns the raw address bytes
 func (va ValAddress) Bytes() []byte {
 	return va
 }
 
+// String implements the Stringer interface
 func (va ValAddress) String() string {
 	if va.Empty() {
 		return ""
@@ -298,14 +293,22 @@ func (va ValAddress) String() string {
 	return bech32Addr
 }
 
+// Format implements the fmt.Formatter interface
+// nolint: errcheck
 func (va ValAddress) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 's':
-		s.Write([]byte(va.String()))
+		if _, err := s.Write([]byte(va.String())); err != nil {
+			log.Println(err)
+		}
 	case 'p':
-		s.Write([]byte(fmt.Sprintf("%p", va)))
+		if _, err := s.Write([]byte(fmt.Sprintf("%p", va))); err != nil {
+			log.Println(err)
+		}
 	default:
-		s.Write([]byte(fmt.Sprintf("%X", []byte(va))))
+		if _, err := s.Write([]byte(fmt.Sprintf("%X", []byte(va)))); err != nil {
+			log.Println(err)
+		}
 	}
 }
 
@@ -330,13 +333,15 @@ func ValAddressFromBech32(address string) (addr ValAddress, err error) {
 	return ValAddress(bz), nil
 }
 
+// VerifyAddressFormat verifies that the provided bytes form a valid address according to the default address rules or
+// a custom address verifier set by GetConfig().SetAddressVerifier()
 func VerifyAddressFormat(bz []byte) error {
 	verifier := GetConfig().GetAddressVerifier()
 	if verifier != nil {
 		return verifier(bz)
 	}
 	if len(bz) != AddrLen {
-		return errors.New("Incorrect address length")
+		return errors.New("incorrect address length")
 	}
 	return nil
 }
@@ -349,7 +354,7 @@ func VerifyAddressFormat(bz []byte) error {
 // When marshaled to a string or JSON, it uses Bech32.
 type ConsAddress []byte
 
-// Returns boolean for whether two ConsAddress are Equal
+// Equals returns boolean for whether two ConsAddress are Equal
 func (ca ConsAddress) Equals(ca2 Address) bool {
 	if ca.Empty() && ca2.Empty() {
 		return true
@@ -358,7 +363,7 @@ func (ca ConsAddress) Equals(ca2 Address) bool {
 	return bytes.Equal(ca.Bytes(), ca2.Bytes())
 }
 
-// Returns boolean for whether an ConsAddress is empty
+// Empty returns boolean for whether an ConsAddress is empty
 func (ca ConsAddress) Empty() bool {
 	if ca == nil {
 		return true
@@ -368,25 +373,23 @@ func (ca ConsAddress) Empty() bool {
 	return bytes.Equal(ca.Bytes(), ca2.Bytes())
 }
 
-// Marshal returns the raw address bytes. It is needed for protobuf
-// compatibility.
+// Marshal returns the raw address bytes. It is needed for protobuf compatibility
 func (ca ConsAddress) Marshal() ([]byte, error) {
 	return ca, nil
 }
 
-// Unmarshal sets the address to the given data. It is needed for protobuf
-// compatibility.
+// Unmarshal sets the address to the given data. It is needed for protobuf compatibility
 func (ca *ConsAddress) Unmarshal(data []byte) error {
 	*ca = data
 	return nil
 }
 
-// MarshalJSON marshals to JSON using Bech32.
+// MarshalJSON marshals to JSON using Bech32
 func (ca ConsAddress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(ca.String())
 }
 
-// UnmarshalJSON unmarshals from JSON assuming Bech32 encoding.
+// UnmarshalJSON unmarshals from JSON assuming Bech32 encoding
 func (ca *ConsAddress) UnmarshalJSON(data []byte) error {
 	var s string
 
@@ -404,12 +407,12 @@ func (ca *ConsAddress) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Bytes returns the raw address bytes.
+// Bytes returns the raw address bytes
 func (ca ConsAddress) Bytes() []byte {
 	return ca
 }
 
-// String implements the Stringer interface.
+// String implements the Stringer interface
 func (ca ConsAddress) String() string {
 	if ca.Empty() {
 		return ""
@@ -425,7 +428,7 @@ func (ca ConsAddress) String() string {
 	return bech32Addr
 }
 
-// Format implements the fmt.Formatter interface.
+// Format implements the fmt.Formatter interface
 // nolint: errcheck
 func (ca ConsAddress) Format(s fmt.State, verb rune) {
 	switch verb {
@@ -438,7 +441,7 @@ func (ca ConsAddress) Format(s fmt.State, verb rune) {
 	}
 }
 
-// ConsAddressFromBech32 creates a ConsAddress from a Bech32 string.
+// ConsAddressFromBech32 creates a ConsAddress from a Bech32 string
 func ConsAddressFromBech32(address string) (addr ConsAddress, err error) {
 	if len(strings.TrimSpace(address)) == 0 {
 		return ConsAddress{}, nil
@@ -459,8 +462,8 @@ func ConsAddressFromBech32(address string) (addr ConsAddress, err error) {
 	return ConsAddress(bz), nil
 }
 
-// GetConsPubKeyBech32 creates a PubKey for a consensus node with a given public
-// key string using the Bech32 Bech32PrefixConsPub prefix.
+// GetConsPubKeyBech32 creates a PubKey for a consensus node with a given public key string using the Bech32
+// Bech32PrefixConsPub prefix
 func GetConsPubKeyBech32(pubkey string) (pk crypto.PubKey, err error) {
 	bech32PrefixConsPub := GetConfig().GetBech32ConsensusPubPrefix()
 	bz, err := GetFromBech32(pubkey, bech32PrefixConsPub)
@@ -476,8 +479,7 @@ func GetConsPubKeyBech32(pubkey string) (pk crypto.PubKey, err error) {
 	return pk, nil
 }
 
-// MustBech32ifyConsPub returns the result of Bech32ifyConsPub panicing on
-// failure.
+// MustBech32ifyConsPub returns the result of Bech32ifyConsPub panicing on failure
 func MustBech32ifyConsPub(pub crypto.PubKey) string {
 	enc, err := Bech32ifyConsPub(pub)
 	if err != nil {

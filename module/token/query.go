@@ -57,7 +57,7 @@ func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo type
 
 // QueryTokenInfo gets token info with a specific symbol or the owner address
 func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.Token, err error) {
-	if err = params.CheckQueryTokenInfo(ownerAddr, symbol); err != nil {
+	if err = params.CheckQueryTokenInfoParams(ownerAddr, symbol); err != nil {
 		return
 	}
 

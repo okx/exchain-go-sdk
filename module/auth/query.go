@@ -14,7 +14,7 @@ func (ac authClient) QueryAccount(accAddrStr string) (account types.Account, err
 		return account, errors.New("failed. accAddress converted from Bech32 error")
 	}
 
-	res, err := ac.Query(types.AccountInfoPath, types.AddressStoreKey(accAddr))
+	res, err := ac.Query(types.AccountInfoPath, types.GetAddressStoreKey(accAddr))
 	if err != nil {
 		return account, utils.ErrClientQuery(err.Error())
 	}

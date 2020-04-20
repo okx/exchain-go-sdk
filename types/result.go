@@ -4,70 +4,71 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
 	"math"
 	"strings"
 
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 
-// Result is the union of ResponseFormat and ResponseCheckTx.
+// Result is the union of ResponseFormat and ResponseCheckTx
 type Result struct {
-	// Code is the response code, is stored back on the chain.
+	// Code is the response code, is stored back on the chain
 	Code CodeType
 
 	// Codespace is the string referring to the domain of an error
 	Codespace CodespaceType
 
-	// Data is any data returned from the app.
+	// Data is any data returned from the app
 	// Data has to be length prefixed in order to separate
 	// results from multiple msgs executions
 	Data []byte
 
-	// Log contains the txs log information. NOTE: nondeterministic.
+	// Log contains the txs log information. NOTE: nondeterministic
 	Log string
 
-	// GasWanted is the maximum units of work we allow this tx to perform.
+	// GasWanted is the maximum units of work we allow this tx to perform
 	GasWanted uint64
 
 	// GasUsed is the amount of gas actually consumed. NOTE: unimplemented
 	GasUsed uint64
 
-	// Events contains a slice of Event objects that were emitted during some
-	// execution.
+	// Events contains a slice of Event objects that were emitted during some execution
 	Events Events
 }
 
-// TODO: In the future, more codes may be OK.
+// TODO: In the future, more codes may be OK
 func (res Result) IsOK() bool {
 	return res.Code.IsOK()
 }
 
-// ABCIMessageLogs represents a slice of ABCIMessageLog.
+// ABCIMessageLogs represents a slice of ABCIMessageLog
 type ABCIMessageLogs []ABCIMessageLog
 
-// ABCIMessageLog defines a structure containing an indexed tx ABCI message log.
+// String implements the fmt.Stringer interface for the ABCIMessageLogs type
+func (logs ABCIMessageLogs) String() (str string) {
+	if logs != nil {
+		raw, err := Cdc.MarshalJSON(logs)
+		if err == nil {
+			str = string(raw)
+		}
+	}
+
+	return str
+}
+
+// ABCIMessageLog defines a structure containing an indexed tx ABCI message log
 type ABCIMessageLog struct {
 	MsgIndex uint16 `json:"msg_index"`
 	Success  bool   `json:"success"`
 	Log      string `json:"log"`
 
-	// Events contains a slice of Event objects that were emitted during some
-	// execution.
+	// Events contains a slice of Event objects that were emitted during some execution
 	Events StringEvents `json:"events"`
 }
 
-func NewABCIMessageLog(i uint16, success bool, log string, events Events) ABCIMessageLog {
-	return ABCIMessageLog{
-		MsgIndex: i,
-		Success:  success,
-		Log:      log,
-		Events:   StringifyEvents(events.ToABCIEvents()),
-	}
-}
-
-
-// TxResponse defines a structure containing relevant tx data and metadata. The
-// tags are stringified and the log is JSON decoded.
+// TxResponse defines a structure containing relevant tx data and metadata
+// The tags are stringified and the log is JSON decoded
 type TxResponse struct {
 	Height    int64           `json:"height,omitempty"`
 	TxHash    string          `json:"txhash"`
@@ -87,32 +88,7 @@ type TxResponse struct {
 	Events StringEvents `json:"events,omitempty"`
 }
 
-// NewResponseResultTx returns a TxResponse given a ResultTx from tendermint
-func NewResponseResultTx(res *ctypes.ResultTx, tx Tx, timestamp string) TxResponse {
-	if res == nil {
-		return TxResponse{}
-	}
-
-	parsedLogs, _ := ParseABCILogs(res.TxResult.Log)
-
-	return TxResponse{
-		TxHash:    res.Hash.String(),
-		Height:    res.Height,
-		Code:      res.TxResult.Code,
-		Data:      strings.ToUpper(hex.EncodeToString(res.TxResult.Data)),
-		RawLog:    res.TxResult.Log,
-		Logs:      parsedLogs,
-		Info:      res.TxResult.Info,
-		GasWanted: res.TxResult.GasWanted,
-		GasUsed:   res.TxResult.GasUsed,
-		Events:    StringifyEvents(res.TxResult.Events),
-		Tx:        tx,
-		Timestamp: timestamp,
-	}
-}
-
-// NewResponseFormatBroadcastTxCommit returns a TxResponse given a
-// ResultBroadcastTxCommit from tendermint.
+// NewResponseFormatBroadcastTxCommit returns a TxResponse given a ResultBroadcastTxCommit from tendermint
 func NewResponseFormatBroadcastTxCommit(res *ctypes.ResultBroadcastTxCommit) TxResponse {
 	if res == nil {
 		return TxResponse{}
@@ -221,7 +197,10 @@ func (r TxResponse) String() string {
 	}
 
 	if r.Logs != nil {
-		sb.WriteString(fmt.Sprintf("  Logs: %s\n", r.Logs))
+		if _, err := sb.WriteString(fmt.Sprintf("  Logs: %s\n", r.Logs)); err != nil {
+			log.Println(err)
+		}
+
 	}
 
 	if r.Info != "" {
@@ -277,8 +256,8 @@ func NewSearchTxsResult(totalCount, count, page, limit int, txs []TxResponse) Se
 	}
 }
 
-// ParseABCILogs attempts to parse a stringified ABCI tx log into a slice of
-// ABCIMessageLog types. It returns an error upon JSON decoding failure.
+// ParseABCILogs attempts to parse a stringified ABCI tx log into a slice of ABCIMessageLog types
+// It returns an error upon JSON decoding failure
 func ParseABCILogs(logs string) (res ABCIMessageLogs, err error) {
 	err = json.Unmarshal([]byte(logs), &res)
 	return res, err

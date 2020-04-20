@@ -8,6 +8,7 @@ const (
 )
 
 type (
+	// nolint
 	Ticker = types.Ticker
 	MatchResult = types.MatchResult
 	Order = types.Order

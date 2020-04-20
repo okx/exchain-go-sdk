@@ -15,7 +15,8 @@ const (
 	perPageMax        = 200
 )
 
-func CheckProduct(fromInfo keys.Info, passWd, product string) error {
+// CheckProductParams gives a quick validity check for the input product params
+func CheckProductParams(fromInfo keys.Info, passWd, product string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
@@ -27,7 +28,8 @@ func CheckProduct(fromInfo keys.Info, passWd, product string) error {
 	return nil
 }
 
-func CheckDexAssets(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) error {
+// CheckDexAssetsParams gives a quick validity check for the input params of dex assets
+func CheckDexAssetsParams(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
@@ -43,8 +45,8 @@ func CheckDexAssets(fromInfo keys.Info, passWd, baseAsset, quoteAsset string) er
 	return nil
 }
 
-// CheckQueryTokenInfo gives a quick validity check for the input params
-func CheckQueryTokenInfo(ownerAddr, symbol string) error {
+// CheckQueryTokenInfo gives a quick validity check for the input params of query token info
+func CheckQueryTokenInfoParams(ownerAddr, symbol string) error {
 	if len(ownerAddr) == 0 && len(symbol) == 0 {
 		return errors.New("failed. empty input")
 	}
@@ -52,7 +54,8 @@ func CheckQueryTokenInfo(ownerAddr, symbol string) error {
 	return nil
 }
 
-func CheckTokenIssue(fromInfo keys.Info, passWd, orgSymbol, wholeName, tokenDesc string) error {
+// CheckTokenIssueParams gives a quick validity check for the input params of token issuing
+func CheckTokenIssueParams(fromInfo keys.Info, passWd, orgSymbol, wholeName, tokenDesc string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
@@ -73,6 +76,7 @@ func CheckTokenIssue(fromInfo keys.Info, passWd, orgSymbol, wholeName, tokenDesc
 	return nil
 }
 
+// CheckTransferUnitsParams gives a quick validity check for the input params of multi-send
 func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []tokentypes.TransferUnit) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
@@ -92,6 +96,7 @@ func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []tok
 	return nil
 }
 
+// CheckVoteParams gives a quick validity check for the input params of multi-voting
 func CheckVoteParams(fromInfo keys.Info, passWd string, valAddrs []string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
@@ -112,6 +117,7 @@ func CheckVoteParams(fromInfo keys.Info, passWd string, valAddrs []string) error
 	return nil
 }
 
+// CheckKeyParams gives a basic validity check for the input key params
 func CheckKeyParams(fromInfo keys.Info, passWd string) error {
 	if fromInfo == nil {
 		return errors.New("failed. input invalid keys info")
@@ -123,6 +129,7 @@ func CheckKeyParams(fromInfo keys.Info, passWd string) error {
 	return nil
 }
 
+// CheckSendParams gives a quick validity check for the input params of transfering
 func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
@@ -134,6 +141,7 @@ func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 	return nil
 }
 
+// CheckNewOrderParams gives a quick validity check for the input params for placing orders
 func CheckNewOrderParams(fromInfo keys.Info, passWd string, products, sides, prices, quantities []string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
@@ -165,6 +173,7 @@ func CheckNewOrderParams(fromInfo keys.Info, passWd string, products, sides, pri
 	return nil
 }
 
+// CheckCancelOrderParams gives a quick validity check for the input params for cancelling orders
 func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
@@ -184,13 +193,14 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 }
 
 // CheckQueryOrderDetailParams gives a quick validity check for the input params of query order detail
-func CheckQueryOrderDetailParams(orderID string)error{
-	if len(orderID)==0{
+func CheckQueryOrderDetailParams(orderID string) error {
+	if len(orderID) == 0 {
 		return errors.New("failed. empty order ID")
 	}
 
 	return nil
 }
+
 // CheckQueryTickersParams gives a quick validity check for the input params of query tickers
 func CheckQueryTickersParams(count []int) (countRet int, err error) {
 	if len(count) > 1 {

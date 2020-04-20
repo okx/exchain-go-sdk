@@ -12,7 +12,7 @@ import (
 // List lists a trading pair on dex
 func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, initPriceStr, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckDexAssets(fromInfo, passWd, baseAsset, quoteAsset); err != nil {
+	if err = params.CheckDexAssetsParams(fromInfo, passWd, baseAsset, quoteAsset); err != nil {
 		return
 	}
 
@@ -26,7 +26,7 @@ func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, init
 // Deposit deposits some tokens to a specific product
 func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
-	if err = params.CheckProduct(fromInfo, passWd, product); err != nil {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
 		return
 	}
 
@@ -43,7 +43,7 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 // Withdraw withdraws some tokens from a specific product
 func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
-	if err = params.CheckProduct(fromInfo, passWd, product); err != nil {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
 		return
 	}
 

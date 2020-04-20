@@ -17,8 +17,9 @@ const (
 
 var (
 	msgCdc = sdk.NewCodec()
-	// useful for subspace and store query
+	// ValidatorsKey is useful for subspace and store query about validator
 	ValidatorsKey = []byte{0x21}
+	// DelegatorKey is useful for subspace and store query about delegator
 	DelegatorKey  = []byte{0x52}
 )
 

@@ -143,3 +143,9 @@ func (bc *baseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.M
 
 	return sdk.NewStdTx(signMsg.Msgs, signMsg.Fee, []sdk.StdSignature{sigBytes}, signMsg.Memo), err
 }
+
+// BuildUnsignedStdTxOffline builds a stdTx without signature
+func (bc *baseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) sdk.StdTx {
+	fee := sdk.NewStdFee(20000, bc.GetConfig().Fees)
+	return sdk.NewStdTx(msgs, fee, nil, memo)
+}

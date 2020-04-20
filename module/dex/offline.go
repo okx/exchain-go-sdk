@@ -24,7 +24,7 @@ func (dc dexClient) GenerateUnsignedTransferOwnershipTx(product, fromAddrStr, to
 	}
 
 	msg := types.NewMsgTransferOwnership(fromAddr, toAddr, product)
-	jsonBytes, err := dc.GetCodec().MarshalJSON(tx.BuildUnsignedStdTxOffline([]sdk.Msg{msg}, memo))
+	jsonBytes, err := dc.GetCodec().MarshalJSON(dc.BuildUnsignedStdTxOffline([]sdk.Msg{msg}, memo))
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (dc dexClient) MultiSign(fromInfo keys.Info, passWd, inputPath, outputPath 
 	}
 
 	msg.ToSignature = sdk.NewStdSignature(fromInfo.GetPubKey(), signature)
-	jsonBytes, err := dc.GetCodec().MarshalJSON(tx.BuildUnsignedStdTxOffline([]sdk.Msg{msg}, stdTx.Memo))
+	jsonBytes, err := dc.GetCodec().MarshalJSON(dc.BuildUnsignedStdTxOffline([]sdk.Msg{msg}, stdTx.Memo))
 	if err != nil {
 		return err
 	}

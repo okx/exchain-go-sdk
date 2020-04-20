@@ -8,6 +8,7 @@ const (
 )
 
 type (
+	// nolint
 	Validator = types.Validator
 	DelegatorResp = types.DelegatorResp
 )

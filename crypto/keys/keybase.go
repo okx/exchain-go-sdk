@@ -54,7 +54,7 @@ const (
 )
 
 const (
-	// used for deriving seed from mnemonic
+	// DefaultBIP39Passphrase is used for deriving seed from mnemonic
 	DefaultBIP39Passphrase = ""
 
 	// bits of entropy to draw when creating a mnemonic
@@ -75,13 +75,6 @@ var (
 // a full-featured key manager
 type dbKeybase struct {
 	db dbm.DB
-}
-
-// newDbKeybase creates a new keybase instance using the passed DB for reading and writing keys.
-func newDbKeybase(db dbm.DB) Keybase {
-	return dbKeybase{
-		db: db,
-	}
 }
 
 // NewInMemory creates a transient keybase on top of in-memory storage
@@ -448,7 +441,7 @@ func (kb dbKeybase) writeOfflineKey(name string, pub tmcrypto.PubKey) Info {
 }
 
 func (kb dbKeybase) writeMultisigKey(name string, pub tmcrypto.PubKey) Info {
-	info := NewMultiInfo(name, pub)
+	info := newMultiInfo(name, pub)
 	kb.writeInfo(name, info)
 	return info
 }

@@ -8,6 +8,7 @@ const (
 )
 
 type (
+	// nolint
 	BookRes = types.BookRes
 	OrderDetail = types.OrderDetail
 )

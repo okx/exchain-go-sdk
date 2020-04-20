@@ -23,7 +23,7 @@ func (dexClient) Name() string {
 	return types.ModuleName
 }
 
-// NewOrderClient creates a new instance of dex client as implement
+// NewDexClient creates a new instance of dex client as implement
 func NewDexClient(baseClient sdk.BaseClient) exposed.Dex {
 	return dexClient{baseClient}
 }

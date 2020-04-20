@@ -8,5 +8,6 @@ const (
 )
 
 type (
+	// nolint
 	Account = types.Account
 )

@@ -42,12 +42,12 @@ func (st StdTx) ValidateBasic() Error { return nil }
 
 // StdFee includes the amount of coins paid in fees and the maximum gas to be used by the transaction
 type StdFee struct {
-	Amount Coins  `json:"amount"`
-	Gas    uint64 `json:"gas"`
+	Amount DecCoins `json:"amount"`
+	Gas    uint64   `json:"gas"`
 }
 
 // NewStdFee creates a new instance of StdFee
-func NewStdFee(gas uint64, amount Coins) StdFee {
+func NewStdFee(gas uint64, amount DecCoins) StdFee {
 	return StdFee{
 		Amount: amount,
 		Gas:    gas,
@@ -57,7 +57,7 @@ func NewStdFee(gas uint64, amount Coins) StdFee {
 // Bytes for signing later
 func (sf StdFee) Bytes() []byte {
 	if len(sf.Amount) == 0 {
-		sf.Amount = NewCoins()
+		sf.Amount = NewDecCoins()
 	}
 	bz, err := Cdc.MarshalJSON(sf) // TODO
 	if err != nil {

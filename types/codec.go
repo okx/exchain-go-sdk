@@ -32,7 +32,7 @@ type SDKCodec interface {
 
 var _ SDKCodec = (*Codec)(nil)
 
-// SDKCodec defines the codec only for okchain gosdk
+// Codec defines the codec only for okchain gosdk
 type Codec struct {
 	*amino.Codec
 }

@@ -22,7 +22,7 @@ const (
 	blockTypePubKey  = "TENDERMINT PUBLIC KEY"
 )
 
-// Make bcrypt security parameter var, so it can be changed within the lcd test
+// BcryptSecurityParameter - Make bcrypt security parameter var, so it can be changed within the lcd test
 // Making the bcrypt security parameter a var shouldn't be a security issue:
 // One can't verify an invalid key by maliciously changing the bcrypt
 // parameter during a runtime vulnerability. The main security
@@ -40,12 +40,12 @@ var BcryptSecurityParameter = 12
 //-----------------------------------------------------------------
 // add armor
 
-// Armor the InfoBytes
+// ArmorInfoBytes armors the InfoBytes
 func ArmorInfoBytes(bz []byte) string {
 	return armorBytes(bz, blockTypeKeyInfo)
 }
 
-// Armor the PubKeyBytes
+// ArmorPubKeyBytes armors the PubKeyBytes
 func ArmorPubKeyBytes(bz []byte) string {
 	return armorBytes(bz, blockTypePubKey)
 }
@@ -61,12 +61,12 @@ func armorBytes(bz []byte, blockType string) string {
 //-----------------------------------------------------------------
 // remove armor
 
-// Unarmor the InfoBytes
+// UnarmorInfoBytes unarmors the InfoBytes
 func UnarmorInfoBytes(armorStr string) (bz []byte, err error) {
 	return unarmorBytes(armorStr, blockTypeKeyInfo)
 }
 
-// Unarmor the PubKeyBytes
+// UnarmorPubKeyBytes unarmors the PubKeyBytes
 func UnarmorPubKeyBytes(armorStr string) (bz []byte, err error) {
 	return unarmorBytes(armorStr, blockTypePubKey)
 }
@@ -77,11 +77,11 @@ func unarmorBytes(armorStr, blockType string) (bz []byte, err error) {
 		return
 	}
 	if bType != blockType {
-		err = fmt.Errorf("Unrecognized armor type %q, expected: %q", bType, blockType)
+		err = fmt.Errorf("unrecognized armor type %q, expected: %q", bType, blockType)
 		return
 	}
 	if header["version"] != "0.0.0" {
-		err = fmt.Errorf("Unrecognized version: %v", header["version"])
+		err = fmt.Errorf("unrecognized version: %v", header["version"])
 		return
 	}
 	return
@@ -90,7 +90,7 @@ func unarmorBytes(armorStr, blockType string) (bz []byte, err error) {
 //-----------------------------------------------------------------
 // encrypt/decrypt with armor
 
-// Encrypt and armor the private key.
+// EncryptArmorPrivKey encrypts and armors the private key
 func EncryptArmorPrivKey(privKey crypto.PrivKey, passphrase string) string {
 	saltBytes, encBytes := encryptPrivKey(privKey, passphrase)
 	header := map[string]string{
@@ -115,7 +115,7 @@ func encryptPrivKey(privKey crypto.PrivKey, passphrase string) (saltBytes []byte
 	return saltBytes, xsalsa20symmetric.EncryptSymmetric(privKeyBytes, key)
 }
 
-// Unarmor and decrypt the private key.
+// UnarmorDecryptPrivKey unarmors and decrypts the private key
 func UnarmorDecryptPrivKey(armorStr string, passphrase string) (crypto.PrivKey, error) {
 	var privKey crypto.PrivKey
 	blockType, header, encBytes, err := armor.DecodeArmor(armorStr)
@@ -123,17 +123,17 @@ func UnarmorDecryptPrivKey(armorStr string, passphrase string) (crypto.PrivKey, 
 		return privKey, err
 	}
 	if blockType != blockTypePrivKey {
-		return privKey, fmt.Errorf("Unrecognized armor type: %v", blockType)
+		return privKey, fmt.Errorf("unrecognized armor type: %v", blockType)
 	}
 	if header["kdf"] != "bcrypt" {
-		return privKey, fmt.Errorf("Unrecognized KDF type: %v", header["KDF"])
+		return privKey, fmt.Errorf("unrecognized KDF type: %v", header["KDF"])
 	}
 	if header["salt"] == "" {
-		return privKey, fmt.Errorf("Missing salt bytes")
+		return privKey, fmt.Errorf("missing salt bytes")
 	}
 	saltBytes, err := hex.DecodeString(header["salt"])
 	if err != nil {
-		return privKey, fmt.Errorf("Error decoding salt: %v", err.Error())
+		return privKey, fmt.Errorf("error decoding salt: %v", err.Error())
 	}
 	privKey, err = decryptPrivKey(saltBytes, encBytes, passphrase)
 	return privKey, err

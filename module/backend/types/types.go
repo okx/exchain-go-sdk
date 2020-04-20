@@ -69,7 +69,7 @@ type ListResponse struct {
 // Order - structure of order query result
 type Order struct {
 	TxHash         string `json:"txhash"`
-	OrderId        string `json:"order_id"`
+	OrderID        string `json:"order_id"`
 	Sender         string `json:"sender"`
 	Product        string `json:"product"`
 	Side           string `json:"side"`
@@ -85,7 +85,7 @@ type Order struct {
 type Deal struct {
 	Timestamp   int64   `json:"timestamp"`
 	BlockHeight int64   `json:"block_height"`
-	OrderId     string  `json:"order_id"`
+	OrderID     string  `json:"order_id"`
 	Sender      string  `json:"sender"`
 	Product     string  `json:"product"`
 	Side        string  `json:"side"`

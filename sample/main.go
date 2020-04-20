@@ -8,7 +8,7 @@ import (
 
 const (
 	// TODO: link to mainnet of OKChain later
-	rpcUrl = "tcp://127.0.0.1:26657"
+	rpcURL = "tcp://127.0.0.1:26657"
 	// user's name
 	name = "alice"
 	// user's mnemonic
@@ -24,7 +24,7 @@ func main() {
 	////////// 1. preparation //////////
 
 	// create a client
-	config := sdk.NewClientConfig(rpcUrl, sdk.BroadcastBlock)
+	config := sdk.NewClientConfig(rpcURL, sdk.BroadcastBlock)
 	cli := sdk.NewClient(config)
 
 	// create an account with your own mnemonic，name and password
@@ -53,5 +53,15 @@ func main() {
 
 	log.Println(res)
 
-	return
+	////////// 4. delegate for staking //////////
+
+	// increase sequence number
+	sequenceNum++
+	res, err = cli.Staking().Delegate(fromInfo, passWd, "0.1"+baseCoin, "my memo", accountNum, sequenceNum)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(res)
+
 }

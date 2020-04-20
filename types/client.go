@@ -27,7 +27,7 @@ type ClientQuery interface {
 	QuerySubspace(subspace []byte, storeName string) ([]cmn.KVPair, error)
 }
 
-// ClientQuery shows the expected tx behavior
+// ClientTx shows the expected tx behavior
 type ClientTx interface {
 	Broadcast(txBytes []byte, broadcastMode BroadcastMode) (res TxResponse, err error)
 }

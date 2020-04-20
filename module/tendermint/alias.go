@@ -8,6 +8,7 @@ const (
 )
 
 type (
+	// nolint
 	Block = types.Block
 	BlockResults = types.BlockResults
 	ResultCommit = types.ResultCommit

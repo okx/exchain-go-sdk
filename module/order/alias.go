@@ -9,4 +9,5 @@ const (
 
 type (
 	BookRes = types.BookRes
+	OrderDetail = types.OrderDetail
 )

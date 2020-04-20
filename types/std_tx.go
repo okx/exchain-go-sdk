@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"github.com/tendermint/tendermint/crypto"
 )
 
@@ -78,4 +79,36 @@ func NewStdSignature(pubkey crypto.PubKey, signature []byte) StdSignature {
 		PubKey:    pubkey,
 		Signature: signature,
 	}
+}
+
+// StdSignDoc is replay-prevention structure
+// It includes the result of msg.GetSignBytes(), as well as the ChainID (prevent cross chain replay) and the Sequence
+// numbers for each signature (prevent inchain replay and enforce tx ordering per account)
+type StdSignDoc struct {
+	AccountNumber uint64            `json:"account_number"`
+	ChainID       string            `json:"chain_id"`
+	Fee           json.RawMessage   `json:"-"`
+	Memo          string            `json:"memo"`
+	Msgs          []json.RawMessage `json:"msgs"`
+	Sequence      uint64            `json:"sequence"`
+}
+
+// stdSignBytes returns the bytes to sign for a transaction
+func stdSignBytes(chainID string, accnum uint64, sequence uint64, fee StdFee, msgs []Msg, memo string) []byte {
+	var msgsBytes []json.RawMessage
+	for _, msg := range msgs {
+		msgsBytes = append(msgsBytes, json.RawMessage(msg.GetSignBytes()))
+	}
+	bz, err := Cdc.MarshalJSON(StdSignDoc{
+		AccountNumber: accnum,
+		ChainID:       chainID,
+		Fee:           json.RawMessage(fee.Bytes()),
+		Memo:          memo,
+		Msgs:          msgsBytes,
+		Sequence:      sequence,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return MustSortJSON(bz)
 }

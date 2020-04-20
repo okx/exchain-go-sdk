@@ -16,7 +16,7 @@ func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo stri
 		return
 	}
 
-	coin, err := utils.ParseDecCoin(coinsStr)
+	coin, err := sdk.ParseDecCoin(coinsStr)
 	if err != nil {
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
@@ -33,7 +33,7 @@ func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string
 		return
 	}
 
-	coin, err := utils.ParseDecCoin(coinsStr)
+	coin, err := sdk.ParseDecCoin(coinsStr)
 	if err != nil {
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}

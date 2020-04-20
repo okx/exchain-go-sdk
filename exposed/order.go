@@ -23,4 +23,5 @@ type OrderTx interface {
 // OrderQuery shows the expected query behavior for inner order client
 type OrderQuery interface {
 	QueryDepthBook(product string) (types.BookRes, error)
+	QueryOrderDetail(orderID string) (types.OrderDetail, error)
 }

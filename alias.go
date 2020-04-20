@@ -37,6 +37,7 @@ type (
 	TokenPair = dex.TokenPair
 	// order
 	BookRes = order.BookRes
+	OrderDetail = order.OrderDetail
 	// backend
 	Ticker = backend.Ticker
 	MatchResult = backend.MatchResult
@@ -47,4 +48,6 @@ type (
 	BlockResults = tendermint.BlockResults
 	ResultCommit = tendermint.ResultCommit
 	ResultValidators = tendermint.ResultValidators
+	ResultTx = tendermint.ResultTx
+	ResultTxs = tendermint.ResultTxs
 )

@@ -183,6 +183,14 @@ func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string
 	return nil
 }
 
+// CheckQueryOrderDetailParams gives a quick validity check for the input params of query order detail
+func CheckQueryOrderDetailParams(orderID string)error{
+	if len(orderID)==0{
+		return errors.New("failed. empty order ID")
+	}
+
+	return nil
+}
 // CheckQueryTickersParams gives a quick validity check for the input params of query tickers
 func CheckQueryTickersParams(count []int) (countRet int, err error) {
 	if len(count) > 1 {

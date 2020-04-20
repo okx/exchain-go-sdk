@@ -240,7 +240,7 @@ okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
 }
 
 func TestIssue(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -269,7 +269,7 @@ func TestList(t *testing.T) {
 }
 
 func TestNewOrders(t *testing.T) {
-	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
+	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
 	client := NewClient(config)
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
@@ -289,7 +289,7 @@ func TestNewOrders(t *testing.T) {
 	res, err := client.Order().NewOrders(
 		fromInfo,
 		passWd,
-		"btc-65f_okt,btc-65f_okt,btc-65f_okt",
+		"tbtc-ca3_okt,tbtc-ca3_okt,tbtc-ca3_okt",
 		"BUY,BUY,BUY",
 		"11.2,22.3,33.4",
 		"1.23,2.34,3.45",
@@ -386,6 +386,14 @@ func TestCancelOrders(t *testing.T) {
 }
 
 // query test
+
+func TestQueryOrderDetail(t *testing.T) {
+	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
+	client := NewClient(config)
+	orderDetail, err := client.Order().QueryOrderDetail("ID0000203885-1")
+	require.NoError(t, err)
+	fmt.Printf("%+v", orderDetail)
+}
 
 func TestQueryValidators(t *testing.T) {
 	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)

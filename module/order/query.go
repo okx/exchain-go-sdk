@@ -1,6 +1,7 @@
 package order
 
 import (
+	"fmt"
 	"github.com/okex/okchain-go-sdk/module/order/types"
 	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/okex/okchain-go-sdk/utils"
@@ -21,6 +22,24 @@ func (oc orderClient) QueryDepthBook(product string) (depthBook types.BookRes, e
 
 	if err = oc.GetCodec().UnmarshalJSON(res, &depthBook); err != nil {
 		return depthBook, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}
+
+// QueryOrderDetail gets the detail info of an order by its order ID
+func (oc orderClient) QueryOrderDetail(orderID string) (orderDetail types.OrderDetail, err error) {
+	if err = params.CheckQueryOrderDetailParams(orderID); err != nil {
+		return
+	}
+
+	res, err := oc.Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil)
+	if err != nil {
+		return orderDetail, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = oc.GetCodec().UnmarshalJSON(res, &orderDetail); err != nil {
+		return orderDetail, utils.ErrUnmarshalJSON(err.Error())
 	}
 
 	return

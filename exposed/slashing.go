@@ -1,8 +1,8 @@
 package exposed
 
 import (
-	"github.com/okex/okchain-go-sdk/crypto/keys"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 )
 
 // Slashing shows the expected behavior for inner slashing client

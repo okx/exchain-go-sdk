@@ -3,9 +3,9 @@ package dex
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types/tx"
 	"github.com/okex/okchain-go-sdk/utils"
 	"io/ioutil"
@@ -34,7 +34,7 @@ func (dc dexClient) GenerateUnsignedTransferOwnershipTx(product, fromAddrStr, to
 
 // MultiSign appends signature to the unsigned tx file of transfer-ownership
 func (dc dexClient) MultiSign(fromInfo keys.Info, passWd, inputPath, outputPath string) error {
-	stdTx, err := utils.GetStdTxFromFile(dc.GetCodec(),inputPath)
+	stdTx, err := utils.GetStdTxFromFile(dc.GetCodec(), inputPath)
 	if err != nil {
 		return err
 	}

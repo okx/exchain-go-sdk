@@ -2,9 +2,9 @@ package dex
 
 import (
 	"errors"
-	"github.com/okex/okchain-go-sdk/crypto/keys"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/okex/okchain-go-sdk/utils"
 )

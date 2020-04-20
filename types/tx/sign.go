@@ -6,6 +6,7 @@ import (
 	"github.com/okex/okchain-go-sdk/types"
 )
 
+// StdSignMsg defines the text content for signing
 type StdSignMsg struct {
 	ChainID       string       `json:"chain_id"`
 	AccountNumber uint64       `json:"account_number"`
@@ -15,8 +16,9 @@ type StdSignMsg struct {
 	Memo          string       `json:"memo"`
 }
 
+// Bytes returns the bytes of StdSignMsg
 func (msg StdSignMsg) Bytes() []byte {
-	return StdSignBytes(msg.ChainID, msg.AccountNumber, msg.Sequence, msg.Fee, msg.Msgs, msg.Memo)
+	return stdSignBytes(msg.ChainID, msg.AccountNumber, msg.Sequence, msg.Fee, msg.Msgs, msg.Memo)
 }
 
 type stdSignDoc struct {
@@ -28,7 +30,7 @@ type stdSignDoc struct {
 	Sequence      uint64            `json:"sequence"`
 }
 
-func StdSignBytes(chainID string, accnum uint64, sequence uint64, fee types.StdFee, msgs []types.Msg, memo string) []byte {
+func stdSignBytes(chainID string, accnum uint64, sequence uint64, fee types.StdFee, msgs []types.Msg, memo string) []byte {
 	var msgsBytes []json.RawMessage
 	for _, msg := range msgs {
 		msgsBytes = append(msgsBytes, json.RawMessage(msg.GetSignBytes()))

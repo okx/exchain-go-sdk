@@ -13,9 +13,7 @@ import (
 )
 
 const (
-	mnemonicEntropySize     = 128
-	bcryptSecurityParameter = 12
-	defaultKeyDBName        = "keys"
+	mnemonicEntropySize = 128
 )
 
 // CreateAccount creates a random key info with the given name and password
@@ -44,7 +42,7 @@ func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error
 
 }
 
-// CreateAccount creates the key info with the given mnemonic, name and password
+// CreateAccountWithMnemo creates the key info with the given mnemonic, name and password
 func CreateAccountWithMnemo(mnemonic, name, passWd string) (info keys.Info, mnemo string, err error) {
 	if len(mnemonic) == 0 {
 		return info, mnemo, errors.New("failed. no mnemonic input")

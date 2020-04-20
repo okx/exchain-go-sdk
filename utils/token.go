@@ -14,9 +14,10 @@ var (
 	reSpc       = `[[:space:]]*`
 	reDnmString = `[a-z][a-z0-9]{0,5}(\-[a-z0-9]{3})?`
 	reDecCoin   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
-	ReDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
+	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
+// ParseDecCoins parses DecCoins from string
 func ParseDecCoins(coinsStr string) (types.DecCoins, error) {
 	coinsStr = strings.TrimSpace(coinsStr)
 	if len(coinsStr) == 0 {
@@ -102,7 +103,7 @@ func ParseTransfersStr(str string) ([]tokentypes.TransferUnit, error) {
 }
 
 func validateDenom(denom string) error {
-	if !ReDnm.MatchString(denom) {
+	if !reDnm.MatchString(denom) {
 		return errors.New("illegal characters")
 	}
 	return nil

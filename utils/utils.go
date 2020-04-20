@@ -44,6 +44,9 @@ func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
 	}
 	masterPrivateKey, ch := hd.ComputeMastersFromSeed(seed)
 	derivedPrivateKey, err := hd.DerivePrivateKeyForPath(masterPrivateKey, ch, hdPath.String())
+	if err != nil {
+		return
+	}
 	return hex.EncodeToString(derivedPrivateKey[:]), nil
 }
 

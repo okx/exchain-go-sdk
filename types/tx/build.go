@@ -6,6 +6,7 @@ import (
 )
 
 var (
+	// Kb - global keybase
 	Kb keys.Keybase
 )
 

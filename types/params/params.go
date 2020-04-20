@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	DefaultBookSize = 200
-	DefaultPage     = 1
-	DefaultPerPage  = 50
+	defaultBookSize = 200
+	defaultPage     = 1
+	defaultPerPage  = 50
 )
 
 // QueryAccTokenParams - structure of params to query a specific token in an account
@@ -26,14 +26,16 @@ func NewQueryAccTokenParams(symbol, show string) QueryAccTokenParams {
 	}
 }
 
+// QueryDepthBookParams - structure of params to query the depthbook of a specific product
 type QueryDepthBookParams struct {
 	Product string
 	Size    int
 }
 
+// NewQueryDepthBookParams creates a new instance of QueryDepthBookParams
 func NewQueryDepthBookParams(product string, size int) QueryDepthBookParams {
 	if size == 0 {
-		size = DefaultBookSize
+		size = defaultBookSize
 	}
 	return QueryDepthBookParams{
 		Product: product,
@@ -41,12 +43,14 @@ func NewQueryDepthBookParams(product string, size int) QueryDepthBookParams {
 	}
 }
 
+// QueryKlinesParams - structure of params to query the klines of a specific product
 type QueryKlinesParams struct {
 	Product     string
 	Granularity int
 	Size        int
 }
 
+// NewQueryKlinesParams creates a new instance of QueryKlinesParams
 func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesParams {
 	return QueryKlinesParams{
 		product,
@@ -83,8 +87,8 @@ type QueryMatchParams struct {
 // NewQueryMatchParams creates a new instance of QueryMatchParams
 func NewQueryMatchParams(product string, start, end int64, page, perPage int) QueryMatchParams {
 	if page == 0 && perPage == 0 {
-		page = DefaultPage
-		perPage = DefaultPerPage
+		page = defaultPage
+		perPage = defaultPerPage
 	}
 	return QueryMatchParams{
 		Product: product,
@@ -95,6 +99,7 @@ func NewQueryMatchParams(product string, start, end int64, page, perPage int) Qu
 	}
 }
 
+// QueryOrderListParams - structure of params to query record list
 type QueryOrderListParams struct {
 	Address    string
 	Product    string
@@ -106,12 +111,12 @@ type QueryOrderListParams struct {
 	HideNoFill bool
 }
 
-// creates a new instance of NewQueryOrderListParams
+// NewQueryOrderListParams creates a new instance of NewQueryOrderListParams
 func NewQueryOrderListParams(addr, product, side string, page, perPage int, start, end int64,
 	hideNoFill bool) QueryOrderListParams {
 	if page == 0 && perPage == 0 {
-		page = DefaultPage
-		perPage = DefaultPerPage
+		page = defaultPage
+		perPage = defaultPerPage
 	}
 	if start == 0 && end == 0 {
 		end = time.Now().Unix()
@@ -128,6 +133,7 @@ func NewQueryOrderListParams(addr, product, side string, page, perPage int, star
 	}
 }
 
+// QueryDealsParams - structure of params to query the deals info of a specific product
 type QueryDealsParams struct {
 	Address string
 	Product string
@@ -138,10 +144,11 @@ type QueryDealsParams struct {
 	Side    string
 }
 
+// NewQueryDealsParams creates a new instance of NewQueryDealsParams
 func NewQueryDealsParams(addr, product string, start, end int64, page, perPage int, side string) QueryDealsParams {
 	if page == 0 && perPage == 0 {
-		page = DefaultPage
-		perPage = DefaultPerPage
+		page = defaultPage
+		perPage = defaultPerPage
 	}
 	return QueryDealsParams{
 		Address: addr,
@@ -154,6 +161,7 @@ func NewQueryDealsParams(addr, product string, start, end int64, page, perPage i
 	}
 }
 
+// QueryTxListParams - structure of params to query the transaction info
 type QueryTxListParams struct {
 	Address   string
 	TxType    int64
@@ -163,11 +171,11 @@ type QueryTxListParams struct {
 	PerPage   int
 }
 
-// creates a new instance of NewQueryOrderListParams
+// NewQueryTxListParams creates a new instance of QueryTxListParams
 func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, perPage int) QueryTxListParams {
 	if page == 0 && perPage == 0 {
-		page = DefaultPage
-		perPage = DefaultPerPage
+		page = defaultPage
+		perPage = defaultPerPage
 	}
 	return QueryTxListParams{
 		Address:   addr,
@@ -198,7 +206,7 @@ type QueryDexInfoParams struct {
 	PerPage int
 }
 
-// NewQueryDexInfoParams creates query params of dex info
+// NewQueryDexInfoParams creates a new instance of QueryDexInfoParams
 func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams, error) {
 	if len(owner) == 0 {
 		owner = ""

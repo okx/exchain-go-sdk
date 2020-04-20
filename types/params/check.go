@@ -45,7 +45,7 @@ func CheckDexAssetsParams(fromInfo keys.Info, passWd, baseAsset, quoteAsset stri
 	return nil
 }
 
-// CheckQueryTokenInfo gives a quick validity check for the input params of query token info
+// CheckQueryTokenInfoParams gives a quick validity check for the input params of query token info
 func CheckQueryTokenInfoParams(ownerAddr, symbol string) error {
 	if len(ownerAddr) == 0 && len(symbol) == 0 {
 		return errors.New("failed. empty input")
@@ -305,8 +305,5 @@ func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error
 }
 
 func isValidSide(side string) bool {
-	if !(side == "BUY" || side == "SELL") {
-		return false
-	}
-	return true
+	return side == "BUY" || side == "SELL"
 }

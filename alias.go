@@ -23,6 +23,7 @@ var (
 	NewClientConfig = sdk.NewClientConfig
 )
 
+// nolint
 type (
 	TxResponse = sdk.TxResponse
 	// auth

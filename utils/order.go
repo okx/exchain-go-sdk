@@ -7,7 +7,7 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
-// GetOrderIdsFromResponse filters the orderID from the tx response
+// GetOrderIDsFromResponse filters the orderID from the tx response
 // a useful tool
 func GetOrderIDsFromResponse(txResp *sdk.TxResponse) (orderIDs []string) {
 	for _, event := range txResp.Events {

@@ -47,11 +47,6 @@ func (mc *MockClient) RegisterModule(mod sdk.Module) {
 	mc.cdc.Seal()
 }
 
-// GetConfig returns the client config
-func (mc *MockClient) GetConfig() sdk.ClientConfig {
-	return mc.config
-}
-
 // GetCodec returns the client codec
 func (mc *MockClient) GetCodec() sdk.SDKCodec {
 	return mc.cdc
@@ -83,11 +78,6 @@ func (mc *MockClient) Tendermint() exposed.Tendermint {
 	return mc.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
 
-// T returns the testing helper
-func (mc *MockClient) T() *testing.T {
-	return mc.t
-}
-
 // BuildAccountBytes generates the account bytes for test
 func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr string, accNum, seqNum uint64) []byte {
 	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
@@ -108,4 +98,42 @@ func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr strin
 	require.NoError(mc.t, err)
 
 	return bytes
+}
+
+// BuildTokenPairBytes generates the token pairs bytes for test
+func (mc *MockClient) BuildTokenPairsBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
+	minQuantity sdk.Dec, maxPriceDigit, maxQuantityDigit, blockHeight1, blockHeight2 int64, ID1, ID2 uint64, delisting bool,
+	owner sdk.AccAddress, deposits sdk.DecCoin) []byte {
+
+	var tokenPairs []dex.TokenPair
+
+	tokenPairs = append(tokenPairs, dex.TokenPair{
+		BaseAssetSymbol:  baseAssetSymbol1,
+		QuoteAssetSymbol: quoteAssetSymbol,
+		InitPrice:        initPrice,
+		MaxPriceDigit:    maxPriceDigit,
+		MaxQuantityDigit: maxQuantityDigit,
+		MinQuantity:      minQuantity,
+		ID:               ID1,
+		Delisting:        delisting,
+		Owner:            owner,
+		Deposits:         deposits,
+		BlockHeight:      blockHeight1,
+	})
+
+	tokenPairs = append(tokenPairs, dex.TokenPair{
+		BaseAssetSymbol:  baseAssetSymbol2,
+		QuoteAssetSymbol: quoteAssetSymbol,
+		InitPrice:        initPrice,
+		MaxPriceDigit:    maxPriceDigit,
+		MaxQuantityDigit: maxQuantityDigit,
+		MinQuantity:      minQuantity,
+		ID:               ID2,
+		Delisting:        delisting,
+		Owner:            owner,
+		Deposits:         deposits,
+		BlockHeight:      blockHeight2,
+	})
+
+	return mc.cdc.MustMarshalJSON(tokenPairs)
 }

@@ -12,7 +12,12 @@ import (
 )
 
 const (
-	addr = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
+	addr      = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
+	name      = "alice"
+	passWd    = "12345678"
+	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
+	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	memo      = "my memo"
 )
 
 func TestDexClient_QueryProducts(t *testing.T) {
@@ -41,8 +46,8 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.MockBaseClient.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.MockBaseClient.EXPECT().Query(types.ProductsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(types.ProductsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	tokenPairs, err := mockCli.Dex().QueryProducts(addr, 1, 30)
 	require.NoError(t, err)

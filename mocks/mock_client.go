@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/exposed"
 	auth "github.com/okex/okchain-go-sdk/module/auth/types"
@@ -40,9 +41,16 @@ func NewMockClient(t *testing.T, ctrl *gomock.Controller, config sdk.ClientConfi
 }
 
 // RegisterModule registers the specific module for MockClient
-func (mc *MockClient) RegisterModule(mod sdk.Module) {
-	mod.RegisterCodec(mc.cdc)
-	mc.modules[mod.Name()] = mod
+func (mc *MockClient) RegisterModule(mods ...sdk.Module) {
+	for _, mod := range mods {
+		moduleName := mod.Name()
+		if _, ok := mc.modules[moduleName]; ok {
+			panic(fmt.Sprintf("duplicated module: %s", moduleName))
+		}
+		// register codec by each module
+		mod.RegisterCodec(mc.cdc)
+		mc.modules[mod.Name()] = mod
+	}
 	sdk.RegisterBasicCodec(mc.cdc)
 	mc.cdc.Seal()
 }

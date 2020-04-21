@@ -28,8 +28,8 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 
 	expectedCdc := mockCli.GetCodec()
 	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "1024btc,2048.1024okt", 1, 2)
-	mockCli.MockBaseClient.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.MockBaseClient.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
 
 	acc, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)

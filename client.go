@@ -49,7 +49,7 @@ func NewClient(config sdk.ClientConfig) Client {
 func (cli *Client) registerModule(mods ...sdk.Module) {
 	for _, mod := range mods {
 		moduleName := mod.Name()
-		if _, ok := cli.modules[mod.Name()]; ok {
+		if _, ok := cli.modules[moduleName]; ok {
 			panic(fmt.Sprintf("duplicated module: %s", moduleName))
 		}
 		// register codec by each module

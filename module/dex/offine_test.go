@@ -39,14 +39,14 @@ func TestDexClient_GenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	cdc.MustUnmarshalJSON([]byte(expectedUnsignedTxJSON), &expectedStdTx)
 	require.Equal(t, expectedStdTx, stdTx)
 
-	// remove the temporary unsignedTx.json
+	// remove the temporary file: unsignedTx.json
 	err = os.Remove(unsignedPath)
 	require.NoError(t, err)
 
 }
 
 func TestDexClient_MultiSign(t *testing.T) {
-	// set up the unsignedTx.json
+	// set up unsignedTx.json
 	err := ioutil.WriteFile(unsignedPath, []byte(expectedUnsignedTxJSON), 0644)
 	require.NoError(t, err)
 
@@ -72,7 +72,7 @@ func TestDexClient_MultiSign(t *testing.T) {
 	cdc.MustUnmarshalJSON([]byte(expectedSignedTxJSON), &expectedStdTx)
 	require.Equal(t, expectedStdTx, stdTx)
 
-	// remove the temporary unsignedTx.json and signedTx.json
+	// remove the temporary files: unsignedTx.json and signedTx.json
 	err = os.Remove(unsignedPath)
 	require.NoError(t, err)
 	err = os.Remove(signedPath)

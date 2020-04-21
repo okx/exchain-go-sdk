@@ -12,23 +12,23 @@ import (
 	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/module/tendermint"
 	"github.com/okex/okchain-go-sdk/module/token"
-	"github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
 // Client - structure of the main client of okchain gosdk
 type Client struct {
-	config  types.ClientConfig
-	cdc     types.SDKCodec
-	modules map[string]types.Module
+	config  sdk.ClientConfig
+	cdc     sdk.SDKCodec
+	modules map[string]sdk.Module
 }
 
 // NewClient creates a new instance of Client
-func NewClient(config types.ClientConfig) Client {
-	cdc := types.NewCodec()
+func NewClient(config sdk.ClientConfig) Client {
+	cdc := sdk.NewCodec()
 	pClient := &Client{
 		config:  config,
 		cdc:     cdc,
-		modules: make(map[string]types.Module),
+		modules: make(map[string]sdk.Module),
 	}
 	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
@@ -46,7 +46,7 @@ func NewClient(config types.ClientConfig) Client {
 	return *pClient
 }
 
-func (cli *Client) registerModule(mods ...types.Module) {
+func (cli *Client) registerModule(mods ...sdk.Module) {
 	for _, mod := range mods {
 		moduleName := mod.Name()
 		if _, ok := cli.modules[mod.Name()]; ok {
@@ -56,12 +56,12 @@ func (cli *Client) registerModule(mods ...types.Module) {
 		mod.RegisterCodec(cli.cdc)
 		cli.modules[moduleName] = mod
 	}
-	types.RegisterBasicCodec(cli.cdc)
+	sdk.RegisterBasicCodec(cli.cdc)
 	cli.cdc.Seal()
 }
 
 // GetConfig returns the client config
-func (cli *Client) GetConfig() types.ClientConfig {
+func (cli *Client) GetConfig() sdk.ClientConfig {
 	return cli.config
 }
 

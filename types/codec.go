@@ -22,6 +22,7 @@ type SDKCodec interface {
 	UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
 	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
 
+	MarshalBinaryBare(o interface{}) ([]byte, error)
 	UnmarshalBinaryBare(bytes []byte, ptr interface{}) error
 
 	RegisterConcrete(o interface{}, name string)

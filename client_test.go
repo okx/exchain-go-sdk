@@ -2,7 +2,6 @@ package gosdk
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -26,19 +25,19 @@ const (
 //
 //// transact tx
 //
-func TestDelegate(t *testing.T) {
-	config, err := NewClientConfig("tcp://127.0.0.1:10057", "okchain", BroadcastBlock, "0.01okt")
-	require.NoError(t, err)
-	client := NewClient(config)
-	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-	require.NoError(t, err)
-	accInfo, err := client.Auth().QueryAccount(addr)
-	require.NoError(t, err)
-
-	resp, err := client.Staking().Delegate(fromInfo, passWd, "1024.1024okt", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-	require.NoError(t, err)
-	fmt.Println(resp)
-}
+//func TestDelegate(t *testing.T) {
+//	config, err := NewClientConfig("tcp://127.0.0.1:10057", "okchain", BroadcastBlock, "0.01okt")
+//	require.NoError(t, err)
+//	client := NewClient(config)
+//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+//	require.NoError(t, err)
+//	accInfo, err := client.Auth().QueryAccount(addr)
+//	require.NoError(t, err)
+//
+//	resp, err := client.Staking().Delegate(fromInfo, passWd, "1024.1024okt", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
+//	require.NoError(t, err)
+//	fmt.Println(resp)
+//}
 
 //
 //func TestUnbond(t *testing.T) {
@@ -623,11 +622,11 @@ func TestDelegate(t *testing.T) {
 //	fmt.Printf("%+v\n", txsRes)
 //}
 //
-//func TestQueryAccount(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
-//	client := NewClient(config)
-//
-//	acc, err := client.Auth().QueryAccount("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", acc)
-//}
+func TestQueryAccount(t *testing.T) {
+	config ,_:= NewClientConfig("tcp://127.0.0.1:10157", "okchain",BroadcastBlock,"0.01okt")
+	client := NewClient(config)
+
+	acc, err := client.Auth().QueryAccount("okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz")
+	require.NoError(t, err)
+	fmt.Printf("%+v\n", acc)
+}

@@ -3,6 +3,7 @@ module github.com/okex/okchain-go-sdk
 require (
 	github.com/btcsuite/btcd v0.0.0-20190523000118-16327141da8c
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
+	github.com/golang/mock v1.4.3
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/pkg/errors v0.8.1

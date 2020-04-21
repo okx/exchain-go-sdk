@@ -255,20 +255,6 @@ const (
 //
 //}
 //
-//func TestList(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Dex().List(fromInfo, passWd, "btc-65f", "okt", "0.02", "my memo",
-//		accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
 //func TestNewOrders(t *testing.T) {
 //	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
 //	client := NewClient(config)

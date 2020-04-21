@@ -55,6 +55,11 @@ func (mc *MockClient) RegisterModule(mods ...sdk.Module) {
 	mc.cdc.Seal()
 }
 
+// GetConfig returns the client config
+func (mc *MockClient) GetConfig() sdk.ClientConfig {
+	return mc.config
+}
+
 // GetCodec returns the client codec
 func (mc *MockClient) GetCodec() sdk.SDKCodec {
 	return mc.cdc

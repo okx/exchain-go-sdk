@@ -18,6 +18,11 @@ const (
 	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
 	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
 	memo      = "my memo"
+
+	product = "btc-000_okt"
+
+	recMnemonic = "pepper basket run install fury scheme journey worry tumble toddler swap change"
+	recAddr     = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
 )
 
 func TestDexClient_QueryProducts(t *testing.T) {

@@ -60,7 +60,7 @@ func TestDexClient_Deposit(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
 		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().Deposit(fromInfo, passWd, "btc-000_okt", "10.24okt", memo,
+	res, err := mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24okt", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
@@ -88,7 +88,7 @@ func TestDexClient_Withdraw(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
 		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().Withdraw(fromInfo, passWd, "btc-000_okt", "1.024okt", memo,
+	res, err := mockCli.Dex().Withdraw(fromInfo, passWd, product, "1.024okt", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)

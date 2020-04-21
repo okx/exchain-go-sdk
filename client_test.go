@@ -440,16 +440,6 @@ const (
 //
 //}
 //
-//func TestQueryProducts(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	tokenPairs, err := client.Dex().QueryProducts("", 1, 50)
-//	require.NoError(t, err)
-//	for _, v := range tokenPairs {
-//		fmt.Println(v)
-//	}
-//}
-//
 //func TestQueryAccountTokensInfo(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
@@ -623,7 +613,7 @@ const (
 //}
 //
 func TestQueryAccount(t *testing.T) {
-	config ,_:= NewClientConfig("tcp://127.0.0.1:10157", "okchain",BroadcastBlock,"0.01okt")
+	config, _ := NewClientConfig("tcp://127.0.0.1:10157", "okchain", BroadcastBlock, "0.01okt")
 	client := NewClient(config)
 
 	acc, err := client.Auth().QueryAccount("okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz")

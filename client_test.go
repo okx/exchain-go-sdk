@@ -287,51 +287,7 @@ const (
 //	fmt.Println(res)
 //	fmt.Println("orderIds:", utils.GetOrderIDsFromResponse(&res))
 //}
-//
-//func TestDeposit(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Dex().Deposit(fromInfo, passWd, "btc-216_okt", "1024.2048okt", "my memo",
-//		accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
-//func TestWithdraw(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Dex().Withdraw(fromInfo, passWd, "btc-216_okt", "0.2048okt", "my memo",
-//		accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
-//func TestGenerateUnsignedTransferOwnershipTx(t *testing.T) {
-//	config := NewClientConfig("", BroadcastBlock)
-//	client := NewClient(config)
-//	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
-//	require.NoError(t, err)
-//}
-//
-//func TestMultiSign(t *testing.T) {
-//	config := NewClientConfig("", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	err = client.Dex().MultiSign(fromInfo, passWd, "./unsignedTx.json", "./signedTx.json")
-//	require.NoError(t, err)
-//}
-//
+
 //func TestTransferOwnership(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
 //	client := NewClient(config)

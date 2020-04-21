@@ -172,13 +172,6 @@ func (aa AccAddress) Format(s fmt.State, verb rune) {
 	}
 }
 
-// Bech32ifyAccPub returns a Bech32 encoded string containing the
-// Bech32PrefixAccPub prefix for a given account PubKey.
-func Bech32ifyAccPub(pub crypto.PubKey) (string, error) {
-	bech32PrefixAccPub := GetConfig().GetBech32AccountPubPrefix()
-	return bech32.ConvertAndEncode(bech32PrefixAccPub, pub.Bytes())
-}
-
 // MustBech32ifyAccPub returns the result of Bech32ifyAccPub panicing on failure.
 func MustBech32ifyAccPub(pub crypto.PubKey) string {
 	enc, err := Bech32ifyAccPub(pub)
@@ -211,6 +204,28 @@ func GetFromBech32(bech32str, prefix string) ([]byte, error) {
 func Bech32ifyConsPub(pub crypto.PubKey) (string, error) {
 	bech32PrefixConsPub := GetConfig().GetBech32ConsensusPubPrefix()
 	return bech32.ConvertAndEncode(bech32PrefixConsPub, pub.Bytes())
+}
+
+// GetAccPubKeyBech32 creates a PubKey for an account with a given public key string using the Bech32 Bech32PrefixAccPub prefix
+func GetAccPubKeyBech32(pubkey string) (pk crypto.PubKey, err error) {
+	bech32PrefixAccPub := GetConfig().GetBech32AccountPubPrefix()
+	bz, err := GetFromBech32(pubkey, bech32PrefixAccPub)
+	if err != nil {
+		return nil, err
+	}
+
+	pk, err = cryptoAmino.PubKeyFromBytes(bz)
+	if err != nil {
+		return nil, err
+	}
+
+	return pk, nil
+}
+
+// Bech32ifyAccPub returns a Bech32 encoded string containing the Bech32PrefixAccPub prefix for a given account PubKey.
+func Bech32ifyAccPub(pub crypto.PubKey) (string, error) {
+	bech32PrefixAccPub := GetConfig().GetBech32AccountPubPrefix()
+	return bech32.ConvertAndEncode(bech32PrefixAccPub, pub.Bytes())
 }
 
 // ----------------------------------------------------------------------------

@@ -14,6 +14,9 @@ import (
 	token "github.com/okex/okchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
+	cmn "github.com/tendermint/tendermint/libs/common"
+	ctypes "github.com/tendermint/tendermint/rpc/core/types"
+	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
 	"time"
 )
@@ -282,4 +285,24 @@ func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sd
 	}
 
 	return mc.cdc.MustMarshalJSON(undelegation)
+}
+
+// GetRawResultBlockPointer generates the raw tendermint block result pointer for test
+func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, time time.Time, appHash, blockIDHash cmn.HexBytes) *ctypes.ResultBlock {
+	return &ctypes.ResultBlock{
+		Block: &tmtypes.Block{
+			Header: tmtypes.Header{
+				ChainID: chainID,
+				Height:  height,
+				Time:    time,
+				AppHash: appHash,
+			},
+			Evidence: tmtypes.EvidenceData{},
+			LastCommit: &tmtypes.Commit{
+				BlockID: tmtypes.BlockID{
+					Hash: blockIDHash,
+				},
+			},
+		},
+	}
 }

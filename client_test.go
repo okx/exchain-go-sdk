@@ -237,15 +237,7 @@ const (
 //		fmt.Println(tx)
 //	}
 //}
-//
-//func TestQueryBlock(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	block, err := client.Tendermint().QueryBlock(10000)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", block)
-//}
-//
+
 //func TestQueryBlockResults(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
 //	client := NewClient(config)

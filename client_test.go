@@ -60,36 +60,7 @@ const (
 //	require.NoError(t, err)
 //	fmt.Println(resp)
 //}
-//
-//func TestDestroyValidator(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(
-//		"novel tomorrow scorpion cross immense photo wrap acquire midnight about what clean", name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	resp, err := client.Staking().DestroyValidator(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(resp)
-//}
 
-//func TestEditValidator(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(
-//		"ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren", name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	resp, err := client.Staking().EditValidator(fromInfo, passWd, "my moniker", "my identity", "my website",
-//		"my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(resp)
-//
-//}
 //
 //func TestRegisterProxy(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)

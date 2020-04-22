@@ -20,6 +20,7 @@ type SDKCodec interface {
 
 	MarshalBinaryLengthPrefixed(o interface{}) ([]byte, error)
 	UnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{}) error
+	MustMarshalBinaryLengthPrefixed(o interface{}) []byte
 	MustUnmarshalBinaryLengthPrefixed(bytes []byte, ptr interface{})
 
 	MarshalBinaryBare(o interface{}) ([]byte, error)

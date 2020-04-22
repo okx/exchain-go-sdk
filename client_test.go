@@ -187,20 +187,9 @@ const (
 //}
 //
 
-
 //
 //// query test
-//
-//func TestQueryValidators(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	vals, err := client.Staking().QueryValidators()
-//	require.NoError(t, err)
-//	for _, v := range vals {
-//		fmt.Println(v)
-//	}
-//}
-//
+
 //func TestQueryValidator(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
@@ -217,7 +206,6 @@ const (
 //	require.NoError(t, err)
 //	fmt.Println(delResp)
 //}
-
 
 //// need test
 //

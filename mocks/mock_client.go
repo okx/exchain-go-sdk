@@ -15,6 +15,7 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -227,4 +228,29 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 	}
 
 	return mc.cdc.MustMarshalJSON(tokenInfo)
+}
+
+// BuildValidatorsBytes generates the validator bytes for test
+func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
+	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
+	jailed, isSlice bool) []byte {
+	val := staking.Validator{
+		OperatorAddress: valAddr,
+		ConsPubKey:      consPubKey,
+		Jailed:          jailed,
+		Status:          status,
+		DelegatorShares: delegatorShares,
+		Description: staking.Description{
+			Moniker:  moniker,
+			Identity: identity,
+			Website:  website,
+			Details:  details,
+		},
+		UnbondingHeight:         unbondingHeight,
+		UnbondingCompletionTime: unbondingCompletionTime,
+		MinSelfDelegation:       minSelfDelegation,
+	}
+
+	return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
+
 }

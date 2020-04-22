@@ -207,3 +207,24 @@ func (mc *MockClient) BuildAccountTokensInfoBytes(addrStr, symbol, available, fr
 
 	return mc.cdc.MustMarshalJSON(accTokensInfo)
 }
+
+// BuildTokenInfoBytes generates the token info bytes for test
+func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, wholeName string, originalTotalSupply,
+	totalSupply sdk.Dec, owner sdk.AccAddress, mintable, isSlice bool) []byte {
+	tokenInfo := token.Token{
+		Description:         description,
+		Symbol:              symbol,
+		OriginalSymbol:      originalSymbol,
+		WholeName:           wholeName,
+		OriginalTotalSupply: originalTotalSupply,
+		TotalSupply:         totalSupply,
+		Owner:               owner,
+		Mintable:            mintable,
+	}
+
+	if isSlice {
+		return mc.cdc.MustMarshalJSON([]token.Token{tokenInfo})
+	}
+
+	return mc.cdc.MustMarshalJSON(tokenInfo)
+}

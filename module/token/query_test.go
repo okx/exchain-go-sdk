@@ -86,3 +86,60 @@ func TestTokenClient_QueryAccountTokenInfo(t *testing.T) {
 	_, err = mockCli.Token().QueryAccountTokenInfo(addr[1:], tokenSymbol)
 	require.Error(t, err)
 }
+
+func TestTokenClient_QueryTokenInfo(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTokenClient(mockCli.MockBaseClient))
+
+	originalTotalSupply, err := sdk.NewDecFromStr("10000000000")
+	require.NoError(t, err)
+	totalSupply, err := sdk.NewDecFromStr("20000000000")
+	require.NoError(t, err)
+	ownerAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+
+	expectedRet := mockCli.BuildTokenInfoBytes("default description", tokenSymbol, "default original symbol",
+		"default whole name", originalTotalSupply, totalSupply, ownerAddr, true, false)
+	expectedCdc := mockCli.GetCodec()
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(fmt.Sprintf("custom/%s/info/%s", types.ModuleName, tokenSymbol), nil).Return(expectedRet, nil)
+
+	tokensInfo, err := mockCli.Token().QueryTokenInfo("", tokenSymbol)
+	require.NoError(t, err)
+
+	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
+	require.Equal(t, "default description", tokensInfo[0].Description)
+	require.Equal(t, tokenSymbol, tokensInfo[0].Symbol)
+	require.Equal(t, "default original symbol", tokensInfo[0].OriginalSymbol)
+	require.Equal(t, "default whole name", tokensInfo[0].WholeName)
+	require.Equal(t, originalTotalSupply, tokensInfo[0].OriginalTotalSupply)
+	require.Equal(t, totalSupply, tokensInfo[0].TotalSupply)
+	require.Equal(t, true, tokensInfo[0].Mintable)
+	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
+
+	expectedRet = mockCli.BuildTokenInfoBytes("default description", tokenSymbol, "default original symbol",
+		"default whole name", originalTotalSupply, totalSupply, ownerAddr, true, true)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("custom/%s/tokens/%s", types.ModuleName, addr), nil).Return(expectedRet, nil)
+
+	tokensInfo, err = mockCli.Token().QueryTokenInfo(addr, "")
+	require.NoError(t, err)
+
+	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
+	require.Equal(t, "default description", tokensInfo[0].Description)
+	require.Equal(t, tokenSymbol, tokensInfo[0].Symbol)
+	require.Equal(t, "default original symbol", tokensInfo[0].OriginalSymbol)
+	require.Equal(t, "default whole name", tokensInfo[0].WholeName)
+	require.Equal(t, originalTotalSupply, tokensInfo[0].OriginalTotalSupply)
+	require.Equal(t, totalSupply, tokensInfo[0].TotalSupply)
+	require.Equal(t, true, tokensInfo[0].Mintable)
+	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
+
+	_, err = mockCli.Token().QueryTokenInfo("", "")
+	require.Error(t, err)
+}

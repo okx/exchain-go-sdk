@@ -324,14 +324,6 @@ const (
 //
 //// query test
 //
-//func TestQueryOrderDetail(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	orderDetail, err := client.Order().QueryOrderDetail("ID0000203885-1")
-//	require.NoError(t, err)
-//	fmt.Printf("%+v", orderDetail)
-//}
-//
 //func TestQueryValidators(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
@@ -388,14 +380,6 @@ const (
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
 //	tokensInfo, err := client.Token().QueryAccountTokenInfo(addr, "btc-e68")
-//	require.NoError(t, err)
-//	fmt.Println(tokensInfo)
-//}
-//
-//func TestQueryDepthBook(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokensInfo, err := client.Order().QueryDepthBook("btc-216_okt")
 //	require.NoError(t, err)
 //	fmt.Println(tokensInfo)
 //}

@@ -200,40 +200,7 @@ const (
 //	require.NoError(t, err)
 //	fmt.Println(res)
 //}
-//
-//func TestMultiSend(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	transStr := `okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k 1.024okt
-//okchain1aac2la53t933t265nhat9pexf9sde8kjnagh9m 2.048okt`
-//	transfers, err := utils.ParseTransfersStr(transStr)
-//	require.NoError(t, err)
-//
-//	res, err := client.Token().MultiSend(fromInfo, passWd, transfers, "my memo", accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
-//func TestIssue(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Token().Issue(fromInfo, passWd, "btc", "BitCoin", "100000000",
-//		"the token of Bitcoin", "my memo", true, accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//
-//}
+
 
 //
 //// query test
@@ -414,15 +381,6 @@ const (
 //	fmt.Printf("%+v\n", txsRes)
 //}
 //
-
-//func TestQueryAccount(t *testing.T) {
-//	config, _ := NewClientConfig("tcp://127.0.0.1:10157", "okchain", BroadcastBlock, "0.01okt")
-//	client := NewClient(config)
-//
-//	acc, err := client.Auth().QueryAccount("okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz")
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", acc)
-//}
 
 //config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
 //client := NewClient(config)

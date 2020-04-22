@@ -1,6 +1,7 @@
 package token
 
 import (
+	"bytes"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/auth"
@@ -81,4 +82,61 @@ okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as 20.48okt`
 	_, err = mockCli.Token().MultiSend(fromInfo, passWd, badTransfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
+}
+
+func TestTokenClient_Issue(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTokenClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
+
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	expectedCdc := mockCli.GetCodec()
+	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+
+	accInfo, err := mockCli.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+
+	mockCli.EXPECT().BuildAndBroadcast(
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
+		Return(mocks.DefaultMockSuccessTxResponse(), nil)
+
+	res, err := mockCli.Token().Issue(fromInfo, passWd, "default original symbol", "default whole name",
+		"default total supply", "default token description", memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+
+	_, err = mockCli.Token().Issue(fromInfo, passWd, "", "default whole name",
+		"default total supply", "default token description", memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Token().Issue(fromInfo, passWd, "default original symbol", "default whole name",
+		"default total supply", "", memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	// build a invalid long token description
+	var buffer bytes.Buffer
+	for i := 0; i < 257; i++ {
+		_, _ = buffer.WriteString("a")
+	}
+	longDesc := buffer.String()
+
+	_, err = mockCli.Token().Issue(fromInfo, passWd, "default original symbol", "default whole name",
+		"default total supply", longDesc, memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Token().Issue(fromInfo, passWd, "default original symbol", "",
+		"default total supply", "default token description", memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
 }

@@ -34,6 +34,11 @@ func (oc orderClient) NewOrders(fromInfo keys.Info, passWd, products, sides, pri
 // CancelOrders cancels orders by orderIDs
 func (oc orderClient) CancelOrders(fromInfo keys.Info, passWd, orderIDs, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
+	if len(orderIDs) == 0 {
+		return resp, errors.New("failed. empty orderIDs input")
+
+	}
+
 	orderIDStrs := strings.Split(orderIDs, ",")
 	if err = params.CheckCancelOrderParams(fromInfo, passWd, orderIDStrs); err != nil {
 		return

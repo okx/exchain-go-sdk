@@ -74,6 +74,9 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 	require.Equal(t, int64(0), orderDetail.Status)
 	require.Equal(t, "BUY", orderDetail.Side)
 
+	_, err = mockCli.Order().QueryOrderDetail("")
+	require.Error(t, err)
+
 }
 
 func TestOrderClient_QueryDepthBook(t *testing.T) {

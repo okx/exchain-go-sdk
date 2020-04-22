@@ -250,21 +250,6 @@ const (
 //}
 
 //
-//func TestCancelOrders(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	orderIDs := "ID0000000055-1,ID0000000055-2,ID0000000055-3"
-//	res, err := client.Order().CancelOrders(fromInfo, passWd, orderIDs, "my memo",
-//		accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
 //// query test
 //
 //func TestQueryValidators(t *testing.T) {

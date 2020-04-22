@@ -191,3 +191,40 @@ func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuan
 
 	return mc.cdc.MustMarshalJSON(bookRes)
 }
+
+// BuildAccountTokensInfoBytes generates the account tokens info bytes for test
+func (mc *MockClient) BuildAccountTokensInfoBytes(addrStr, symbol, available, freeze, locked string) []byte {
+	accTokensInfo := token.AccountTokensInfo{
+		Address: addrStr,
+	}
+
+	accTokensInfo.Currencies = append(accTokensInfo.Currencies, token.CoinInfo{
+		Symbol:    symbol,
+		Available: available,
+		Freeze:    freeze,
+		Locked:    locked,
+	})
+
+	return mc.cdc.MustMarshalJSON(accTokensInfo)
+}
+
+// BuildTokenInfoBytes generates the token info bytes for test
+func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, wholeName string, originalTotalSupply,
+	totalSupply sdk.Dec, owner sdk.AccAddress, mintable, isSlice bool) []byte {
+	tokenInfo := token.Token{
+		Description:         description,
+		Symbol:              symbol,
+		OriginalSymbol:      originalSymbol,
+		WholeName:           wholeName,
+		OriginalTotalSupply: originalTotalSupply,
+		TotalSupply:         totalSupply,
+		Owner:               owner,
+		Mintable:            mintable,
+	}
+
+	if isSlice {
+		return mc.cdc.MustMarshalJSON([]token.Token{tokenInfo})
+	}
+
+	return mc.cdc.MustMarshalJSON(tokenInfo)
+}

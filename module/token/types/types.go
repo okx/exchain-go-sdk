@@ -8,7 +8,7 @@ import (
 const (
 	ModuleName = "token"
 
-	AccountTokensInfoPath = "custom/token/accounts/"
+	AccountTokensInfoPath = "custom/token/accounts"
 
 )
 

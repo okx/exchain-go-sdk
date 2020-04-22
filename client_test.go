@@ -295,23 +295,7 @@ const (
 //	fmt.Println(tokens)
 //
 //}
-//
-//func TestQueryAccountTokensInfo(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokensInfo, err := client.Token().QueryAccountTokensInfo(addr)
-//	require.NoError(t, err)
-//	fmt.Println(tokensInfo)
-//}
-//
-//func TestQueryAccountTokenInfo(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokensInfo, err := client.Token().QueryAccountTokenInfo(addr, "btc-e68")
-//	require.NoError(t, err)
-//	fmt.Println(tokensInfo)
-//}
-//
+
 //// need test
 //
 //func TestQueryCandles(t *testing.T) {
@@ -469,3 +453,6 @@ const (
 //	require.NoError(t, err)
 //	fmt.Printf("%+v\n", acc)
 //}
+
+//config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
+//client := NewClient(config)

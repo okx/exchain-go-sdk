@@ -150,3 +150,28 @@ func (mc *MockClient) BuildTokenPairsBytes(baseAssetSymbol1, baseAssetSymbol2, q
 
 	return mc.cdc.MustMarshalJSON(tokenPairs)
 }
+
+// BuildOrderDetailBytes generates the order detail bytes for test
+func (mc *MockClient) BuildOrderDetailBytes(txHash, orderID, extraInfo, product, side string, status, timestamp,
+	orderExpireBlocks int64, sender sdk.AccAddress, price, quantity, filledAvgPrice, remainQuantity, remainLocked sdk.Dec,
+	feePerBlock sdk.DecCoin) []byte {
+	orderDetail := order.OrderDetail{
+		TxHash:            txHash,
+		OrderID:           orderID,
+		Sender:            sender,
+		Product:           product,
+		Side:              side,
+		Price:             price,
+		Quantity:          quantity,
+		Status:            status,
+		FilledAvgPrice:    filledAvgPrice,
+		RemainQuantity:    remainQuantity,
+		RemainLocked:      remainLocked,
+		Timestamp:         timestamp,
+		OrderExpireBlocks: orderExpireBlocks,
+		FeePerBlock:       feePerBlock,
+		ExtraInfo:         extraInfo,
+	}
+
+	return mc.cdc.MustMarshalJSON(orderDetail)
+}

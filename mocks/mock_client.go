@@ -15,6 +15,7 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -227,4 +228,58 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 	}
 
 	return mc.cdc.MustMarshalJSON(tokenInfo)
+}
+
+// BuildValidatorsBytes generates the validator bytes for test
+func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
+	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
+	jailed bool) []byte {
+	consPK, err := sdk.GetConsPubKeyBech32(consPubKey)
+	require.NoError(mc.t, err)
+	val := staking.ValidatorInner{
+		OperatorAddress: valAddr,
+		ConsPubKey:      consPK,
+		Jailed:          jailed,
+		Status:          status,
+		DelegatorShares: delegatorShares,
+		Description: staking.Description{
+			Moniker:  moniker,
+			Identity: identity,
+			Website:  website,
+			Details:  details,
+		},
+		UnbondingHeight:         unbondingHeight,
+		UnbondingCompletionTime: unbondingCompletionTime,
+		MinSelfDelegation:       minSelfDelegation,
+	}
+
+	return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
+
+}
+
+// BuildDelegatorBytes generates the delegator bytes for test
+func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, valAddrs []sdk.ValAddress, shares, tokens,
+	totalDelegatedTokens sdk.Dec, isProxy bool) []byte {
+	delegator := staking.Delegator{
+		DelegatorAddress:     delAddr,
+		ValidatorAddresses:   valAddrs,
+		Shares:               shares,
+		Tokens:               tokens,
+		IsProxy:              isProxy,
+		TotalDelegatedTokens: totalDelegatedTokens,
+		ProxyAddress:         proxyAddr,
+	}
+
+	return mc.cdc.MustMarshalBinaryLengthPrefixed(delegator)
+}
+
+// BuildUndelegationBytes generates the undelegation bytes for test
+func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sdk.Dec, completionTime time.Time) []byte {
+	undelegation := staking.Undelegation{
+		DelegatorAddress: delAddr,
+		Quantity:         quantity,
+		CompletionTime:   completionTime,
+	}
+
+	return mc.cdc.MustMarshalJSON(undelegation)
 }

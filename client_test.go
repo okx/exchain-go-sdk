@@ -187,18 +187,6 @@ const (
 //}
 //
 
-//
-//// query test
-
-
-//func TestQueryDelegator(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	delResp, err := client.Staking().QueryDelegator(addr)
-//	require.NoError(t, err)
-//	fmt.Println(delResp)
-//}
-
 //// need test
 //
 //func TestQueryCandles(t *testing.T) {

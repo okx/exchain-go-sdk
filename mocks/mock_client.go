@@ -256,3 +256,30 @@ func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, mo
 	return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
 
 }
+
+// BuildDelegatorBytes generates the delegator bytes for test
+func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, valAddrs []sdk.ValAddress, shares, tokens,
+	totalDelegatedTokens sdk.Dec, isProxy bool) []byte {
+	delegator := staking.Delegator{
+		DelegatorAddress:     delAddr,
+		ValidatorAddresses:   valAddrs,
+		Shares:               shares,
+		Tokens:               tokens,
+		IsProxy:              isProxy,
+		TotalDelegatedTokens: totalDelegatedTokens,
+		ProxyAddress:         proxyAddr,
+	}
+
+	return mc.cdc.MustMarshalBinaryLengthPrefixed(delegator)
+}
+
+// BuildUndelegationBytes generates the undelegation bytes for test
+func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sdk.Dec, completionTime time.Time) []byte {
+	undelegation := staking.Undelegation{
+		DelegatorAddress: delAddr,
+		Quantity:         quantity,
+		CompletionTime:   completionTime,
+	}
+
+	return mc.cdc.MustMarshalJSON(undelegation)
+}

@@ -6,6 +6,7 @@ import (
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/staking/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	"testing"
@@ -21,6 +22,7 @@ const (
 	memo      = "my memo"
 	valAddr   = "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
 	valConsPK = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
+	proxyAddr = "okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as"
 )
 
 var (
@@ -119,6 +121,61 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 
 	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(nil, nil)
 	_, err = mockCli.Staking().QueryValidator(valAddr)
+	require.Error(t, err)
+
+}
+
+func TestStakingClient_QueryDelegator(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+
+	delAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+	proxyAddr, err := sdk.AccAddressFromBech32(proxyAddr)
+	require.NoError(t, err)
+	valAddr, err := sdk.ValAddressFromBech32(valAddr)
+	require.NoError(t, err)
+	shares, err := sdk.NewDecFromStr("10240000.1024")
+	require.NoError(t, err)
+	tokens, err := sdk.NewDecFromStr("10.24")
+	require.NoError(t, err)
+	totalDelegatedTokens, err := sdk.NewDecFromStr("20.48")
+	require.NoError(t, err)
+	quantity, err := sdk.NewDecFromStr("40.96")
+	require.NoError(t, err)
+	completionTime := time.Now()
+
+	expectedRet1 := mockCli.BuildDelegatorBytes(delAddr, proxyAddr, []sdk.ValAddress{valAddr}, shares, tokens,
+		totalDelegatedTokens, false)
+	expectedRet2 := mockCli.BuildUndelegationBytes(delAddr, quantity, completionTime)
+	expectedCdc := mockCli.GetCodec()
+	queryBytes := expectedCdc.MustMarshalJSON(params.NewQueryDelegatorParams(delAddr))
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
+	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").Return(expectedRet1, nil)
+	mockCli.EXPECT().Query(types.UnbondDelegationPath, cmn.HexBytes(queryBytes)).Return(expectedRet2, nil)
+
+	delResp, err := mockCli.Staking().QueryDelegator(addr)
+	require.NoError(t, err)
+	require.Equal(t, delAddr, delResp.DelegatorAddress)
+	require.Equal(t, totalDelegatedTokens, delResp.TotalDelegatedTokens)
+	require.Equal(t, quantity, delResp.UnbondedTokens)
+	require.Equal(t, valAddr, delResp.ValidatorAddresses[0])
+	require.Equal(t, shares, delResp.Shares)
+	require.Equal(t, tokens, delResp.Tokens)
+	require.Equal(t, false, delResp.IsProxy)
+	require.Equal(t, proxyAddr, delResp.ProxyAddress)
+	require.True(t, completionTime.Equal(delResp.CompletionTime))
+
+	_, err = mockCli.Staking().QueryDelegator(addr[1:])
+	require.Error(t, err)
+
+	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").Return(expectedRet1, errors.New("default error"))
+	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
 
 }

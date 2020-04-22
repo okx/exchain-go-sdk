@@ -1,5 +1,11 @@
 package gosdk
 
+import (
+	"fmt"
+	"github.com/stretchr/testify/require"
+	"testing"
+)
+
 //
 //// just a temporary test, it will be removed later
 //
@@ -296,13 +302,14 @@ const (
 //
 //}
 //
-//func TestQueryAccountTokensInfo(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokensInfo, err := client.Token().QueryAccountTokensInfo(addr)
-//	require.NoError(t, err)
-//	fmt.Println(tokensInfo)
-//}
+func TestQueryAccountTokensInfo(t *testing.T) {
+	config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
+	client := NewClient(config)
+	tokensInfo, err := client.Token().QueryAccountTokensInfo("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya")
+	require.NoError(t, err)
+	fmt.Println(tokensInfo)
+}
+
 //
 //func TestQueryAccountTokenInfo(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)

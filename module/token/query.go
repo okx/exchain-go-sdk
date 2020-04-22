@@ -20,7 +20,7 @@ func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (accTokensIn
 		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	res, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
 		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}
@@ -44,7 +44,7 @@ func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo type
 		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := tc.Query(fmt.Sprintf("%s%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	res, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
 		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}

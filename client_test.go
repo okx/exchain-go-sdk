@@ -201,20 +201,6 @@ const (
 //	fmt.Println(res)
 //}
 //
-//func TestSend(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Token().Send(fromInfo, passWd, targetAddr, "10.24okt", "my memo", accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
 //func TestMultiSend(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
@@ -278,23 +264,7 @@ const (
 //	require.NoError(t, err)
 //	fmt.Println(delResp)
 //}
-//
-//func TestQueryTokenInfo(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokens, err := client.Token().QueryTokenInfo(addr, "")
-//	require.NoError(t, err)
-//	fmt.Println(tokens)
-//
-//	tokens, err = client.Token().QueryTokenInfo("", "btc-32e")
-//	require.NoError(t, err)
-//	fmt.Println(tokens)
-//
-//	tokens, err = client.Token().QueryTokenInfo(addr+"123", "btc-9ec")
-//	require.NoError(t, err)
-//	fmt.Println(tokens)
-//
-//}
+
 
 //// need test
 //

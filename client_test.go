@@ -1,11 +1,5 @@
 package gosdk
 
-import (
-	"fmt"
-	"github.com/stretchr/testify/require"
-	"testing"
-)
-
 //
 //// just a temporary test, it will be removed later
 //
@@ -554,11 +548,12 @@ const (
 //	fmt.Printf("%+v\n", txsRes)
 //}
 //
-func TestQueryAccount(t *testing.T) {
-	config, _ := NewClientConfig("tcp://127.0.0.1:10157", "okchain", BroadcastBlock, "0.01okt")
-	client := NewClient(config)
 
-	acc, err := client.Auth().QueryAccount("okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz")
-	require.NoError(t, err)
-	fmt.Printf("%+v\n", acc)
-}
+//func TestQueryAccount(t *testing.T) {
+//	config, _ := NewClientConfig("tcp://127.0.0.1:10157", "okchain", BroadcastBlock, "0.01okt")
+//	client := NewClient(config)
+//
+//	acc, err := client.Auth().QueryAccount("okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz")
+//	require.NoError(t, err)
+//	fmt.Printf("%+v\n", acc)
+//}

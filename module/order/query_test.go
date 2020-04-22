@@ -79,7 +79,7 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 func TestOrderClient_QueryDepthBook(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 20000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))

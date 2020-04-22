@@ -24,7 +24,7 @@ func main() {
 	//-------------------- 1. preparation --------------------//
 
 	// create a client
-	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt")
+	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 200000)
 	if err != nil {
 		log.Fatal(err)
 	}

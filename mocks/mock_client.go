@@ -49,7 +49,7 @@ func (mc *MockClient) RegisterModule(mods ...sdk.Module) {
 		}
 		// register codec by each module
 		mod.RegisterCodec(mc.cdc)
-		mc.modules[mod.Name()] = mod
+		mc.modules[moduleName] = mod
 	}
 	sdk.RegisterBasicCodec(mc.cdc)
 	mc.cdc.Seal()

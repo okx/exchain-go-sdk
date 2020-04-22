@@ -21,10 +21,14 @@ const (
 )
 
 func main() {
-	////////// 1. preparation //////////
+	//-------------------- 1. preparation --------------------//
 
 	// create a client
-	config := sdk.NewClientConfig(rpcURL, sdk.BroadcastBlock)
+	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	cli := sdk.NewClient(config)
 
 	// create an account with your own mnemonic，name and password
@@ -33,7 +37,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	////////// 2. query for the information of your address //////////
+	//-------------------- 2. query for the information of your address --------------------//
 
 	accInfo, err := cli.Auth().QueryAccount(fromInfo.GetAddress().String())
 	if err != nil {
@@ -42,7 +46,7 @@ func main() {
 
 	log.Println(accInfo)
 
-	////////// 3. transfer to other address //////////
+	//-------------------- 3. transfer to other address --------------------//
 
 	// sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
 	accountNum, sequenceNum := accInfo.GetAccountNumber(), accInfo.GetSequence()
@@ -53,7 +57,7 @@ func main() {
 
 	log.Println(res)
 
-	////////// 4. delegate for staking //////////
+	//-------------------- 4. delegate for staking --------------------//
 
 	// increase sequence number
 	sequenceNum++

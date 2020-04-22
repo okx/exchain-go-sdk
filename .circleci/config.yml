@@ -18,9 +18,9 @@ jobs:
       - run:
           name: Cache go modules
           command: go mod download
-#      - run:
-#          name: Unit Test
-#          command:  go test -mod=readonly -tags='sdk test_sdk_mock' ./...
+      - run:
+          name: Unit Test
+          command:  go test -mod=readonly -tags='sdk test_sdk_mock' ./...
       - save_cache:
           name: Save go modules cache
           key: go-mod-v1-{{ checksum "go.sum" }}

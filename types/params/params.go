@@ -14,8 +14,8 @@ const (
 
 // QueryAccTokenParams - structure of params to query a specific token in an account
 type QueryAccTokenParams struct {
-	Symbol string `json:"symbol"`
-	Show   string `json:"show"`
+	Symbol string
+	Show   string
 }
 
 // NewQueryAccTokenParams creates a new instance of QueryAccTokenParams
@@ -61,9 +61,9 @@ func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesPara
 
 // QueryTickerParams - structure of params to query tickers
 type QueryTickerParams struct {
-	Product string `json:"product"`
-	Count   int    `json:"count"`
-	Sort    bool   `json:"sort"`
+	Product string
+	Count   int
+	Sort    bool
 }
 
 // NewQueryTickerParams creates a new instance of QueryTickerParams
@@ -213,15 +213,15 @@ func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams,
 	} else {
 		_, err := types.AccAddressFromBech32(owner)
 		if err != nil {
-			return QueryDexInfoParams{}, fmt.Errorf("invalid address：%s", owner)
+			return QueryDexInfoParams{}, fmt.Errorf("failed. invalid address: %s", owner)
 		}
 	}
 
 	if page <= 0 {
-		return QueryDexInfoParams{}, fmt.Errorf("invalid page：%d", page)
+		return QueryDexInfoParams{}, fmt.Errorf("failed. invalid page: %d", page)
 	}
 	if perPage <= 0 {
-		return QueryDexInfoParams{}, fmt.Errorf("invalid per-page：%d", perPage)
+		return QueryDexInfoParams{}, fmt.Errorf("failed. invalid per-page: %d", perPage)
 	}
 	return QueryDexInfoParams{
 		Owner:   owner,

@@ -22,6 +22,8 @@ const (
 	memo      = "my memo"
 
 	tokenSymbol = "btc-000"
+
+	recAddr = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
 )
 
 func TestTokenClient_QueryAccountTokensInfo(t *testing.T) {

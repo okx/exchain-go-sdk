@@ -85,7 +85,7 @@ func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []tok
 	if transLen == 0 {
 		return errors.New("failed. no receiver input")
 	}
-	for i := 0; i < 0; i++ {
+	for i := 0; i < transLen; i++ {
 		if transfers[i].Coins.IsAllPositive() {
 			continue
 		} else {

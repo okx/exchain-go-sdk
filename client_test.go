@@ -74,22 +74,7 @@ const (
 //	require.NoError(t, err)
 //	fmt.Println(resp)
 //}
-//
-//func TestCreateValidator(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(addr)
-//	require.NoError(t, err)
-//
-//	pubkeyStr := "okchainvalconspub1zcjduepqghrtvkngejwese62wg49ewskz4r93vkyj3md5mg5rf7twcc6jduqpqw66q"
-//	resp, err := client.Staking().CreateValidator(fromInfo, passWd, pubkeyStr, "my moniker", "my identity",
-//		"my website", "my details", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(resp)
-//}
-//
+
 //func TestEditValidator(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)

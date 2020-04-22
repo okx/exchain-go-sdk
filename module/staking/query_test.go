@@ -1,6 +1,7 @@
 package staking
 
 import (
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/staking/types"
@@ -64,6 +65,60 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.Equal(t, byte(2), vals[0].Status)
 	require.Equal(t, delegatorShares, vals[0].DelegatorShares)
 	require.Equal(t, int64(0), vals[0].UnbondingHeight)
-	require.Equal(t, time.Unix(0, 0).UTC(), vals[0].UnbondingCompletionTime)
 	require.Equal(t, minSelfDelegation, vals[0].MinSelfDelegation)
+	require.True(t, time.Unix(0, 0).UTC().Equal(vals[0].UnbondingCompletionTime))
+
+}
+
+func TestStakingClient_QueryValidator(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+
+	valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
+	require.NoError(t, err)
+	delegatorShares, err := sdk.NewDecFromStr("1")
+	require.NoError(t, err)
+	minSelfDelegation, err := sdk.NewDecFromStr("0.001")
+	require.NoError(t, err)
+	unbondingCompletionTime := time.Now()
+
+	expectedRet := mockCli.BuildValidatorBytes(valOperAddr, valConsPK, "default moniker", "default identity",
+		"default website", "default details", 2, delegatorShares, minSelfDelegation, 0,
+		unbondingCompletionTime, false)
+	expectedCdc := mockCli.GetCodec()
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(expectedRet, nil)
+
+	val, err := mockCli.Staking().QueryValidator(valAddr)
+	require.NoError(t, err)
+
+	require.Equal(t, valOperAddr, val.OperatorAddress)
+	require.Equal(t, valConsPK, val.ConsPubKey)
+	require.Equal(t, false, val.Jailed)
+	require.Equal(t, byte(2), val.Status)
+	require.Equal(t, delegatorShares, val.DelegatorShares)
+	require.Equal(t, "default moniker", val.Description.Moniker)
+	require.Equal(t, "default identity", val.Description.Identity)
+	require.Equal(t, "default website", val.Description.Website)
+	require.Equal(t, "default details", val.Description.Details)
+	require.Equal(t, int64(0), val.UnbondingHeight)
+	require.Equal(t, minSelfDelegation, val.MinSelfDelegation)
+	require.True(t, unbondingCompletionTime.Equal(val.UnbondingCompletionTime))
+
+	_, err = mockCli.Staking().QueryValidator(valAddr[1:])
+	require.Error(t, err)
+
+	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return([]byte{1}, errors.New("default error"))
+	_, err = mockCli.Staking().QueryValidator(valAddr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(nil, nil)
+	_, err = mockCli.Staking().QueryValidator(valAddr)
+	require.Error(t, err)
+
 }

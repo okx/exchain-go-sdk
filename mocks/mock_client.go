@@ -233,10 +233,12 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 // BuildValidatorsBytes generates the validator bytes for test
 func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
 	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
-	jailed, isSlice bool) []byte {
-	val := staking.Validator{
+	jailed bool) []byte {
+	consPK, err := sdk.GetConsPubKeyBech32(consPubKey)
+	require.NoError(mc.t, err)
+	val := staking.ValidatorInner{
 		OperatorAddress: valAddr,
-		ConsPubKey:      consPubKey,
+		ConsPubKey:      consPK,
 		Jailed:          jailed,
 		Status:          status,
 		DelegatorShares: delegatorShares,

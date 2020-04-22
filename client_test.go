@@ -190,15 +190,7 @@ const (
 //
 //// query test
 
-//func TestQueryValidator(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	valAddr := "okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"
-//	val, err := client.Staking().QueryValidator(valAddr)
-//	require.NoError(t, err)
-//	fmt.Println(val)
-//}
-//
+
 //func TestQueryDelegator(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)

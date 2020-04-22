@@ -13,6 +13,10 @@ import (
 
 // GenerateUnsignedTransferOwnershipTx generates the unsigned transfer-ownership transaction offline
 func (dc dexClient) GenerateUnsignedTransferOwnershipTx(product, fromAddrStr, toAddrStr, memo, outputPath string) error {
+	if len(product) == 0 {
+		return errors.New("failed. empty product input")
+	}
+
 	fromAddr, err := sdk.AccAddressFromBech32(fromAddrStr)
 	if err != nil {
 		return fmt.Errorf("failed. parse Address [%s] error: %s", fromAddrStr, err)

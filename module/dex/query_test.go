@@ -72,4 +72,13 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	require.Equal(t, int64(512), tokenPairs[0].BlockHeight)
 	require.Equal(t, int64(1024), tokenPairs[1].BlockHeight)
 
+	_, err = mockCli.Dex().QueryProducts(addr, -1, 30)
+	require.Error(t, err)
+
+	_, err = mockCli.Dex().QueryProducts(addr, 1, -30)
+	require.Error(t, err)
+
+	_, err = mockCli.Dex().QueryProducts(addr[1:], 1, 30)
+	require.Error(t, err)
+
 }

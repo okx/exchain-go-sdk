@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/auth/types"
@@ -49,4 +50,14 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	require.Equal(t, expectedCoin0, coins[0])
 	require.Equal(t, expectedCoin1, coins[1])
 
+	_, err = mockCli.Auth().QueryAccount(addr[1:])
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, nil)
+	_, err = mockCli.Auth().QueryAccount(addr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, errors.New("default error"))
+	_, err = mockCli.Auth().QueryAccount(addr)
+	require.Error(t, err)
 }

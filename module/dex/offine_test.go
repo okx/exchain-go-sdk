@@ -31,6 +31,15 @@ func TestDexClient_GenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	err = dexClient.GenerateUnsignedTransferOwnershipTx(product, addr, recAddr, memo, unsignedPath)
 	require.NoError(t, err)
 
+	err = dexClient.GenerateUnsignedTransferOwnershipTx("", addr, recAddr, memo, unsignedPath)
+	require.Error(t, err)
+
+	err = dexClient.GenerateUnsignedTransferOwnershipTx(product, addr[1:], recAddr, memo, unsignedPath)
+	require.Error(t, err)
+
+	err = dexClient.GenerateUnsignedTransferOwnershipTx(product, addr, recAddr[1:], memo, unsignedPath)
+	require.Error(t, err)
+
 	// read back to check
 	stdTx, err := utils.GetStdTxFromFile(cdc, unsignedPath)
 	require.NoError(t, err)
@@ -63,6 +72,12 @@ func TestDexClient_MultiSign(t *testing.T) {
 	require.NoError(t, err)
 	err = dexClient.MultiSign(recInfo, passWd, unsignedPath, signedPath)
 	require.NoError(t, err)
+
+	err = dexClient.MultiSign(recInfo, passWd[1:], unsignedPath, signedPath)
+	require.Error(t, err)
+
+	err = dexClient.MultiSign(recInfo, passWd, unsignedPath, signedPath[1:])
+	require.Error(t, err)
 
 	// read back to check
 	stdTx, err := utils.GetStdTxFromFile(cdc, signedPath)

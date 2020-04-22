@@ -113,7 +113,7 @@ func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr strin
 	return bytes
 }
 
-// BuildTokenPairBytes generates the token pairs bytes for test
+// BuildTokenPairsBytes generates the token pairs bytes for test
 func (mc *MockClient) BuildTokenPairsBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
 	minQuantity sdk.Dec, maxPriceDigit, maxQuantityDigit, blockHeight1, blockHeight2 int64, ID1, ID2 uint64, delisting bool,
 	owner sdk.AccAddress, deposits sdk.DecCoin) []byte {
@@ -174,4 +174,20 @@ func (mc *MockClient) BuildOrderDetailBytes(txHash, orderID, extraInfo, product,
 	}
 
 	return mc.cdc.MustMarshalJSON(orderDetail)
+}
+
+// BuildBookResBytes generates the book result bytes for test
+func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuantity string) []byte {
+	var bookRes order.BookRes
+	bookRes.Asks = append(bookRes.Asks, order.BookResItem{
+		Price:    askPrice,
+		Quantity: askQuantity,
+	})
+
+	bookRes.Bids = append(bookRes.Bids, order.BookResItem{
+		Price:    bidPrice,
+		Quantity: bidQuantity,
+	})
+
+	return mc.cdc.MustMarshalJSON(bookRes)
 }

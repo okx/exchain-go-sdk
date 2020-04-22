@@ -384,14 +384,6 @@ const (
 //	fmt.Println(tokensInfo)
 //}
 //
-//func TestQueryDepthBook(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	tokensInfo, err := client.Order().QueryDepthBook("btc-216_okt")
-//	require.NoError(t, err)
-//	fmt.Println(tokensInfo)
-//}
-//
 //// need test
 //
 //func TestQueryCandles(t *testing.T) {

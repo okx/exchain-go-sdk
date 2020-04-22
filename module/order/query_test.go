@@ -6,7 +6,9 @@ import (
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
+	cmn "github.com/tendermint/tendermint/libs/common"
 
 	"testing"
 )
@@ -71,5 +73,33 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 	require.Equal(t, int64(10240000), orderDetail.Timestamp)
 	require.Equal(t, int64(0), orderDetail.Status)
 	require.Equal(t, "BUY", orderDetail.Side)
+
+}
+
+func TestOrderClient_QueryDepthBook(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
+
+	expectedRet := mockCli.BuildBookResBytes("1.024", "10.24", "2.048", "20.48")
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryDepthBookParams(product, 200)
+	require.NoError(t, err)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	depthBook, err := mockCli.Order().QueryDepthBook(product)
+	require.NoError(t, err)
+
+	require.Equal(t, "1.024", depthBook.Asks[0].Price)
+	require.Equal(t, "10.24", depthBook.Asks[0].Quantity)
+	require.Equal(t, "2.048", depthBook.Bids[0].Price)
+	require.Equal(t, "20.48", depthBook.Bids[0].Quantity)
 
 }

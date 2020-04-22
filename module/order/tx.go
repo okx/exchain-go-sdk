@@ -1,6 +1,7 @@
 package order
 
 import (
+	"errors"
 	"github.com/okex/okchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
@@ -11,6 +12,10 @@ import (
 // NewOrders places orders with some detail info
 func (oc orderClient) NewOrders(fromInfo keys.Info, passWd, products, sides, prices, quantities, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if len(products) == 0 || len(sides) == 0 || len(prices) == 0 || len(quantities) == 0 {
+		return resp, errors.New("failed. empty param input")
+	}
+
 	productStrs := strings.Split(products, ",")
 	sideStrs := strings.Split(sides, ",")
 	priceStrs := strings.Split(prices, ",")

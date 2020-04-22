@@ -248,64 +248,7 @@ const (
 //	fmt.Println(res)
 //
 //}
-//
-//func TestNewOrders(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.123:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	//res, err := client.Order().NewOrders(
-//	//	fromInfo,
-//	//	passWd,
-//	//	"btc-9ec_okt,btc-9ec_okt,btc-9ec_okt",
-//	//	"BUY,SELL,BUY",
-//	//	"11.2,22.3,33.4",
-//	//	"1.23,2.34,3.45",
-//	//	"my memo",
-//	//	accInfo.GetAccountNumber(),
-//	//	accInfo.GetSequence())
-//	res, err := client.Order().NewOrders(
-//		fromInfo,
-//		passWd,
-//		"tbtc-ca3_okt,tbtc-ca3_okt,tbtc-ca3_okt",
-//		"BUY,BUY,BUY",
-//		"11.2,22.3,33.4",
-//		"1.23,2.34,3.45",
-//		"my memo",
-//		accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//	fmt.Println("orderIds:", utils.GetOrderIDsFromResponse(&res))
-//}
 
-//func TestTransferOwnership(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:26657", BroadcastBlock)
-//	client := NewClient(config)
-//	// 1.generate unsigned transfer-ownership tx file
-//	err := client.Dex().GenerateUnsignedTransferOwnershipTx("btc-216_okt", addr, targetAddr, "my memo", "./unsignedTx.json")
-//	require.NoError(t, err)
-//
-//	// 2.multi-sign the stdTx by the receiver
-//	recvInfo, _, err := utils.CreateAccountWithMnemo(targetMnemonic, name, passWd)
-//	require.NoError(t, err)
-//	err = client.Dex().MultiSign(recvInfo, passWd, "./unsignedTx.json", "./signedTx.json")
-//	require.NoError(t, err)
-//
-//	// 3.transfer ownership with the signed tx file
-//	ownInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(ownInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Dex().TransferOwnership(ownInfo, passWd, "./signedTx.json", accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
 //
 //func TestCancelOrders(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)

@@ -15,7 +15,7 @@ import (
 func TestDexClient_List(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt",200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -38,12 +38,25 @@ func TestDexClient_List(t *testing.T) {
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
+
+	res, err = mockCli.Dex().List(fromInfo, passWd, "", "okt", "1.024", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	res, err = mockCli.Dex().List(fromInfo, passWd, "btc", "", "1.024", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	require.Panics(t, func() {
+		_, _ = mockCli.Dex().List(fromInfo, passWd, "btc", "okt", "1.a024", memo,
+			accInfo.GetAccountNumber(), accInfo.GetSequence())
+	})
 }
 
 func TestDexClient_Deposit(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt",200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -66,12 +79,20 @@ func TestDexClient_Deposit(t *testing.T) {
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
+
+	res, err = mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	res, err = mockCli.Dex().Deposit(fromInfo, passWd, "", "10.24okt", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestDexClient_Withdraw(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt",200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -94,6 +115,10 @@ func TestDexClient_Withdraw(t *testing.T) {
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
+
+	res, err = mockCli.Dex().Withdraw(fromInfo, passWd, "", "1.024okt", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestDexClient_TransferOwnership(t *testing.T) {
@@ -103,7 +128,7 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt",200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -113,7 +138,7 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 
 	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 11, 22)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
@@ -125,6 +150,9 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 	res, err := mockCli.Dex().TransferOwnership(fromInfo, passWd, signedPath, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
+
+	_, err = mockCli.Dex().TransferOwnership(fromInfo, passWd, signedPath[1:], accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 
 	// remove the temporary file: signedTx.json
 	err = os.Remove(signedPath)

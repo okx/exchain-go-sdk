@@ -14,13 +14,13 @@ import (
 const (
 	unsignedPath           = "./unsignedTx.json"
 	signedPath             = "./signedTx.json"
-	expectedUnsignedTxJSON = `{"type":"cosmos-sdk/StdTx","value":{"msg":[{"type":"okchain/dex/MsgTransferTradingPairOwnership","value":{"from_address":"okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz","to_address":"okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7","product":"btc-000_okt","to_signature":{"pub_key":null,"signature":null}}}],"fee":{"amount":[{"denom":"okt","amount":"0.01000000"}],"gas":"20000"},"signatures":null,"memo":"my memo"}}`
-	expectedSignedTxJSON   = `{"type":"cosmos-sdk/StdTx","value":{"msg":[{"type":"okchain/dex/MsgTransferTradingPairOwnership","value":{"from_address":"okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz","to_address":"okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7","product":"btc-000_okt","to_signature":{"pub_key":{"type":"tendermint/PubKeySecp256k1","value":"AgNf7LwXZdAuTZs7XAY7lbdVaOvQlpGVyc2TV0QrSgj+"},"signature":"/3yLlZ96fDy97CRC/6kvooNJveVcANUTu6dbAEaaiipwKrpeUeNFoMFsBgxvM/+dWf2PckTezHRLKwk/ExQ+gA=="}}}],"fee":{"amount":[{"denom":"okt","amount":"0.01000000"}],"gas":"20000"},"signatures":null,"memo":"my memo"}}`
+	expectedUnsignedTxJSON = `{"type":"cosmos-sdk/StdTx","value":{"msg":[{"type":"okchain/dex/MsgTransferTradingPairOwnership","value":{"from_address":"okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz","to_address":"okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7","product":"btc-000_okt","to_signature":{"pub_key":null,"signature":null}}}],"fee":{"amount":[{"denom":"okt","amount":"0.01000000"}],"gas":"200000"},"signatures":null,"memo":"my memo"}}`
+	expectedSignedTxJSON   = `{"type":"cosmos-sdk/StdTx","value":{"msg":[{"type":"okchain/dex/MsgTransferTradingPairOwnership","value":{"from_address":"okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz","to_address":"okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7","product":"btc-000_okt","to_signature":{"pub_key":{"type":"tendermint/PubKeySecp256k1","value":"AgNf7LwXZdAuTZs7XAY7lbdVaOvQlpGVyc2TV0QrSgj+"},"signature":"/3yLlZ96fDy97CRC/6kvooNJveVcANUTu6dbAEaaiipwKrpeUeNFoMFsBgxvM/+dWf2PckTezHRLKwk/ExQ+gA=="}}}],"fee":{"amount":[{"denom":"okt","amount":"0.01000000"}],"gas":"200000"},"signatures":null,"memo":"my memo"}}`
 )
 
 func TestDexClient_GenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	// make dex client
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt")
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, nil, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))
@@ -51,7 +51,7 @@ func TestDexClient_MultiSign(t *testing.T) {
 	require.NoError(t, err)
 
 	// make dex client
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt")
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, nil, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))

@@ -46,10 +46,12 @@ type ClientConfig struct {
 	BroadcastMode BroadcastMode
 	ChainID       string
 	Fees          DecCoins
+	Gas           uint64
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string) (cliConfig ClientConfig, err error) {
+func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string, gas uint64) (
+	cliConfig ClientConfig, err error) {
 	fees, err := ParseDecCoins(feesStr)
 	if err != nil {
 		return
@@ -60,5 +62,6 @@ func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesS
 		BroadcastMode: broadcastMode,
 		ChainID:       chainID,
 		Fees:          fees,
+		Gas:           gas,
 	}, err
 }

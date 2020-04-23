@@ -98,23 +98,6 @@ package gosdk
 //	}
 //}
 
-//
-//func TestQueryCommitResults(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:21257", BroadcastBlock)
-//	client := NewClient(config)
-//	commitRes, err := client.Tendermint().QueryCommitResult(10000)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", commitRes)
-//}
-//
-//func TestQueryValidatorResult(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
-//	client := NewClient(config)
-//	valsRes, err := client.Tendermint().QueryValidatorsResult(10000)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", valsRes)
-//}
-//
 //func TestQueryTxResult(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
 //	client := NewClient(config)

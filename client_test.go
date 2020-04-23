@@ -18,20 +18,6 @@ const (
 
 //
 //// transact tx
-//
-//func TestVote(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(addr)
-//	require.NoError(t, err)
-//
-//	valsToVoted := []string{"okchainvaloper1n62v94azspas83uucwxg347jqmfma90fwx7nxt", "okchainvaloper1wsrrv0q4ldqjm2lxayuscwthcht55crdnt6her"}
-//	resp, err := client.Staking().Vote(fromInfo, passWd, valsToVoted, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(resp)
-//}
 
 //
 //func TestRegisterProxy(t *testing.T) {

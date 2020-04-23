@@ -41,14 +41,6 @@ jobs:
               tail -n +2 /tmp/workspace/profiles/"$prof" >> coverage.txt
             done
 
-            echo "--> Filter out DONTCOVER:"
-            excludelist="$(find . -type f -name '*.go' | xargs grep -l 'DONTCOVER')"
-            for filename in ${excludelist}; do
-              filename=$(echo $filename | sed 's/^./github.com\/okex\/okchain-go-sdk/g')
-              echo "Excluding ${filename} from coverage report..."
-              sed -i.bak "/$(echo $filename | sed 's/\//\\\//g')/d" coverage.txt
-            done
-
             echo "--> upload codecov:"
             bash <(curl -s https://codecov.io/bash) -f coverage.txt
       - save_cache:

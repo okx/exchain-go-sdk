@@ -2,37 +2,6 @@ package gosdk
 
 //
 //// just a temporary test, it will be removed later
-//
-const (
-	name   = "alice"
-	passWd = "12345678"
-	// sender's mnemonic
-	mnemonic = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
-	addr     = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
-	// target mnemonic
-	targetMnemonic = "pepper basket run install fury scheme journey worry tumble toddler swap change"
-	targetAddr     = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
-
-	backendAddr = "okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya"
-)
-
-//
-//// transact tx
-
-//func TestUnbindProxy(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	res, err := client.Staking().UnbindProxy(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//
-//}
-//
 
 //// need test
 //

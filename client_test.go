@@ -98,17 +98,6 @@ package gosdk
 //	}
 //}
 
-//func TestQueryTxResult(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
-//	client := NewClient(config)
-//	// get tx hash bytes
-//	txHash, err := hex.DecodeString("184F5C27BB885B5DB21C8BEC2A521F72E4287721AD0CB04ACB6EC961668E4B11")
-//	require.NoError(t, err)
-//	txRes, err := client.Tendermint().QueryTxResult(txHash, true)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", txRes)
-//}
-//
 //func TestQueryTxsResult(t *testing.T) {
 //	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
 //	client := NewClient(config)

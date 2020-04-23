@@ -380,3 +380,22 @@ func (mc *MockClient) GetRawValidatorsResultPointer(height, VotingPower, propose
 		},
 	}
 }
+
+// GetRawTxResultPointer generates the raw tendermint tx result pointer for test
+func (mc *MockClient) GetRawTxResultPointer(hash cmn.HexBytes, height int64, code uint32, log, eventType string,
+	tx []byte) *ctypes.ResultTx {
+	return &ctypes.ResultTx{
+		Hash:   hash,
+		Height: height,
+		Tx:     tx,
+		TxResult: abci.ResponseDeliverTx{
+			Code: code,
+			Log:  log,
+			Events: []abci.Event{
+				{
+					Type: eventType,
+				},
+			},
+		},
+	}
+}

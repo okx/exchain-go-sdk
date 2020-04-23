@@ -7,6 +7,7 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
+	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
 	"time"
 )
@@ -125,5 +126,34 @@ func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 
 	mockCli.EXPECT().Validators(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Tendermint().QueryValidatorsResult(1024)
+	require.Error(t, err)
+}
+
+func TestTendermintClient_QueryTxResult(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+
+	txHash, tx := []byte("default tx hash"), []byte("default tx")
+	height, code := int64(1024), uint32(0)
+	log, eventType := "default log", "default event type"
+
+	expectedRet := mockCli.GetRawTxResultPointer(txHash, height, code, log, eventType, tx)
+	mockCli.EXPECT().Tx(txHash, true).Return(expectedRet, nil)
+
+	txResult, err := mockCli.Tendermint().QueryTxResult(txHash, true)
+	require.NoError(t, err)
+	require.Equal(t, height, txResult.Height)
+	require.Equal(t, cmn.HexBytes(txHash), txResult.Hash)
+	require.Equal(t, tmtypes.Tx(tx), txResult.Tx)
+	require.Equal(t, log, txResult.TxResult.Log)
+	require.Equal(t, code, txResult.TxResult.Code)
+	require.Equal(t, eventType, txResult.TxResult.Events[0].Type)
+
+	mockCli.EXPECT().Tx(txHash, true).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryTxResult(txHash, true)
 	require.Error(t, err)
 }

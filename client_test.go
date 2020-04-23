@@ -19,21 +19,6 @@ const (
 //
 //// transact tx
 //
-//func TestDelegate(t *testing.T) {
-//	config, err := NewClientConfig("tcp://127.0.0.1:10057", "okchain", BroadcastBlock, "0.01okt")
-//	require.NoError(t, err)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(addr)
-//	require.NoError(t, err)
-//
-//	resp, err := client.Staking().Delegate(fromInfo, passWd, "1024.1024okt", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
-//	require.NoError(t, err)
-//	fmt.Println(resp)
-//}
-
-//
 //func TestUnbond(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)
@@ -238,13 +223,6 @@ const (
 //	}
 //}
 
-//func TestQueryBlockResults(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
-//	client := NewClient(config)
-//	blockRes, err := client.Tendermint().QueryBlockResults(11)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", blockRes)
-//}
 //
 //func TestQueryCommitResults(t *testing.T) {
 //	config := NewClientConfig("tcp://192.168.13.125:21257", BroadcastBlock)

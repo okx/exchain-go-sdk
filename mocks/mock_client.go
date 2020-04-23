@@ -399,3 +399,14 @@ func (mc *MockClient) GetRawTxResultPointer(hash cmn.HexBytes, height int64, cod
 		},
 	}
 }
+
+// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
+func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash cmn.HexBytes, height int64, code uint32, log,
+	eventType string, tx []byte) *ctypes.ResultTxSearch {
+	return &ctypes.ResultTxSearch{
+		TotalCount: totalCount,
+		Txs: []*ctypes.ResultTx{
+			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
+		},
+	}
+}

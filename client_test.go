@@ -98,16 +98,6 @@ package gosdk
 //	}
 //}
 
-//func TestQueryTxsResult(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
-//	client := NewClient(config)
-//	// get searching string
-//	searchStr := `message.sender=okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya`
-//	txsRes, err := client.Tendermint().QueryTxsResult(searchStr, 1, 30)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", txsRes)
-//}
-//
 
 //config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
 //client := NewClient(config)

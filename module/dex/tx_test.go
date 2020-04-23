@@ -39,11 +39,15 @@ func TestDexClient_List(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	res, err = mockCli.Dex().List(fromInfo, passWd, "", "okt", "1.024", memo,
+	_, err = mockCli.Dex().List(fromInfo, passWd, "", "okt", "1.024", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	res, err = mockCli.Dex().List(fromInfo, passWd, "btc", "", "1.024", memo,
+	_, err = mockCli.Dex().List(fromInfo, passWd, "btc", "", "1.024", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Dex().List(fromInfo, "", "btc", "okt", "1.024", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
@@ -80,11 +84,15 @@ func TestDexClient_Deposit(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	res, err = mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24", memo,
+	_, err = mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	res, err = mockCli.Dex().Deposit(fromInfo, passWd, "", "10.24okt", memo,
+	_, err = mockCli.Dex().Deposit(fromInfo, passWd, "", "10.24okt", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Dex().Deposit(fromInfo, "", product, "10.24okt", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
@@ -116,7 +124,11 @@ func TestDexClient_Withdraw(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	res, err = mockCli.Dex().Withdraw(fromInfo, passWd, "", "1.024okt", memo,
+	_, err = mockCli.Dex().Withdraw(fromInfo, passWd, "", "1.024okt", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Dex().Withdraw(fromInfo, "", product, "1.024okt", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
@@ -154,8 +166,10 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 	_, err = mockCli.Dex().TransferOwnership(fromInfo, passWd, signedPath[1:], accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
+	_, err = mockCli.Dex().TransferOwnership(fromInfo, "", signedPath, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
 	// remove the temporary file: signedTx.json
 	err = os.Remove(signedPath)
 	require.NoError(t, err)
-
 }

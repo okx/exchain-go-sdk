@@ -19,25 +19,6 @@ const (
 //
 //// transact tx
 
-//
-//func TestRegisterProxy(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(addr)
-//	require.NoError(t, err)
-//
-//	sequence := accInfo.GetSequence()
-//	res, err := client.Staking().Delegate(fromInfo, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//
-//	sequence++
-//	res, err = client.Staking().RegisterProxy(fromInfo, passWd, "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//}
-//
 //func TestUnregisterProxy(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)

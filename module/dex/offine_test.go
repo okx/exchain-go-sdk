@@ -51,7 +51,6 @@ func TestDexClient_GenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	// remove the temporary file: unsignedTx.json
 	err = os.Remove(unsignedPath)
 	require.NoError(t, err)
-
 }
 
 func TestDexClient_MultiSign(t *testing.T) {
@@ -79,6 +78,9 @@ func TestDexClient_MultiSign(t *testing.T) {
 	err = dexClient.MultiSign(recInfo, passWd, unsignedPath, signedPath[1:])
 	require.Error(t, err)
 
+	err = dexClient.MultiSign(recInfo, "", unsignedPath, signedPath)
+	require.Error(t, err)
+
 	// read back to check
 	stdTx, err := utils.GetStdTxFromFile(cdc, signedPath)
 	require.NoError(t, err)
@@ -92,5 +94,4 @@ func TestDexClient_MultiSign(t *testing.T) {
 	require.NoError(t, err)
 	err = os.Remove(signedPath)
 	require.NoError(t, err)
-
 }

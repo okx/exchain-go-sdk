@@ -1,65 +1,49 @@
 package utils
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+const (
+	defaultName       = "alice"
+	defaultPassWd     = "12345678"
+	defaultMnemonic   = "sustain hole urban away boy core lazy brick wait drive tiger tell"
+	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
 )
 
 func TestCreateAccount(t *testing.T) {
 	info, mnemo, err := CreateAccount("", "")
-	assertNotEqual(t, err, nil)
-	assertEqual(t, info, nil)
-	assertEqual(t, mnemo, "")
-
-	fmt.Println(info.GetAddress().String())
-	fmt.Println(info.GetName())
-	fmt.Println(info.GetPubKey())
-	fmt.Println(mnemo)
+	require.NoError(t, err)
+	require.Equal(t, defaultName, info.GetName())
+	require.NotNil(t, mnemo)
 }
 
 func TestCreateAccountWithMnemo(t *testing.T) {
-	info, mnemo, err := CreateAccountWithMnemo(mnemonic, name, passWd)
-	assertNotEqual(t, err, nil)
-	assertEqual(t, info, nil)
-	assertEqual(t, mnemo, "")
-
-	fmt.Println(info.GetAddress().String())
-	fmt.Println(info.GetName())
-	fmt.Println(info.GetPubKey())
-	fmt.Println(mnemo)
+	info, mnemo, err := CreateAccountWithMnemo(defaultMnemonic, defaultName, defaultPassWd)
+	require.NoError(t, err)
+	require.Equal(t, defaultName, info.GetName())
+	require.Equal(t, defaultMnemonic, mnemo)
 }
 
 func TestCreateAccountWithPrivateKey(t *testing.T) {
-	privateKeyStr, err := GeneratePrivateKeyFromMnemo(mnemonic)
-	assertNotEqual(t, err, nil)
-	fmt.Println(privateKeyStr)
-	info, err := CreateAccountWithPrivateKey(privateKeyStr, name, passWd)
-	assertNotEqual(t, err, nil)
-	fmt.Println(info.GetAddress().String())
-	fmt.Println(info.GetName())
-	fmt.Println(info.GetPubKey())
+	privateKeyStr, err := GeneratePrivateKeyFromMnemo(defaultMnemonic)
+	require.NoError(t, err)
+	require.Equal(t, defaultPrivateKey, privateKeyStr)
+
+	privInfo, err := CreateAccountWithPrivateKey(privateKeyStr, defaultName, defaultPassWd)
+	require.NoError(t, err)
+
+	mnemoInfo, _, err := CreateAccountWithMnemo(defaultMnemonic, defaultName, defaultPassWd)
+	require.NoError(t, err)
+	require.Equal(t, privInfo.GetPubKey(), mnemoInfo.GetPubKey())
+	require.Equal(t, privInfo.GetAddress(), mnemoInfo.GetAddress())
+	require.Equal(t, privInfo.GetName(), mnemoInfo.GetName())
 }
 
 func TestGenerateMnemonic(t *testing.T) {
 	mnemo, err := GenerateMnemonic()
-	assertNotEqual(t, err, nil)
-	fmt.Println(mnemo)
-}
-
-func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
-	privateKey, err := GeneratePrivateKeyFromMnemo(mnemonic)
-	assertNotEqual(t, err, nil)
-	fmt.Println(privateKey)
-}
-
-func assertNotEqual(t *testing.T, a, b interface{}) {
-	if a != b {
-		t.Errorf("test failed: %s", a)
-	}
-}
-
-func assertEqual(t *testing.T, a, b interface{}) {
-	if a == b {
-		t.Errorf("test failed: %s", a)
-	}
+	require.NoError(t, err)
+	require.NotNil(t, mnemo)
 }

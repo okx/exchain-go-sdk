@@ -3,17 +3,10 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	"testing"
-
 	"math/big"
-	"math/rand"
 )
 
 const maxBitLen = 255
-
-func newIntegerFromString(s string) (*big.Int, bool) {
-	return new(big.Int).SetString(s, 0)
-}
 
 func equal(i *big.Int, i2 *big.Int) bool { return i.Cmp(i2) == 0 }
 
@@ -36,8 +29,6 @@ func div(i *big.Int, i2 *big.Int) *big.Int { return new(big.Int).Quo(i, i2) }
 func mod(i *big.Int, i2 *big.Int) *big.Int { return new(big.Int).Mod(i, i2) }
 
 func neg(i *big.Int) *big.Int { return new(big.Int).Neg(i) }
-
-func random(i *big.Int) *big.Int { return new(big.Int).Rand(rand.New(rand.NewSource(rand.Int63())), i) }
 
 func min(i *big.Int, i2 *big.Int) *big.Int {
 	if i.Cmp(i2) == 1 {
@@ -125,43 +116,6 @@ func NewIntFromBigInt(i *big.Int) Int {
 	return Int{i}
 }
 
-// NewIntFromString constructs Int from string
-func NewIntFromString(s string) (res Int, ok bool) {
-	i, ok := newIntegerFromString(s)
-	if !ok {
-		return
-	}
-	// Check overflow
-	if i.BitLen() > maxBitLen {
-		ok = false
-		return
-	}
-	return Int{i}, true
-}
-
-// NewIntWithDecimal constructs Int with decimal
-// Result value is n*10^dec
-func NewIntWithDecimal(n int64, dec int) Int {
-	if dec < 0 {
-		panic("NewIntWithDecimal() decimal is negative")
-	}
-	exp := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(dec)), nil)
-	i := new(big.Int)
-	i.Mul(big.NewInt(n), exp)
-
-	// Check overflow
-	if i.BitLen() > maxBitLen {
-		panic("NewIntWithDecimal() out of bound")
-	}
-	return Int{i}
-}
-
-// ZeroInt returns Int value with zero
-func ZeroInt() Int { return Int{big.NewInt(0)} }
-
-// OneInt returns Int value with one
-func OneInt() Int { return Int{big.NewInt(1)} }
-
 // ToDec converts Int to Dec
 func (i Int) ToDec() Dec {
 	return NewDecFromInt(i)
@@ -211,8 +165,7 @@ func (i Int) GT(i2 Int) bool {
 	return gt(i.i, i2.i)
 }
 
-// GTE returns true if receiver Int is greater than or equal to the parameter
-// Int.
+// GTE returns true if receiver Int is greater than or equal to the parameter Int
 func (i Int) GTE(i2 Int) bool {
 	return gte(i.i, i2.i)
 }
@@ -308,7 +261,7 @@ func (i Int) Neg() (res Int) {
 	return Int{neg(i.i)}
 }
 
-// return the minimum of the ints
+// MinInt returns the minimum of the ints
 func MinInt(i1, i2 Int) Int {
 	return Int{min(i1.BigInt(), i2.BigInt())}
 }
@@ -318,7 +271,7 @@ func MaxInt(i, i2 Int) Int {
 	return Int{max(i.BigInt(), i2.BigInt())}
 }
 
-// Human readable string
+// String returns Human readable string
 func (i Int) String() string {
 	return i.i.String()
 }
@@ -353,17 +306,4 @@ func (i *Int) UnmarshalJSON(bz []byte) error {
 		i.i = new(big.Int)
 	}
 	return unmarshalJSON(i.i, bz)
-}
-
-// intended to be used with require/assert:  require.True(IntEq(...))
-func IntEq(t *testing.T, exp, got Int) (*testing.T, bool, string, string, string) {
-	return t, exp.Equal(got), "expected:\t%v\ngot:\t\t%v", exp.String(), got.String()
-}
-
-// required by okchain
-
-// turn the Int to Dec by descending power 8
-// e.g : 123456789 -> 1.23456789
-func (i Int) StandardizeToDec() Dec {
-	return NewDecFromIntWithPrec(i, Precision)
 }

@@ -2,35 +2,32 @@ package utils
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/common/libs/pkg/errors"
-	"github.com/okex/okchain-go-sdk/crypto/go-bip39"
-	"github.com/okex/okchain-go-sdk/crypto/keys/hd"
-	"github.com/okex/okchain-go-sdk/types"
+	"github.com/cosmos/go-bip39"
+	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
 	"io/ioutil"
 )
 
-var AddressStoreKeyPrefix = []byte{0x01}
-
 // GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(filePath string) (stdTx types.StdTx, err error) {
+func GetStdTxFromFile(codec sdk.SDKCodec, filePath string) (stdTx sdk.StdTx, err error) {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return
 	}
 
-	types.MsgCdc.MustUnmarshalJSON(bytes, &stdTx)
-
+	codec.MustUnmarshalJSON(bytes, &stdTx)
 	return
 }
 
-// parse validator address string to types.ValAddress
-func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
+// ParseValAddresses parses validator address string to types.ValAddress
+func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 	valLen := len(valAddrsStr)
-	valAddrs := make([]types.ValAddress, valLen)
+	valAddrs := make([]sdk.ValAddress, valLen)
 	var err error
 	for i := 0; i < valLen; i++ {
-		valAddrs[i], err = types.ValAddressFromBech32(valAddrsStr[i])
+		valAddrs[i], err = sdk.ValAddressFromBech32(valAddrsStr[i])
 		if err != nil {
 			return nil, fmt.Errorf("invalid validator address: %s", valAddrsStr[i])
 		}
@@ -38,24 +35,24 @@ func ParseValAddresses(valAddrsStr []string) ([]types.ValAddress, error) {
 	return valAddrs, nil
 }
 
-func AddressStoreKey(addr types.AccAddress) []byte {
-	return append(AddressStoreKeyPrefix, addr.Bytes()...)
-}
-
-func GeneratePrivateKeyFromMnemo(mnemo string) (string, error) {
+// GeneratePrivateKeyFromMnemo converts mnemonic to private key
+func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
 	hdPath := hd.NewFundraiserParams(0, 0)
 	seed, err := bip39.NewSeedWithErrorChecking(mnemo, "")
 	if err != nil {
-		return "", err
+		return
 	}
 	masterPrivateKey, ch := hd.ComputeMastersFromSeed(seed)
 	derivedPrivateKey, err := hd.DerivePrivateKeyForPath(masterPrivateKey, ch, hdPath.String())
+	if err != nil {
+		return
+	}
 	return hex.EncodeToString(derivedPrivateKey[:]), nil
 }
 
-func slice2Array(s []byte) (byteArray [32]byte, err error) {
+func sliceToArray(s []byte) (byteArray [32]byte, err error) {
 	if len(s) != 32 {
-		return byteArray, errors.New("byte slice's length is not 32")
+		return byteArray, errors.New("failed. byte slice's length is not 32")
 	}
 	for i := 0; i < 32; i++ {
 		byteArray[i] = s[i]

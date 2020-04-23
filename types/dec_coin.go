@@ -8,12 +8,15 @@ import (
 )
 
 var (
+	// Denominations can be 3 ~ 16 characters long
+	reDnmString = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
 	reDecAmt    = `[[:digit:]]*\.?[[:digit:]]+`
 	reSpc       = `[[:space:]]*`
-	reDnmString = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
 	reDecCoin   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
+	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 )
 
+// DecCoin defines a coin which can have additional decimal points
 type DecCoin struct {
 	Denom  string `json:"denom"`
 	Amount Dec    `json:"amount"`
@@ -56,6 +59,7 @@ func (coin DecCoin) Add(coinB DecCoin) DecCoin {
 	return DecCoin{coin.Denom, coin.Amount.Add(coinB.Amount)}
 }
 
+// DecCoins defines a slice of coins with decimal values
 type DecCoins []DecCoin
 
 //nolint
@@ -179,6 +183,97 @@ func (coins DecCoins) safeAdd(coinsB DecCoins) DecCoins {
 	}
 }
 
+// NewDecCoins creates a new instance of DecCoins
+func NewDecCoins(coins ...DecCoin) DecCoins {
+	// remove zeroes
+	newCoins := removeZeroDecCoins(coins)
+	if len(newCoins) == 0 {
+		return DecCoins{}
+	}
+
+	newCoins.Sort()
+
+	// detect duplicate Denoms
+	if dupIndex := findDup(newCoins); dupIndex != -1 {
+		panic(fmt.Errorf("find duplicate denom: %s", newCoins[dupIndex]))
+	}
+
+	if !newCoins.IsValid() {
+		panic(fmt.Errorf("invalid dec coin set: %s", newCoins))
+	}
+
+	return newCoins
+}
+
+// ParseDecCoins parses DecCoins from string
+func ParseDecCoins(coinsStr string) (DecCoins, error) {
+	coinsStr = strings.TrimSpace(coinsStr)
+	if len(coinsStr) == 0 {
+		return nil, nil
+	}
+
+	coinStrs := strings.Split(coinsStr, ",")
+	coins := make(DecCoins, len(coinStrs))
+	for i, coinStr := range coinStrs {
+		coin, err := ParseDecCoin(coinStr)
+		if err != nil {
+			return nil, err
+		}
+
+		coins[i] = coin
+	}
+
+	// sort coins for determinism
+	coins.Sort()
+
+	// validate coins before returning
+	if !coins.IsValid() {
+		return nil, fmt.Errorf("parsed decimal coins are invalid: %#v", coins)
+	}
+
+	return coins, nil
+}
+
+// ParseDecCoin parses a decimal coin from a string, returning an error if invalid
+// An empty string is considered invalid
+func ParseDecCoin(coinStr string) (coin DecCoin, err error) {
+	coinStr = strings.TrimSpace(coinStr)
+
+	matches := reDecCoin.FindStringSubmatch(coinStr)
+	if matches == nil {
+		return coin, fmt.Errorf("invalid decimal coin expression: %s", coinStr)
+	}
+
+	amountStr, denomStr := matches[1], matches[2]
+
+	amount, err := NewDecFromStr(amountStr)
+	if err != nil {
+		return coin, fmt.Errorf("failed to parse decimal coin amount: %s, %s", amountStr, err.Error())
+	}
+
+	if err := validateDenom(denomStr); err != nil {
+		return coin, fmt.Errorf("invalid denom cannot contain upper case characters or spaces: %s", err)
+	}
+
+	return NewDecCoinFromDec(denomStr, amount), nil
+}
+
+func findDup(coins DecCoins) int {
+	if len(coins) <= 1 {
+		return -1
+	}
+
+	prevDenom := coins[0].Denom
+	for i := 1; i < len(coins); i++ {
+		if coins[i].Denom == prevDenom {
+			return i
+		}
+		prevDenom = coins[i].Denom
+	}
+
+	return -1
+}
+
 func removeZeroDecCoins(coins DecCoins) DecCoins {
 	i, l := 0, len(coins)
 	for i < l {
@@ -192,4 +287,17 @@ func removeZeroDecCoins(coins DecCoins) DecCoins {
 	}
 
 	return coins[:i]
+}
+
+func mustValidateDenom(denom string) {
+	if err := validateDenom(denom); err != nil {
+		panic(err)
+	}
+}
+
+func validateDenom(denom string) error {
+	if !reDnm.MatchString(denom) {
+		return fmt.Errorf("invalid denom: %s", denom)
+	}
+	return nil
 }

@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	abci "github.com/okex/okchain-go-sdk/types/abci"
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	"github.com/pkg/errors"
 	cmn "github.com/tendermint/tendermint/libs/common"
 )
@@ -55,6 +56,7 @@ func unknownCodeMsg(code CodeType) string {
 	return fmt.Sprintf("unknown code %d", code)
 }
 
+// CodeToDefaultMsg converts code to string message
 // NOTE: Don't stringer this, we'll put better messages in later.
 func CodeToDefaultMsg(code CodeType) string {
 	switch code {
@@ -100,56 +102,8 @@ func CodeToDefaultMsg(code CodeType) string {
 // and inject stack traces if we really want to.
 
 // nolint
-func ErrInternal(msg string) Error {
-	return newErrorWithRootCodespace(CodeInternal, msg)
-}
-func ErrTxDecode(msg string) Error {
-	return newErrorWithRootCodespace(CodeTxDecode, msg)
-}
-func ErrInvalidSequence(msg string) Error {
-	return newErrorWithRootCodespace(CodeInvalidSequence, msg)
-}
-func ErrUnauthorized(msg string) Error {
-	return newErrorWithRootCodespace(CodeUnauthorized, msg)
-}
-func ErrInsufficientFunds(msg string) Error {
-	return newErrorWithRootCodespace(CodeInsufficientFunds, msg)
-}
 func ErrUnknownRequest(msg string) Error {
 	return newErrorWithRootCodespace(CodeUnknownRequest, msg)
-}
-func ErrInvalidAddress(msg string) Error {
-	return newErrorWithRootCodespace(CodeInvalidAddress, msg)
-}
-func ErrUnknownAddress(msg string) Error {
-	return newErrorWithRootCodespace(CodeUnknownAddress, msg)
-}
-func ErrInvalidPubKey(msg string) Error {
-	return newErrorWithRootCodespace(CodeInvalidPubKey, msg)
-}
-func ErrInsufficientCoins(msg string) Error {
-	return newErrorWithRootCodespace(CodeInsufficientCoins, msg)
-}
-func ErrInvalidCoins(msg string) Error {
-	return newErrorWithRootCodespace(CodeInvalidCoins, msg)
-}
-func ErrOutOfGas(msg string) Error {
-	return newErrorWithRootCodespace(CodeOutOfGas, msg)
-}
-func ErrMemoTooLarge(msg string) Error {
-	return newErrorWithRootCodespace(CodeMemoTooLarge, msg)
-}
-func ErrInsufficientFee(msg string) Error {
-	return newErrorWithRootCodespace(CodeInsufficientFee, msg)
-}
-func ErrTooManySignatures(msg string) Error {
-	return newErrorWithRootCodespace(CodeTooManySignatures, msg)
-}
-func ErrNoSignatures(msg string) Error {
-	return newErrorWithRootCodespace(CodeNoSignatures, msg)
-}
-func ErrGasOverflow(msg string) Error {
-	return newErrorWithRootCodespace(CodeGasOverflow, msg)
 }
 
 //----------------------------------------
@@ -157,7 +111,7 @@ func ErrGasOverflow(msg string) Error {
 
 type cmnError = cmn.Error
 
-// sdk Error type
+// Error shows the expected behavior of a sdk error type
 type Error interface {
 	// Implements cmn.Error
 	// Error() string
@@ -177,11 +131,6 @@ type Error interface {
 	ABCILog() string
 	Result() Result
 	QueryResult() abci.ResponseQuery
-}
-
-// NewError - create an error.
-func NewError(codespace CodespaceType, code CodeType, format string, args ...interface{}) Error {
-	return newError(codespace, code, format, args...)
 }
 
 func newErrorWithRootCodespace(code CodeType, format string, args ...interface{}) *sdkError {
@@ -279,33 +228,6 @@ func (err *sdkError) QueryResult() abci.ResponseQuery {
 		Codespace: string(err.Codespace()),
 		Log:       err.ABCILog(),
 	}
-}
-
-//----------------------------------------
-// REST error utilities
-
-// appends a message to the head of the given error
-func AppendMsgToErr(msg string, err string) string {
-	msgIdx := strings.Index(err, "message\":\"")
-	if msgIdx != -1 {
-		errMsg := err[msgIdx+len("message\":\"") : len(err)-2]
-		errMsg = fmt.Sprintf("%s; %s", msg, errMsg)
-		return fmt.Sprintf("%s%s%s",
-			err[:msgIdx+len("message\":\"")],
-			errMsg,
-			err[len(err)-2:],
-		)
-	}
-	return fmt.Sprintf("%s; %s", msg, err)
-}
-
-// returns the index of the message in the ABCI Log
-func mustGetMsgIndex(abciLog string) int {
-	msgIdx := strings.Index(abciLog, "message\":\"")
-	if msgIdx == -1 {
-		panic(fmt.Sprintf("invalid error format: %s", abciLog))
-	}
-	return msgIdx + len("message\":\"")
 }
 
 // parses the error into an object-like struct for exporting

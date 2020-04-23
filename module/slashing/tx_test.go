@@ -46,7 +46,6 @@ func TestSlashingClient_Unjail(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	res, err = mockCli.Slashing().Unjail(fromInfo, "", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Slashing().Unjail(fromInfo, "", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
-
 }

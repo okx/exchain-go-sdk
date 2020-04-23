@@ -43,6 +43,9 @@ func TestTokenClient_Send(t *testing.T) {
 		accInfo.GetSequence())
 	require.Error(t, err)
 
+	_, err = mockCli.Token().Send(fromInfo, "", recAddr, "10.24okt", memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestTokenClient_MultiSend(t *testing.T) {
@@ -82,6 +85,8 @@ okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as 20.48okt`
 	_, err = mockCli.Token().MultiSend(fromInfo, passWd, badTransfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
+	_, err = mockCli.Token().MultiSend(fromInfo, "", transfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestTokenClient_Issue(t *testing.T) {
@@ -136,6 +141,11 @@ func TestTokenClient_Issue(t *testing.T) {
 	require.Error(t, err)
 
 	_, err = mockCli.Token().Issue(fromInfo, passWd, "default original symbol", "",
+		"default total supply", "default token description", memo, true, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Token().Issue(fromInfo, "", "default original symbol", "default whole name",
 		"default total supply", "default token description", memo, true, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)

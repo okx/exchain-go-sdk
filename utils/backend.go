@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+
 	bkdtypes "github.com/okex/okchain-go-sdk/module/backend/types"
 )
 
@@ -36,5 +37,5 @@ func GetDataFromBaseResponse(bytes []byte, ptr interface{}) error {
 func getRawDataFromBaseResponse(bz []byte) []byte {
 	preIndex := bytes.Index(bz, []byte("data"))
 	//sufIndex := bytes.LastIndex(bz, []byte("detail_msg"))
-	return bz[preIndex+6 : len(bz)-1 ]
+	return bz[preIndex+6 : len(bz)-1]
 }

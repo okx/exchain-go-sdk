@@ -6,9 +6,9 @@ package gosdk
 //// need test
 //
 //func TestQueryCandles(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+//	config, _ := NewClientConfig("http://192.168.13.125:20157", "okchain", BroadcastBlock, "0.01okt", 0)
 //	client := NewClient(config)
-//	candles, err := client.Backend().QueryCandles("tbtc-44f_tusdk-0cd", 60, 100)
+//	candles, err := client.Backend().QueryCandles("tusdk-f5c_tbtc-06c", 60*3*7, 100)
 //	require.NoError(t, err)
 //	for _, line := range candles {
 //		fmt.Println(line)
@@ -16,7 +16,7 @@ package gosdk
 //}
 //
 //func TestQueryTickers(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
+//	config, _ := NewClientConfig("http://192.168.13.125:20157", "okchain", BroadcastBlock, "0.01okt", 200000)
 //	client := NewClient(config)
 //	tickers, err := client.Backend().QueryTickers(10)
 //	require.NoError(t, err)
@@ -24,7 +24,7 @@ package gosdk
 //		fmt.Println(t)
 //	}
 //}
-//
+
 //func TestQueryRecentTxRecord(t *testing.T) {
 //	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
 //	client := NewClient(config)
@@ -97,45 +97,3 @@ package gosdk
 //		fmt.Println(tx)
 //	}
 //}
-
-//
-//func TestQueryCommitResults(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:21257", BroadcastBlock)
-//	client := NewClient(config)
-//	commitRes, err := client.Tendermint().QueryCommitResult(10000)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", commitRes)
-//}
-//
-//func TestQueryValidatorResult(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
-//	client := NewClient(config)
-//	valsRes, err := client.Tendermint().QueryValidatorsResult(10000)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", valsRes)
-//}
-//
-//func TestQueryTxResult(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10157", BroadcastBlock)
-//	client := NewClient(config)
-//	// get tx hash bytes
-//	txHash, err := hex.DecodeString("184F5C27BB885B5DB21C8BEC2A521F72E4287721AD0CB04ACB6EC961668E4B11")
-//	require.NoError(t, err)
-//	txRes, err := client.Tendermint().QueryTxResult(txHash, true)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", txRes)
-//}
-//
-//func TestQueryTxsResult(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.130:20057", BroadcastBlock)
-//	client := NewClient(config)
-//	// get searching string
-//	searchStr := `message.sender=okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya`
-//	txsRes, err := client.Tendermint().QueryTxsResult(searchStr, 1, 30)
-//	require.NoError(t, err)
-//	fmt.Printf("%+v\n", txsRes)
-//}
-//
-
-//config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
-//client := NewClient(config)

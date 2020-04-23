@@ -1,6 +1,5 @@
 package dex
 
-
 import (
 	"github.com/okex/okchain-go-sdk/exposed"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
@@ -27,4 +26,3 @@ func (dexClient) Name() string {
 func NewDexClient(baseClient sdk.BaseClient) exposed.Dex {
 	return dexClient{baseClient}
 }
-

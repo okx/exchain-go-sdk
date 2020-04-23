@@ -7,65 +7,62 @@
 [![LoC](https://tokei.rs/b1/github/okex/okchain-go-sdk)](https://github.com/okex/okchain-go-sdk)
 [![GolangCI](https://golangci.com/badges/github.com/okex/okchain-go-sdk.svg)](https://golangci.com/r/github.com/okex/okchain-go-sdk)
 
-The OKChain Go SDK is a lightweight Go library to interact with OKChain.
+OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
 ### 1. Components
 
-- okclient - The functions which could be invoked to query information and transact trades are designed as class methods of `okclient` inside. An object of the struct `okclient` should be created first before the voking of api functions.
-- common -  It contains some third-party libs and definitions of parameters which are used in the api functions.
-- crypto - The path of cryptography, encoding and keys. The creation of accounts is relied on it closely.
-- types - All the definitions of interfaces and structs which work during the  interaction between OKChain Go SDK and OKChain are here inside. The change will cause the failing interaction. So it is not recommended to modify any code under this path.
-- utils - some tool functions. The developer should focus on it if they want to be clear about the operations of ok accounts.
-- vendor - Third-party dependency libs such as the rpc client core.  
-
-There are some test modules in path `okclient` and `utils` as well. The developer will know how to design the code themselves by checking the test code and running the test modules.
-
-- okclient/query.go : all the api functions of querying information from OKChain, such as getting infomation of tokens and K lines,  are here.
-- okclient/transact.go : all the api functions of transact a trade to OKChain,  such as transfering and pending a new order , are here. It is noticed that the fee is required no matter what you do.
+- client.go - The main client of GO SDK is created in this file. Developers are supposed to set up the config with own requirement during the client creation.
+- expose - Abstraction with the interfaces of each module. The implements of it are filled in the folder `module`.
+- module - The main logic for GO SDK queries and txs are classfied by their own module names in OKChain. Developers can find out the concrete designs under the specific module folder. Please focus on the files, tx.go and query.go. 
+- mocks - Mock client tools for unit test of the main client in GO SDK.
+- sample - A clear short user guild is showed here.
+-  types - The necessary struct set of OKChain is built here. Developers are allowed to import some basic types like Dec and AccAddress directly if they want.
+- utils -  A useful tool set for the one who is going to send more transcations and queries is spilted by module names as the file names. Beyond that, the operation of account keys with mnemonics remains in the file `account.go`.
 
 ### 2. Installation
 
 Go version above 1.12 is required.
 
-The developer can install the OKChain Go SDK by `git clone` from github : https://github.com/okex/okchain-go-sdk
+The developer can get the OKChain Go SDK directly by `git clone` from github : https://github.com/okex/okchain-go-sdk
 
 ### 3. API
 
-The api functions of querying and transacting are in the files 'okclient/query,go'  and `okclient/transact.go`. You can find more details in okchain-docs : https://okchain-docs.readthedocs.io/zh_CN/latest/api/sdk/go-sdk.html
+The api functions of transactions and queries are all under the path `expose`. You can find more details in okchain-docs : https://okchain-docs.readthedocs.io/zh_CN/latest/api/sdk/go-sdk.html
 
-### 4. Node query
+### 4. Tendermint query
 
- The OKChain Go SDK also provides node query functions so that the underlying information of the blockchain can be got by developers.
+OKChain Go SDK also provides node query functions so that the underlying information of the blockchain is available for developers.
 
-The node query functions could be found in file `okclient/node_query.go `. The module of them are in file `okclient/node_query_test.go`. The develop could make it through and get clear that how to invoke them.
-
-More details of node querying from OKChain in okchain-docs : https://okchain-docs.readthedocs.io/zh_CN/latest/api/node_rpc.html
+The tendermint query functions could be found in the file `exposed/tendermint.go `. Developers could make it through with the file `module/tendermint/query.go` and get clear how to invoke them.
 
 ### 5. Example
 
-Every operation by using Go SDK needs `okclient`. Here are the examples :
+`Client` seems necessary to every operation with Go SDK. Here are the examples :
 
 ```go
-// rpcUrl can be modified according to the actual situation
-rpcUrl	 := "3.13.150.20:26657"
-okCli 	 := NewClient(rpcUrl)
-name     := "alice"
-passWd   := "12345678"
-mnemonic := "sustain hole urban away boy core lazy brick wait drive tiger tell"
-addr1    := "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	// rpcURL should modified according to the actual situation
+	rpcURL   = "3.13.150.20:26657"
+	name     = "alice"
+	passWd   = "12345678"
+	mnemonic = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	addr     = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	
+	// build the client with own config
+	config, _ := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 20000)
+	client := sdk.NewClient(config)
 
-// create your account key info by 'name','passWd' and 'mnemonic'
-fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-assertNotEqual(t, err, nil)
-// get info of your account from OKChain
-accInfo, err := okCli.GetAccountInfoByAddr(fromInfo.GetAddress().String())
-assertNotEqual(t, err, nil)
-// transfer okb to addr1
-res, err := okCli.Send(fromInfo, passWd, addr1, "10.24okt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
-assertNotEqual(t, err, nil)
+	// create your account key info by 'name','passWd' and 'mnemonic'
+	keyInfo, _, _ := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+
+	// get info of your account from OKChain
+	accInfo, _ := client.Auth().QueryAccount(keyInfo.GetAddress().String())
+
+	// transfer some okt to addr1
+	res, _ := client.Token().Send(keyInfo, passWd, addr, "0.1024okt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
+
 ```
 
-you can use the object `okCli` to invoke more api functions.
+You can invoke more and more api functions with the object `client`.
 
 ### 6. Testing
 

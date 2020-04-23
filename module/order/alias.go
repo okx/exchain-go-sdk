@@ -9,6 +9,6 @@ const (
 
 type (
 	// nolint
-	BookRes = types.BookRes
+	BookRes     = types.BookRes
 	OrderDetail = types.OrderDetail
 )

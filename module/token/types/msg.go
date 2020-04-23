@@ -26,14 +26,14 @@ func (msg MsgSend) GetSignBytes() []byte {
 }
 
 // nolint
-func (MsgSend) Route() string                  { return "" }
-func (MsgSend) Type() string                   { return "" }
+func (MsgSend) Route() string                { return "" }
+func (MsgSend) Type() string                 { return "" }
 func (MsgSend) ValidateBasic() sdk.Error     { return nil }
 func (MsgSend) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgMultiSend - structure to transfer to multi receivers
 type MsgMultiSend struct {
-	From      sdk.AccAddress      `json:"from"`
+	From      sdk.AccAddress `json:"from"`
 	Transfers []TransferUnit `json:"transfers"`
 }
 
@@ -51,15 +51,15 @@ func (msg MsgMultiSend) GetSignBytes() []byte {
 }
 
 // nolint
-func (MsgMultiSend) Route() string                  { return "" }
-func (MsgMultiSend) Type() string                   { return "" }
+func (MsgMultiSend) Route() string                { return "" }
+func (MsgMultiSend) Type() string                 { return "" }
 func (MsgMultiSend) ValidateBasic() sdk.Error     { return nil }
 func (MsgMultiSend) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgMint - structure to mint a kind of token
 type MsgMint struct {
-	Symbol string           `json:"symbol"`
-	Amount int64            `json:"amount"`
+	Symbol string         `json:"symbol"`
+	Amount int64          `json:"amount"`
 	Owner  sdk.AccAddress `json:"owner"`
 }
 
@@ -78,20 +78,20 @@ func (msg MsgMint) GetSignBytes() []byte {
 }
 
 // nolint
-func (MsgMint) Route() string                  { return "" }
-func (MsgMint) Type() string                   { return "" }
+func (MsgMint) Route() string                { return "" }
+func (MsgMint) Type() string                 { return "" }
 func (MsgMint) ValidateBasic() sdk.Error     { return nil }
 func (MsgMint) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgTokenIssue - structure to issue a kind of token
 type MsgTokenIssue struct {
-	Description    string           `json:"description"`
-	Symbol         string           `json:"symbol"`
-	OriginalSymbol string           `json:"original_symbol"`
-	WholeName      string           `json:"whole_name"`
-	TotalSupply    string           `json:"total_supply"`
+	Description    string         `json:"description"`
+	Symbol         string         `json:"symbol"`
+	OriginalSymbol string         `json:"original_symbol"`
+	WholeName      string         `json:"whole_name"`
+	TotalSupply    string         `json:"total_supply"`
 	Owner          sdk.AccAddress `json:"owner"`
-	Mintable       bool             `json:"mintable"`
+	Mintable       bool           `json:"mintable"`
 }
 
 // NewMsgTokenIssue creates a new instance of MsgTokenIssue
@@ -114,7 +114,7 @@ func (msg MsgTokenIssue) GetSignBytes() []byte {
 }
 
 // nolint
-func (MsgTokenIssue) Route() string                  { return "" }
-func (MsgTokenIssue) Type() string                   { return "" }
+func (MsgTokenIssue) Route() string                { return "" }
+func (MsgTokenIssue) Type() string                 { return "" }
 func (MsgTokenIssue) ValidateBasic() sdk.Error     { return nil }
 func (MsgTokenIssue) GetSigners() []sdk.AccAddress { return nil }

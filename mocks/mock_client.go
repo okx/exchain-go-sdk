@@ -15,6 +15,7 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/common"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -292,7 +293,8 @@ func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sd
 }
 
 // GetRawResultBlockPointer generates the raw tendermint block result pointer for test
-func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, time time.Time, appHash, blockIDHash cmn.HexBytes) *ctypes.ResultBlock {
+func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, time time.Time, appHash,
+	blockIDHash cmn.HexBytes) *ctypes.ResultBlock {
 	return &ctypes.ResultBlock{
 		Block: &tmtypes.Block{
 			Header: tmtypes.Header{
@@ -312,7 +314,8 @@ func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, tim
 }
 
 // GetRawResultBlockResultsPointer generates the raw tendermint result block results pointer for test
-func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkType, eventType string, kvPairKey []byte) *ctypes.ResultBlockResults {
+func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkType, eventType string,
+	kvPairKey []byte) *ctypes.ResultBlockResults {
 	return &ctypes.ResultBlockResults{
 		Height: height,
 		Results: &tmstate.ABCIResponses{
@@ -338,6 +341,72 @@ func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkTyp
 					},
 				},
 			},
+		},
+	}
+}
+
+// GetRawCommitResultPointer generates the raw tendermint commit result pointer for test
+func (mc *MockClient) GetRawCommitResultPointer(canonicalCommit bool, chainID string, height int64, time time.Time, appHash,
+	blockIDHash cmn.HexBytes) *ctypes.ResultCommit {
+	return &ctypes.ResultCommit{
+		CanonicalCommit: canonicalCommit,
+		SignedHeader: tmtypes.SignedHeader{
+			Header: &tmtypes.Header{
+				ChainID: chainID,
+				Height:  height,
+				Time:    time,
+				AppHash: appHash,
+			},
+			Commit: &tmtypes.Commit{
+				BlockID: tmtypes.BlockID{
+					Hash: blockIDHash,
+				},
+			},
+		},
+	}
+}
+
+// GetRawValidatorsResultPointer generates the raw tendermint validators result pointer for test
+func (mc *MockClient) GetRawValidatorsResultPointer(height, VotingPower, proposerPriority int64,
+	consPubkey crypto.PubKey) *ctypes.ResultValidators {
+	return &ctypes.ResultValidators{
+		BlockHeight: height,
+		Validators: []*tmtypes.Validator{
+			{
+				PubKey:           consPubkey,
+				VotingPower:      VotingPower,
+				ProposerPriority: proposerPriority,
+			},
+		},
+	}
+}
+
+// GetRawTxResultPointer generates the raw tendermint tx result pointer for test
+func (mc *MockClient) GetRawTxResultPointer(hash cmn.HexBytes, height int64, code uint32, log, eventType string,
+	tx []byte) *ctypes.ResultTx {
+	return &ctypes.ResultTx{
+		Hash:   hash,
+		Height: height,
+		Tx:     tx,
+		TxResult: abci.ResponseDeliverTx{
+			Code: code,
+			Log:  log,
+			Events: []abci.Event{
+				{
+					Type: eventType,
+				},
+			},
+		},
+	}
+}
+
+// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
+func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash cmn.HexBytes, height int64, code uint32, log,
+	eventType string, tx []byte) *ctypes.ResultTxSearch {
+	return &ctypes.ResultTxSearch{
+		TotalCount: totalCount,
+		Txs: []*ctypes.ResultTx{
+			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
 		},
 	}
 }

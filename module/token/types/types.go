@@ -9,7 +9,6 @@ const (
 	ModuleName = "token"
 
 	AccountTokensInfoPath = "custom/token/accounts"
-
 )
 
 var (

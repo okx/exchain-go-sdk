@@ -1,9 +1,10 @@
 package types
 
 import (
+	"time"
+
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
-	"time"
 )
 
 // const
@@ -20,7 +21,7 @@ var (
 	// ValidatorsKey is useful for subspace and store query about validator
 	ValidatorsKey = []byte{0x21}
 	// DelegatorKey is useful for subspace and store query about delegator
-	DelegatorKey  = []byte{0x52}
+	DelegatorKey = []byte{0x52}
 )
 
 func init() {

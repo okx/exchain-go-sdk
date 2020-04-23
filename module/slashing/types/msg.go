@@ -24,4 +24,3 @@ func (MsgUnjail) Route() string                  { return "" }
 func (MsgUnjail) Type() string                   { return "" }
 func (MsgUnjail) ValidateBasic() types.Error     { return nil }
 func (MsgUnjail) GetSigners() []types.AccAddress { return nil }
-

@@ -14,9 +14,13 @@ import (
 	token "github.com/okex/okchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
+	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/common"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
+	tmstate "github.com/tendermint/tendermint/state"
 	tmtypes "github.com/tendermint/tendermint/types"
+
 	"testing"
 	"time"
 )
@@ -301,6 +305,37 @@ func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, tim
 			LastCommit: &tmtypes.Commit{
 				BlockID: tmtypes.BlockID{
 					Hash: blockIDHash,
+				},
+			},
+		},
+	}
+}
+
+// GetRawResultBlockResultsPointer generates the raw tendermint result block results pointer for test
+func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkType, eventType string, kvPairKey []byte) *ctypes.ResultBlockResults {
+	return &ctypes.ResultBlockResults{
+		Height: height,
+		Results: &tmstate.ABCIResponses{
+			BeginBlock: &abci.ResponseBeginBlock{
+				Events: []abci.Event{
+					{
+						Type: eventType,
+						Attributes: []common.KVPair{
+							{
+								Key: kvPairKey,
+							},
+						},
+					},
+				},
+			},
+			EndBlock: &abci.ResponseEndBlock{
+				ValidatorUpdates: []abci.ValidatorUpdate{
+					{
+						PubKey: abci.PubKey{
+							Type: pkType,
+						},
+						Power: power,
+					},
 				},
 			},
 		},

@@ -31,33 +31,33 @@ jobs:
           key: go-src-v1-{{ .Revision }}
           paths:
             - ".git"
-#      - run:
-#          name: Run tests with coverage and upload codecov
-#          command: |
-#            set -ex
-#            echo "--> Run tests with coverage:"
-#            export VERSION="$(git describe --tags --long | sed 's/v\(.*\)/\1/')"
-#            export GO111MODULE=on
-#            mkdir -p /tmp/logs /tmp/workspace/profiles
-#            for pkg in $(go list ./... | circleci tests split); do
-#              id=$(echo "$pkg" | sed 's|[/.]|_|g')
-#              go test -mod=readonly -timeout 8m -race -coverprofile=/tmp/workspace/profiles/$id.out -covermode=atomic -tags='sdk test_sdk_mock' "$pkg" | tee "/tmp/logs/$id-$RANDOM.log"
-#            done
-#
-#            echo "--> Gather coverage:"
-#            ls /tmp/workspace/profiles/
-#            echo "mode: atomic" > coverage.txt
-#            for prof in $(ls /tmp/workspace/profiles/); do
-#              tail -n +2 /tmp/workspace/profiles/"$prof" >> coverage.txt
-#            done
-#
-#            echo "--> Filter out DONTCOVER:"
-#            excludelist="$(find . -type f -name '*.go' | xargs grep -l 'DONTCOVER')"
-#            for filename in ${excludelist}; do
-#              filename=$(echo $filename | sed 's/^./github.com\/okex\/okchain-go-sdk/g')
-#              echo "Excluding ${filename} from coverage report..."
-#              sed -i.bak "/$(echo $filename | sed 's/\//\\\//g')/d" coverage.txt
-#            done
-#
-#            echo "--> upload codecov:"
-#            bash <(curl -s https://codecov.io/bash) -f coverage.txt
+      - run:
+          name: Run tests with coverage and upload codecov
+          command: |
+            set -ex
+            echo "--> Run tests with coverage:"
+            export VERSION="$(git describe --tags --long | sed 's/v\(.*\)/\1/')"
+            export GO111MODULE=on
+            mkdir -p /tmp/logs /tmp/workspace/profiles
+            for pkg in $(go list ./... | circleci tests split); do
+              id=$(echo "$pkg" | sed 's|[/.]|_|g')
+              go test -mod=readonly -timeout 8m -race -coverprofile=/tmp/workspace/profiles/$id.out -covermode=atomic -tags='sdk test_sdk_mock' "$pkg" | tee "/tmp/logs/$id-$RANDOM.log"
+            done
+
+            echo "--> Gather coverage:"
+            ls /tmp/workspace/profiles/
+            echo "mode: atomic" > coverage.txt
+            for prof in $(ls /tmp/workspace/profiles/); do
+              tail -n +2 /tmp/workspace/profiles/"$prof" >> coverage.txt
+            done
+
+            echo "--> Filter out DONTCOVER:"
+            excludelist="$(find . -type f -name '*.go' | xargs grep -l 'DONTCOVER')"
+            for filename in ${excludelist}; do
+              filename=$(echo $filename | sed 's/^./github.com\/okex\/okchain-go-sdk/g')
+              echo "Excluding ${filename} from coverage report..."
+              sed -i.bak "/$(echo $filename | sed 's/\//\\\//g')/d" coverage.txt
+            done
+
+            echo "--> upload codecov:"
+            bash <(curl -s https://codecov.io/bash) -f coverage.txt

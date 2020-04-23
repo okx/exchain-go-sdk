@@ -341,3 +341,23 @@ func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkTyp
 		},
 	}
 }
+
+// GetRawCommitResultPointer generates the raw tendermint commit result pointer for test
+func (mc *MockClient) GetRawCommitResultPointer(canonicalCommit bool, chainID string, height int64, time time.Time, appHash, blockIDHash cmn.HexBytes) *ctypes.ResultCommit {
+	return &ctypes.ResultCommit{
+		CanonicalCommit: canonicalCommit,
+		SignedHeader: tmtypes.SignedHeader{
+			Header: &tmtypes.Header{
+				ChainID: chainID,
+				Height:  height,
+				Time:    time,
+				AppHash: appHash,
+			},
+			Commit: &tmtypes.Commit{
+				BlockID: tmtypes.BlockID{
+					Hash: blockIDHash,
+				},
+			},
+		},
+	}
+}

@@ -19,42 +19,6 @@ const (
 //
 //// transact tx
 
-//
-//func TestBindProxy(t *testing.T) {
-//	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
-//	client := NewClient(config)
-//	valMnemo := "ready edge sketch vibrant cause snake donor trophy cruise pulse vanish siren"
-//	// validator becomes a proxy
-//	valAcc, _, err := utils.CreateAccountWithMnemo(valMnemo, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err := client.Auth().QueryAccount(valAcc.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	sequence := accInfo.GetSequence()
-//	res, err := client.Staking().Delegate(valAcc, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//
-//	sequence++
-//	res, err = client.Staking().RegisterProxy(valAcc, passWd, "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//
-//	// delegator tries to bind proxy
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//	accInfo, err = client.Auth().QueryAccount(fromInfo.GetAddress().String())
-//	require.NoError(t, err)
-//
-//	sequence = accInfo.GetSequence()
-//	res, err = client.Staking().Delegate(fromInfo, passWd, "102.4okt", "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//
-//	sequence++
-//	res, err = client.Staking().BindProxy(fromInfo, passWd, valAcc.GetAddress().String(), "my memo", accInfo.GetAccountNumber(), sequence)
-//	require.NoError(t, err)
-//	fmt.Println(res)
-//
-//}
-//
 //func TestUnbindProxy(t *testing.T) {
 //	config := NewClientConfig("tcp://127.0.0.1:10057", BroadcastBlock)
 //	client := NewClient(config)

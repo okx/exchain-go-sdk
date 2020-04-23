@@ -3,9 +3,10 @@ package types
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
-	"time"
 )
 
 // const
@@ -47,7 +48,7 @@ type Account interface {
 // BaseAccount - structure of account info
 type BaseAccount struct {
 	Address       sdk.AccAddress `json:"address"`
-	Coins         sdk.DecCoins      `json:"coins"`
+	Coins         sdk.DecCoins   `json:"coins"`
 	PubKey        crypto.PubKey  `json:"public_key"`
 	AccountNumber uint64         `json:"account_number"`
 	Sequence      uint64         `json:"sequence"`

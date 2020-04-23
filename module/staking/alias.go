@@ -9,6 +9,6 @@ const (
 
 type (
 	// nolint
-	Validator = types.Validator
+	Validator     = types.Validator
 	DelegatorResp = types.DelegatorResp
 )

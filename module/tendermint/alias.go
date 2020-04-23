@@ -9,10 +9,10 @@ const (
 
 type (
 	// nolint
-	Block = types.Block
-	BlockResults = types.BlockResults
-	ResultCommit = types.ResultCommit
+	Block            = types.Block
+	BlockResults     = types.BlockResults
+	ResultCommit     = types.ResultCommit
 	ResultValidators = types.ResultValidators
-	ResultTx = types.ResultTx
-	ResultTxs = types.ResultTxs
+	ResultTx         = types.ResultTx
+	ResultTxs        = types.ResultTxs
 )

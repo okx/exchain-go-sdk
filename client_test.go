@@ -1,30 +1,37 @@
 package gosdk
 
+import (
+	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
 //
 //// just a temporary test, it will be removed later
 
 //// need test
 //
-//func TestQueryCandles(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	candles, err := client.Backend().QueryCandles("tbtc-44f_tusdk-0cd", 60, 100)
-//	require.NoError(t, err)
-//	for _, line := range candles {
-//		fmt.Println(line)
-//	}
-//}
-//
-//func TestQueryTickers(t *testing.T) {
-//	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
-//	client := NewClient(config)
-//	tickers, err := client.Backend().QueryTickers(10)
-//	require.NoError(t, err)
-//	for _, t := range tickers {
-//		fmt.Println(t)
-//	}
-//}
-//
+func TestQueryCandles(t *testing.T) {
+	config, _ := NewClientConfig("http://192.168.13.125:20157", "okchain", BroadcastBlock, "0.01okt", 0)
+	client := NewClient(config)
+	candles, err := client.Backend().QueryCandles("tusdk-f5c_tbtc-06c", 60*3*7, 100)
+	require.NoError(t, err)
+	for _, line := range candles {
+		fmt.Println(line)
+	}
+}
+
+func TestQueryTickers(t *testing.T) {
+	config, _ := NewClientConfig("http://192.168.13.125:20157", "okchain", BroadcastBlock, "0.01okt", 200000)
+	client := NewClient(config)
+	tickers, err := client.Backend().QueryTickers(10)
+	require.NoError(t, err)
+	for _, t := range tickers {
+		fmt.Println(t)
+	}
+}
+
 //func TestQueryRecentTxRecord(t *testing.T) {
 //	config := NewClientConfig("tcp://192.168.13.125:20157", BroadcastBlock)
 //	client := NewClient(config)
@@ -97,7 +104,3 @@ package gosdk
 //		fmt.Println(tx)
 //	}
 //}
-
-
-//config, _ := NewClientConfig("tcp://127.0.0.1:10057", "", BroadcastBlock, "0.01okt", 0)
-//client := NewClient(config)

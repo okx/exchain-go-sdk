@@ -2,6 +2,7 @@ package token
 
 import (
 	"fmt"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/token/types"
@@ -20,10 +21,9 @@ const (
 	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
 	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
 	memo      = "my memo"
-	recAddr = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
+	recAddr   = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
 
 	tokenSymbol = "btc-000"
-
 )
 
 func TestTokenClient_QueryAccountTokensInfo(t *testing.T) {

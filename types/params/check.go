@@ -129,7 +129,7 @@ func CheckKeyParams(fromInfo keys.Info, passWd string) error {
 	return nil
 }
 
-// CheckSendParams gives a quick validity check for the input params of transfering
+// CheckSendParams gives a quick validity check for the input params of transferring
 func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err

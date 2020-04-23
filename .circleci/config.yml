@@ -18,19 +18,9 @@ jobs:
       - run:
           name: Cache go modules
           command: go mod download
-      - run:
-          name: Unit Test
-          command:  go test -mod=readonly -tags='sdk test_sdk_mock' ./...
-      - save_cache:
-          name: Save go modules cache
-          key: go-mod-v1-{{ checksum "go.sum" }}
-          paths:
-            - "/go/pkg/mod"
-      - save_cache:
-          name: Save source code cache
-          key: go-src-v1-{{ .Revision }}
-          paths:
-            - ".git"
+#      - run:
+#          name: Unit Test
+#          command:  go test -mod=readonly -tags='sdk test_sdk_mock' ./...
       - run:
           name: Run tests with coverage and upload codecov
           command: |
@@ -61,3 +51,13 @@ jobs:
 
             echo "--> upload codecov:"
             bash <(curl -s https://codecov.io/bash) -f coverage.txt
+      - save_cache:
+          name: Save go modules cache
+          key: go-mod-v1-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - save_cache:
+          name: Save source code cache
+          key: go-src-v1-{{ .Revision }}
+          paths:
+            - ".git"

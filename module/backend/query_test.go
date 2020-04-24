@@ -227,3 +227,59 @@ func TestBackendClient_QueryClosedOrders(t *testing.T) {
 	_, err = mockCli.Backend().QueryClosedOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 }
+
+func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewBackendClient(mockCli.MockBaseClient))
+
+	timestamp, blockHeight := time.Now().Unix()*1000, int64(1024)
+	price, quantity := 1024.1024, 2048.2048
+	start, end, page, perPage := 0, 0, 1, 30
+
+	expectedRet := mockCli.BuildBackendMatchResultBytes(timestamp, blockHeight, product, price, quantity)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPage)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	txRecord, err := mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
+	require.NoError(t, err)
+	require.Equal(t, timestamp, txRecord[0].Timestamp)
+	require.Equal(t, product, txRecord[0].Product)
+	require.Equal(t, price, txRecord[0].Price)
+	require.Equal(t, quantity, txRecord[0].Quantity)
+	require.Equal(t, blockHeight, txRecord[0].BlockHeight)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord("", start, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, end+1, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, -1, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, -1, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, -1, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, -1)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
+	require.Error(t, err)
+}

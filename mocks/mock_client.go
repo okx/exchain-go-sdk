@@ -465,3 +465,24 @@ func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, pro
 	require.NoError(mc.t, err)
 	return bytes
 }
+
+// BuildBackendMatchResultBytes generates the backend match result bytes for test
+func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, product string, price, quantity float64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.MatchResult{
+				{
+					Timestamp:   timestamp,
+					BlockHeight: height,
+					Product:     product,
+					Price:       price,
+					Quantity:    quantity,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}

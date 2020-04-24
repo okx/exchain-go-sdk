@@ -283,3 +283,65 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.Error(t, err)
 }
+
+func TestBackendClient_QueryTransactions(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewBackendClient(mockCli.MockBaseClient))
+
+	txHash, quantity, fee := "default tx hash", "1024.1024", "0.00000000okt"
+	txType, side, timestamp := 2, int64(1), time.Now().Unix()*1000
+	start, end, page, perPage := 0, 0, 1, 30
+
+	expectedRet := mockCli.BuildBackendTransactionsResultBytes(txHash, addr, product, quantity, fee, int64(txType), side, timestamp)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryTxListParams(addr, int64(txType), int64(start), int64(end), page, perPage)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
+	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	txs, err := mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
+	require.NoError(t, err)
+	require.Equal(t, txHash, txs[0].TxHash)
+	require.Equal(t, int64(txType), txs[0].Type)
+	require.Equal(t, addr, txs[0].Address)
+	require.Equal(t, product, txs[0].Symbol)
+	require.Equal(t, side, txs[0].Side)
+	require.Equal(t, quantity, txs[0].Quantity)
+	require.Equal(t, fee, txs[0].Fee)
+	require.Equal(t, timestamp, txs[0].Timestamp)
+
+	_, err = mockCli.Backend().QueryTransactions(addr[1:], txType, start, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, -1, start, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, end+1, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, -1, end, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, -1, page, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, -1, perPage)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, -1)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
+	require.Error(t, err)
+}

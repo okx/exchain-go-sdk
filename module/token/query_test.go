@@ -1,6 +1,7 @@
 package token
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/golang/mock/gomock"
@@ -41,7 +42,7 @@ func TestTokenClient_QueryAccountTokensInfo(t *testing.T) {
 	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
 	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	accTokensInfo, err := mockCli.Token().QueryAccountTokensInfo(addr)
@@ -56,6 +57,13 @@ func TestTokenClient_QueryAccountTokensInfo(t *testing.T) {
 	_, err = mockCli.Token().QueryAccountTokensInfo(addr[1:])
 	require.Error(t, err)
 
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Token().QueryAccountTokensInfo(addr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	_, err = mockCli.Token().QueryAccountTokensInfo(addr)
+	require.Error(t, err)
 }
 
 func TestTokenClient_QueryAccountTokenInfo(t *testing.T) {
@@ -73,7 +81,7 @@ func TestTokenClient_QueryAccountTokenInfo(t *testing.T) {
 	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
 	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	accTokensInfo, err := mockCli.Token().QueryAccountTokenInfo(addr, tokenSymbol)
@@ -87,6 +95,17 @@ func TestTokenClient_QueryAccountTokenInfo(t *testing.T) {
 
 	_, err = mockCli.Token().QueryAccountTokenInfo(addr[1:], tokenSymbol)
 	require.Error(t, err)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).
+		Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Token().QueryAccountTokenInfo(addr, tokenSymbol)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addr), cmn.HexBytes(queryBytes)).
+		Return(expectedRet[1:], nil)
+	_, err = mockCli.Token().QueryAccountTokenInfo(addr, tokenSymbol)
+	require.Error(t, err)
+
 }
 
 func TestTokenClient_QueryTokenInfo(t *testing.T) {
@@ -143,5 +162,11 @@ func TestTokenClient_QueryTokenInfo(t *testing.T) {
 	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
 
 	_, err = mockCli.Token().QueryTokenInfo("", "")
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("custom/%s/tokens/%s", types.ModuleName, addr), nil).
+		Return(expectedRet, errors.New("default error"))
+
+	_, err = mockCli.Token().QueryTokenInfo(addr, "")
 	require.Error(t, err)
 }

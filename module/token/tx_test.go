@@ -2,6 +2,9 @@ package token
 
 import (
 	"bytes"
+	"fmt"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/auth"
@@ -9,7 +12,6 @@ import (
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestTokenClient_Send(t *testing.T) {
@@ -32,8 +34,8 @@ func TestTokenClient_Send(t *testing.T) {
 	require.NoError(t, err)
 
 	mockCli.EXPECT().BuildAndBroadcast(
-		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-		Return(mocks.DefaultMockSuccessTxResponse(), nil)
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
+		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
 	res, err := mockCli.Token().Send(fromInfo, passWd, recAddr, "10.24okt", memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.NoError(t, err)
@@ -44,6 +46,15 @@ func TestTokenClient_Send(t *testing.T) {
 	require.Error(t, err)
 
 	_, err = mockCli.Token().Send(fromInfo, "", recAddr, "10.24okt", memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Token().Send(fromInfo, passWd, recAddr, "10.24", memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	badBech32Addr := fmt.Sprintf("%s1", recAddr[:len(recAddr)-1])
+	_, err = mockCli.Token().Send(fromInfo, passWd, badBech32Addr, "10.24okt", memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 }

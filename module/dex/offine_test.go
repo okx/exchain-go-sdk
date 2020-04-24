@@ -1,14 +1,15 @@
 package dex
 
 import (
+	"io/ioutil"
+	"os"
+	"testing"
+
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
-	"os"
-	"testing"
 )
 
 const (
@@ -79,6 +80,9 @@ func TestDexClient_MultiSign(t *testing.T) {
 	require.Error(t, err)
 
 	err = dexClient.MultiSign(recInfo, "", unsignedPath, signedPath)
+	require.Error(t, err)
+
+	err = dexClient.MultiSign(recInfo, passWd, unsignedPath[1:], signedPath)
 	require.Error(t, err)
 
 	// read back to check

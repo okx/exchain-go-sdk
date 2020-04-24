@@ -1,6 +1,7 @@
 package staking
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -327,6 +328,10 @@ func TestStakingClient_BindProxy(t *testing.T) {
 	require.Error(t, err)
 
 	_, err = mockCli.Staking().BindProxy(fromInfo, passWd, proxyAddr[1:], memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	badBech32Addr := fmt.Sprintf("%s1", proxyAddr[:len(proxyAddr)-1])
+	_, err = mockCli.Staking().BindProxy(fromInfo, passWd, badBech32Addr, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 

@@ -80,7 +80,7 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 	queryParams := params.NewQueryTickerParams(product, 10, true)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(7)
 	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
 
 	tickers, err := mockCli.Backend().QueryTickers(product)
@@ -138,6 +138,11 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryTickers("")
 	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
+	_, err = mockCli.Backend().QueryTickers("")
+	require.Error(t, err)
+
 }
 
 func TestBackendClient_QueryDeals(t *testing.T) {

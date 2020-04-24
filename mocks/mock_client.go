@@ -437,3 +437,31 @@ func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orde
 	require.NoError(mc.t, err)
 	return bytes
 }
+
+// BuildBackendOrdersResultBytes generates the backend orders result bytes for test
+func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, product, side, price, quantity, filledAvgPrice,
+	remainQuantity string, status, timestamp int64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.Order{
+				{
+					TxHash:         txHash,
+					OrderID:        orderID,
+					Sender:         sender,
+					Product:        product,
+					Side:           side,
+					Price:          price,
+					Quantity:       quantity,
+					Status:         status,
+					FilledAvgPrice: filledAvgPrice,
+					RemainQuantity: remainQuantity,
+					Timestamp:      timestamp,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}

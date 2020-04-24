@@ -2,13 +2,14 @@ package auth
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/auth/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
-	"testing"
 )
 
 const (
@@ -29,7 +30,7 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 
 	expectedCdc := mockCli.GetCodec()
 	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "1024btc,2048.1024okt", 1, 2)
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
 	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
 
 	acc, err := mockCli.Auth().QueryAccount(addr)
@@ -57,7 +58,14 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, errors.New("default error"))
+	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
+		Return(nil, errors.New("default error"))
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
+		Return(expectedRet[1:], nil)
+	_, err = mockCli.Auth().QueryAccount(addr)
+	require.Error(t, err)
+
 }

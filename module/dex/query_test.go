@@ -1,6 +1,9 @@
 package dex
 
 import (
+	"errors"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/dex/types"
@@ -8,7 +11,6 @@ import (
 	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
-	"testing"
 )
 
 const (
@@ -43,15 +45,15 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedRet := mockCli.BuildTokenPairsBytes("btc", "eth", "okt",
-		initPrice, minQuantity, 4, 4, 512, 1024, 2048, 4096, true,
-		ownerAddr, deposit)
+		initPrice, minQuantity, 4, 4, 512, 1024, 2048, 4096,
+		true, ownerAddr, deposit)
 	expectedCdc := mockCli.GetCodec()
 
 	queryParams, err := params.NewQueryDexInfoParams(addr, 1, 30)
 	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
 	mockCli.EXPECT().Query(types.ProductsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	tokenPairs, err := mockCli.Dex().QueryProducts(addr, 1, 30)
@@ -79,6 +81,14 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	require.Error(t, err)
 
 	_, err = mockCli.Dex().QueryProducts(addr[1:], 1, 30)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.ProductsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Dex().QueryProducts(addr, 1, 30)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.ProductsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	_, err = mockCli.Dex().QueryProducts(addr, 1, 30)
 	require.Error(t, err)
 
 }

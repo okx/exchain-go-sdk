@@ -511,3 +511,13 @@ func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbo
 	require.NoError(mc.t, err)
 	return bytes
 }
+
+// BuildBackendCandlesBytes generates the backend candles bytes for test
+func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
+	baseResp := backend.BaseResponse{
+		Data: candles,
+	}
+	bytes, err := json.Marshal(baseResp)
+	require.NoError(mc.t, err)
+	return bytes
+}

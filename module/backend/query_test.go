@@ -20,6 +20,49 @@ const (
 	product = "btc-000_okt"
 )
 
+func TestBackendClient_QueryCandles(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewBackendClient(mockCli.MockBaseClient))
+
+	mockCandles := [][]string{
+		{"1.024", "2.048", "4.096", "8.192"},
+		{"10.24", "20.48", "40.96", "81.92"},
+	}
+	granularity, size := 60, 1
+
+	expectedRet := mockCli.BuildBackendCandlesBytes(mockCandles)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryKlinesParams(product, granularity, size)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
+	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	candles, err := mockCli.Backend().QueryCandles(product, granularity, size)
+	require.NoError(t, err)
+	require.Equal(t, "1.024", candles[0][0])
+	require.Equal(t, "2.048", candles[0][1])
+	require.Equal(t, "4.096", candles[0][2])
+	require.Equal(t, "8.192", candles[0][3])
+	require.Equal(t, "10.24", candles[1][0])
+	require.Equal(t, "20.48", candles[1][1])
+	require.Equal(t, "40.96", candles[1][2])
+	require.Equal(t, "81.92", candles[1][3])
+
+	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
+	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
+	require.Error(t, err)
+}
+
 func TestBackendClient_QueryDeals(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()

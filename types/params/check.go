@@ -3,14 +3,15 @@ package params
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"strings"
 )
 
 const (
 	tokenDescLenLimit = 256
-	countDefault      = 100
+	countDefault      = 10
 	perPageDefault    = 50
 	perPageMax        = 200
 )

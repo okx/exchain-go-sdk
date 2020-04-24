@@ -1,7 +1,9 @@
 package mocks
 
 import (
+	"encoding/json"
 	"fmt"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/exposed"
 	auth "github.com/okex/okchain-go-sdk/module/auth/types"
@@ -409,4 +411,139 @@ func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash cmn.HexBy
 			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
 		},
 	}
+}
+
+// BuildBackendDealsResultBytes generates the backend deals result bytes for test
+func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.Deal{
+				{
+					Timestamp:   timestamp,
+					BlockHeight: height,
+					OrderID:     orderID,
+					Sender:      sender,
+					Product:     product,
+					Side:        side,
+					Price:       price,
+					Quantity:    quantity,
+					Fee:         fee,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendOrdersResultBytes generates the backend orders result bytes for test
+func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, product, side, price, quantity, filledAvgPrice,
+	remainQuantity string, status, timestamp int64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.Order{
+				{
+					TxHash:         txHash,
+					OrderID:        orderID,
+					Sender:         sender,
+					Product:        product,
+					Side:           side,
+					Price:          price,
+					Quantity:       quantity,
+					Status:         status,
+					FilledAvgPrice: filledAvgPrice,
+					RemainQuantity: remainQuantity,
+					Timestamp:      timestamp,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendMatchResultBytes generates the backend match result bytes for test
+func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, product string, price, quantity float64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.MatchResult{
+				{
+					Timestamp:   timestamp,
+					BlockHeight: height,
+					Product:     product,
+					Price:       price,
+					Quantity:    quantity,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendMatchResultBytes generates the backend transactions result bytes for test
+func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbol, quantity, fee string, txType, side,
+	timestamp int64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.Transaction{
+				{
+					TxHash:    txHash,
+					Type:      txType,
+					Address:   accAddr,
+					Symbol:    symbol,
+					Side:      side,
+					Quantity:  quantity,
+					Fee:       fee,
+					Timestamp: timestamp,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendCandlesBytes generates the backend candles bytes for test
+func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
+	baseResp := backend.BaseResponse{
+		Data: candles,
+	}
+
+	bytes, err := json.Marshal(baseResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendTickersBytes generates the backend tickers bytes for test
+func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open, close, high, low, price, volumn,
+	change string) []byte {
+	baseResp := backend.BaseResponse{
+		Data: []backend.Ticker{
+			{
+				Symbol:    symbol,
+				Product:   product,
+				Timestamp: timestamp,
+				Open:      open,
+				Close:     close,
+				High:      high,
+				Low:       low,
+				Price:     price,
+				Volume:    volumn,
+				Change:    change,
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(baseResp)
+	require.NoError(mc.t, err)
+	return bytes
 }

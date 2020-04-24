@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"fmt"
 	"github.com/okex/okchain-go-sdk/module/backend/types"
 	"github.com/okex/okchain-go-sdk/types/params"
 	"github.com/okex/okchain-go-sdk/utils"
@@ -28,13 +27,14 @@ func (bc backendClient) QueryCandles(product string, granularity, size int) (can
 }
 
 // QueryTickers gets all tickers' data
-func (bc backendClient) QueryTickers(count ...int) (tickers []types.Ticker, err error) {
+// NOTE: all products are involved with setting "" to product
+func (bc backendClient) QueryTickers(product string, count ...int) (tickers []types.Ticker, err error) {
 	countNum, err := params.CheckQueryTickersParams(count)
 	if err != nil {
 		return
 	}
 
-	tickersParams := params.NewQueryTickerParams("", countNum, true)
+	tickersParams := params.NewQueryTickerParams(product, countNum, true)
 	jsonBytes, err := bc.GetCodec().MarshalJSON(tickersParams)
 	if err != nil {
 		return tickers, utils.ErrMarshalJSON(err.Error())
@@ -45,7 +45,6 @@ func (bc backendClient) QueryTickers(count ...int) (tickers []types.Ticker, err 
 		return tickers, utils.ErrClientQuery(err.Error())
 	}
 
-	fmt.Println(string(res))
 	if err = utils.GetDataFromBaseResponse(res, &tickers); err != nil {
 		return tickers, utils.ErrFilterDataFromBaseResponse("tickers", err.Error())
 	}

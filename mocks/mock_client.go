@@ -517,6 +517,32 @@ func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
 	baseResp := backend.BaseResponse{
 		Data: candles,
 	}
+
+	bytes, err := json.Marshal(baseResp)
+	require.NoError(mc.t, err)
+	return bytes
+}
+
+// BuildBackendTickersBytes generates the backend tickers bytes for test
+func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open, close, high, low, price, volumn,
+	change string) []byte {
+	baseResp := backend.BaseResponse{
+		Data: []backend.Ticker{
+			{
+				Symbol:    symbol,
+				Product:   product,
+				Timestamp: timestamp,
+				Open:      open,
+				Close:     close,
+				High:      high,
+				Low:       low,
+				Price:     price,
+				Volume:    volumn,
+				Change:    change,
+			},
+		},
+	}
+
 	bytes, err := json.Marshal(baseResp)
 	require.NoError(mc.t, err)
 	return bytes

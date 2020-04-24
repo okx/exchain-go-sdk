@@ -2,8 +2,9 @@ package params
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/types"
 	"time"
+
+	"github.com/okex/okchain-go-sdk/types"
 )
 
 const (
@@ -61,9 +62,9 @@ func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesPara
 
 // QueryTickerParams - structure of params to query tickers
 type QueryTickerParams struct {
-	Product string
-	Count   int
-	Sort    bool
+	Product string `json:"product"`
+	Count   int    `json:"count"`
+	Sort    bool   `json:"sort"`
 }
 
 // NewQueryTickerParams creates a new instance of QueryTickerParams

@@ -63,6 +63,83 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestBackendClient_QueryTickers(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewBackendClient(mockCli.MockBaseClient))
+
+	open, close, high, low := "2.048", "2.048", "4.096", "1.024"
+	timestamp := time.Now().String()
+	price, volume, change := "2.048", "1024", "100"
+	expectedRet := mockCli.BuildBackendTickersBytes(product, product, timestamp, open, close, high, low, price, volume, change)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryTickerParams(product, 10, true)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
+	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
+
+	tickers, err := mockCli.Backend().QueryTickers(product)
+	require.NoError(t, err)
+
+	_, err = mockCli.Backend().QueryTickers(product, 10)
+	require.NoError(t, err)
+	require.Equal(t, product, tickers[0].Symbol)
+	require.Equal(t, product, tickers[0].Product)
+	require.Equal(t, timestamp, tickers[0].Timestamp)
+	require.Equal(t, open, tickers[0].Open)
+	require.Equal(t, close, tickers[0].Close)
+	require.Equal(t, high, tickers[0].High)
+	require.Equal(t, low, tickers[0].Low)
+	require.Equal(t, price, tickers[0].Price)
+	require.Equal(t, volume, tickers[0].Volume)
+	require.Equal(t, change, tickers[0].Change)
+
+	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Backend().QueryTickers(product)
+	require.Error(t, err)
+
+	queryParams = params.NewQueryTickerParams("", 10, true)
+	queryBytes = expectedCdc.MustMarshalJSON(queryParams)
+	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
+
+	_, err = mockCli.Backend().QueryTickers("")
+	require.NoError(t, err)
+
+	tickers, err = mockCli.Backend().QueryTickers("", 10)
+	require.NoError(t, err)
+	require.Equal(t, product, tickers[0].Symbol)
+	require.Equal(t, product, tickers[0].Product)
+	require.Equal(t, timestamp, tickers[0].Timestamp)
+	require.Equal(t, open, tickers[0].Open)
+	require.Equal(t, close, tickers[0].Close)
+	require.Equal(t, high, tickers[0].High)
+	require.Equal(t, low, tickers[0].Low)
+	require.Equal(t, price, tickers[0].Price)
+	require.Equal(t, volume, tickers[0].Volume)
+	require.Equal(t, change, tickers[0].Change)
+
+	_, err = mockCli.Backend().QueryTickers(product, 1, 1)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTickers("", 1, 1)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTickers(product, -1)
+	require.Error(t, err)
+
+	_, err = mockCli.Backend().QueryTickers("", -1)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Backend().QueryTickers("")
+	require.Error(t, err)
+}
+
 func TestBackendClient_QueryDeals(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()

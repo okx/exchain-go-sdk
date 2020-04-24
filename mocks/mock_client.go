@@ -1,7 +1,9 @@
 package mocks
 
 import (
+	"encoding/json"
 	"fmt"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/exposed"
 	auth "github.com/okex/okchain-go-sdk/module/auth/types"
@@ -409,4 +411,29 @@ func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash cmn.HexBy
 			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
 		},
 	}
+}
+
+// BuildBackendDealsResultBytes generates the backend deals result bytes for test
+func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {
+	listResp := backend.ListResponse{
+		Data: backend.ListDataRes{
+			Data: []backend.Deal{
+				{
+					Timestamp:   timestamp,
+					BlockHeight: height,
+					OrderID:     orderID,
+					Sender:      sender,
+					Product:     product,
+					Side:        side,
+					Price:       price,
+					Quantity:    quantity,
+					Fee:         fee,
+				},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(listResp)
+	require.NoError(mc.t, err)
+	return bytes
 }

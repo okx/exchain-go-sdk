@@ -1,7 +1,9 @@
 package order
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/order/types"
@@ -53,7 +55,7 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 		remainLocked, feePerBlock)
 	expectedCdc := mockCli.GetCodec()
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
 	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet, nil)
 
 	orderDetail, err := mockCli.Order().QueryOrderDetail(orderID)
@@ -77,6 +79,15 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 	_, err = mockCli.Order().QueryOrderDetail("")
 	require.Error(t, err)
 
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet,
+		errors.New("default error"))
+	_, err = mockCli.Order().QueryOrderDetail(orderID)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet[1:], nil)
+	_, err = mockCli.Order().QueryOrderDetail(orderID)
+	require.Error(t, err)
+
 }
 
 func TestOrderClient_QueryDepthBook(t *testing.T) {
@@ -94,7 +105,7 @@ func TestOrderClient_QueryDepthBook(t *testing.T) {
 	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
 	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	depthBook, err := mockCli.Order().QueryDepthBook(product)
@@ -105,4 +116,11 @@ func TestOrderClient_QueryDepthBook(t *testing.T) {
 	require.Equal(t, "2.048", depthBook.Bids[0].Price)
 	require.Equal(t, "20.48", depthBook.Bids[0].Quantity)
 
+	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Order().QueryDepthBook(product)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	_, err = mockCli.Order().QueryDepthBook(product)
+	require.Error(t, err)
 }

@@ -131,6 +131,10 @@ func TestDexClient_Withdraw(t *testing.T) {
 	_, err = mockCli.Dex().Withdraw(fromInfo, "", product, "1.024okt", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
+
+	_, err = mockCli.Dex().Withdraw(fromInfo, passWd, product, "1.024", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestDexClient_TransferOwnership(t *testing.T) {

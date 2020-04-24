@@ -132,7 +132,6 @@ func TestTokenClient_QueryTokenInfo(t *testing.T) {
 
 	tokensInfo, err := mockCli.Token().QueryTokenInfo("", tokenSymbol)
 	require.NoError(t, err)
-
 	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
 	require.Equal(t, "default description", tokensInfo[0].Description)
 	require.Equal(t, tokenSymbol, tokensInfo[0].Symbol)
@@ -142,6 +141,11 @@ func TestTokenClient_QueryTokenInfo(t *testing.T) {
 	require.Equal(t, totalSupply, tokensInfo[0].TotalSupply)
 	require.Equal(t, true, tokensInfo[0].Mintable)
 	require.Equal(t, ownerAddr, tokensInfo[0].Owner)
+
+	mockCli.EXPECT().Query(fmt.Sprintf("custom/%s/info/%s", types.ModuleName, tokenSymbol), nil).
+		Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Token().QueryTokenInfo("", tokenSymbol)
+	require.Error(t, err)
 
 	expectedRet = mockCli.BuildTokenInfoBytes("default description", tokenSymbol, "default original symbol",
 		"default whole name", originalTotalSupply, totalSupply, ownerAddr, true, true)
@@ -166,7 +170,6 @@ func TestTokenClient_QueryTokenInfo(t *testing.T) {
 
 	mockCli.EXPECT().Query(fmt.Sprintf("custom/%s/tokens/%s", types.ModuleName, addr), nil).
 		Return(expectedRet, errors.New("default error"))
-
 	_, err = mockCli.Token().QueryTokenInfo(addr, "")
 	require.Error(t, err)
 }

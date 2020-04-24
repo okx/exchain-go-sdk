@@ -25,6 +25,18 @@ func TestCreateAccountWithMnemo(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, defaultName, info.GetName())
 	require.Equal(t, defaultMnemonic, mnemo)
+
+	_, _, err = CreateAccountWithMnemo(defaultMnemonic, "", defaultPassWd)
+	require.NoError(t, err)
+
+	_, _, err = CreateAccountWithMnemo(defaultMnemonic, defaultName, "")
+	require.NoError(t, err)
+
+	_, _, err = CreateAccountWithMnemo("", defaultName, defaultPassWd)
+	require.Error(t, err)
+
+	_, _, err = CreateAccountWithMnemo(defaultPassWd, defaultName, defaultPassWd)
+	require.Error(t, err)
 }
 
 func TestCreateAccountWithPrivateKey(t *testing.T) {
@@ -40,6 +52,12 @@ func TestCreateAccountWithPrivateKey(t *testing.T) {
 	require.Equal(t, privInfo.GetPubKey(), mnemoInfo.GetPubKey())
 	require.Equal(t, privInfo.GetAddress(), mnemoInfo.GetAddress())
 	require.Equal(t, privInfo.GetName(), mnemoInfo.GetName())
+
+	_, err = CreateAccountWithPrivateKey("", defaultName, defaultPassWd)
+	require.Error(t, err)
+
+	_, err = CreateAccountWithPrivateKey(defaultMnemonic, defaultName, defaultPassWd)
+	require.Error(t, err)
 }
 
 func TestGenerateMnemonic(t *testing.T) {

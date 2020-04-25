@@ -2,9 +2,9 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/okex/okchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"log"
 )
 
 // GetOrderIDsFromResponse filters the orderID from the tx response
@@ -16,8 +16,8 @@ func GetOrderIDsFromResponse(txResp *sdk.TxResponse) (orderIDs []string) {
 				if attribute.Key == "orders" {
 					var orderRes []types.OrderResult
 					if err := json.Unmarshal([]byte(attribute.Value), &orderRes); err != nil {
-						fmt.Println(err)
-						return
+						log.Println(ErrUnmarshalJSON(err.Error()).Error())
+						continue
 					}
 
 					for _, res := range orderRes {

@@ -23,7 +23,8 @@ func TestGetOrderIDsFromResponse(t *testing.T) {
 	}
 
 	rawStrs := getRawStrSlice(orderResults, fakeOrderResults1, fakeOrderResults2)
-	require.Equal(t, 3, len(rawStrs))
+	rawStrs = append(rawStrs, "string that failed to unmarshal JSON")
+	require.Equal(t, 4, len(rawStrs))
 
 	// build mock TxResponse
 	mockTxResp := sdk.TxResponse{
@@ -34,6 +35,10 @@ func TestGetOrderIDsFromResponse(t *testing.T) {
 					{
 						Key:   "not orders",
 						Value: rawStrs[1],
+					},
+					{
+						Key:   "orders",
+						Value: rawStrs[3], // log error
 					},
 					{
 						Key:   "orders",

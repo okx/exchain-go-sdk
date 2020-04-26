@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -53,10 +54,16 @@ func TestCreateAccountWithPrivateKey(t *testing.T) {
 	require.Equal(t, privInfo.GetAddress(), mnemoInfo.GetAddress())
 	require.Equal(t, privInfo.GetName(), mnemoInfo.GetName())
 
+	// empty private key
 	_, err = CreateAccountWithPrivateKey("", defaultName, defaultPassWd)
 	require.Error(t, err)
 
+	// wrong format of private key
 	_, err = CreateAccountWithPrivateKey(defaultMnemonic, defaultName, defaultPassWd)
+	require.Error(t, err)
+
+	// doulbe strength of private key
+	_, err = CreateAccountWithPrivateKey(fmt.Sprintf("%s%s", defaultPrivateKey, defaultPrivateKey), defaultName, defaultPassWd)
 	require.Error(t, err)
 }
 

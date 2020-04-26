@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -23,5 +24,15 @@ func TestParseValAddresses(t *testing.T) {
 	// bad val address
 	valAddrsStr = append(valAddrsStr, valAddrStr[1:])
 	_, err = ParseValAddresses(valAddrsStr)
+	require.Error(t, err)
+}
+
+func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
+	priKey, err := GeneratePrivateKeyFromMnemo(defaultMnemonic)
+	require.NoError(t, err)
+	require.Equal(t, defaultPrivateKey, priKey)
+
+	// bad mnemonic, add one word in it
+	_, err = GeneratePrivateKeyFromMnemo(fmt.Sprintf("%s %s", defaultMnemonic, "offer"))
 	require.Error(t, err)
 }

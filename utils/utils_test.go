@@ -67,6 +67,9 @@ func TestGetStdTxFromFile(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, mockStdTx, stdTx)
 
+	_, err = GetStdTxFromFile(testCdc, filePath[1:])
+	require.Error(t, err)
+
 	// bad JSON bytes in file
 	badFilePath := "./test_bad_std_tx.json"
 	err = ioutil.WriteFile(badFilePath, testCdc.MustMarshalJSON(mockStdTx)[1:], 0644)
@@ -75,4 +78,5 @@ func TestGetStdTxFromFile(t *testing.T) {
 	require.Panics(t, func() {
 		_, _ = GetStdTxFromFile(testCdc, badFilePath)
 	})
+
 }

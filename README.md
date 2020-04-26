@@ -57,7 +57,7 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 	// get info of your account from OKChain
 	accInfo, _ := client.Auth().QueryAccount(keyInfo.GetAddress().String())
 
-	// transfer some okt to addr1
+	// transfer some okt to addr
 	res, _ := client.Token().Send(keyInfo, passWd, addr, "0.1024okt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
 
 ```

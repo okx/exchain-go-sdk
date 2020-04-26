@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,6 +12,8 @@ const (
 	defaultPassWd     = "12345678"
 	defaultMnemonic   = "sustain hole urban away boy core lazy brick wait drive tiger tell"
 	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
+	defaultMemo       = "my memo"
+	valConsPK         = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
 )
 
 func TestCreateAccount(t *testing.T) {
@@ -53,10 +56,16 @@ func TestCreateAccountWithPrivateKey(t *testing.T) {
 	require.Equal(t, privInfo.GetAddress(), mnemoInfo.GetAddress())
 	require.Equal(t, privInfo.GetName(), mnemoInfo.GetName())
 
+	// empty private key
 	_, err = CreateAccountWithPrivateKey("", defaultName, defaultPassWd)
 	require.Error(t, err)
 
+	// wrong format of private key
 	_, err = CreateAccountWithPrivateKey(defaultMnemonic, defaultName, defaultPassWd)
+	require.Error(t, err)
+
+	// doulbe strength of private key
+	_, err = CreateAccountWithPrivateKey(fmt.Sprintf("%s%s", defaultPrivateKey, defaultPrivateKey), defaultName, defaultPassWd)
 	require.Error(t, err)
 }
 

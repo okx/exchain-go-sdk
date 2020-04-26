@@ -12,6 +12,7 @@ const (
 	defaultPassWd     = "12345678"
 	defaultMnemonic   = "sustain hole urban away boy core lazy brick wait drive tiger tell"
 	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
+	defaultMemo       = "my memo"
 )
 
 func TestCreateAccount(t *testing.T) {

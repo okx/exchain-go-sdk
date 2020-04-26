@@ -5,8 +5,13 @@ import (
 	"fmt"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/tx"
+	"github.com/okex/okchain-go-sdk/utils"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
+)
+
+const (
+	simulationPath = "/app/simulate"
 )
 
 var _ sdk.BaseClient = (*baseClient)(nil)
@@ -126,14 +131,32 @@ func (bc *baseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.M
 	if len(config.ChainID) == 0 {
 		return stdTx, errors.New("failed. empty chain ID")
 	}
-	// TODO: implements the gas price later
+
+	var stdFee sdk.StdFee
+	if config.GasPrices.IsZero() {
+		// fixed fees
+		stdFee = sdk.NewStdFee(config.Gas, config.Fees)
+	} else {
+		// auto gas calculation
+		var txBytes []byte
+		txBytes, err = bc.BuildTxForSim(msgs, memo, accNumber, seqNumber)
+		if err != nil {
+			return stdTx, fmt.Errorf("failed. build tx for simulation error: %s", err)
+		}
+
+		stdFee, err = bc.CalculateGas(txBytes)
+		if err != nil {
+			return
+		}
+	}
+
 	signMsg := sdk.StdSignMsg{
 		ChainID:       config.ChainID,
 		AccountNumber: accNumber,
 		Sequence:      seqNumber,
 		Memo:          memo,
 		Msgs:          msgs,
-		Fee:           sdk.NewStdFee(config.Gas, config.Fees),
+		Fee:           stdFee,
 	}
 
 	sigBytes, err := tx.MakeSignature(fromName, passphrase, signMsg)
@@ -149,4 +172,45 @@ func (bc *baseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) sdk
 	config := bc.GetConfig()
 	fee := sdk.NewStdFee(config.Gas, bc.GetConfig().Fees)
 	return sdk.NewStdTx(msgs, fee, nil, memo)
+}
+
+// CalculateGas is designed for auto gas calculation and builds an available stdFee
+func (bc *baseClient) CalculateGas(txBytes []byte) (stdFee sdk.StdFee, err error) {
+	config := bc.GetConfig()
+	// estimate the gas by a simulation query
+	rawRes, err := bc.Query(simulationPath, txBytes)
+	if err != nil {
+		return stdFee, utils.ErrClientQuery(err.Error())
+	}
+
+	// get simulation result
+	var simResult sdk.Result
+	if err = bc.GetCodec().UnmarshalBinaryLengthPrefixed(rawRes, &simResult); err != nil {
+		return
+	}
+
+	// enlarge the simulation result by gas adjustment in config
+	adjustedGasLimt := uint64(config.GasAdjustment * float64(simResult.GasUsed))
+	return calculateStdFee(config.GasPrices, adjustedGasLimt), err
+}
+
+// BuildTxForSim creates a StdSignMsg and encodes a transaction with the StdSignMsg for tx simulation
+func (bc *baseClient) BuildTxForSim(msgs []sdk.Msg, memo string, accNumber, seqNumber uint64) ([]byte, error) {
+	config := bc.GetConfig()
+
+	// build std tx for simulation
+	simStdTx := sdk.NewStdTx(msgs, calculateStdFee(config.GasPrices, config.Gas), []sdk.StdSignature{{}}, memo)
+	return bc.GetCodec().MarshalBinaryLengthPrefixed(simStdTx)
+}
+
+func calculateStdFee(gasPrices sdk.DecCoins, gas uint64) sdk.StdFee {
+	gasLimitDec := sdk.NewDec(int64(gas))
+	gasPricesLen := len(gasPrices)
+	fees := make(sdk.DecCoins, gasPricesLen)
+	for i := 0; i < gasPricesLen; i++ {
+		// Derive the fees based on the provided gas prices, where fee = gasPrice * gasLimit
+		fees[i] = sdk.NewDecCoinFromDec(gasPrices[i].Denom, gasPrices[i].Amount.Mul(gasLimitDec))
+	}
+
+	return sdk.NewStdFee(gas, fees)
 }

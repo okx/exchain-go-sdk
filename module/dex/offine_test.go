@@ -21,7 +21,8 @@ const (
 
 func TestDexClient_GenerateUnsignedTransferOwnershipTx(t *testing.T) {
 	// make dex client
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000,
+		0, "")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, nil, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))
@@ -60,7 +61,8 @@ func TestDexClient_MultiSign(t *testing.T) {
 	require.NoError(t, err)
 
 	// make dex client
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000)
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "0.01okt", 200000,
+		0, "")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, nil, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))

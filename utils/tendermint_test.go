@@ -50,8 +50,8 @@ func TestParseBlock(t *testing.T) {
 	require.NoError(t, err)
 	feeCoins, err := sdk.ParseDecCoins("1024okt,2.048btc")
 	require.NoError(t, err)
-
 	stdFee := sdk.NewStdFee(20000, feeCoins)
+
 	stdTx := sdk.StdTx{
 		Msgs: []sdk.Msg{
 			TestMsg{

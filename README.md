@@ -40,7 +40,7 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 `Client` seems necessary to every operation with Go SDK. Here are the examples :
 
 ```go
-	// rpcURL should modified according to the actual situation
+	// rpcURL should be modified according to the actual situation
 	rpcURL   = "3.13.150.20:26657"
 	name     = "alice"
 	passWd   = "12345678"

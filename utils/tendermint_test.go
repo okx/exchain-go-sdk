@@ -164,6 +164,11 @@ func TestParseBlockResults(t *testing.T) {
 	require.Equal(t, maxAge, blockResults.Results.EndBlock.ConsensusParamUpdates.Evidence.MaxAge)
 	require.Equal(t, 1, len(blockResults.Results.EndBlock.ConsensusParamUpdates.Validator.PubKeyTypes))
 	require.Equal(t, pubkeyType, blockResults.Results.EndBlock.ConsensusParamUpdates.Validator.PubKeyTypes[0])
+
+	// consensus params check: empty pointer
+	pTmBlockResults.Results.EndBlock.ConsensusParamUpdates = nil
+	blockResults = ParseBlockResults(pTmBlockResults)
+	require.NotNil(t, blockResults.Results.EndBlock.ConsensusParamUpdates)
 }
 
 func TestParseCommitResult(t *testing.T) {
@@ -221,4 +226,72 @@ func TestParseValidatorsResult(t *testing.T) {
 	require.Equal(t, proposerPriority, valsResult.Validators[0].ProposerPriority)
 	require.Equal(t, votingPower, valsResult.Validators[0].VotingPower)
 	require.Equal(t, consPubkey, valsResult.Validators[0].PubKey)
+}
+
+func TestParseTxResult(t *testing.T) {
+	// data preparation
+	txHash, tx := []byte("default tx hash"), []byte("default tx")
+	height, code := int64(1024), uint32(0)
+	log, eventType := "default log", "default event type"
+
+	pTmTxResult := &ctypes.ResultTx{
+		Hash:   txHash,
+		Height: height,
+		Tx:     tx,
+		TxResult: abci.ResponseDeliverTx{
+			Code: code,
+			Log:  log,
+			Events: []abci.Event{
+				{
+					Type: eventType,
+				},
+			},
+		},
+	}
+
+	txResult := ParseTxResult(pTmTxResult)
+	require.Equal(t, height, txResult.Height)
+	require.Equal(t, cmn.HexBytes(txHash), txResult.Hash)
+	require.Equal(t, tmtypes.Tx(tx), txResult.Tx)
+	require.Equal(t, log, txResult.TxResult.Log)
+	require.Equal(t, code, txResult.TxResult.Code)
+	require.Equal(t, 1, len(txResult.TxResult.Events))
+	require.Equal(t, eventType, txResult.TxResult.Events[0].Type)
+}
+
+func TestParseTxsResult(t *testing.T) {
+	// data preparation
+	txHash, tx := []byte("default tx hash"), []byte("default tx")
+	height, code, totalCount := int64(1024), uint32(0), 1
+	log, eventType := "default log", "default event type"
+
+	pTmTxsResult := &ctypes.ResultTxSearch{
+		TotalCount: totalCount,
+		Txs: []*ctypes.ResultTx{
+			{
+				Hash:   txHash,
+				Height: height,
+				Tx:     tx,
+				TxResult: abci.ResponseDeliverTx{
+					Code: code,
+					Log:  log,
+					Events: []abci.Event{
+						{
+							Type: eventType,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	txSearchResult := ParseTxsResult(pTmTxsResult)
+	require.Equal(t, totalCount, txSearchResult.TotalCount)
+	require.Equal(t, 1, len(txSearchResult.Txs))
+	require.Equal(t, height, txSearchResult.Txs[0].Height)
+	require.Equal(t, cmn.HexBytes(txHash), txSearchResult.Txs[0].Hash)
+	require.Equal(t, tmtypes.Tx(tx), txSearchResult.Txs[0].Tx)
+	require.Equal(t, log, txSearchResult.Txs[0].TxResult.Log)
+	require.Equal(t, code, txSearchResult.Txs[0].TxResult.Code)
+	require.Equal(t, eventType, txSearchResult.Txs[0].TxResult.Events[0].Type)
 }

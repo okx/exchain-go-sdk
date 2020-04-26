@@ -22,9 +22,18 @@ const (
 
 func main() {
 	//-------------------- 1. preparation --------------------//
+	// NOTE: either of the both ways below to pay fees is available
 
-	// create a client
-	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 200000)
+	// WAY 1: create a client config with fixed fees
+	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 200000,
+		0, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// WAY 2:alternative client config with the fees by auto gas calculation
+	config, err = sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "", 200000,
+		1.1, "0.00000001okt")
 	if err != nil {
 		log.Fatal(err)
 	}

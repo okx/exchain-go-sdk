@@ -369,14 +369,14 @@ func (mc *MockClient) GetRawCommitResultPointer(canonicalCommit bool, chainID st
 }
 
 // GetRawValidatorsResultPointer generates the raw tendermint validators result pointer for test
-func (mc *MockClient) GetRawValidatorsResultPointer(height, VotingPower, proposerPriority int64,
+func (mc *MockClient) GetRawValidatorsResultPointer(height, votingPower, proposerPriority int64,
 	consPubkey crypto.PubKey) *ctypes.ResultValidators {
 	return &ctypes.ResultValidators{
 		BlockHeight: height,
 		Validators: []*tmtypes.Validator{
 			{
 				PubKey:           consPubkey,
-				VotingPower:      VotingPower,
+				VotingPower:      votingPower,
 				ProposerPriority: proposerPriority,
 			},
 		},

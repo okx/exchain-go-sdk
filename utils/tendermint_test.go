@@ -101,12 +101,18 @@ func TestParseBlock(t *testing.T) {
 func TestParseBlockResults(t *testing.T) {
 	// data preparation
 	power, height := int64(1000), int64(1024)
-	pubkeyType, eventType := "default pubkey type", "default event type"
+	pubkeyType, eventType, info := "default pubkey type", "default event type", "default info"
 	kvPairKey := []byte("default kv pair key")
+	maxBytes, maxGas, maxAge := int64(1024), int64(20000), int64(2048)
 
 	pTmBlockResults := &ctypes.ResultBlockResults{
 		Height: height,
 		Results: &tmstate.ABCIResponses{
+			DeliverTx: []*abci.ResponseDeliverTx{
+				{
+					Info: info,
+				},
+			},
 			BeginBlock: &abci.ResponseBeginBlock{
 				Events: []abci.Event{
 					{
@@ -128,15 +134,91 @@ func TestParseBlockResults(t *testing.T) {
 						Power: power,
 					},
 				},
+				ConsensusParamUpdates: &abci.ConsensusParams{
+					Block: &abci.BlockParams{
+						MaxBytes: maxBytes,
+						MaxGas:   maxGas,
+					},
+					Evidence: &abci.EvidenceParams{
+						MaxAge: maxAge,
+					},
+					Validator: &abci.ValidatorParams{
+						PubKeyTypes: []string{pubkeyType},
+					},
+				},
 			},
 		},
 	}
 
 	blockResults := ParseBlockResults(pTmBlockResults)
 	require.Equal(t, height, blockResults.Height)
+	require.Equal(t, 1, len(blockResults.Results.DeliverTx))
+	require.Equal(t, info, blockResults.Results.DeliverTx[0].Info)
 	require.Equal(t, 1, len(blockResults.Results.BeginBlock.Events))
 	require.Equal(t, eventType, blockResults.Results.BeginBlock.Events[0].Type)
 	require.Equal(t, kvPairKey, blockResults.Results.BeginBlock.Events[0].Attributes[0].Key)
 	require.Equal(t, pubkeyType, blockResults.Results.EndBlock.ValidatorUpdates[0].PubKey.Type)
 	require.Equal(t, power, blockResults.Results.EndBlock.ValidatorUpdates[0].Power)
+	require.Equal(t, maxBytes, blockResults.Results.EndBlock.ConsensusParamUpdates.Block.MaxBytes)
+	require.Equal(t, maxGas, blockResults.Results.EndBlock.ConsensusParamUpdates.Block.MaxGas)
+	require.Equal(t, maxAge, blockResults.Results.EndBlock.ConsensusParamUpdates.Evidence.MaxAge)
+	require.Equal(t, 1, len(blockResults.Results.EndBlock.ConsensusParamUpdates.Validator.PubKeyTypes))
+	require.Equal(t, pubkeyType, blockResults.Results.EndBlock.ConsensusParamUpdates.Validator.PubKeyTypes[0])
+}
+
+func TestParseCommitResult(t *testing.T) {
+	// data preparation
+	height, blockTime := int64(1024), time.Now()
+	appHash, blockIDHash := cmn.HexBytes("default app hash"), cmn.HexBytes("default block ID hash")
+	chainID := "default chainID"
+
+	pTmCommitResult := &ctypes.ResultCommit{
+		CanonicalCommit: true,
+		SignedHeader: tmtypes.SignedHeader{
+			Header: &tmtypes.Header{
+				ChainID: chainID,
+				Height:  height,
+				Time:    blockTime,
+				AppHash: appHash,
+			},
+			Commit: &tmtypes.Commit{
+				BlockID: tmtypes.BlockID{
+					Hash: blockIDHash,
+				},
+			},
+		},
+	}
+
+	commitResult := ParseCommitResult(pTmCommitResult)
+	require.Equal(t, true, commitResult.CanonicalCommit)
+	require.Equal(t, chainID, commitResult.ChainID)
+	require.Equal(t, appHash, commitResult.AppHash)
+	require.Equal(t, height, commitResult.Header.Height)
+	require.Equal(t, blockIDHash, commitResult.Commit.BlockID.Hash)
+	require.True(t, blockTime.Equal(commitResult.Time))
+}
+
+func TestParseValidatorsResult(t *testing.T) {
+	// data preparation
+	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
+	consPubkey, err := sdk.GetConsPubKeyBech32(valConsPK)
+	require.NoError(t, err)
+
+	pTmValsResult := &ctypes.ResultValidators{
+		BlockHeight: height,
+		Validators: []*tmtypes.Validator{
+			{
+				PubKey:           consPubkey,
+				VotingPower:      votingPower,
+				ProposerPriority: proposerPriority,
+			},
+		},
+	}
+
+	valsResult := ParseValidatorsResult(pTmValsResult)
+	require.Equal(t, height, valsResult.BlockHeight)
+	require.Equal(t, 1, len(valsResult.Validators))
+	require.Equal(t, proposerPriority, valsResult.Validators[0].ProposerPriority)
+	require.Equal(t, votingPower, valsResult.Validators[0].VotingPower)
+	require.Equal(t, consPubkey, valsResult.Validators[0].PubKey)
 }

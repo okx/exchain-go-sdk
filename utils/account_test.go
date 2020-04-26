@@ -13,6 +13,7 @@ const (
 	defaultMnemonic   = "sustain hole urban away boy core lazy brick wait drive tiger tell"
 	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
 	defaultMemo       = "my memo"
+	valConsPK         = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
 )
 
 func TestCreateAccount(t *testing.T) {

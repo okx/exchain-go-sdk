@@ -126,6 +126,16 @@ func (coins DecCoins) IsAllPositive() bool {
 	return true
 }
 
+// IsZero returns whether all coins are zero
+func (coins DecCoins) IsZero() bool {
+	for _, coin := range coins {
+		if !coin.Amount.IsZero() {
+			return false
+		}
+	}
+	return true
+}
+
 // Add adds two sets of DecCoins
 // NOTE: Add operates under the invariant that coins are sorted by
 // denominations.

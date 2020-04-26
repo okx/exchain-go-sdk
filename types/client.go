@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpc "github.com/tendermint/tendermint/rpc/client"
 )
@@ -10,6 +11,7 @@ type BaseClient interface {
 	ClientQuery
 	ClientTx
 	TxHandler
+	SimulationHandler
 	GetCodec() SDKCodec
 	GetConfig() ClientConfig
 }
@@ -19,6 +21,12 @@ type TxHandler interface {
 	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error)
 	BuildStdTx(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (StdTx, error)
 	BuildUnsignedStdTxOffline(msgs []Msg, memo string) StdTx
+}
+
+// SimulationHandler shows the expected behavior to handle simulation
+type SimulationHandler interface {
+	CalculateGas(txBytes []byte) (StdFee, error)
+	BuildTxForSim(msgs []Msg, memo string, accNumber, seqNumber uint64) ([]byte, error)
 }
 
 // ClientQuery shows the expected query behavior
@@ -43,25 +51,44 @@ type RPCClient interface {
 // ClientConfig records the base config of gosdk client
 type ClientConfig struct {
 	NodeURI       string
-	BroadcastMode BroadcastMode
 	ChainID       string
-	Fees          DecCoins
+	BroadcastMode BroadcastMode
 	Gas           uint64
+	GasAdjustment float64
+	Fees          DecCoins
+	GasPrices     DecCoins
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string, gas uint64) (
+func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string, gas uint64, gasAdjustment float64,
+	gasPricesStr string) (
 	cliConfig ClientConfig, err error) {
-	fees, err := ParseDecCoins(feesStr)
-	if err != nil {
-		return
+	var fees, gasPrices DecCoins
+	if len(feesStr) != 0 {
+		fees, err = ParseDecCoins(feesStr)
+		if err != nil {
+			return
+		}
+	}
+
+	if len(gasPricesStr) != 0 {
+		if gasAdjustment <= 1 {
+			return cliConfig, errors.New("failed. gasAdjustment must be greater than 1 with the auto gas calculating")
+		}
+
+		gasPrices, err = ParseDecCoins(gasPricesStr)
+		if err != nil {
+			return
+		}
 	}
 
 	return ClientConfig{
 		NodeURI:       nodeURI,
-		BroadcastMode: broadcastMode,
 		ChainID:       chainID,
-		Fees:          fees,
+		BroadcastMode: broadcastMode,
 		Gas:           gas,
+		GasAdjustment: gasAdjustment,
+		Fees:          fees,
+		GasPrices:     gasPrices,
 	}, err
 }

@@ -68,6 +68,19 @@ func precisionMultiplier(prec int64) *big.Int {
 
 //______________________________________________________________________________________________
 
+// create a new Dec from integer assuming whole number
+func NewDec(i int64) Dec {
+	return NewDecWithPrec(i, 0)
+}
+
+// create a new Dec from integer with decimal place at prec
+// CONTRACT: prec <= Precision
+func NewDecWithPrec(i, prec int64) Dec {
+	return Dec{
+		new(big.Int).Mul(big.NewInt(i), precisionMultiplier(prec)),
+	}
+}
+
 // NewDecFromBigInt creates a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
 func NewDecFromBigInt(i *big.Int) Dec {

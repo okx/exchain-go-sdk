@@ -48,7 +48,7 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 	addr     = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
 	
 	// build the client with own config
-	config, _ := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 20000)
+	config, _ := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 20000, 0, "")
 	client := sdk.NewClient(config)
 
 	// create your account key info by 'name','passWd' and 'mnemonic'

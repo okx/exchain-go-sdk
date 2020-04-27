@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// WAY 2:alternative client config with the fees by auto gas calculation
+	// WAY 2: alternative client config with the fees by auto gas calculation
 	config, err = sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	if err != nil {

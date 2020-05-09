@@ -87,7 +87,7 @@ func NewStdSignature(pubkey crypto.PubKey, signature []byte) StdSignature {
 type StdSignDoc struct {
 	AccountNumber uint64            `json:"account_number"`
 	ChainID       string            `json:"chain_id"`
-	Fee           json.RawMessage   `json:"-"`
+	Fee           json.RawMessage   `json:"fee"`
 	Memo          string            `json:"memo"`
 	Msgs          []json.RawMessage `json:"msgs"`
 	Sequence      uint64            `json:"sequence"`

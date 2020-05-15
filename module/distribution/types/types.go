@@ -20,4 +20,5 @@ func init() {
 // RegisterCodec registers the msg type for distribution module
 func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgSetWithdrawAddr{}, "okchain/distribution/MsgModifyWithdrawAddress")
+	cdc.RegisterConcrete(MsgWithdrawValCommission{}, "okchain/distribution/MsgWithdrawReward")
 }

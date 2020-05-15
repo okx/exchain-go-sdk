@@ -25,3 +25,21 @@ func (dc distrClient) SetWithdrawAddr(fromInfo keys.Info, passWd, withdrawAddrSt
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+// WithdrawRewards withdraws the rewards of validator by himself
+func (dc distrClient) WithdrawRewards(fromInfo keys.Info, passWd, valAddrStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
+	if err != nil {
+		return resp, fmt.Errorf("invalid validator address: %s", valAddrStr)
+	}
+
+	msg := types.NewMsgWithdrawValCommission(valAddr)
+
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

@@ -35,7 +35,7 @@ func (dc distrClient) WithdrawRewards(fromInfo keys.Info, passWd, valAddrStr, me
 
 	valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
 	if err != nil {
-		return resp, fmt.Errorf("invalid validator address: %s", valAddrStr)
+		return resp, fmt.Errorf("failed. invalid validator address: %s", valAddrStr)
 	}
 
 	msg := types.NewMsgWithdrawValCommission(valAddr)

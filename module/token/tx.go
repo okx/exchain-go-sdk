@@ -56,3 +56,29 @@ func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, to
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+//
+func (tc tokenClient) Mint(fromInfo keys.Info, passWd, memo string, amount sdk.DecCoin,
+	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckTokenMintParams(fromInfo, passWd, amount); err != nil {
+		return
+	}
+
+	msg := types.NewMsgTokenMint(amount, fromInfo.GetAddress())
+
+	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}
+
+//
+func (tc tokenClient) Burn(fromInfo keys.Info, passWd, memo string, amount sdk.DecCoin,
+	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckTokenBurnParams(fromInfo, passWd, amount); err != nil {
+		return
+	}
+
+	msg := types.NewMsgTokenBurn(amount, fromInfo.GetAddress())
+
+	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

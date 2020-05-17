@@ -56,32 +56,49 @@ func (MsgMultiSend) Type() string                 { return "" }
 func (MsgMultiSend) ValidateBasic() sdk.Error     { return nil }
 func (MsgMultiSend) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgMint - structure to mint a kind of token
-type MsgMint struct {
-	Symbol string         `json:"symbol"`
-	Amount int64          `json:"amount"`
+type MsgTokenBurn struct {
+	Amount sdk.DecCoin    `json:"amount"`
 	Owner  sdk.AccAddress `json:"owner"`
 }
 
-// NewMsgMint is a constructor function for MsgMint
-func NewMsgMint(symbol string, amount int64, owner sdk.AccAddress) MsgMint {
-	return MsgMint{
-		Symbol: symbol,
+func NewMsgTokenBurn(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenBurn {
+	return MsgTokenBurn{
 		Amount: amount,
 		Owner:  owner,
 	}
 }
 
-// GetSignBytes encodes the message for signing
-func (msg MsgMint) GetSignBytes() []byte {
+func (msg MsgTokenBurn) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
-// nolint
-func (MsgMint) Route() string                { return "" }
-func (MsgMint) Type() string                 { return "" }
-func (MsgMint) ValidateBasic() sdk.Error     { return nil }
-func (MsgMint) GetSigners() []sdk.AccAddress { return nil }
+func (msg MsgTokenBurn) Route() string { return "" }
+func (msg MsgTokenBurn) Type() string { return "" }
+func (msg MsgTokenBurn) ValidateBasic() sdk.Error {return nil}
+func (msg MsgTokenBurn) GetSigners() []sdk.AccAddress {return nil}
+
+type MsgTokenMint struct {
+	Amount sdk.DecCoin    `json:"amount"`
+	Owner  sdk.AccAddress `json:"owner"`
+}
+
+func NewMsgTokenMint(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenMint {
+	return MsgTokenMint{
+		Amount: amount,
+		Owner:  owner,
+	}
+}
+
+func (msg MsgTokenMint) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+func (msg MsgTokenMint) Route() string { return "" }
+func (msg MsgTokenMint) Type() string { return "" }
+func (msg MsgTokenMint) ValidateBasic() sdk.Error { return nil}
+func (msg MsgTokenMint) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{msg.Owner}
+}
 
 // MsgTokenIssue - structure to issue a kind of token
 type MsgTokenIssue struct {

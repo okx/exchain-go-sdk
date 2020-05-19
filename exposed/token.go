@@ -22,6 +22,8 @@ type TokenTx interface {
 		seqNum uint64) (sdk.TxResponse, error)
 	Mint(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Burn(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	Edit(fromInfo keys.Info, passWd, symbol, description, wholeName, memo string, isDescEdit, isWholeNameEdit bool, accNum,
+		seqNum uint64) (sdk.TxResponse, error)
 }
 
 // TokenQuery shows the expected query behavior for inner token client

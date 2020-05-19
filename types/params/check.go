@@ -3,6 +3,7 @@ package params
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
@@ -14,7 +15,33 @@ const (
 	countDefault      = 10
 	perPageDefault    = 50
 	perPageMax        = 200
+	reWholeName       = `[a-zA-Z0-9[:space:]]{1,30}`
 )
+
+var (
+	reWhole = regexp.MustCompile(fmt.Sprintf(`^%s$`, reWholeName))
+)
+
+// CheckTokenEditParams gives a quick validity check for the input params of token info editing
+func CheckTokenEditParams(fromInfo keys.Info, passWd, symbol, description, wholeName string, isDescEdit, isWholeNameEdit bool) error {
+	if err := CheckKeyParams(fromInfo, passWd); err != nil {
+		return err
+	}
+
+	if len(symbol) == 0 {
+		return errors.New("failed. empty symbol")
+	}
+
+	if isWholeNameEdit && !isWholeNameValid(wholeName) {
+		return fmt.Errorf("failed. invalid whole name of token: %s", wholeName)
+	}
+
+	if isDescEdit && len(description) > tokenDescLenLimit {
+		return errors.New("failed. invalid token description")
+	}
+
+	return nil
+}
 
 // CheckProductParams gives a quick validity check for the input product params
 func CheckProductParams(fromInfo keys.Info, passWd, product string) error {
@@ -307,4 +334,8 @@ func checkParamsPaging(start, end, page, perPage int) (perPageRet int, err error
 
 func isValidSide(side string) bool {
 	return side == "BUY" || side == "SELL"
+}
+
+func isWholeNameValid(wholeName string) bool {
+	return reWhole.MatchString(wholeName)
 }

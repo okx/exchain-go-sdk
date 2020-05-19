@@ -24,7 +24,8 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgSend{}, "okchain/token/MsgTransfer")
 	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer")
 	cdc.RegisterConcrete(MsgTokenIssue{}, "okchain/token/MsgIssue")
-	cdc.RegisterConcrete(MsgMint{}, "okchain/token/MsgMint")
+	cdc.RegisterConcrete(MsgTokenMint{}, "okchain/token/MsgMint")
+	cdc.RegisterConcrete(MsgTokenBurn{}, "okchain/token/MsgBurn")
 }
 
 // TransferUnit - amount part for multi-send

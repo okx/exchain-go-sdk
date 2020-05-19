@@ -55,6 +55,10 @@ func TestDistrClient_SetWithdrawAddr(t *testing.T) {
 		accInfo.GetSequence())
 	require.Error(t, err)
 
+	_, err = mockCli.Distribution().SetWithdrawAddr(fromInfo, "", recAddr, memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(sdk.TxResponse{}, errors.New("default error"))
@@ -94,6 +98,10 @@ func TestDistrClient_WithdrawRewards(t *testing.T) {
 	require.Equal(t, uint32(0), res.Code)
 
 	res, err = mockCli.Distribution().WithdrawRewards(fromInfo, passWd, valAddr[1:], memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	res, err = mockCli.Distribution().WithdrawRewards(fromInfo, "", valAddr, memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 

@@ -15,13 +15,13 @@ import (
 )
 
 const (
-	addr      = "okchain1alq9na49n9yycysh889rl90g9nhe58lcv27tfj"
+	addr      = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
 	name      = "alice"
 	passWd    = "12345678"
 	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
 	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
 	memo      = "my memo"
-	valAddr   = "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
+	valAddr   = "okchainvaloper1dcsxvxgj374dv3wt9szflf9nz6342juz7grk2y"
 	valConsPK = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
 	proxyAddr = "okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as"
 )

@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 )
 
@@ -73,30 +72,6 @@ func CheckTokenIssueParams(fromInfo keys.Info, passWd, orgSymbol, wholeName, tok
 
 	if len(wholeName) == 0 {
 		return errors.New("failed. empty whole name")
-	}
-
-	return nil
-}
-
-// CheckTokenMintParams gives a quick validity check for the input params of token minting
-func CheckTokenMintParams(fromInfo keys.Info, passWd string, amount sdk.DecCoin) error {
-	if err := CheckKeyParams(fromInfo, passWd); err != nil {
-		return err
-	}
-	if true == amount.IsNegative() {
-		return errors.New("failed. the amount of coin is negative")
-	}
-
-	return nil
-}
-
-// CheckTokenBurnParams gives a quick validity check for the input params of token burning
-func CheckTokenBurnParams(fromInfo keys.Info, passWd string, amount sdk.DecCoin) error {
-	if err := CheckKeyParams(fromInfo, passWd); err != nil {
-		return err
-	}
-	if true == amount.IsNegative() {
-		return errors.New("failed. the amount of coin is negative")
 	}
 
 	return nil

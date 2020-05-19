@@ -57,27 +57,37 @@ func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, to
 
 }
 
-//
-func (tc tokenClient) Mint(fromInfo keys.Info, passWd, memo string, amount sdk.DecCoin,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckTokenMintParams(fromInfo, passWd, amount); err != nil {
+// Mint increases the total supply of a kind of token by its owner
+func (tc tokenClient) Mint(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (resp sdk.TxResponse,
+	err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	msg := types.NewMsgTokenMint(amount, fromInfo.GetAddress())
+	coin, err := sdk.ParseDecCoin(coinsStr)
+	if err != nil {
+		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
+	}
+
+	msg := types.NewMsgTokenMint(coin, fromInfo.GetAddress())
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
 
-//
-func (tc tokenClient) Burn(fromInfo keys.Info, passWd, memo string, amount sdk.DecCoin,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckTokenBurnParams(fromInfo, passWd, amount); err != nil {
+// Burn decreases the total supply of a kind of token by burning a specific amount of that from the own account
+func (tc tokenClient) Burn(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (resp sdk.TxResponse,
+	err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	msg := types.NewMsgTokenBurn(amount, fromInfo.GetAddress())
+	coin, err := sdk.ParseDecCoin(coinsStr)
+	if err != nil {
+		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
+	}
+
+	msg := types.NewMsgTokenBurn(coin, fromInfo.GetAddress())
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 

@@ -20,6 +20,8 @@ type TokenTx interface {
 		sdk.TxResponse, error)
 	Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, totalSupply, tokenDesc, memo string, mintable bool, accNum,
 		seqNum uint64) (sdk.TxResponse, error)
+	Mint(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	Burn(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
 // TokenQuery shows the expected query behavior for inner token client

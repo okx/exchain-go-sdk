@@ -56,11 +56,13 @@ func (MsgMultiSend) Type() string                 { return "" }
 func (MsgMultiSend) ValidateBasic() sdk.Error     { return nil }
 func (MsgMultiSend) GetSigners() []sdk.AccAddress { return nil }
 
+// MsgTokenBurn - structure to burn token
 type MsgTokenBurn struct {
 	Amount sdk.DecCoin    `json:"amount"`
 	Owner  sdk.AccAddress `json:"owner"`
 }
 
+// NewMsgTokenBurn is a constructor function for MsgTokenBurn
 func NewMsgTokenBurn(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenBurn {
 	return MsgTokenBurn{
 		Amount: amount,
@@ -68,20 +70,24 @@ func NewMsgTokenBurn(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenBurn {
 	}
 }
 
+// GetSignBytes encodes the message for signing
 func (msg MsgTokenBurn) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
+// nolint
 func (msg MsgTokenBurn) Route() string { return "" }
 func (msg MsgTokenBurn) Type() string { return "" }
 func (msg MsgTokenBurn) ValidateBasic() sdk.Error {return nil}
 func (msg MsgTokenBurn) GetSigners() []sdk.AccAddress {return nil}
 
+// MsgTokenMint - structure to mint token
 type MsgTokenMint struct {
 	Amount sdk.DecCoin    `json:"amount"`
 	Owner  sdk.AccAddress `json:"owner"`
 }
 
+// NewMsgTokenMint is a constructor function for MsgTokenMint
 func NewMsgTokenMint(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenMint {
 	return MsgTokenMint{
 		Amount: amount,
@@ -89,10 +95,12 @@ func NewMsgTokenMint(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenMint {
 	}
 }
 
+// GetSignBytes encodes the message for signing
 func (msg MsgTokenMint) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
+// nolint
 func (msg MsgTokenMint) Route() string { return "" }
 func (msg MsgTokenMint) Type() string { return "" }
 func (msg MsgTokenMint) ValidateBasic() sdk.Error { return nil}

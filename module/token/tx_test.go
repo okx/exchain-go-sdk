@@ -257,3 +257,63 @@ func TestTokenClient_Burn(t *testing.T) {
 	require.Error(t, err)
 
 }
+
+func TestTokenClient_Edit(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+		1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTokenClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
+
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	expectedCdc := mockCli.GetCodec()
+	mockCli.EXPECT().GetCodec().Return(expectedCdc)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+
+	accInfo, err := mockCli.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+
+	mockCli.EXPECT().BuildAndBroadcast(
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
+		Return(mocks.DefaultMockSuccessTxResponse(), nil)
+
+	res, err := mockCli.Token().Edit(fromInfo, passWd, "okt", "new description", "new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+
+	res, err = mockCli.Token().Edit(fromInfo, passWd, "", "new description", "new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	res, err = mockCli.Token().Edit(fromInfo, passWd, "okt", "new description", ".new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	// build a invalid long token description
+	var buffer bytes.Buffer
+	for i := 0; i < 257; i++ {
+		_, _ = buffer.WriteString("a")
+	}
+	longDesc := buffer.String()
+	res, err = mockCli.Token().Edit(fromInfo, passWd, "okt", longDesc, "new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	res, err = mockCli.Token().Edit(fromInfo, "", "okt", "new description", "new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+	mockCli.EXPECT().BuildAndBroadcast(
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
+		Return(sdk.TxResponse{}, errors.New("default error"))
+	res, err = mockCli.Token().Edit(fromInfo, passWd, "okt", "new description", "new whole name",
+		memo, true, true, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
+
+}

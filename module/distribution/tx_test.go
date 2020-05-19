@@ -2,6 +2,7 @@ package distribution
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/mocks"
 	"github.com/okex/okchain-go-sdk/module/auth"
@@ -56,6 +57,11 @@ func TestDistrClient_SetWithdrawAddr(t *testing.T) {
 	require.Error(t, err)
 
 	_, err = mockCli.Distribution().SetWithdrawAddr(fromInfo, "", recAddr, memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	badParseAddr := fmt.Sprintf("%s%s", "okchain2", recAddr[8:])
+	_, err = mockCli.Distribution().SetWithdrawAddr(fromInfo, passWd, badParseAddr, memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 

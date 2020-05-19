@@ -255,4 +255,5 @@ func TestTokenClient_Burn(t *testing.T) {
 	res, err = mockCli.Token().Burn(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
+
 }

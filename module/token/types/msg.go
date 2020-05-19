@@ -76,10 +76,10 @@ func (msg MsgTokenBurn) GetSignBytes() []byte {
 }
 
 // nolint
-func (msg MsgTokenBurn) Route() string { return "" }
-func (msg MsgTokenBurn) Type() string { return "" }
-func (msg MsgTokenBurn) ValidateBasic() sdk.Error {return nil}
-func (msg MsgTokenBurn) GetSigners() []sdk.AccAddress {return nil}
+func (msg MsgTokenBurn) Route() string                { return "" }
+func (msg MsgTokenBurn) Type() string                 { return "" }
+func (msg MsgTokenBurn) ValidateBasic() sdk.Error     { return nil }
+func (msg MsgTokenBurn) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgTokenMint - structure to mint token
 type MsgTokenMint struct {
@@ -101,9 +101,9 @@ func (msg MsgTokenMint) GetSignBytes() []byte {
 }
 
 // nolint
-func (msg MsgTokenMint) Route() string { return "" }
-func (msg MsgTokenMint) Type() string { return "" }
-func (msg MsgTokenMint) ValidateBasic() sdk.Error { return nil}
+func (msg MsgTokenMint) Route() string            { return "" }
+func (msg MsgTokenMint) Type() string             { return "" }
+func (msg MsgTokenMint) ValidateBasic() sdk.Error { return nil }
 func (msg MsgTokenMint) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
@@ -143,3 +143,36 @@ func (MsgTokenIssue) Route() string                { return "" }
 func (MsgTokenIssue) Type() string                 { return "" }
 func (MsgTokenIssue) ValidateBasic() sdk.Error     { return nil }
 func (MsgTokenIssue) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgTokenModify - structure to edit the info of a specific token
+type MsgTokenModify struct {
+	Owner                 sdk.AccAddress `json:"owner"`
+	Symbol                string         `json:"symbol"`
+	Description           string         `json:"description"`
+	WholeName             string         `json:"whole_name"`
+	IsDescriptionModified bool           `json:"description_modified"`
+	IsWholeNameModified   bool           `json:"whole_name_modified"`
+}
+
+// NewMsgTokenModify creates a new instance of MsgTokenModify
+func NewMsgTokenModify(symbol, desc, wholeName string, isDescEdit, isWholeNameEdit bool, owner sdk.AccAddress) MsgTokenModify {
+	return MsgTokenModify{
+		Symbol:                symbol,
+		IsDescriptionModified: isDescEdit,
+		Description:           desc,
+		IsWholeNameModified:   isWholeNameEdit,
+		WholeName:             wholeName,
+		Owner:                 owner,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgTokenModify) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgTokenModify) Route() string                { return "" }
+func (MsgTokenModify) Type() string                 { return "" }
+func (MsgTokenModify) ValidateBasic() sdk.Error     { return nil }
+func (MsgTokenModify) GetSigners() []sdk.AccAddress { return nil }

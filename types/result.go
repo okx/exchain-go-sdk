@@ -110,10 +110,7 @@ func newTxResponseCheckTx(res *ctypes.ResultBroadcastTxCommit) TxResponse {
 		txHash = res.Hash.String()
 	}
 
-	parsedLogs, err := ParseABCILogs(res.CheckTx.Log)
-	if err != nil {
-		log.Println(err)
-	}
+	parsedLogs, _ := ParseABCILogs(res.CheckTx.Log)
 
 	return TxResponse{
 		Height:    res.Height,
@@ -163,10 +160,7 @@ func NewResponseFormatBroadcastTx(res *ctypes.ResultBroadcastTx) TxResponse {
 		return TxResponse{}
 	}
 
-	parsedLogs, err := ParseABCILogs(res.Log)
-	if err != nil {
-		log.Println(err)
-	}
+	parsedLogs, _ := ParseABCILogs(res.Log)
 
 	return TxResponse{
 		Code:   res.Code,

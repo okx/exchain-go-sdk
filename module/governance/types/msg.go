@@ -22,7 +22,7 @@ func NewMsgSubmitProposal(content Content, initialDeposit sdk.DecCoins, proposer
 
 // GetSignBytes encodes the message for signing
 func (msg MsgSubmitProposal) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+	return sdk.MustSortJSON(MsgCdc.MustMarshalJSON(msg))
 }
 
 // nolint

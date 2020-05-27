@@ -1,13 +1,10 @@
 package governance
 
 import (
-	"encoding/json"
 	"github.com/okex/okchain-go-sdk/module/governance/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
-	"io/ioutil"
 )
 
 // SubmitTextProposal submits the text proposal on OKChain
@@ -37,15 +34,29 @@ func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath,
 
 }
 
-func parseProposalFromFile(path string) (proposal types.Proposal, err error) {
-	contents, err := ioutil.ReadFile(path)
+// SubmitParamChangeProposal submits the proposal to change the params on OKChain
+func (gc govClient) SubmitParamChangeProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := parseParamChangeProposalFromFile(proposalPath)
 	if err != nil {
 		return
 	}
 
-	if err = json.Unmarshal(contents, &proposal); err != nil {
-		return proposal, utils.ErrUnmarshalJSON(err.Error())
-	}
+	msg := types.NewMsgSubmitProposal(
+		types.NewParameterChangeProposal(
+			proposal.Title,
+			proposal.Description,
+			proposal.Changes.ToParamChanges(),
+			proposal.Height,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
 
-	return
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
 }

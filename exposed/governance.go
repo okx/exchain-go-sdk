@@ -13,6 +13,6 @@ type Governance interface {
 
 // GovTx shows the expected tx behavior for inner governance client
 type GovTx interface {
-	SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, depositCoinsStr, memo string, accNum, seqNum uint64) (
+	SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, error)
 }

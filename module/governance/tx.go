@@ -11,8 +11,8 @@ import (
 )
 
 // SubmitTextProposal submits the text proposal on OKChain
-func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, depositCoinsStr, memo string, accNum,
-	seqNum uint64) (resp sdk.TxResponse, err error) {
+func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
@@ -22,7 +22,7 @@ func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath,
 		return
 	}
 
-	deposit, err := sdk.ParseDecCoins(depositCoinsStr)
+	deposit, err := sdk.ParseDecCoins(proposal.Deposit)
 	if err != nil {
 		return
 	}

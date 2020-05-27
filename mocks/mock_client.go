@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	distribution "github.com/okex/okchain-go-sdk/module/distribution/types"
+	governance "github.com/okex/okchain-go-sdk/module/governance/types"
 
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okchain-go-sdk/exposed"
@@ -89,6 +90,9 @@ func (mc *MockClient) Dex() exposed.Dex {
 }
 func (mc *MockClient) Distribution() exposed.Distribution {
 	return mc.modules[distribution.ModuleName].(exposed.Distribution)
+}
+func (mc *MockClient) Governance() exposed.Governance {
+	return mc.modules[governance.ModuleName].(exposed.Governance)
 }
 func (mc *MockClient) Order() exposed.Order {
 	return mc.modules[order.ModuleName].(exposed.Order)

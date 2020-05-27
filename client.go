@@ -8,6 +8,7 @@ import (
 	"github.com/okex/okchain-go-sdk/module/backend"
 	"github.com/okex/okchain-go-sdk/module/dex"
 	"github.com/okex/okchain-go-sdk/module/distribution"
+	"github.com/okex/okchain-go-sdk/module/governance"
 	"github.com/okex/okchain-go-sdk/module/order"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
@@ -38,6 +39,7 @@ func NewClient(config sdk.ClientConfig) Client {
 		backend.NewBackendClient(pBaseClient),
 		dex.NewDexClient(pBaseClient),
 		distribution.NewDistrClient(pBaseClient),
+		governance.NewGovClient(pBaseClient),
 		order.NewOrderClient(pBaseClient),
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
@@ -79,6 +81,9 @@ func (cli *Client) Dex() exposed.Dex {
 }
 func (cli *Client) Distribution() exposed.Distribution {
 	return cli.modules[distribution.ModuleName].(exposed.Distribution)
+}
+func (cli *Client) Governance() exposed.Governance {
+	return cli.modules[governance.ModuleName].(exposed.Governance)
 }
 func (cli *Client) Order() exposed.Order {
 	return cli.modules[order.ModuleName].(exposed.Order)

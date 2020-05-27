@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 

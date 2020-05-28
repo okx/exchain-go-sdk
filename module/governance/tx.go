@@ -115,3 +115,21 @@ func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd,
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+// Deposit increases the deposit amount on a specific proposal
+func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo string, proposalID, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckProposalDeposit(fromInfo, passWd, proposalID); err != nil {
+		return
+	}
+
+	deposit, err := sdk.ParseDecCoins(depositCoinsStr)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

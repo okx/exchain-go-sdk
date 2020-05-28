@@ -22,6 +22,7 @@ func init() {
 // RegisterCodec registers the msg type for governance module
 func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgSubmitProposal{}, "okchain/gov/MsgSubmitProposal")
+	cdc.RegisterConcrete(MsgDeposit{}, "okchain/gov/MsgDeposit")
 	cdc.RegisterInterface((*Content)(nil))
 	cdc.RegisterConcrete(TextProposal{}, "okchain/gov/TextProposal")
 	cdc.RegisterConcrete(ParameterChangeProposal{}, "okchain/params/ParameterChangeProposal")

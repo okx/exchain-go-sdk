@@ -119,7 +119,7 @@ func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd,
 // Deposit increases the deposit amount on a specific proposal
 func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo string, proposalID, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckProposalDeposit(fromInfo, passWd, proposalID); err != nil {
+	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
 		return
 	}
 
@@ -129,6 +129,25 @@ func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo st
 	}
 
 	msg := types.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}
+
+// Vote votes for an active proposal
+// options: yes/no/no_with_veto/abstain
+func (gc govClient) Vote(fromInfo keys.Info, passWd, voteOption, memo string, proposalID, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
+		return
+	}
+
+	voteOptionBytes, err := voteOptionFromString(voteOption)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgVote(fromInfo.GetAddress(), proposalID, voteOptionBytes)
 
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 

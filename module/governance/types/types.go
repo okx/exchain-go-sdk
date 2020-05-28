@@ -8,7 +8,11 @@ import (
 
 // const
 const (
-	ModuleName = "governance"
+	ModuleName                  = "governance"
+	OptionYes        VoteOption = 0x01
+	OptionAbstain    VoteOption = 0x02
+	OptionNo         VoteOption = 0x03
+	OptionNoWithVeto VoteOption = 0x04
 )
 
 var (
@@ -23,6 +27,8 @@ func init() {
 func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgSubmitProposal{}, "okchain/gov/MsgSubmitProposal")
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/gov/MsgDeposit")
+	cdc.RegisterConcrete(MsgVote{}, "okchain/gov/MsgVote")
+
 	cdc.RegisterInterface((*Content)(nil))
 	cdc.RegisterConcrete(TextProposal{}, "okchain/gov/TextProposal")
 	cdc.RegisterConcrete(ParameterChangeProposal{}, "okchain/params/ParameterChangeProposal")
@@ -234,3 +240,27 @@ func (CommunityPoolSpendProposal) ProposalRoute() string    { return "" }
 func (CommunityPoolSpendProposal) ProposalType() string     { return "" }
 func (CommunityPoolSpendProposal) String() string           { return "" }
 func (CommunityPoolSpendProposal) ValidateBasic() sdk.Error { return nil }
+
+// VoteOption defines a vote option
+type VoteOption byte
+
+// MarshalJSON Marshals to JSON using string
+func (vo VoteOption) MarshalJSON() ([]byte, error) {
+	return json.Marshal(vo.String())
+}
+
+// String implements the Stringer interface
+func (vo VoteOption) String() string {
+	switch vo {
+	case OptionYes:
+		return "Yes"
+	case OptionAbstain:
+		return "Abstain"
+	case OptionNo:
+		return "No"
+	case OptionNoWithVeto:
+		return "NoWithVeto"
+	default:
+		return ""
+	}
+}

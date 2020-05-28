@@ -74,12 +74,39 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 	}
 
 	msg := types.NewMsgSubmitProposal(
-		types.NewDelistTokenPairProposal(
+		types.NewDelistProposal(
 			proposal.Title,
 			proposal.Description,
 			fromInfo.GetAddress(),
 			proposal.BaseAsset,
 			proposal.QuoteAsset,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}
+
+// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
+func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := parseCommunityPoolSpendProposalFromFile(proposalPath)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgSubmitProposal(
+		types.NewCommunityPoolSpendProposal(
+			proposal.Title,
+			proposal.Description,
+			proposal.Recipient,
+			proposal.Amount,
 		),
 		proposal.Deposit,
 		fromInfo.GetAddress(),

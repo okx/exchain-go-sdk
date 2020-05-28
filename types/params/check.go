@@ -22,6 +22,19 @@ var (
 	reWhole = regexp.MustCompile(fmt.Sprintf(`^%s$`, reWholeName))
 )
 
+// CheckProposalDeposit gives a quick validity check for the input params of the deposit on a proposal
+func CheckProposalDeposit(fromInfo keys.Info, passWd string, proposalID uint64) error {
+	if err := CheckKeyParams(fromInfo, passWd); err != nil {
+		return err
+	}
+
+	if proposalID <= 0 {
+		return errors.New("failed. proposal ID must be positive")
+	}
+
+	return nil
+}
+
 // CheckTokenEditParams gives a quick validity check for the input params of token info editing
 func CheckTokenEditParams(fromInfo keys.Info, passWd, symbol, description, wholeName string, isDescEdit, isWholeNameEdit bool) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {

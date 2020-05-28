@@ -22,8 +22,8 @@ var (
 	reWhole = regexp.MustCompile(fmt.Sprintf(`^%s$`, reWholeName))
 )
 
-// CheckProposalDeposit gives a quick validity check for the input params of the deposit on a proposal
-func CheckProposalDeposit(fromInfo keys.Info, passWd string, proposalID uint64) error {
+// CheckProposalOperation gives a quick validity check for the input params of the proposal operation with proposal ID
+func CheckProposalOperation(fromInfo keys.Info, passWd string, proposalID uint64) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}

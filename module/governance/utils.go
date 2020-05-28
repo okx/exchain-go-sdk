@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 )
 
-func parseProposalFromFile(path string) (proposal types.Proposal, err error) {
+func parseProposalFromFile(path string) (proposal types.ProposalJSON, err error) {
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return
@@ -20,7 +20,7 @@ func parseProposalFromFile(path string) (proposal types.Proposal, err error) {
 	return
 }
 
-func parseParamChangeProposalFromFile(path string) (proposal types.ParamChangeProposal, err error) {
+func parseParamChangeProposalFromFile(path string) (proposal types.ParamChangeProposalJSON, err error) {
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return
@@ -33,7 +33,20 @@ func parseParamChangeProposalFromFile(path string) (proposal types.ParamChangePr
 	return
 }
 
-func parseDelistProposalFromFile(path string) (proposal types.DelistProposal, err error) {
+func parseDelistProposalFromFile(path string) (proposal types.DelistProposalJSON, err error) {
+	contents, err := ioutil.ReadFile(path)
+	if err != nil {
+		return
+	}
+
+	if err = types.MsgCdc.UnmarshalJSON(contents, &proposal); err != nil {
+		return proposal, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}
+
+func parseCommunityPoolSpendProposalFromFile(path string) (proposal types.CommunityPoolSpendProposalJSON, err error) {
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return

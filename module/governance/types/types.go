@@ -25,20 +25,22 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterInterface((*Content)(nil))
 	cdc.RegisterConcrete(TextProposal{}, "okchain/gov/TextProposal")
 	cdc.RegisterConcrete(ParameterChangeProposal{}, "okchain/params/ParameterChangeProposal")
-	cdc.RegisterConcrete(DelistTokenPairProposal{}, "okchain/dex/DelistProposal")
+	cdc.RegisterConcrete(DelistProposal{}, "okchain/dex/DelistProposal")
+	cdc.RegisterConcrete(CommunityPoolSpendProposal{}, "okchain/distribution/CommunityPoolSpendProposal")
 }
 
 type (
-	// Proposal - structure for a standard proposal from the JSON file
-	Proposal struct {
+	// ProposalJSON - structure for a standard proposal from the JSON file
+	ProposalJSON struct {
 		Title        string
 		Description  string
 		ProposalType string
 		Deposit      string
 	}
 
-	// Proposal - structure for a standard proposal from the JSON file
-	ParamChangeProposal struct {
+	// ParamChangeProposalJSON - structure for a ParamChangeProposal with a deposit used to parse parameter change proposals
+	// from the JSON file
+	ParamChangeProposalJSON struct {
 		Title       string           `json:"title"`
 		Description string           `json:"description"`
 		Changes     ParamChangesJSON `json:"changes"`
@@ -46,13 +48,23 @@ type (
 		Height      uint64           `json:"height"`
 	}
 
-	// DelistProposal defines a DelistProposal with a deposit used to parse parameter change proposals from the JSON file
-	DelistProposal struct {
+	// DelistProposalJSON - structure for a DelistProposal with a deposit used to parse delist proposals from the JSON file
+	DelistProposalJSON struct {
 		Title       string       `json:"title"`
 		Description string       `json:"description"`
 		BaseAsset   string       `json:"base_asset"`
 		QuoteAsset  string       `json:"quote_asset"`
 		Deposit     sdk.DecCoins `json:"deposit"`
+	}
+
+	// CommunityPoolSpendProposalJSON - structure for a CommunityPoolSpendProposal used to parse community pool spend proposals
+	// from the JSON file
+	CommunityPoolSpendProposalJSON struct {
+		Title       string         `json:"title"`
+		Description string         `json:"description"`
+		Recipient   sdk.AccAddress `json:"recipient"`
+		Amount      sdk.DecCoins   `json:"amount"`
+		Deposit     sdk.DecCoins   `json:"deposit"`
 	}
 )
 
@@ -102,7 +114,8 @@ type Content interface {
 var (
 	_ Content = (*TextProposal)(nil)
 	_ Content = (*ParameterChangeProposal)(nil)
-	_ Content = (*DelistTokenPairProposal)(nil)
+	_ Content = (*DelistProposal)(nil)
+	_ Content = (*CommunityPoolSpendProposal)(nil)
 )
 
 // TextProposal - structure for a text proposal that implements interface Content
@@ -165,8 +178,8 @@ func (ParameterChangeProposal) ProposalType() string     { return "" }
 func (ParameterChangeProposal) String() string           { return "" }
 func (ParameterChangeProposal) ValidateBasic() sdk.Error { return nil }
 
-// DelistTokenPairProposal - structure of a delist token pair proposal that implements interface Content
-type DelistTokenPairProposal struct {
+// DelistProposal - structure of a delist proposal that implements interface Content
+type DelistProposal struct {
 	Title       string         `json:"title"`
 	Description string         `json:"description"`
 	Proposer    sdk.AccAddress `json:"proposer"`
@@ -174,10 +187,10 @@ type DelistTokenPairProposal struct {
 	QuoteAsset  string         `json:"quote_asset"`
 }
 
-// NewDelistTokenPairProposal is a constructor function for DelistTokenPairProposal
-func NewDelistTokenPairProposal(title, description string, proposer sdk.AccAddress, baseAsset, quoteAsset string,
-) DelistTokenPairProposal {
-	return DelistTokenPairProposal{
+// NewDelistProposal is a constructor function for DelistProposal
+func NewDelistProposal(title, description string, proposer sdk.AccAddress, baseAsset, quoteAsset string,
+) DelistProposal {
+	return DelistProposal{
 		Title:       title,
 		Description: description,
 		Proposer:    proposer,
@@ -187,9 +200,36 @@ func NewDelistTokenPairProposal(title, description string, proposer sdk.AccAddre
 }
 
 // nolint
-func (DelistTokenPairProposal) GetTitle() string         { return "" }
-func (DelistTokenPairProposal) GetDescription() string   { return "" }
-func (DelistTokenPairProposal) ProposalRoute() string    { return "" }
-func (DelistTokenPairProposal) ProposalType() string     { return "" }
-func (DelistTokenPairProposal) String() string           { return "" }
-func (DelistTokenPairProposal) ValidateBasic() sdk.Error { return nil }
+func (DelistProposal) GetTitle() string         { return "" }
+func (DelistProposal) GetDescription() string   { return "" }
+func (DelistProposal) ProposalRoute() string    { return "" }
+func (DelistProposal) ProposalType() string     { return "" }
+func (DelistProposal) String() string           { return "" }
+func (DelistProposal) ValidateBasic() sdk.Error { return nil }
+
+// CommunityPoolSpendProposal - structure of a community pool spend proposal that implements interface Content
+type CommunityPoolSpendProposal struct {
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	Recipient   sdk.AccAddress `json:"recipient"`
+	Amount      sdk.DecCoins   `json:"amount"`
+}
+
+// NewCommunityPoolSpendProposal is a constructor function for CommunityPoolSpendProposal
+func NewCommunityPoolSpendProposal(title, description string, recipient sdk.AccAddress, amount sdk.DecCoins,
+) CommunityPoolSpendProposal {
+	return CommunityPoolSpendProposal{
+		title,
+		description,
+		recipient,
+		amount,
+	}
+}
+
+// nolint
+func (CommunityPoolSpendProposal) GetTitle() string         { return "" }
+func (CommunityPoolSpendProposal) GetDescription() string   { return "" }
+func (CommunityPoolSpendProposal) ProposalRoute() string    { return "" }
+func (CommunityPoolSpendProposal) ProposalType() string     { return "" }
+func (CommunityPoolSpendProposal) String() string           { return "" }
+func (CommunityPoolSpendProposal) ValidateBasic() sdk.Error { return nil }

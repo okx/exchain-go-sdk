@@ -361,13 +361,26 @@ func TestGovClient_Vote(t *testing.T) {
 
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-		Return(mocks.DefaultMockSuccessTxResponse(), nil)
+		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(4)
 
 	res, err := mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 1, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "Abstain", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no_with_veto", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	// error
 	_, err = mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 0, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
@@ -376,7 +389,7 @@ func TestGovClient_Vote(t *testing.T) {
 		accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Governance().Vote(fromInfo, passWd, "", memo, 0, accInfo.GetAccountNumber(),
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "", memo, 1, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 

@@ -25,6 +25,7 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterInterface((*Content)(nil))
 	cdc.RegisterConcrete(TextProposal{}, "okchain/gov/TextProposal")
 	cdc.RegisterConcrete(ParameterChangeProposal{}, "okchain/params/ParameterChangeProposal")
+	cdc.RegisterConcrete(DelistTokenPairProposal{}, "okchain/dex/DelistProposal")
 }
 
 type (
@@ -43,6 +44,15 @@ type (
 		Changes     ParamChangesJSON `json:"changes"`
 		Deposit     sdk.DecCoins     `json:"deposit"`
 		Height      uint64           `json:"height"`
+	}
+
+	// DelistProposal defines a DelistProposal with a deposit used to parse parameter change proposals from the JSON file
+	DelistProposal struct {
+		Title       string       `json:"title"`
+		Description string       `json:"description"`
+		BaseAsset   string       `json:"base_asset"`
+		QuoteAsset  string       `json:"quote_asset"`
+		Deposit     sdk.DecCoins `json:"deposit"`
 	}
 )
 
@@ -92,6 +102,7 @@ type Content interface {
 var (
 	_ Content = (*TextProposal)(nil)
 	_ Content = (*ParameterChangeProposal)(nil)
+	_ Content = (*DelistTokenPairProposal)(nil)
 )
 
 // TextProposal - structure for a text proposal that implements interface Content
@@ -153,3 +164,32 @@ func (ParameterChangeProposal) ProposalRoute() string    { return "" }
 func (ParameterChangeProposal) ProposalType() string     { return "" }
 func (ParameterChangeProposal) String() string           { return "" }
 func (ParameterChangeProposal) ValidateBasic() sdk.Error { return nil }
+
+// DelistTokenPairProposal - structure of a delist token pair proposal that implements interface Content
+type DelistTokenPairProposal struct {
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	Proposer    sdk.AccAddress `json:"proposer"`
+	BaseAsset   string         `json:"base_asset"`
+	QuoteAsset  string         `json:"quote_asset"`
+}
+
+// NewDelistTokenPairProposal is a constructor function for DelistTokenPairProposal
+func NewDelistTokenPairProposal(title, description string, proposer sdk.AccAddress, baseAsset, quoteAsset string,
+) DelistTokenPairProposal {
+	return DelistTokenPairProposal{
+		Title:       title,
+		Description: description,
+		Proposer:    proposer,
+		BaseAsset:   baseAsset,
+		QuoteAsset:  quoteAsset,
+	}
+}
+
+// nolint
+func (DelistTokenPairProposal) GetTitle() string         { return "" }
+func (DelistTokenPairProposal) GetDescription() string   { return "" }
+func (DelistTokenPairProposal) ProposalRoute() string    { return "" }
+func (DelistTokenPairProposal) ProposalType() string     { return "" }
+func (DelistTokenPairProposal) String() string           { return "" }
+func (DelistTokenPairProposal) ValidateBasic() sdk.Error { return nil }

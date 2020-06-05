@@ -28,7 +28,7 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 		proposalParams.Depositor = depositorAddr
 	}
 	if len(voterAddrStr) != 0 {
-		voterAddr, err = sdk.AccAddressFromBech32(depositorAddrStr)
+		voterAddr, err = sdk.AccAddressFromBech32(voterAddrStr)
 		if err != nil {
 			return
 		}

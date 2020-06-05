@@ -2,17 +2,26 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
+	"time"
 
 	sdk "github.com/okex/okchain-go-sdk/types"
 )
 
 // const
 const (
-	ModuleName                  = "governance"
-	OptionYes        VoteOption = 0x01
-	OptionAbstain    VoteOption = 0x02
-	OptionNo         VoteOption = 0x03
-	OptionNoWithVeto VoteOption = 0x04
+	ModuleName                         = "governance"
+	ProposalsPath                      = "custom/gov/proposals"
+	OptionYes           VoteOption     = 0x01
+	OptionAbstain       VoteOption     = 0x02
+	OptionNo            VoteOption     = 0x03
+	OptionNoWithVeto    VoteOption     = 0x04
+	StatusNil           ProposalStatus = 0x00
+	StatusDepositPeriod ProposalStatus = 0x01
+	StatusVotingPeriod  ProposalStatus = 0x02
+	StatusPassed        ProposalStatus = 0x03
+	StatusRejected      ProposalStatus = 0x04
+	StatusFailed        ProposalStatus = 0x05
 )
 
 var (
@@ -262,5 +271,120 @@ func (vo VoteOption) String() string {
 		return "NoWithVeto"
 	default:
 		return ""
+	}
+}
+
+// Proposal - structure used by the governance module to allow for voting on network changes
+type Proposal struct {
+	Content          `json:"content"`
+	ProposalID       uint64         `json:"id"`
+	Status           ProposalStatus `json:"proposal_status"`
+	FinalTallyResult TallyResult    `json:"final_tally_result"`
+	SubmitTime       time.Time      `json:"submit_time"`
+	DepositEndTime   time.Time      `json:"deposit_end_time"`
+	TotalDeposit     sdk.DecCoins   `json:"total_deposit"`
+	VotingStartTime  time.Time      `json:"voting_start_time"`
+	VotingEndTime    time.Time      `json:"voting_end_time"`
+}
+
+// String returns a human readable string representation of Proposal
+func (p Proposal) String() string {
+	return fmt.Sprintf(`Proposal %d:
+  Title:              %s
+  Type:               %s
+  Status:             %s
+  Submit Time:        %s
+  Deposit End Time:   %s
+  Total Deposit:      %s
+  Voting Start Time:  %s
+  Voting End Time:    %s
+  Description:        %s`,
+		p.ProposalID, p.GetTitle(), p.ProposalType(),
+		p.Status, p.SubmitTime, p.DepositEndTime,
+		p.TotalDeposit, p.VotingStartTime, p.VotingEndTime, p.GetDescription(),
+	)
+}
+
+// TallyResult - structure of the tally results statistics
+type TallyResult struct {
+	TotalPower      sdk.Dec `json:"total_power"`
+	TotalVotedPower sdk.Dec `json:"total_voted_power"`
+	Yes             sdk.Dec `json:"yes"`
+	Abstain         sdk.Dec `json:"abstain"`
+	No              sdk.Dec `json:"no"`
+	NoWithVeto      sdk.Dec `json:"no_with_veto"`
+}
+
+// ProposalStatus is a type alias that represents a proposal status as a byte
+type ProposalStatus byte
+
+// MarshalJSON marshals to JSON using string
+func (status ProposalStatus) MarshalJSON() ([]byte, error) {
+	return json.Marshal(status.String())
+}
+
+// UnmarshalJSON unmarshals from JSON assuming Bech32 encoding
+func (status *ProposalStatus) UnmarshalJSON(data []byte) error {
+	var s string
+	err := json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+
+	bz2, err := ProposalStatusFromString(s)
+	if err != nil {
+		return err
+	}
+
+	*status = bz2
+	return nil
+}
+
+// String implements the Stringer interface
+func (status ProposalStatus) String() string {
+	switch status {
+	case StatusDepositPeriod:
+		return "DepositPeriod"
+
+	case StatusVotingPeriod:
+		return "VotingPeriod"
+
+	case StatusPassed:
+		return "Passed"
+
+	case StatusRejected:
+		return "Rejected"
+
+	case StatusFailed:
+		return "Failed"
+
+	default:
+		return ""
+	}
+}
+
+// ProposalStatusToString turns a string into a ProposalStatus
+func ProposalStatusFromString(status string) (ProposalStatus, error) {
+	switch status {
+	case "DepositPeriod", "deposit_period":
+		return StatusDepositPeriod, nil
+
+	case "VotingPeriod", "voting_period":
+		return StatusVotingPeriod, nil
+
+	case "Passed", "passed":
+		return StatusPassed, nil
+
+	case "Rejected", "rejected":
+		return StatusRejected, nil
+
+	case "Failed", "failed":
+		return StatusFailed, nil
+
+	case "":
+		return StatusNil, nil
+
+	default:
+		return ProposalStatus(0xff), fmt.Errorf("failed. '%s' is not a valid proposal status", status)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	govtypes "github.com/okex/okchain-go-sdk/module/governance/types"
 	"github.com/okex/okchain-go-sdk/types"
 )
 
@@ -229,4 +230,22 @@ func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams,
 		Page:    page,
 		PerPage: perPage,
 	}, nil
+}
+
+// QueryProposalsParams defines query params of proposals in gov
+type QueryProposalsParams struct {
+	Voter          types.AccAddress
+	Depositor      types.AccAddress
+	ProposalStatus govtypes.ProposalStatus
+	Limit          uint64
+}
+
+// NewQueryProposalsParams creates a new instance of QueryProposalsParams
+func NewQueryProposalsParams(status govtypes.ProposalStatus, limit uint64, voter, depositor types.AccAddress) QueryProposalsParams {
+	return QueryProposalsParams{
+		Voter:          voter,
+		Depositor:      depositor,
+		ProposalStatus: status,
+		Limit:          limit,
+	}
 }

@@ -40,7 +40,6 @@ func TestTokenClient_QueryAccountTokensInfo(t *testing.T) {
 	expectedCdc := mockCli.GetCodec()
 
 	queryParams := params.NewQueryAccTokenParams("", "all")
-	require.NoError(t, err)
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)

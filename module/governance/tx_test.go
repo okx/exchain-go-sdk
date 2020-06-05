@@ -14,15 +14,6 @@ import (
 )
 
 const (
-	addr      = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
-	name      = "alice"
-	passWd    = "12345678"
-	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
-	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
-	memo      = "my memo"
-)
-
-const (
 	textProposalFilePath               = "./text_proposal.json"
 	paramChangeProposalFilePath        = "./param_change_proposal.json"
 	delistProposalFilePath             = "./delist_proposal.json"

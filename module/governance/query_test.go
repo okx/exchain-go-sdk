@@ -78,10 +78,19 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	_, err = mockCli.Governance().QueryProposals("", "", "", 0)
 	require.Error(t, err)
 
-	depositorAddr,err=sdk.AccAddressFromBech32(addr)
-	require.NoError(t,err)
-	voterAddr,err=sdk.AccAddressFromBech32(addr)
-	require.NoError(t,err)
+	_, err = mockCli.Governance().QueryProposals(addr[1:], addr, "deposit_period", 1)
+	require.Error(t, err)
+
+	_, err = mockCli.Governance().QueryProposals(addr, addr[1:], "deposit_period", 1)
+	require.Error(t, err)
+
+	_, err = mockCli.Governance().QueryProposals(addr, addr, "unknown status", 1)
+	require.Error(t, err)
+
+	depositorAddr, err = sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+	voterAddr, err = sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
 	queryParams = params.NewQueryProposalsParams(types.StatusDepositPeriod, 1, voterAddr, depositorAddr)
 	queryBytes = expectedCdc.MustMarshalJSON(queryParams)
 

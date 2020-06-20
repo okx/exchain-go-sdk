@@ -124,7 +124,7 @@ func TestStakingClient_DestroyValidator(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestStakingClient_Delegate(t *testing.T) {
+func TestStakingClient_Deposit(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
@@ -148,18 +148,18 @@ func TestStakingClient_Delegate(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().Delegate(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().Deposit(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().Delegate(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Deposit(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Delegate(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Deposit(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 
-func TestStakingClient_Unbond(t *testing.T) {
+func TestStakingClient_Withdraw(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
@@ -183,18 +183,18 @@ func TestStakingClient_Unbond(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().Unbond(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().Withdraw(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().Unbond(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Withdraw(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Unbond(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Withdraw(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 
-func TestStakingClient_Vote(t *testing.T) {
+func TestStakingClient_AddShares(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
@@ -218,22 +218,22 @@ func TestStakingClient_Vote(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().Vote(fromInfo, passWd, []string{valAddr}, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().AddShares(fromInfo, passWd, []string{valAddr}, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().Vote(fromInfo, passWd, []string{}, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().AddShares(fromInfo, passWd, []string{}, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Vote(fromInfo, passWd, []string{valAddr, valAddr}, memo, accInfo.GetAccountNumber(),
+	_, err = mockCli.Staking().AddShares(fromInfo, passWd, []string{valAddr, valAddr}, memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Vote(fromInfo, passWd, []string{valAddr, valAddr[1:]}, memo, accInfo.GetAccountNumber(),
+	_, err = mockCli.Staking().AddShares(fromInfo, passWd, []string{valAddr, valAddr[1:]}, memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Vote(fromInfo, "", []string{valAddr}, memo, accInfo.GetAccountNumber(),
+	_, err = mockCli.Staking().AddShares(fromInfo, "", []string{valAddr}, memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.Error(t, err)
 }

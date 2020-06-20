@@ -6,80 +6,80 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
-// MsgDelegate - structure for delegating to exchange the votes
-type MsgDelegate struct {
+// MsgDeposit - structure for depositing to the delegator account
+type MsgDeposit struct {
 	DelegatorAddress sdk.AccAddress `json:"delegator_address"`
 	Amount           sdk.DecCoin    `json:"quantity"`
 }
 
-// NewMsgDelegate creates a msg of delegating
-func NewMsgDelegate(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgDelegate {
-	return MsgDelegate{
+// NewMsgDeposit creates a msg of delegating
+func NewMsgDeposit(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgDeposit {
+	return MsgDeposit{
 		DelegatorAddress: delAddr,
 		Amount:           amount,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgDelegate) GetSignBytes() []byte {
+func (msg MsgDeposit) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgDelegate) Route() string                { return "" }
-func (MsgDelegate) Type() string                 { return "" }
-func (MsgDelegate) ValidateBasic() sdk.Error     { return nil }
-func (MsgDelegate) GetSigners() []sdk.AccAddress { return nil }
+func (MsgDeposit) Route() string                { return "" }
+func (MsgDeposit) Type() string                 { return "" }
+func (MsgDeposit) ValidateBasic() sdk.Error     { return nil }
+func (MsgDeposit) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgUndelegate - structure for delegating to exchange the votes
-type MsgUndelegate struct {
+// MsgWithdraw - structure for withdrawing okt and the corresponding shares from all validators
+type MsgWithdraw struct {
 	DelegatorAddress sdk.AccAddress `json:"delegator_address" `
 	Amount           sdk.DecCoin    `json:"quantity"`
 }
 
-// NewMsgUndelegate creates a msg of undelegating
-func NewMsgUndelegate(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgUndelegate {
-	return MsgUndelegate{
+// NewMsgWithdraw creates a new instance of MsgWithdraw
+func NewMsgWithdraw(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgWithdraw {
+	return MsgWithdraw{
 		DelegatorAddress: delAddr,
 		Amount:           amount,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgUndelegate) GetSignBytes() []byte {
+func (msg MsgWithdraw) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgUndelegate) Route() string                { return "" }
-func (MsgUndelegate) Type() string                 { return "" }
-func (MsgUndelegate) ValidateBasic() sdk.Error     { return nil }
-func (MsgUndelegate) GetSigners() []sdk.AccAddress { return nil }
+func (MsgWithdraw) Route() string                { return "" }
+func (MsgWithdraw) Type() string                 { return "" }
+func (MsgWithdraw) ValidateBasic() sdk.Error     { return nil }
+func (MsgWithdraw) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgVote - structure for voting transactions
-type MsgVote struct {
+// MsgAddShares - structure for adding-shares transaction
+type MsgAddShares struct {
 	DelAddr  sdk.AccAddress   `json:"delegator_address"`
 	ValAddrs []sdk.ValAddress `json:"validator_addresses"`
 }
 
-// NewMsgVote creates a msg of multi voting
-func NewMsgVote(delAddr sdk.AccAddress, valAddrs []sdk.ValAddress) MsgVote {
-	return MsgVote{
+// NewMsgAddShares creates a msg of adding shares to vals
+func NewMsgAddShares(delAddr sdk.AccAddress, valAddrs []sdk.ValAddress) MsgAddShares {
+	return MsgAddShares{
 		DelAddr:  delAddr,
 		ValAddrs: valAddrs,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgVote) GetSignBytes() []byte {
+func (msg MsgAddShares) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgVote) Route() string                { return "" }
-func (MsgVote) Type() string                 { return "" }
-func (MsgVote) ValidateBasic() sdk.Error     { return nil }
-func (MsgVote) GetSigners() []sdk.AccAddress { return nil }
+func (MsgAddShares) Route() string                { return "" }
+func (MsgAddShares) Type() string                 { return "" }
+func (MsgAddShares) ValidateBasic() sdk.Error     { return nil }
+func (MsgAddShares) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgDestroyValidator - structure to deregister a validator
 type MsgDestroyValidator struct {

@@ -66,11 +66,11 @@ func main() {
 
 	log.Println(res)
 
-	//-------------------- 4. delegate for staking --------------------//
+	//-------------------- 4. deposit for staking --------------------//
 
 	// increase sequence number
 	sequenceNum++
-	res, err = cli.Staking().Delegate(fromInfo, passWd, "0.1"+baseCoin, "my memo", accountNum, sequenceNum)
+	res, err = cli.Staking().Deposit(fromInfo, passWd, "0.1"+baseCoin, "my memo", accountNum, sequenceNum)
 	if err != nil {
 		log.Fatal(err)
 	}

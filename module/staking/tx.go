@@ -45,9 +45,9 @@ func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo stri
 }
 
 // Vote votes to the some specific validators
-func (sc stakingClient) Vote(fromInfo keys.Info, passWd string, valAddrsStr []string, memo string, accNum, seqNum uint64) (
+func (sc stakingClient) AddShares(fromInfo keys.Info, passWd string, valAddrsStr []string, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
-	if err = params.CheckVoteParams(fromInfo, passWd, valAddrsStr); err != nil {
+	if err = params.CheckAddSharesParams(fromInfo, passWd, valAddrsStr); err != nil {
 		return
 	}
 
@@ -56,7 +56,7 @@ func (sc stakingClient) Vote(fromInfo keys.Info, passWd string, valAddrsStr []st
 		return resp, fmt.Errorf("failed. validator address parsed error: %s", err.Error())
 	}
 
-	msg := types.NewMsgVote(fromInfo.GetAddress(), valAddrs)
+	msg := types.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 

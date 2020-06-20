@@ -137,8 +137,8 @@ func CheckTransferUnitsParams(fromInfo keys.Info, passWd string, transfers []tok
 	return nil
 }
 
-// CheckVoteParams gives a quick validity check for the input params of multi-voting
-func CheckVoteParams(fromInfo keys.Info, passWd string, valAddrs []string) error {
+// CheckAddSharesParams gives a quick validity check for the input params of multi-voting
+func CheckAddSharesParams(fromInfo keys.Info, passWd string, valAddrs []string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}

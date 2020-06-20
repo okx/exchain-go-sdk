@@ -56,30 +56,30 @@ func (MsgWithdraw) Type() string                 { return "" }
 func (MsgWithdraw) ValidateBasic() sdk.Error     { return nil }
 func (MsgWithdraw) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgVote - structure for voting transactions
-type MsgVote struct {
+// MsgAddShares - structure for adding-shares transaction
+type MsgAddShares struct {
 	DelAddr  sdk.AccAddress   `json:"delegator_address"`
 	ValAddrs []sdk.ValAddress `json:"validator_addresses"`
 }
 
-// NewMsgVote creates a msg of multi voting
-func NewMsgVote(delAddr sdk.AccAddress, valAddrs []sdk.ValAddress) MsgVote {
-	return MsgVote{
+// NewMsgAddShares creates a msg of adding shares to vals
+func NewMsgAddShares(delAddr sdk.AccAddress, valAddrs []sdk.ValAddress) MsgAddShares {
+	return MsgAddShares{
 		DelAddr:  delAddr,
 		ValAddrs: valAddrs,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgVote) GetSignBytes() []byte {
+func (msg MsgAddShares) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgVote) Route() string                { return "" }
-func (MsgVote) Type() string                 { return "" }
-func (MsgVote) ValidateBasic() sdk.Error     { return nil }
-func (MsgVote) GetSigners() []sdk.AccAddress { return nil }
+func (MsgAddShares) Route() string                { return "" }
+func (MsgAddShares) Type() string                 { return "" }
+func (MsgAddShares) ValidateBasic() sdk.Error     { return nil }
+func (MsgAddShares) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgDestroyValidator - structure to deregister a validator
 type MsgDestroyValidator struct {

@@ -6,30 +6,30 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
-// MsgDelegate - structure for delegating to exchange the votes
-type MsgDelegate struct {
+// MsgDeposit - structure for depositing to the delegator account
+type MsgDeposit struct {
 	DelegatorAddress sdk.AccAddress `json:"delegator_address"`
 	Amount           sdk.DecCoin    `json:"quantity"`
 }
 
-// NewMsgDelegate creates a msg of delegating
-func NewMsgDelegate(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgDelegate {
-	return MsgDelegate{
+// NewMsgDeposit creates a msg of delegating
+func NewMsgDeposit(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgDeposit {
+	return MsgDeposit{
 		DelegatorAddress: delAddr,
 		Amount:           amount,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgDelegate) GetSignBytes() []byte {
+func (msg MsgDeposit) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgDelegate) Route() string                { return "" }
-func (MsgDelegate) Type() string                 { return "" }
-func (MsgDelegate) ValidateBasic() sdk.Error     { return nil }
-func (MsgDelegate) GetSigners() []sdk.AccAddress { return nil }
+func (MsgDeposit) Route() string                { return "" }
+func (MsgDeposit) Type() string                 { return "" }
+func (MsgDeposit) ValidateBasic() sdk.Error     { return nil }
+func (MsgDeposit) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgUndelegate - structure for delegating to exchange the votes
 type MsgUndelegate struct {

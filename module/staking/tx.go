@@ -10,7 +10,7 @@ import (
 )
 
 // Delegate delegates okt for voting
-func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (
+func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
@@ -21,7 +21,7 @@ func (sc stakingClient) Delegate(fromInfo keys.Info, passWd, coinsStr, memo stri
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgDelegate(fromInfo.GetAddress(), coin)
+	msg := types.NewMsgDeposit(fromInfo.GetAddress(), coin)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }

@@ -159,7 +159,7 @@ func TestStakingClient_Deposit(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestStakingClient_Unbond(t *testing.T) {
+func TestStakingClient_Withdraw(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
@@ -183,14 +183,14 @@ func TestStakingClient_Unbond(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().Unbond(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().Withdraw(fromInfo, passWd, "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().Unbond(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Withdraw(fromInfo, passWd, "1024.1024", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().Unbond(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().Withdraw(fromInfo, "", "1024.1024okt", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 

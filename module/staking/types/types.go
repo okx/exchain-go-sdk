@@ -33,7 +33,7 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgCreateValidator{}, "okchain/staking/MsgCreateValidator")
 	cdc.RegisterConcrete(MsgEditValidator{}, "okchain/staking/MsgEditValidator")
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/staking/MsgDeposit")
-	cdc.RegisterConcrete(MsgUndelegate{}, "okchain/staking/MsgUnDelegate")
+	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/staking/MsgWithdraw")
 	cdc.RegisterConcrete(MsgVote{}, "okchain/staking/MsgVote")
 	cdc.RegisterConcrete(MsgDestroyValidator{}, "okchain/staking/MsgDestroyValidator")
 	cdc.RegisterConcrete(MsgRegProxy{}, "okchain/staking/MsgRegProxy")

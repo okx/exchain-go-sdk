@@ -9,7 +9,7 @@ import (
 	"github.com/okex/okchain-go-sdk/utils"
 )
 
-// Delegate delegates okt for voting
+// Deposit deposits an amount of okt to delegator account
 func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -26,8 +26,8 @@ func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo strin
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// Unbond unbonds the delegation on okchain
-func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (
+// Withdraw withdraws an amount of okt and the corresponding shares from all validators
+func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
@@ -38,7 +38,7 @@ func (sc stakingClient) Unbond(fromInfo keys.Info, passWd, coinsStr, memo string
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgUndelegate(fromInfo.GetAddress(), coin)
+	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), coin)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 

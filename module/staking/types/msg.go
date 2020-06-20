@@ -31,30 +31,30 @@ func (MsgDeposit) Type() string                 { return "" }
 func (MsgDeposit) ValidateBasic() sdk.Error     { return nil }
 func (MsgDeposit) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgUndelegate - structure for delegating to exchange the votes
-type MsgUndelegate struct {
+// MsgWithdraw - structure for withdrawing okt and the corresponding shares from all validators
+type MsgWithdraw struct {
 	DelegatorAddress sdk.AccAddress `json:"delegator_address" `
 	Amount           sdk.DecCoin    `json:"quantity"`
 }
 
-// NewMsgUndelegate creates a msg of undelegating
-func NewMsgUndelegate(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgUndelegate {
-	return MsgUndelegate{
+// NewMsgWithdraw creates a new instance of MsgWithdraw
+func NewMsgWithdraw(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgWithdraw {
+	return MsgWithdraw{
 		DelegatorAddress: delAddr,
 		Amount:           amount,
 	}
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgUndelegate) GetSignBytes() []byte {
+func (msg MsgWithdraw) GetSignBytes() []byte {
 	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
 }
 
 // nolint
-func (MsgUndelegate) Route() string                { return "" }
-func (MsgUndelegate) Type() string                 { return "" }
-func (MsgUndelegate) ValidateBasic() sdk.Error     { return nil }
-func (MsgUndelegate) GetSigners() []sdk.AccAddress { return nil }
+func (MsgWithdraw) Route() string                { return "" }
+func (MsgWithdraw) Type() string                 { return "" }
+func (MsgWithdraw) ValidateBasic() sdk.Error     { return nil }
+func (MsgWithdraw) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgVote - structure for voting transactions
 type MsgVote struct {

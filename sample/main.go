@@ -66,7 +66,7 @@ func main() {
 
 	log.Println(res)
 
-	//-------------------- 4. delegate for staking --------------------//
+	//-------------------- 4. deposit for staking --------------------//
 
 	// increase sequence number
 	sequenceNum++

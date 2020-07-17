@@ -67,7 +67,7 @@ func (pc poolswapClient) RemoveLiquidity (fromInfo keys.Info, passWd, liquidity,
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-func (pc poolswapClient) CreateExchage(fromInfo keys.Info, passWd, token, memo string,
+func (pc poolswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error){
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return

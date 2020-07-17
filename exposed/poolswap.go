@@ -18,7 +18,7 @@ type PoolSwapTx interface {
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 	RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
-	CreateExchage(fromInfo keys.Info, passWd, token, memo string,
+	CreateExchange(fromInfo keys.Info, passWd, token, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 	TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)

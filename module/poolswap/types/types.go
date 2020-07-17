@@ -26,3 +26,14 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgCreateExchange{}, "okchain/poolswap/MsgCreateExchange")
 	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okchain/poolswap/MsgSwapToken")
 }
+
+// SwapTokenPair defines token pair exchange
+type SwapTokenPair struct {
+	QuotePooledCoin sdk.DecCoin `json:"quote_pooled_coin"` // The volume of quote token in the token pair exchange pool
+	BasePooledCoin  sdk.DecCoin `json:"base_pooled_coin"`  // The volume of base token in the token pair exchange pool
+	PoolTokenName   string      `json:"pool_token_name"`   // The name of pool token
+}
+
+func GetTokenPairKey(key string) []byte {
+	return append(TokenPairPrefixKey, []byte(key)...)
+}

@@ -1,6 +1,7 @@
 package exposed
 
 import (
+	"github.com/okex/okchain-go-sdk/module/poolswap/types"
 	sdk "github.com/okex/okchain-go-sdk/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
 )
@@ -26,5 +27,5 @@ type PoolSwapTx interface {
 
 // PoolSwapQuery shows the expected query behavior for inner staking client
 type PoolSwapQuery interface {
-
+	QueryExchange(token string) (types.SwapTokenPair, error)
 }

@@ -100,3 +100,6 @@ func (cli *Client) Token() exposed.Token {
 func (cli *Client) Tendermint() exposed.Tendermint {
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
+func (cli *Client) PoolSwap() exposed.PoolSwap {
+	return cli.modules[token.ModuleName].(exposed.PoolSwap)
+}

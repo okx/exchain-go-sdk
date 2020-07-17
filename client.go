@@ -10,6 +10,7 @@ import (
 	"github.com/okex/okchain-go-sdk/module/distribution"
 	"github.com/okex/okchain-go-sdk/module/governance"
 	"github.com/okex/okchain-go-sdk/module/order"
+	"github.com/okex/okchain-go-sdk/module/poolswap"
 	"github.com/okex/okchain-go-sdk/module/slashing"
 	"github.com/okex/okchain-go-sdk/module/staking"
 	"github.com/okex/okchain-go-sdk/module/tendermint"
@@ -101,5 +102,5 @@ func (cli *Client) Tendermint() exposed.Tendermint {
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
 func (cli *Client) PoolSwap() exposed.PoolSwap {
-	return cli.modules[token.ModuleName].(exposed.PoolSwap)
+	return cli.modules[poolswap.ModuleName].(exposed.PoolSwap)
 }

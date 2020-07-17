@@ -14,13 +14,13 @@ type PoolSwap interface {
 
 // PoolSwapTx shows the expected tx behavior for inner staking client
 type PoolSwapTx interface {
-	AddLiquidity(fromInfo keys.Info, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
+	AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
-	RemoveLiquidity(fromInfo keys.Info, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
+	RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
-	CreateExchage(fromInfo keys.Info, token, memo string,
+	CreateExchage(fromInfo keys.Info, passWd, token, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
-	TokenSwap(fromInfo keys.Info, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
+	TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 

@@ -46,6 +46,7 @@ func NewClient(config sdk.ClientConfig) Client {
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
+		poolswap.NewPoolSwapClient(pBaseClient),
 	)
 
 	return *pClient

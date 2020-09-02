@@ -2,7 +2,34 @@ package types
 
 import (
 	sdk "github.com/okex/okchain-go-sdk/types"
+	"strings"
 )
+
+// MsgCreateOperator - structure to register a new DEXOperator or update it
+type MsgCreateOperator struct {
+	Owner              sdk.AccAddress `json:"owner"`
+	Website            string         `json:"website"`
+	HandlingFeeAddress sdk.AccAddress `json:"handling_fee_address"`
+}
+
+// NewMsgCreateOperator creates a new MsgCreateOperator
+func NewMsgCreateOperator(owner, handlingFeeAddress sdk.AccAddress, website string) MsgCreateOperator {
+	if handlingFeeAddress.Empty() {
+		handlingFeeAddress = owner
+	}
+	return MsgCreateOperator{owner, strings.TrimSpace(website), handlingFeeAddress}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgCreateOperator) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgCreateOperator) Route() string                { return "" }
+func (MsgCreateOperator) Type() string                 { return "" }
+func (MsgCreateOperator) ValidateBasic() sdk.Error     { return nil }
+func (MsgCreateOperator) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgList - structure for listing a trading pair on dex
 type MsgList struct {

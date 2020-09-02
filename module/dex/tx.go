@@ -81,3 +81,19 @@ func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath stri
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, stdTx.Memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	handleFeeAddr, err := sdk.AccAddressFromBech32(handleFeeAddrStr)
+	if err != nil {
+		return
+	}
+	msg := types.NewMsgCreateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
+
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

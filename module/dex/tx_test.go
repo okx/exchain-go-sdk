@@ -55,7 +55,6 @@ func TestDexClient_RegisterDexOperator(t *testing.T) {
 	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, "", addr, "https://github.com/okex/okchain-go-sdk",  memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
-
 }
 
 func TestDexClient_List(t *testing.T) {

@@ -5,6 +5,32 @@ import (
 	"strings"
 )
 
+// MsgUpdateOperator - structure to update an existed DEXOperator
+type MsgUpdateOperator struct {
+	Owner              sdk.AccAddress `json:"owner"`
+	Website            string         `json:"website"`
+	HandlingFeeAddress sdk.AccAddress `json:"handling_fee_address"`
+}
+
+// NewMsgUpdateOperator creates a new MsgUpdateOperator
+func NewMsgUpdateOperator(owner, handlingFeeAddress sdk.AccAddress, website string) MsgUpdateOperator {
+	if handlingFeeAddress.Empty() {
+		handlingFeeAddress = owner
+	}
+	return MsgUpdateOperator{owner, strings.TrimSpace(website), handlingFeeAddress}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgUpdateOperator) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgUpdateOperator) Route() string                { return "" }
+func (MsgUpdateOperator) Type() string                 { return "" }
+func (MsgUpdateOperator) ValidateBasic() sdk.Error     { return nil }
+func (MsgUpdateOperator) GetSigners() []sdk.AccAddress { return nil }
+
 // MsgCreateOperator - structure to register a new DEXOperator or update it
 type MsgCreateOperator struct {
 	Owner              sdk.AccAddress `json:"owner"`

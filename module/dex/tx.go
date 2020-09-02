@@ -97,3 +97,19 @@ func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAdd
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
+
+func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	handleFeeAddr, err := sdk.AccAddressFromBech32(handleFeeAddrStr)
+	if err != nil {
+		return
+	}
+	msg := types.NewMsgUpdateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
+
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+
+}

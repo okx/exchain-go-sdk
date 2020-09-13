@@ -1,4 +1,4 @@
-## OKChain Go SDK
+## OKExChain Go SDK
 
 [![CircleCI](https://circleci.com/gh/okex/okchain-go-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/okex/okchain-go-sdk/tree/master)
 [![codecov](https://codecov.io/gh/okex/okchain-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/okex/okchain-go-sdk)

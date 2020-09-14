@@ -26,6 +26,8 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgDeposit{}, "okchain/dex/MsgDeposit")
 	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/dex/MsgWithdraw")
 	cdc.RegisterConcrete(MsgTransferOwnership{}, "okchain/dex/MsgTransferTradingPairOwnership")
+	cdc.RegisterConcrete(MsgCreateOperator{}, "okchain/dex/CreateOperator")
+	cdc.RegisterConcrete(MsgUpdateOperator{}, "okchain/dex/UpdateOperator")
 }
 
 // TokenPair represents token pair object

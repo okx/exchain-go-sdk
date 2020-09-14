@@ -1,9 +1,9 @@
 package exposed
 
 import (
-	"github.com/okex/okchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
 // Dex shows the expected behavior for inner dex client

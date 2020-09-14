@@ -1,6 +1,6 @@
 package staking
 
-import "github.com/okex/okchain-go-sdk/module/staking/types"
+import "github.com/okex/okexchain-go-sdk/module/staking/types"
 
 // const
 const (

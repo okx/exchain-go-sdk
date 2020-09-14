@@ -2,9 +2,10 @@ package token
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/token/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+
+	"github.com/okex/okexchain-go-sdk/module/token/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // QueryAccountTokenInfo gets a specific available token info of an account

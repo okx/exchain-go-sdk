@@ -1,9 +1,9 @@
 package distribution
 
 import (
-	"github.com/okex/okchain-go-sdk/exposed"
-	"github.com/okex/okchain-go-sdk/module/distribution/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/exposed"
+	"github.com/okex/okexchain-go-sdk/module/distribution/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 var _ sdk.Module = (*distrClient)(nil)

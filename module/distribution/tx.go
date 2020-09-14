@@ -2,10 +2,11 @@ package distribution
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/distribution/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+
+	"github.com/okex/okexchain-go-sdk/module/distribution/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
 // SetWithdrawAddr changes the withdraw address of validator to receive rewards

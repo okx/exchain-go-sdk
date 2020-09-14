@@ -2,15 +2,16 @@ package dex
 
 import (
 	"errors"
-	"github.com/golang/mock/gomock"
-	"github.com/okex/okchain-go-sdk/mocks"
-	"github.com/okex/okchain-go-sdk/module/auth"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/okexchain-go-sdk/module/auth"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDexClient_EditDexOperator(t *testing.T) {
@@ -36,7 +37,7 @@ func TestDexClient_EditDexOperator(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().EditDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	res, err := mockCli.Dex().EditDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
@@ -44,15 +45,15 @@ func TestDexClient_EditDexOperator(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), errors.New("default error"))
-	_, err = mockCli.Dex().EditDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().EditDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().EditDexOperator(fromInfo, passWd, addr[1:], "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().EditDexOperator(fromInfo, passWd, addr[1:], "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().EditDexOperator(fromInfo, "", addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().EditDexOperator(fromInfo, "", addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
@@ -80,7 +81,7 @@ func TestDexClient_RegisterDexOperator(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	res, err := mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
@@ -88,15 +89,15 @@ func TestDexClient_RegisterDexOperator(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), errors.New("default error"))
-	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr[1:], "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, passWd, addr[1:], "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, "", addr, "https://github.com/okex/okchain-go-sdk",  memo,
+	_, err = mockCli.Dex().RegisterDexOperator(fromInfo, "", addr, "https://github.com/okex/okexchain-go-sdk", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }

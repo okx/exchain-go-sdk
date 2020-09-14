@@ -3,12 +3,12 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"
+	"errors"
+	"fmt"
 	"log"
 	"strings"
 
-	"errors"
-	"fmt"
+	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"
 
 	"github.com/tendermint/tendermint/crypto"
 

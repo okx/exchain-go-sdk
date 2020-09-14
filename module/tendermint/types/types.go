@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	tmtypes "github.com/tendermint/tendermint/types"

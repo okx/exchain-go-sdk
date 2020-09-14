@@ -3,20 +3,23 @@ package mocks
 import (
 	"encoding/json"
 	"fmt"
-	distribution "github.com/okex/okchain-go-sdk/module/distribution/types"
-	governance "github.com/okex/okchain-go-sdk/module/governance/types"
+	"testing"
+	"time"
+
+	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okchain-go-sdk/exposed"
-	auth "github.com/okex/okchain-go-sdk/module/auth/types"
-	backend "github.com/okex/okchain-go-sdk/module/backend/types"
-	dex "github.com/okex/okchain-go-sdk/module/dex/types"
-	order "github.com/okex/okchain-go-sdk/module/order/types"
-	slashing "github.com/okex/okchain-go-sdk/module/slashing/types"
-	staking "github.com/okex/okchain-go-sdk/module/staking/types"
-	tendermint "github.com/okex/okchain-go-sdk/module/tendermint/types"
-	token "github.com/okex/okchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/exposed"
+	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
+	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
+	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	order "github.com/okex/okexchain-go-sdk/module/order/types"
+	slashing "github.com/okex/okexchain-go-sdk/module/slashing/types"
+	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
+	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
+	token "github.com/okex/okexchain-go-sdk/module/token/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
@@ -25,9 +28,6 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmstate "github.com/tendermint/tendermint/state"
 	tmtypes "github.com/tendermint/tendermint/types"
-
-	"testing"
-	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing

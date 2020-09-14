@@ -3,12 +3,13 @@ package dex
 import (
 	"errors"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/tx"
-	"github.com/okex/okchain-go-sdk/utils"
 	"io/ioutil"
+
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/tx"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // GenerateUnsignedTransferOwnershipTx generates the unsigned transfer-ownership transaction offline

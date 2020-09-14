@@ -9,11 +9,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/keyerror"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/mintkey"
+	"github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/keyerror"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/mintkey"
 
 	"github.com/cosmos/go-bip39"
 

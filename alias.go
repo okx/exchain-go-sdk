@@ -1,15 +1,15 @@
 package gosdk
 
 import (
-	"github.com/okex/okchain-go-sdk/module/auth"
-	"github.com/okex/okchain-go-sdk/module/backend"
-	"github.com/okex/okchain-go-sdk/module/dex"
-	"github.com/okex/okchain-go-sdk/module/governance"
-	"github.com/okex/okchain-go-sdk/module/order"
-	"github.com/okex/okchain-go-sdk/module/staking"
-	"github.com/okex/okchain-go-sdk/module/tendermint"
-	"github.com/okex/okchain-go-sdk/module/token"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/auth"
+	"github.com/okex/okexchain-go-sdk/module/backend"
+	"github.com/okex/okexchain-go-sdk/module/dex"
+	"github.com/okex/okexchain-go-sdk/module/governance"
+	"github.com/okex/okexchain-go-sdk/module/order"
+	"github.com/okex/okexchain-go-sdk/module/staking"
+	"github.com/okex/okexchain-go-sdk/module/tendermint"
+	"github.com/okex/okexchain-go-sdk/module/token"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // const

@@ -1,8 +1,8 @@
 package exposed
 
 import (
-	"github.com/okex/okchain-go-sdk/module/backend/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/backend/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Backend shows the expected behavior for inner backend client

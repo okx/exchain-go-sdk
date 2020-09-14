@@ -3,9 +3,10 @@ package governance
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/governance/types"
-	"github.com/okex/okchain-go-sdk/utils"
 	"io/ioutil"
+
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 func parseProposalFromFile(path string) (proposal types.ProposalJSON, err error) {

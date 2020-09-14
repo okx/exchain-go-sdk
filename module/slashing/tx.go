@@ -1,10 +1,10 @@
 package slashing
 
 import (
-	"github.com/okex/okchain-go-sdk/module/slashing/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/module/slashing/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
 // Unjail unjails the own validator which was jailed by slashing module

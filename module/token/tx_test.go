@@ -7,11 +7,11 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okchain-go-sdk/mocks"
-	"github.com/okex/okchain-go-sdk/module/auth"
-	"github.com/okex/okchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/okexchain-go-sdk/module/auth"
+	"github.com/okex/okexchain-go-sdk/module/token/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 )
 

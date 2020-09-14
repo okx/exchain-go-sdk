@@ -1,7 +1,10 @@
 package utils
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"testing"
+	"time"
+
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/common"
@@ -9,8 +12,6 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmstate "github.com/tendermint/tendermint/state"
 	tmtypes "github.com/tendermint/tendermint/types"
-	"testing"
-	"time"
 )
 
 var testCdc sdk.SDKCodec

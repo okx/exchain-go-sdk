@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	bkdtypes "github.com/okex/okchain-go-sdk/module/backend/types"
+	bkdtypes "github.com/okex/okexchain-go-sdk/module/backend/types"
 )
 
 // UnmarshalListResponse unmarshals the list response from data bytes

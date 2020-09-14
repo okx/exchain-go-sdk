@@ -1,11 +1,11 @@
 ## OKExChain Go SDK
 
-[![CircleCI](https://circleci.com/gh/okex/okchain-go-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/okex/okchain-go-sdk/tree/master)
-[![codecov](https://codecov.io/gh/okex/okchain-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/okex/okchain-go-sdk)
-[![Go Report Card](https://goreportcard.com/badge/github.com/okex/okchain-go-sdk)](https://goreportcard.com/report/github.com/okex/okchain-go-sdk)
-[![license](https://img.shields.io/github/license/okex/okchain-go-sdk.svg)](https://github.com/okex/okchain-go-sdk/blob/master/LICENSE)
-[![LoC](https://tokei.rs/b1/github/okex/okchain-go-sdk)](https://github.com/okex/okchain-go-sdk)
-[![GolangCI](https://golangci.com/badges/github.com/okex/okchain-go-sdk.svg)](https://golangci.com/r/github.com/okex/okchain-go-sdk)
+[![CircleCI](https://circleci.com/gh/okex/okexchain-go-sdk/tree/master.svg?style=shield)](https://circleci.com/gh/okex/okexchain-go-sdk/tree/master)
+[![codecov](https://codecov.io/gh/okex/okexchain-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/okex/okexchain-go-sdk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/okex/okexchain-go-sdk)](https://goreportcard.com/report/github.com/okex/okexchain-go-sdk)
+[![license](https://img.shields.io/github/license/okex/okexchain-go-sdk.svg)](https://github.com/okex/okexchain-go-sdk/blob/master/LICENSE)
+[![LoC](https://tokei.rs/b1/github/okex/okexchain-go-sdk)](https://github.com/okex/okexchain-go-sdk)
+[![GolangCI](https://golangci.com/badges/github.com/okex/okexchain-go-sdk.svg)](https://golangci.com/r/github.com/okex/okexchain-go-sdk)
 
 OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
@@ -23,7 +23,7 @@ OKChain Go SDK is a lightweight Go library to interact with OKChain.
 
 Go version above 1.12 is required.
 
-The developer can get the OKChain Go SDK directly by `git clone` from github : https://github.com/okex/okchain-go-sdk
+The developer can get the OKChain Go SDK directly by `git clone` from github : https://github.com/okex/okexchain-go-sdk
 
 ### 3. API
 

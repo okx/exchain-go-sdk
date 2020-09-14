@@ -2,6 +2,7 @@ package types
 
 import (
 	"errors"
+
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpc "github.com/tendermint/tendermint/rpc/client"
 )

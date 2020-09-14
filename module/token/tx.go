@@ -2,10 +2,11 @@ package token
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+
+	"github.com/okex/okexchain-go-sdk/module/token/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
 // Send transfers coins to other receiver
@@ -97,8 +98,7 @@ func (tc tokenClient) Burn(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 func (tc tokenClient) Edit(fromInfo keys.Info, passWd, symbol, description, wholeName, memo string, isDescEdit,
 	isWholeNameEdit bool, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 
-	if err = params.CheckTokenEditParams(fromInfo, passWd, symbol, description, wholeName, isDescEdit, isWholeNameEdit);
-		err != nil {
+	if err = params.CheckTokenEditParams(fromInfo, passWd, symbol, description, wholeName, isDescEdit, isWholeNameEdit); err != nil {
 		return
 	}
 

@@ -1,6 +1,6 @@
 package token
 
-import "github.com/okex/okchain-go-sdk/module/token/types"
+import "github.com/okex/okexchain-go-sdk/module/token/types"
 
 // const
 const (

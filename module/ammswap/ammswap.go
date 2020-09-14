@@ -1,28 +1,28 @@
-package staking
+package ammswap
 
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/staking/types"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
-var _ sdk.Module = (*stakingClient)(nil)
+var _ sdk.Module = (*ammswapClient)(nil)
 
-type stakingClient struct {
+type ammswapClient struct {
 	sdk.BaseClient
 }
 
 // RegisterCodec registers the msg type in staking module
-func (sc stakingClient) RegisterCodec(cdc sdk.SDKCodec) {
+func (pc ammswapClient) RegisterCodec(cdc sdk.SDKCodec) {
 	types.RegisterCodec(cdc)
 }
 
 // Name returns the module name
-func (stakingClient) Name() string {
+func (ammswapClient) Name() string {
 	return types.ModuleName
 }
 
 // NewStakingClient creates a new instance of staking client as implement
-func NewStakingClient(baseClient sdk.BaseClient) exposed.Staking {
-	return stakingClient{baseClient}
+func NewAmmSwapClient(baseClient sdk.BaseClient) exposed.AmmSwap {
+	return ammswapClient{baseClient}
 }

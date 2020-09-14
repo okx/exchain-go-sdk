@@ -4,10 +4,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/cosmos/go-bip39"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
 	"io/ioutil"
+
+	"github.com/cosmos/go-bip39"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file

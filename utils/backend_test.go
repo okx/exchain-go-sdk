@@ -2,9 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	backend "github.com/okex/okchain-go-sdk/module/backend/types"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
+	"github.com/stretchr/testify/require"
 )
 
 // custom struct for test

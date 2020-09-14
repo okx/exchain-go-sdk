@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okchain-go-sdk/mocks"
-	"github.com/okex/okchain-go-sdk/module/auth/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/okexchain-go-sdk/module/auth/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
 )

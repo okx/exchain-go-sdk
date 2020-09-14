@@ -2,15 +2,16 @@ package governance
 
 import (
 	"errors"
-	"github.com/golang/mock/gomock"
-	"github.com/okex/okchain-go-sdk/mocks"
-	"github.com/okex/okchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
 	"testing"
 	"time"
+
+	"github.com/golang/mock/gomock"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/stretchr/testify/require"
+	cmn "github.com/tendermint/tendermint/libs/common"
 )
 
 const (

@@ -1,20 +1,20 @@
 package exposed
 
 import (
-	"github.com/okex/okchain-go-sdk/module/poolswap/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
-// PoolSwap shows the expected behavior for inner staking client
-type PoolSwap interface {
+// AmmSwap shows the expected behavior for inner staking client
+type AmmSwap interface {
 	sdk.Module
-	PoolSwapTx
-	PoolSwapQuery
+	AmmSwapTx
+	AmmSwapQuery
 }
 
-// PoolSwapTx shows the expected tx behavior for inner staking client
-type PoolSwapTx interface {
+// AmmSwapTx shows the expected tx behavior for inner staking client
+type AmmSwapTx interface {
 	AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 	RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
@@ -25,7 +25,7 @@ type PoolSwapTx interface {
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
-// PoolSwapQuery shows the expected query behavior for inner staking client
-type PoolSwapQuery interface {
+// AmmSwapQuery shows the expected query behavior for inner staking client
+type AmmSwapQuery interface {
 	QueryExchange(token string) (types.SwapTokenPair, error)
 }

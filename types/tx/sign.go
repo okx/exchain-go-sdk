@@ -1,8 +1,8 @@
 package tx
 
 import (
-	"github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
 var (

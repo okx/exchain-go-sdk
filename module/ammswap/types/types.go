@@ -1,12 +1,12 @@
 package types
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // const
 const (
-	ModuleName = "poolswap"
+	ModuleName = "ammswap"
 )
 
 var (
@@ -21,10 +21,10 @@ func init() {
 
 // RegisterCodec registers the msg type for staking module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgAddLiquidity{}, "okchain/poolswap/MsgAddLiquidity")
-	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okchain/poolswap/MsgRemoveLiquidity")
-	cdc.RegisterConcrete(MsgCreateExchange{}, "okchain/poolswap/MsgCreateExchange")
-	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okchain/poolswap/MsgSwapToken")
+	cdc.RegisterConcrete(MsgAddLiquidity{}, "okchain/ammswap/MsgAddLiquidity")
+	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okchain/ammswap/MsgRemoveLiquidity")
+	cdc.RegisterConcrete(MsgCreateExchange{}, "okchain/ammswap/MsgCreateExchange")
+	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okchain/ammswap/MsgSwapToken")
 }
 
 // SwapTokenPair defines token pair exchange

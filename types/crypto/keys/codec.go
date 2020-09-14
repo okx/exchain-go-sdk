@@ -1,7 +1,7 @@
 package keys
 
 import (
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 	"github.com/tendermint/go-amino"
 	cryptoAmino "github.com/tendermint/tendermint/crypto/encoding/amino"
 )

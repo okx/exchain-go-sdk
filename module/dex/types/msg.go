@@ -1,8 +1,9 @@
 package types
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
 	"strings"
+
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // MsgUpdateOperator - structure to update an existed DEXOperator

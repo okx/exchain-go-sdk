@@ -1,6 +1,6 @@
-module github.com/okex/okchain-go-sdk
+module github.com/okex/okexchain-go-sdk
 
-go 1.13
+go 1.14
 
 require (
 	github.com/btcsuite/btcd v0.0.0-20190523000118-16327141da8c
@@ -24,6 +24,5 @@ require (
 )
 
 replace (
-	github.com/tendermint/iavl => github.com/okex/iavl v0.12.4-okchain
-	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okchain1
+	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okexchain
 )

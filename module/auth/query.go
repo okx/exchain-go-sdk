@@ -2,9 +2,10 @@ package auth
 
 import (
 	"errors"
-	"github.com/okex/okchain-go-sdk/module/auth/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
+
+	"github.com/okex/okexchain-go-sdk/module/auth/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // QueryAccount gets the account info

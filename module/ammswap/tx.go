@@ -1,15 +1,15 @@
-package poolswap
+package ammswap
 
 import (
 	"time"
 
-	"github.com/okex/okchain-go-sdk/module/poolswap/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
-func (pc poolswapClient) AddLiquidity (fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
+func (pc ammswapClient) AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
@@ -21,7 +21,7 @@ func (pc poolswapClient) AddLiquidity (fromInfo keys.Info, passWd, minLiquidity,
 	}
 
 	var maxBaseAmountDecCoin, quoteAmountDecCoin sdk.DecCoin
-	if 	maxBaseAmountDecCoin, err = sdk.ParseDecCoin(maxBaseAmount); err != nil {
+	if maxBaseAmountDecCoin, err = sdk.ParseDecCoin(maxBaseAmount); err != nil {
 		return
 	}
 	if quoteAmountDecCoin, err = sdk.ParseDecCoin(quoteAmount); err != nil {
@@ -29,7 +29,7 @@ func (pc poolswapClient) AddLiquidity (fromInfo keys.Info, passWd, minLiquidity,
 	}
 
 	var duration time.Duration
-	if 	duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
@@ -38,19 +38,19 @@ func (pc poolswapClient) AddLiquidity (fromInfo keys.Info, passWd, minLiquidity,
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-func (pc poolswapClient) RemoveLiquidity (fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
+func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
 	var liquidityDec sdk.Dec
-	if 	liquidityDec, err = sdk.NewDecFromStr(liquidity); err != nil {
+	if liquidityDec, err = sdk.NewDecFromStr(liquidity); err != nil {
 		return
 	}
 
 	var minBaseAmountDecCoin, minQuoteAmountDecCoin sdk.DecCoin
-	if 	minBaseAmountDecCoin, err = sdk.ParseDecCoin(minBaseAmount); err != nil {
+	if minBaseAmountDecCoin, err = sdk.ParseDecCoin(minBaseAmount); err != nil {
 		return
 	}
 	if minQuoteAmountDecCoin, err = sdk.ParseDecCoin(minQuoteAmount); err != nil {
@@ -58,7 +58,7 @@ func (pc poolswapClient) RemoveLiquidity (fromInfo keys.Info, passWd, liquidity,
 	}
 
 	var duration time.Duration
-	if 	duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
@@ -67,8 +67,8 @@ func (pc poolswapClient) RemoveLiquidity (fromInfo keys.Info, passWd, liquidity,
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-func (pc poolswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error){
+func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
+	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
@@ -77,8 +77,8 @@ func (pc poolswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo 
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-func (pc poolswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error){
+func (pc ammswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
+	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (pc poolswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, 
 	}
 
 	var duration time.Duration
-	if 	duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
@@ -109,4 +109,3 @@ func (pc poolswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, 
 	msg := types.NewMsgTokenToNativeToken(soldTokenDecCoin, minBoughtTokenDecCoin, deadline, recip, fromInfo.GetAddress())
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
-

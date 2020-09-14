@@ -1,12 +1,12 @@
-package poolswap
+package ammswap
 
 import (
 	"fmt"
 
-	"github.com/okex/okchain-go-sdk/module/poolswap/types"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 )
 
-func (pc poolswapClient) QueryExchange(token string) (types.SwapTokenPair, error) {
+func (pc ammswapClient) QueryExchange(token string) (types.SwapTokenPair, error) {
 	exchange := types.SwapTokenPair{}
 
 	res, err := pc.QueryStore(types.GetTokenPairKey(token), ModuleName, "key")

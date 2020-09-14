@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	govtypes "github.com/okex/okchain-go-sdk/module/governance/types"
-	"github.com/okex/okchain-go-sdk/types"
+	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
+	"github.com/okex/okexchain-go-sdk/types"
 )
 
 const (

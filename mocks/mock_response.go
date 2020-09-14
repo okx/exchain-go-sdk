@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // DefaultMockSuccessTxResponse returns the default mock success tx response for transaction testing

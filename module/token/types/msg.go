@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 // MsgSend - structure to transfer

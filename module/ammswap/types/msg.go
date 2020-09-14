@@ -1,8 +1,8 @@
 package types
 
-import sdk "github.com/okex/okchain-go-sdk/types"
+import sdk "github.com/okex/okexchain-go-sdk/types"
 
-// PoolSwap message types and routes
+// AmmSwap message types and routes
 const (
 	TypeMsgAddLiquidity = "add_liquidity"
 	TypeMsgTokenSwap    = "token_swap"

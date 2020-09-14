@@ -2,11 +2,12 @@ package dex
 
 import (
 	"errors"
-	"github.com/okex/okchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // List lists a trading pair on dex

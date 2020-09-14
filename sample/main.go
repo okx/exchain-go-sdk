@@ -17,7 +17,7 @@ const (
 	// user's password
 	passWd = "12345678"
 	// target address
-	addr     = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	addr     = "okexchain10q0rk5qnyag7wfvvt7rtphlw589m7frsku8qc9"
 	baseCoin = "okt"
 )
 
@@ -26,14 +26,14 @@ func main() {
 	// NOTE: either of the both ways below to pay fees is available
 
 	// WAY 1: create a client config with fixed fees
-	config, err := sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "0.01okt", 200000,
+	config, err := sdk.NewClientConfig(rpcURL, "okexchain", sdk.BroadcastBlock, "0.01okt", 200000,
 		0, "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// WAY 2: alternative client config with the fees by auto gas calculation
-	config, err = sdk.NewClientConfig(rpcURL, "okchain", sdk.BroadcastBlock, "", 200000,
+	config, err = sdk.NewClientConfig(rpcURL, "okexchain", sdk.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	if err != nil {
 		log.Fatal(err)

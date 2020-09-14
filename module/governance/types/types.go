@@ -34,15 +34,15 @@ func init() {
 
 // RegisterCodec registers the msg type for governance module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgSubmitProposal{}, "okchain/gov/MsgSubmitProposal")
-	cdc.RegisterConcrete(MsgDeposit{}, "okchain/gov/MsgDeposit")
-	cdc.RegisterConcrete(MsgVote{}, "okchain/gov/MsgVote")
+	cdc.RegisterConcrete(MsgSubmitProposal{}, "okexchain/gov/MsgSubmitProposal")
+	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/gov/MsgDeposit")
+	cdc.RegisterConcrete(MsgVote{}, "okexchain/gov/MsgVote")
 
 	cdc.RegisterInterface((*Content)(nil))
-	cdc.RegisterConcrete(TextProposal{}, "okchain/gov/TextProposal")
-	cdc.RegisterConcrete(ParameterChangeProposal{}, "okchain/params/ParameterChangeProposal")
-	cdc.RegisterConcrete(DelistProposal{}, "okchain/dex/DelistProposal")
-	cdc.RegisterConcrete(CommunityPoolSpendProposal{}, "okchain/distribution/CommunityPoolSpendProposal")
+	cdc.RegisterConcrete(TextProposal{}, "okexchain/gov/TextProposal")
+	cdc.RegisterConcrete(ParameterChangeProposal{}, "okexchain/params/ParameterChangeProposal")
+	cdc.RegisterConcrete(DelistProposal{}, "okexchain/dex/DelistProposal")
+	cdc.RegisterConcrete(CommunityPoolSpendProposal{}, "okexchain/distribution/CommunityPoolSpendProposal")
 }
 
 type (

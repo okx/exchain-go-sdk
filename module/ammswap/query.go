@@ -6,8 +6,9 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 )
 
-func (pc ammswapClient) QueryExchange(token string) (types.SwapTokenPair, error) {
-	exchange := types.SwapTokenPair{}
+// QuerySwapTokenPair used for querying the exchange with token name
+func (pc ammswapClient) QuerySwapTokenPair(token string) (types.SwapTokenPair, error) {
+	var exchange types.SwapTokenPair
 
 	res, err := pc.QueryStore(types.GetTokenPairKey(token), ModuleName, "key")
 	if err != nil {
@@ -17,6 +18,6 @@ func (pc ammswapClient) QueryExchange(token string) (types.SwapTokenPair, error)
 		return exchange, fmt.Errorf("failed. no swapTokenPair found based on token %s", token)
 	}
 
-	pc.GetCodec().MustUnmarshalJSON(res, exchange)
+	pc.GetCodec().UnmarshalBinaryLengthPrefixed(res, &exchange)
 	return exchange, nil
 }

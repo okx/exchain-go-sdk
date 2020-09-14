@@ -6,14 +6,14 @@ import (
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
-// AmmSwap shows the expected behavior for inner staking client
+// AmmSwap shows the expected behavior for inner ammswap client
 type AmmSwap interface {
 	sdk.Module
 	AmmSwapTx
 	AmmSwapQuery
 }
 
-// AmmSwapTx shows the expected tx behavior for inner staking client
+// AmmSwapTx shows the expected tx behavior for inner ammswap client
 type AmmSwapTx interface {
 	AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
@@ -25,7 +25,7 @@ type AmmSwapTx interface {
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
-// AmmSwapQuery shows the expected query behavior for inner staking client
+// AmmSwapQuery shows the expected query behavior for inner ammswap client
 type AmmSwapQuery interface {
-	QueryExchange(token string) (types.SwapTokenPair, error)
+	QuerySwapTokenPair(token string) (types.SwapTokenPair, error)
 }

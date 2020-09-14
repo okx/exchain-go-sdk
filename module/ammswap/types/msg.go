@@ -8,7 +8,7 @@ const (
 	TypeMsgTokenSwap    = "token_swap"
 )
 
-// MsgAddLiquidity Deposit quote_amount and base_amount at current ratio to mint pool tokens.
+// MsgAddLiquidity deposit quote_amount and base_amount at current ratio to mint pool tokens.
 type MsgAddLiquidity struct {
 	MinLiquidity  sdk.Dec        `json:"min_liquidity"`   // Minimum number of sender will mint if total pool token supply is greater than 0.
 	MaxBaseAmount sdk.DecCoin    `json:"max_base_amount"` // Maximum number of tokens deposited. Deposits max amount if total pool token supply is 0.

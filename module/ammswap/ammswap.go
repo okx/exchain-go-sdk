@@ -12,7 +12,7 @@ type ammswapClient struct {
 	sdk.BaseClient
 }
 
-// RegisterCodec registers the msg type in staking module
+// RegisterCodec registers the msg type in ammswap module
 func (pc ammswapClient) RegisterCodec(cdc sdk.SDKCodec) {
 	types.RegisterCodec(cdc)
 }
@@ -22,7 +22,7 @@ func (ammswapClient) Name() string {
 	return types.ModuleName
 }
 
-// NewStakingClient creates a new instance of staking client as implement
+// NewAmmSwapClient creates a new instance of ammswap client as implement
 func NewAmmSwapClient(baseClient sdk.BaseClient) exposed.AmmSwap {
 	return ammswapClient{baseClient}
 }

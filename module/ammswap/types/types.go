@@ -19,12 +19,12 @@ func init() {
 	RegisterCodec(msgCdc)
 }
 
-// RegisterCodec registers the msg type for staking module
+// RegisterCodec registers the msg type for ammswap module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgAddLiquidity{}, "okchain/ammswap/MsgAddLiquidity")
-	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okchain/ammswap/MsgRemoveLiquidity")
-	cdc.RegisterConcrete(MsgCreateExchange{}, "okchain/ammswap/MsgCreateExchange")
-	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okchain/ammswap/MsgSwapToken")
+	cdc.RegisterConcrete(MsgAddLiquidity{}, "okexchain/ammswap/MsgAddLiquidity")
+	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okexchain/ammswap/MsgRemoveLiquidity")
+	cdc.RegisterConcrete(MsgCreateExchange{}, "okexchain/ammswap/MsgCreateExchange")
+	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okexchain/ammswap/MsgSwapToken")
 }
 
 // SwapTokenPair defines token pair exchange
@@ -34,6 +34,7 @@ type SwapTokenPair struct {
 	PoolTokenName   string      `json:"pool_token_name"`   // The name of pool token
 }
 
+// nolint
 func GetTokenPairKey(key string) []byte {
 	return append(TokenPairPrefixKey, []byte(key)...)
 }

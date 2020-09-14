@@ -21,12 +21,12 @@ func init() {
 
 // RegisterCodec registers the msg type for token module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgSend{}, "okchain/token/MsgTransfer")
-	cdc.RegisterConcrete(MsgMultiSend{}, "okchain/token/MsgMultiTransfer")
-	cdc.RegisterConcrete(MsgTokenIssue{}, "okchain/token/MsgIssue")
-	cdc.RegisterConcrete(MsgTokenMint{}, "okchain/token/MsgMint")
-	cdc.RegisterConcrete(MsgTokenBurn{}, "okchain/token/MsgBurn")
-	cdc.RegisterConcrete(MsgTokenModify{}, "okchain/token/MsgModify")
+	cdc.RegisterConcrete(MsgSend{}, "okexchain/token/MsgTransfer")
+	cdc.RegisterConcrete(MsgMultiSend{}, "okexchain/token/MsgMultiTransfer")
+	cdc.RegisterConcrete(MsgTokenIssue{}, "okexchain/token/MsgIssue")
+	cdc.RegisterConcrete(MsgTokenMint{}, "okexchain/token/MsgMint")
+	cdc.RegisterConcrete(MsgTokenBurn{}, "okexchain/token/MsgBurn")
+	cdc.RegisterConcrete(MsgTokenModify{}, "okexchain/token/MsgModify")
 }
 
 // TransferUnit - amount part for multi-send

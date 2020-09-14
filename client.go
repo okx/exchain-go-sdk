@@ -19,7 +19,7 @@ import (
 	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
-// Client - structure of the main client of okchain gosdk
+// Client - structure of the main client of okexchain gosdk
 type Client struct {
 	config  sdk.ClientConfig
 	cdc     sdk.SDKCodec

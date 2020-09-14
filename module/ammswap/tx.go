@@ -9,6 +9,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
+// AddLiquidity adds the number of liquidity of a token pair
 func (pc ammswapClient) AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -38,6 +39,7 @@ func (pc ammswapClient) AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, m
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
+// RemoveLiquidity removes the number of liquidity of a token pair
 func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -67,6 +69,7 @@ func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, m
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
+// CreateExchange create a token pair in swap module
 func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -77,6 +80,7 @@ func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo s
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
+// TokenSwap swaps the number of specific token with another type token
 func (pc ammswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {

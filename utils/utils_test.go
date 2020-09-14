@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	valAddrStr = "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
+	valAddrStr = "okexchainvaloper10q0rk5qnyag7wfvvt7rtphlw589m7frshchly8"
 )
 
 func TestParseValAddresses(t *testing.T) {

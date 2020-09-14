@@ -85,8 +85,8 @@ func TestTokenClient_MultiSend(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	transfersStr := `okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7 1024okt,2048btc
-okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as 20.48okt`
+	transfersStr := `okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys 1024okt,2048btc
+okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs 20.48okt`
 	transfers, err := utils.ParseTransfersStr(transfersStr)
 	require.NoError(t, err)
 	res, err := mockCli.Token().MultiSend(fromInfo, passWd, transfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())

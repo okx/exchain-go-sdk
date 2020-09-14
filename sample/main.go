@@ -13,7 +13,7 @@ const (
 	// user's name
 	name = "alice"
 	// user's mnemonic
-	mnemonic = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	mnemonic = "view acid farm come spike since hour width casino cause mom sheriff"
 	// user's password
 	passWd = "12345678"
 	// target address

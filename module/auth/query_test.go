@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	addr      = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
-	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
+	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
 )
 
 func TestAuthClient_QueryAccount(t *testing.T) {

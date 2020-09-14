@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	addr    = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
+	addr    = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
 	product = "btc-000_okt"
 )
 

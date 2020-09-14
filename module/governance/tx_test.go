@@ -24,7 +24,7 @@ const (
 	textProposalJSON               = `{"title":"Text Proposal","description":"text proposal description","proposal_type":"Text","deposit":"100okt"}`
 	paramChangeProposalJSON        = `{"title":"Param Change Proposal","description":"param change proposal description","changes":[{"subspace":"staking","key":"MaxValidators","value":105}],"deposit":[{"denom":"okt","amount":"100"}],"height":"1024"}`
 	delistProposalJSON             = `{"title":"Delist Proposal","description":"delist proposal description","base_asset":"btc-000","quote_asset":"okt","deposit":[{"denom":"okt","amount":"100"}]}`
-	communityPoolSpendProposalJSON = `{"title":"Community Pool Spend Proposal","description":"community pool spend description","recipient":"okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph","amount":[{"denom":"okt","amount":"10.24"}],"deposit":[{"denom":"okt","amount":"100"}]}`
+	communityPoolSpendProposalJSON = `{"title":"Community Pool Spend Proposal","description":"community pool spend description","recipient":"okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs","amount":[{"denom":"okt","amount":"10.24"}],"deposit":[{"denom":"okt","amount":"100"}]}`
 )
 
 func TestGovClient_SubmitTextProposal(t *testing.T) {

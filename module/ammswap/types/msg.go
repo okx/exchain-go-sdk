@@ -28,10 +28,10 @@ func NewMsgAddLiquidity(minLiquidity sdk.Dec, maxBaseAmount, quoteAmount sdk.Dec
 	}
 }
 
-// Route should return the name of the module
+// Route returns the name of the module
 func (msg MsgAddLiquidity) Route() string { return "" }
 
-// Type should return the action
+// Type returns the action
 func (msg MsgAddLiquidity) Type() string { return "" }
 
 // ValidateBasic runs stateless checks on the message
@@ -70,10 +70,10 @@ func NewMsgRemoveLiquidity(liquidity sdk.Dec, minBaseAmount, minQuoteAmount sdk.
 	}
 }
 
-// Route should return the name of the module
+// Route returns the name of the module
 func (msg MsgRemoveLiquidity) Route() string { return "" }
 
-// Type should return the action
+// Type returns the action
 func (msg MsgRemoveLiquidity) Type() string { return "" }
 
 // ValidateBasic runs stateless checks on the message
@@ -106,10 +106,10 @@ func NewMsgCreateExchange(token string, sender sdk.AccAddress) MsgCreateExchange
 	}
 }
 
-// Route should return the name of the module
+// Route returns the name of the module
 func (msg MsgCreateExchange) Route() string { return "" }
 
-// Type should return the action
+// Type returns the action
 func (msg MsgCreateExchange) Type() string { return "" }
 
 // ValidateBasic runs stateless checks on the message
@@ -145,10 +145,10 @@ func NewMsgTokenToNativeToken(
 	}
 }
 
-// Route should return the name of the module
+// Route returns the name of the module
 func (msg MsgTokenToNativeToken) Route() string { return "" }
 
-// Type should return the action
+// Type returns the action
 func (msg MsgTokenToNativeToken) Type() string { return "" }
 
 // ValidateBasic runs stateless checks on the message

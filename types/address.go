@@ -19,7 +19,7 @@ const (
 	// AddrLen defines a valid address length
 	AddrLen = 20
 	// Bech32MainPrefix defines the Bech32 prefix of an account's address
-	Bech32MainPrefix = "okchain"
+	Bech32MainPrefix = "okexchain"
 
 	// PrefixAccount is the prefix for account keys
 	PrefixAccount = "acc"

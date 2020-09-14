@@ -30,15 +30,15 @@ func init() {
 
 // RegisterCodec registers the msg type for staking module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgCreateValidator{}, "okchain/staking/MsgCreateValidator")
-	cdc.RegisterConcrete(MsgEditValidator{}, "okchain/staking/MsgEditValidator")
-	cdc.RegisterConcrete(MsgDeposit{}, "okchain/staking/MsgDeposit")
-	cdc.RegisterConcrete(MsgWithdraw{}, "okchain/staking/MsgWithdraw")
-	cdc.RegisterConcrete(MsgAddShares{}, "okchain/staking/MsgAddShares")
-	cdc.RegisterConcrete(MsgDestroyValidator{}, "okchain/staking/MsgDestroyValidator")
-	cdc.RegisterConcrete(MsgRegProxy{}, "okchain/staking/MsgRegProxy")
-	cdc.RegisterConcrete(MsgBindProxy{}, "okchain/staking/MsgBindProxy")
-	cdc.RegisterConcrete(MsgUnbindProxy{}, "okchain/staking/MsgUnbindProxy")
+	cdc.RegisterConcrete(MsgCreateValidator{}, "okexchain/staking/MsgCreateValidator")
+	cdc.RegisterConcrete(MsgEditValidator{}, "okexchain/staking/MsgEditValidator")
+	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/staking/MsgDeposit")
+	cdc.RegisterConcrete(MsgWithdraw{}, "okexchain/staking/MsgWithdraw")
+	cdc.RegisterConcrete(MsgAddShares{}, "okexchain/staking/MsgAddShares")
+	cdc.RegisterConcrete(MsgDestroyValidator{}, "okexchain/staking/MsgDestroyValidator")
+	cdc.RegisterConcrete(MsgRegProxy{}, "okexchain/staking/MsgRegProxy")
+	cdc.RegisterConcrete(MsgBindProxy{}, "okexchain/staking/MsgBindProxy")
+	cdc.RegisterConcrete(MsgUnbindProxy{}, "okexchain/staking/MsgUnbindProxy")
 }
 
 // ValidatorInner is the struct of validator's detail info(inner)

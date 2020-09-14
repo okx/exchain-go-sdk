@@ -22,8 +22,8 @@ func init() {
 
 // RegisterCodec registers the msg type for token module
 func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgNewOrders{}, "okchain/order/MsgNew")
-	cdc.RegisterConcrete(MsgCancelOrders{}, "okchain/order/MsgCancel")
+	cdc.RegisterConcrete(MsgNewOrders{}, "okexchain/order/MsgNew")
+	cdc.RegisterConcrete(MsgCancelOrders{}, "okexchain/order/MsgCancel")
 }
 
 // OrderItem - structure for a item in MsgNewOrders

@@ -175,7 +175,7 @@ func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
-	if len(toAddr) != 46 || !strings.HasPrefix(toAddr, "okchain") {
+	if len(toAddr) != 48 || !strings.HasPrefix(toAddr, "okexchain") {
 		return errors.New("failed. invalid receiver address")
 	}
 
@@ -302,7 +302,7 @@ func CheckQueryTransactionsParams(addrStr string, typeCode, start, end, page, pe
 
 // IsValidAccAddr gives a quick validity check for an address string
 func IsValidAccAddr(addrStr string) error {
-	if len(addrStr) != 46 || !strings.HasPrefix(addrStr, "okchain") {
+	if len(addrStr) != 48 || !strings.HasPrefix(addrStr, "okexchain") {
 		return fmt.Errorf("failed. invalid account address: %s", addrStr)
 	}
 	return nil

@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	accAddr1  = "okchain1alq9na49n9yycysh889rl90g9nhe58lcv27tfj"
-	accAddr2  = "okchain1hw4r48aww06ldrfeuq2v438ujnl6alszzzqpph"
+	accAddr1  = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	accAddr2  = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
 	coinsStr1 = "1.024okt"
 	coinsStr2 = "2.048btc,2.048okt"
 )

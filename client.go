@@ -5,6 +5,7 @@ import (
 
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
+	"github.com/okex/okexchain-go-sdk/module/ammswap"
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
@@ -18,7 +19,7 @@ import (
 	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
-// Client - structure of the main client of okchain gosdk
+// Client - structure of the main client of okexchain gosdk
 type Client struct {
 	config  sdk.ClientConfig
 	cdc     sdk.SDKCodec
@@ -46,6 +47,7 @@ func NewClient(config sdk.ClientConfig) Client {
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
+		ammswap.NewAmmSwapClient(pBaseClient),
 	)
 
 	return *pClient
@@ -100,4 +102,7 @@ func (cli *Client) Token() exposed.Token {
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
+}
+func (cli *Client) AmmSwap() exposed.AmmSwap {
+	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
 }

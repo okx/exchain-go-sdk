@@ -11,7 +11,7 @@ import (
 // Cdc is the codec for signing
 var Cdc = NewCodec()
 
-// SDKCodec shows the expected behaviour of codec in okchain gosdk
+// SDKCodec shows the expected behaviour of codec in okexchain gosdk
 type SDKCodec interface {
 	MarshalJSON(o interface{}) ([]byte, error)
 	UnmarshalJSON(bytes []byte, ptr interface{}) error
@@ -34,7 +34,7 @@ type SDKCodec interface {
 
 var _ SDKCodec = (*Codec)(nil)
 
-// Codec defines the codec only for okchain gosdk
+// Codec defines the codec only for okexchain gosdk
 type Codec struct {
 	*amino.Codec
 }

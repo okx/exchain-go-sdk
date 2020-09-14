@@ -15,15 +15,15 @@ import (
 )
 
 const (
-	addr      = "okchain1alq9na49n9yycysh889rl90g9nhe58lcv27tfj"
+	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
-	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
+	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
 	memo      = "my memo"
-	valAddr   = "okchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcs50wu5"
-	valConsPK = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
-	proxyAddr = "okchain1npm82ty95j9s7xja5s92hajwszdklh7kch23as"
+	valAddr   = "okexchainvaloper1alq9na49n9yycysh889rl90g9nhe58lcqkfpfg"
+	valConsPK = "okexchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqttvmqv"
+	proxyAddr = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
 )
 
 var (

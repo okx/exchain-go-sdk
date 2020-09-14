@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	addr      = "okchain1alq9na49n9yycysh889rl90g9nhe58lcv27tfj"
-	valConsPK = "okchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqfu3wku"
+	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	valConsPK = "okexchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqttvmqv"
 )
 
 func TestTendermintClient_QueryBlock(t *testing.T) {

@@ -23,6 +23,4 @@ require (
 	golang.org/x/text v0.3.2 // indirect
 )
 
-replace (
-	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okexchain
-)
+replace github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okexchain

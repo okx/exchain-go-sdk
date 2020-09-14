@@ -2,11 +2,12 @@ package tendermint
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 	tmtypes "github.com/tendermint/tendermint/types"
-	"strings"
 )
 
 // QueryBlock gets the block info of a specific height

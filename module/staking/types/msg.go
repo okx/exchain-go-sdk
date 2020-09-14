@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
 )

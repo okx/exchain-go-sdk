@@ -2,6 +2,7 @@ package token
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"

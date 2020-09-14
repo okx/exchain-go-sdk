@@ -2,8 +2,9 @@ package crypto
 
 import (
 	"fmt"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 	"os"
+
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/pkg/errors"

@@ -2,6 +2,9 @@ package governance
 
 import (
 	"errors"
+	"testing"
+	"time"
+
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
@@ -9,8 +12,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"
-	"testing"
-	"time"
 )
 
 const (

@@ -2,9 +2,10 @@ package utils
 
 import (
 	"encoding/json"
+	"log"
+
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
-	"log"
 )
 
 // GetOrderIDsFromResponse filters the orderID from the tx response

@@ -24,6 +24,5 @@ require (
 )
 
 replace (
-	github.com/tendermint/iavl => github.com/okex/iavl v0.12.4-okchain
 	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okchain
 )

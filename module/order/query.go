@@ -2,6 +2,7 @@ package order
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"

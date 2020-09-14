@@ -2,11 +2,12 @@ package order
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 	"github.com/okex/okexchain-go-sdk/types/params"
-	"strings"
 )
 
 // NewOrders places orders with some detail info

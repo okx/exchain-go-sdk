@@ -2,6 +2,7 @@ package staking
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"

@@ -2,11 +2,12 @@ package utils
 
 import (
 	"fmt"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 const (

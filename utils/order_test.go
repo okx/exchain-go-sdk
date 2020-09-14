@@ -2,10 +2,11 @@ package utils
 
 import (
 	"encoding/json"
+	"testing"
+
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestGetOrderIDsFromResponse(t *testing.T) {

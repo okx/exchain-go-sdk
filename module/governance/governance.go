@@ -26,4 +26,3 @@ func (gc govClient) Name() string {
 func NewGovClient(baseClient sdk.BaseClient) exposed.Governance {
 	return govClient{baseClient}
 }
-

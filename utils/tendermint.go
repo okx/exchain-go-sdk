@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"

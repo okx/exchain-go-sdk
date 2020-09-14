@@ -2,6 +2,7 @@ package distribution
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/module/distribution/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys"

@@ -3,6 +3,9 @@ package mocks
 import (
 	"encoding/json"
 	"fmt"
+	"testing"
+	"time"
+
 	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 
@@ -25,9 +28,6 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmstate "github.com/tendermint/tendermint/state"
 	tmtypes "github.com/tendermint/tendermint/types"
-
-	"testing"
-	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing

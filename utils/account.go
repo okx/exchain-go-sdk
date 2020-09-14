@@ -4,12 +4,13 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"log"
+
 	"github.com/cosmos/go-bip39"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys/mintkey"
 	"github.com/okex/okexchain-go-sdk/types/tx"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
-	"log"
 )
 
 const (

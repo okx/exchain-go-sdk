@@ -3,6 +3,7 @@ package module
 import (
 	"errors"
 	"fmt"
+
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/tx"
 	"github.com/okex/okexchain-go-sdk/utils"

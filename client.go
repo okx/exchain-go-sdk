@@ -2,6 +2,7 @@ package gosdk
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/auth"

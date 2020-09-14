@@ -2,9 +2,10 @@ package utils
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
-	"strings"
 )
 
 // ParseTransfersStr parses the whole multi-send info string into TransferUnit

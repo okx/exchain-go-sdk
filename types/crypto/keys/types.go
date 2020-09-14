@@ -2,6 +2,7 @@ package keys
 
 import (
 	"fmt"
+
 	"github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 	"github.com/tendermint/tendermint/crypto"

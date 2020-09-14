@@ -14,17 +14,17 @@ import (
 )
 
 const (
-	addr      = "okchain1dcsxvxgj374dv3wt9szflf9nz6342juzzkjnlz"
+	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okchainpub1addwnpepqgzuks5c07kfce85e0t0x8qkuvvxu874965ruafn6svhjrhswt0lgdj85lv"
-	mnemonic  = "dumb thought reward exhibit quick manage force imitate blossom vendor ketchup sniff"
+	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
+	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
 	memo      = "my memo"
 
 	product = "btc-000_okt"
 
-	recMnemonic = "pepper basket run install fury scheme journey worry tumble toddler swap change"
-	recAddr     = "okchain1wux20ku36ntgtxpgm7my9863xy3fqs0xgh66d7"
+	recMnemonic = "length borrow act busy blur mouse salad suspect demise dizzy obey rookie"
+	recAddr     = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
 )
 
 func TestDexClient_QueryProducts(t *testing.T) {

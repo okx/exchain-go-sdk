@@ -1,8 +1,8 @@
 package main
 
 import (
-	sdk "github.com/okex/okchain-go-sdk"
-	"github.com/okex/okchain-go-sdk/utils"
+	sdk "github.com/okex/okexchain-go-sdk"
+	"github.com/okex/okexchain-go-sdk/utils"
 	"log"
 )
 

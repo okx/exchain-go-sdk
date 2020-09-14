@@ -1,9 +1,9 @@
 package backend
 
 import (
-	"github.com/okex/okchain-go-sdk/exposed"
-	"github.com/okex/okchain-go-sdk/module/backend/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/exposed"
+	"github.com/okex/okexchain-go-sdk/module/backend/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 )
 
 var _ sdk.Module = (*backendClient)(nil)

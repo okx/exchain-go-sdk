@@ -1,7 +1,7 @@
 package utils
 
 import (
-	sdk "github.com/okex/okchain-go-sdk/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/common"

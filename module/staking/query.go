@@ -2,10 +2,10 @@ package staking
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/staking/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/module/staking/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // QueryValidators gets all the validators info

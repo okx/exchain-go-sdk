@@ -1,10 +1,10 @@
 package governance
 
 import (
-	"github.com/okex/okchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
 // SubmitTextProposal submits the text proposal on OKChain

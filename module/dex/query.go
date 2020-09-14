@@ -1,9 +1,9 @@
 package dex
 
 import (
-	"github.com/okex/okchain-go-sdk/module/dex/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // QueryProducts gets token pair info

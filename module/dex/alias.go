@@ -1,6 +1,6 @@
 package dex
 
-import "github.com/okex/okchain-go-sdk/module/dex/types"
+import "github.com/okex/okexchain-go-sdk/module/dex/types"
 
 // const
 const (

@@ -1,9 +1,9 @@
 package backend
 
 import (
-	"github.com/okex/okchain-go-sdk/module/backend/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/module/backend/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 // QueryCandles gets the candles data of a specific product

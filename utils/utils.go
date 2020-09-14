@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cosmos/go-bip39"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 	"io/ioutil"
 )
 

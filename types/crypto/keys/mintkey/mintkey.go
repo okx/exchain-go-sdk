@@ -3,7 +3,7 @@ package mintkey
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/keyerror"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/keyerror"
 
 	"github.com/tendermint/crypto/bcrypt"
 

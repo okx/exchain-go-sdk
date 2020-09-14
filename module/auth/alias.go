@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/okex/okchain-go-sdk/module/auth/types"
+import "github.com/okex/okexchain-go-sdk/module/auth/types"
 
 // const
 const (

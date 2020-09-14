@@ -2,9 +2,9 @@ package tendermint
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/tendermint/types"
-	"github.com/okex/okchain-go-sdk/types/params"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
+	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"strings"
 )

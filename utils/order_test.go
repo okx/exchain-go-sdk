@@ -2,8 +2,8 @@ package utils
 
 import (
 	"encoding/json"
-	order "github.com/okex/okchain-go-sdk/module/order/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
+	order "github.com/okex/okexchain-go-sdk/module/order/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

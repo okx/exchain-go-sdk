@@ -3,8 +3,8 @@ package governance
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/governance/types"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
+	"github.com/okex/okexchain-go-sdk/utils"
 	"io/ioutil"
 )
 

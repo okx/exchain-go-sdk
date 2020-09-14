@@ -3,9 +3,9 @@ package module
 import (
 	"errors"
 	"fmt"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/tx"
-	"github.com/okex/okchain-go-sdk/utils"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/tx"
+	"github.com/okex/okexchain-go-sdk/utils"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	rpcCli "github.com/tendermint/tendermint/rpc/client"
 )

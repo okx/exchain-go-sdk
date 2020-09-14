@@ -2,10 +2,10 @@ package token
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/module/token/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
 // Send transfers coins to other receiver

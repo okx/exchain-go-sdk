@@ -5,10 +5,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/okex/okchain-go-sdk/mocks"
-	"github.com/okex/okchain-go-sdk/module"
-	sdk "github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/utils"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/okexchain-go-sdk/module"
+	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 )
 

@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys"
+	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
 const (

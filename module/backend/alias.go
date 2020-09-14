@@ -1,6 +1,6 @@
 package backend
 
-import "github.com/okex/okchain-go-sdk/module/backend/types"
+import "github.com/okex/okexchain-go-sdk/module/backend/types"
 
 // const
 const (

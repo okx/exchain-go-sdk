@@ -2,8 +2,8 @@ package keys
 
 import (
 	"fmt"
-	"github.com/okex/okchain-go-sdk/types"
-	"github.com/okex/okchain-go-sdk/types/crypto/keys/hd"
+	"github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/multisig"
 )

@@ -8,7 +8,7 @@ const (
 	TypeMsgTokenSwap    = "token_swap"
 )
 
-// MsgAddLiquidity deposit quote_amount and base_amount at current ratio to mint pool tokens.
+// MsgAddLiquidity deposits quote_amount and base_amount at current ratio to mint pool tokens.
 type MsgAddLiquidity struct {
 	MinLiquidity  sdk.Dec        `json:"min_liquidity"`   // Minimum number of sender will mint if total pool token supply is greater than 0.
 	MaxBaseAmount sdk.DecCoin    `json:"max_base_amount"` // Maximum number of tokens deposited. Deposits max amount if total pool token supply is 0.
@@ -98,7 +98,7 @@ type MsgCreateExchange struct {
 	Sender sdk.AccAddress `json:"sender"` // Sender
 }
 
-// NewMsgCreateExchange create a new exchange with token
+// NewMsgCreateExchange creates a new exchange with token
 func NewMsgCreateExchange(token string, sender sdk.AccAddress) MsgCreateExchange {
 	return MsgCreateExchange{
 		Token:  token,
@@ -123,7 +123,7 @@ func (msg MsgCreateExchange) GetSignBytes() []byte {
 // GetSigners defines whose signature is required
 func (msg MsgCreateExchange) GetSigners() []sdk.AccAddress { return nil }
 
-// MsgTokenToNativeToken define the message for swap between token and DefaultBondDenom
+// MsgTokenToNativeToken defines the message for swap between token and DefaultBondDenom
 type MsgTokenToNativeToken struct {
 	SoldTokenAmount      sdk.DecCoin    `json:"sold_token_amount"`       // Amount of Tokens sold.
 	MinBoughtTokenAmount sdk.DecCoin    `json:"min_bought_token_amount"` // Minimum token purchased.

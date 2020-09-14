@@ -69,7 +69,7 @@ func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, m
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// CreateExchange create a token pair in swap module
+// CreateExchange creates a token pair in swap module
 func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {

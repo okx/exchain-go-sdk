@@ -24,5 +24,5 @@ require (
 )
 
 replace (
-	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okchain
+	github.com/tendermint/tendermint => github.com/okex/tendermint v0.32.10-okexchain
 )

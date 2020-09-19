@@ -94,15 +94,17 @@ func (msg MsgRemoveLiquidity) GetSwapTokenPair() string {
 
 // MsgCreateExchange creates a new exchange with token
 type MsgCreateExchange struct {
-	Token  string         `json:"token"`  // Token
-	Sender sdk.AccAddress `json:"sender"` // Sender
+	BaseAmountName  string         `json:"base_amount_name"` // Token
+	QuoteAmountName string         `json:"quote_amount_name"`
+	Sender          sdk.AccAddress `json:"sender"` // Sender
 }
 
 // NewMsgCreateExchange creates a new exchange with token
-func NewMsgCreateExchange(token string, sender sdk.AccAddress) MsgCreateExchange {
+func NewMsgCreateExchange(baseAmountName string, quoteAmountName string, sender sdk.AccAddress) MsgCreateExchange {
 	return MsgCreateExchange{
-		Token:  token,
-		Sender: sender,
+		BaseAmountName:  baseAmountName,
+		QuoteAmountName: quoteAmountName,
+		Sender:          sender,
 	}
 }
 

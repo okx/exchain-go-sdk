@@ -39,6 +39,7 @@ func GetTokenPairKey(key string) []byte {
 	return append(TokenPairPrefixKey, []byte(key)...)
 }
 
+// nolint
 func GetSwapTokenPairName(token1, token2 string) string {
 	if token1 < token2 {
 		return token1 + "_" + token2

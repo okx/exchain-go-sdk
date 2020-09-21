@@ -11,7 +11,7 @@ import (
 var (
 	DefaultBondDenom = "okt"
 
-	FeeRate = sdk.NewDecWithPrec(3,3)
+	FeeRate = sdk.NewDecWithPrec(3, 3)
 )
 
 // QuerySwapTokenPair used for querying one swap token pair
@@ -57,7 +57,7 @@ func (pc ammswapClient) QueryBuyAmount(soldToken sdk.DecCoin, tokenToBuy string)
 	tokenPair, errTokenPair := pc.QuerySwapTokenPair(swapTokenPair)
 	if errTokenPair == nil {
 		buyAmount = calculateTokenToBuy(tokenPair, soldToken, tokenToBuy, FeeRate).Amount
-	}else {
+	} else {
 		tokenPairName1 := types.GetSwapTokenPairName(soldToken.Denom, DefaultBondDenom)
 		tokenPair1, err := pc.QuerySwapTokenPair(tokenPairName1)
 		if err != nil {

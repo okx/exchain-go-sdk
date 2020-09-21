@@ -70,13 +70,13 @@ func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, m
 }
 
 // CreateExchange creates a token pair in swap module
-func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, token, memo string,
+func (pc ammswapClient) CreateExchange(fromInfo keys.Info, passWd, baseToken, quoteToken, memo string,
 	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	msg := types.NewMsgCreateExchange(token, fromInfo.GetAddress())
+	msg := types.NewMsgCreateExchange(baseToken, quoteToken, fromInfo.GetAddress())
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 

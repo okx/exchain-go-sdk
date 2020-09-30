@@ -42,7 +42,6 @@ func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo stri
 	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), coin)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Vote votes to the some specific validators
@@ -60,7 +59,6 @@ func (sc stakingClient) AddShares(fromInfo keys.Info, passWd string, valAddrsStr
 	msg := types.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // DestroyValidator deregisters the validator and unbond the min-self-delegation
@@ -91,7 +89,6 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 	msg := types.NewMsgCreateValidator(sdk.ValAddress(fromInfo.GetAddress()), pubkey, description)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // EditValidator edits the description on a validator by the owner
@@ -105,7 +102,6 @@ func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, ident
 	msg := types.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // RegisterProxy registers the identity of proxy
@@ -118,7 +114,6 @@ func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, a
 	msg := types.NewMsgRegProxy(fromInfo.GetAddress(), true)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // UnregisterProxy registers the identity of proxy
@@ -131,7 +126,6 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 	msg := types.NewMsgRegProxy(fromInfo.GetAddress(), false)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // BindProxy binds the staking tokens to a proxy
@@ -149,7 +143,6 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 	msg := types.NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // UnbindProxy unbinds the staking tokens from a proxy
@@ -162,5 +155,4 @@ func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, acc
 	msg := types.NewMsgUnbindProxy(fromInfo.GetAddress())
 
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

@@ -18,3 +18,15 @@ func (fc farmClient) CreatePool(fromInfo keys.Info, passWd, poolName, lockToken,
 
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
+
+// DestroyPool destroys a farm pool
+func (fc farmClient) DestroyPool(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	msg := types.NewMsgDestroyPool(fromInfo.GetAddress(), poolName)
+
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

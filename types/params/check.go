@@ -22,14 +22,27 @@ var (
 	reWhole = regexp.MustCompile(fmt.Sprintf(`^%s$`, reWholeName))
 )
 
-// CheckCreatePoolParams gives a quick validity check for the input params of creating pool in farm
-func CheckCreatePoolParams(fromInfo keys.Info, passWd, poolName, lockToken, yieldToken string) error {
+// CheckPoolNameParams gives a quick validity check for the input params of the pool name in farm
+func CheckPoolNameParams(fromInfo keys.Info, passWd, poolName string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
 
-	if len(poolName) == 0 || len(lockToken) == 0 || len(yieldToken) == 0 {
-		return errors.New("failed. empty string in pool name,lock token or yield token")
+	if len(poolName) == 0 {
+		return errors.New("failed. empty pool name")
+	}
+
+	return nil
+}
+
+// CheckCreatePoolParams gives a quick validity check for the input params of creating pool in farm
+func CheckCreatePoolParams(fromInfo keys.Info, passWd, poolName, lockToken, yieldToken string) error {
+	if err := CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return err
+	}
+
+	if len(lockToken) == 0 || len(yieldToken) == 0 {
+		return errors.New("failed. empty lock token or empty yield token")
 	}
 
 	return nil

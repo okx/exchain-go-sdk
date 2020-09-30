@@ -30,3 +30,28 @@ func (MsgCreatePool) Route() string                { return "" }
 func (MsgCreatePool) Type() string                 { return "" }
 func (MsgCreatePool) ValidateBasic() sdk.Error     { return nil }
 func (MsgCreatePool) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgDestroyPool - structure for destroying a farm pool
+type MsgDestroyPool struct {
+	Owner    sdk.AccAddress `json:"owner"`
+	PoolName string         `json:"pool_name"`
+}
+
+// NewMsgDestroyPool creates a msg of destroy-pool
+func NewMsgDestroyPool(address sdk.AccAddress, poolName string) MsgDestroyPool {
+	return MsgDestroyPool{
+		Owner:    address,
+		PoolName: poolName,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgDestroyPool) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgDestroyPool) Route() string                { return "" }
+func (MsgDestroyPool) Type() string                 { return "" }
+func (MsgDestroyPool) ValidateBasic() sdk.Error     { return nil }
+func (MsgDestroyPool) GetSigners() []sdk.AccAddress { return nil }

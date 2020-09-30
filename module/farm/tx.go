@@ -34,7 +34,7 @@ func (fc farmClient) DestroyPool(fromInfo keys.Info, passWd, poolName, memo stri
 // Provide provides a number of yield tokens into a pool
 func (fc farmClient) Provide(fromInfo keys.Info, passWd, poolName, amountStr, yieldPerBlockStr string, startHeightToYield int64,
 	memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
 		return
 	}
 
@@ -49,6 +49,23 @@ func (fc farmClient) Provide(fromInfo keys.Info, passWd, poolName, amountStr, yi
 	}
 
 	msg := types.NewMsgProvide(fromInfo.GetAddress(), poolName, amount, amountYieldPerBlock, startHeightToYield)
+
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
+// Lock locks a number of tokens for yield farming
+func (fc farmClient) Lock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	amount, err := sdk.ParseDecCoin(amountStr)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgLock(fromInfo.GetAddress(), poolName, amount)
 
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }

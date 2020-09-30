@@ -141,3 +141,28 @@ func (MsgUnlock) Route() string                { return "" }
 func (MsgUnlock) Type() string                 { return "" }
 func (MsgUnlock) ValidateBasic() sdk.Error     { return nil }
 func (MsgUnlock) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgClaim - structure for claiming current yield
+type MsgClaim struct {
+	PoolName string         `json:"pool_name"`
+	Address  sdk.AccAddress `json:"address"`
+}
+
+// NewMsgClaim creates a new instance of MsgClaim
+func NewMsgClaim(address sdk.AccAddress, poolName string) MsgClaim {
+	return MsgClaim{
+		PoolName: poolName,
+		Address:  address,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgClaim) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgClaim) Route() string                { return "" }
+func (MsgClaim) Type() string                 { return "" }
+func (MsgClaim) ValidateBasic() sdk.Error     { return nil }
+func (MsgClaim) GetSigners() []sdk.AccAddress { return nil }

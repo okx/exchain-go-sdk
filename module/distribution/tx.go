@@ -24,7 +24,6 @@ func (dc distrClient) SetWithdrawAddr(fromInfo keys.Info, passWd, withdrawAddrSt
 	msg := types.NewMsgSetWithdrawAddr(fromInfo.GetAddress(), withdrawAddr)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // WithdrawRewards withdraws the rewards of validator by himself
@@ -42,5 +41,4 @@ func (dc distrClient) WithdrawRewards(fromInfo keys.Info, passWd, valAddrStr, me
 	msg := types.NewMsgWithdrawValCommission(valAddr)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

@@ -27,7 +27,6 @@ func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
 	}
 
 	return
-
 }
 
 // QueryValidator gets the info of a specific validator
@@ -49,7 +48,6 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, 
 	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(res, &innerVal)
 
 	return innerVal.Standardize()
-
 }
 
 // QueryDelegator gets the detail info of a delegator

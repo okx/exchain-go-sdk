@@ -81,5 +81,4 @@ func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.T
 
 	tc.GetCodec().MustUnmarshalJSON(res, &tokens)
 	return
-
 }

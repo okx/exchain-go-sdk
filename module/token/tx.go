@@ -29,7 +29,6 @@ func (tc tokenClient) Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo
 	msg := types.NewMsgTokenSend(fromInfo.GetAddress(), toAddr, coins)
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // MultiSend multi-sends coins to several receivers
@@ -42,7 +41,6 @@ func (tc tokenClient) MultiSend(fromInfo keys.Info, passWd string, transfers []t
 	msg := types.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Issue issues a kind of token
@@ -55,7 +53,6 @@ func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, to
 	msg := types.NewMsgTokenIssue(fromInfo.GetAddress(), tokenDesc, "", orgSymbol, wholeName, totalSupply, mintable)
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Mint increases the total supply of a kind of token by its owner
@@ -73,7 +70,6 @@ func (tc tokenClient) Mint(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 	msg := types.NewMsgTokenMint(coin, fromInfo.GetAddress())
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Burn decreases the total supply of a kind of token by burning a specific amount of that from the own account
@@ -91,7 +87,6 @@ func (tc tokenClient) Burn(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 	msg := types.NewMsgTokenBurn(coin, fromInfo.GetAddress())
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Edit modifies the info of a specific token by its owner
@@ -105,5 +100,4 @@ func (tc tokenClient) Edit(fromInfo keys.Info, passWd, symbol, description, whol
 	msg := types.NewMsgTokenModify(symbol, description, wholeName, isDescEdit, isWholeNameEdit, fromInfo.GetAddress())
 
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

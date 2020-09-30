@@ -21,7 +21,6 @@ func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, init
 	msg := types.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Deposit deposits some tokens to a specific product
@@ -38,7 +37,6 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 	msg := types.NewMsgDeposit(fromInfo.GetAddress(), product, amount)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Withdraw withdraws some tokens from a specific product
@@ -55,7 +53,6 @@ func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, mem
 	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), product, amount)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // TransferOwnership signs the multi-signed tx from a json file and broadcast
@@ -80,7 +77,6 @@ func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath stri
 	}
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, stdTx.Memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
@@ -96,7 +92,6 @@ func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAdd
 	msg := types.NewMsgCreateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
@@ -112,5 +107,4 @@ func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr
 	msg := types.NewMsgUpdateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

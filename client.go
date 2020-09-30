@@ -2,7 +2,6 @@ package gosdk
 
 import (
 	"fmt"
-
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
@@ -10,6 +9,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
+	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
 	"github.com/okex/okexchain-go-sdk/module/slashing"
@@ -48,6 +48,7 @@ func NewClient(config sdk.ClientConfig) Client {
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
 		ammswap.NewAmmSwapClient(pBaseClient),
+		farm.NewFarmClient(pBaseClient),
 	)
 
 	return *pClient
@@ -105,4 +106,7 @@ func (cli *Client) Tendermint() exposed.Tendermint {
 }
 func (cli *Client) AmmSwap() exposed.AmmSwap {
 	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
+}
+func (cli *Client) Farm() exposed.Farm {
+	return cli.modules[farm.ModuleName].(exposed.Farm)
 }

@@ -14,6 +14,7 @@ import (
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	farm "github.com/okex/okexchain-go-sdk/module/farm/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	slashing "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
@@ -108,6 +109,9 @@ func (mc *MockClient) Token() exposed.Token {
 }
 func (mc *MockClient) Tendermint() exposed.Tendermint {
 	return mc.modules[tendermint.ModuleName].(exposed.Tendermint)
+}
+func (mc *MockClient) Farm() exposed.Farm {
+	return mc.modules[farm.ModuleName].(exposed.Farm)
 }
 
 // BuildAccountBytes generates the account bytes for test

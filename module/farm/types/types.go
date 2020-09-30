@@ -20,7 +20,7 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgCreatePool{}, "okexchain/farm/MsgCreatePool")
 	cdc.RegisterConcrete(MsgDestroyPool{}, "okexchain/farm/MsgDestroyPool")
 	cdc.RegisterConcrete(MsgLock{}, "okexchain/farm/MsgLock")
-	//cdc.RegisterConcrete(MsgUnlock{}, "okexchain/farm/MsgUnlock")
+	cdc.RegisterConcrete(MsgUnlock{}, "okexchain/farm/MsgUnlock")
 	//cdc.RegisterConcrete(MsgClaim{}, "okexchain/farm/MsgClaim")
 	cdc.RegisterConcrete(MsgProvide{}, "okexchain/farm/MsgProvide")
 }

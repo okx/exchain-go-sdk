@@ -69,3 +69,20 @@ func (fc farmClient) Lock(fromInfo keys.Info, passWd, poolName, amountStr, memo 
 
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
+
+// Unlock unlocks a number of tokens from the farm pool and claims the current yield
+func (fc farmClient) Unlock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	amount, err := sdk.ParseDecCoin(amountStr)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgUnlock(fromInfo.GetAddress(), poolName, amount)
+
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

@@ -114,3 +114,30 @@ func (MsgLock) Route() string                { return "" }
 func (MsgLock) Type() string                 { return "" }
 func (MsgLock) ValidateBasic() sdk.Error     { return nil }
 func (MsgLock) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgUnlock - structure for unlocking tokens from a farm pool
+type MsgUnlock struct {
+	PoolName string         `json:"pool_name"`
+	Address  sdk.AccAddress `json:"address"`
+	Amount   sdk.DecCoin    `json:"amount"`
+}
+
+// NewMsgUnlock creates a new instance of MsgUnlock
+func NewMsgUnlock(address sdk.AccAddress, poolName string, amount sdk.DecCoin) MsgUnlock {
+	return MsgUnlock{
+		PoolName: poolName,
+		Address:  address,
+		Amount:   amount,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgUnlock) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgUnlock) Route() string                { return "" }
+func (MsgUnlock) Type() string                 { return "" }
+func (MsgUnlock) ValidateBasic() sdk.Error     { return nil }
+func (MsgUnlock) GetSigners() []sdk.AccAddress { return nil }

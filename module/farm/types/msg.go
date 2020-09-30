@@ -10,7 +10,7 @@ type MsgCreatePool struct {
 	YieldSymbol  string         `json:"yield_symbol"`
 }
 
-// NewMsgCreatePool creates a msg of create-pool
+// NewMsgCreatePool creates a new instance of MsgCreatePool
 func NewMsgCreatePool(address sdk.AccAddress, poolName, lockToken, yieldToken string) MsgCreatePool {
 	return MsgCreatePool{
 		Owner:        address,
@@ -37,7 +37,7 @@ type MsgDestroyPool struct {
 	PoolName string         `json:"pool_name"`
 }
 
-// NewMsgDestroyPool creates a msg of destroy-pool
+// NewMsgDestroyPool creates a new instance of MsgDestroyPool
 func NewMsgDestroyPool(address sdk.AccAddress, poolName string) MsgDestroyPool {
 	return MsgDestroyPool{
 		Owner:    address,
@@ -55,3 +55,35 @@ func (MsgDestroyPool) Route() string                { return "" }
 func (MsgDestroyPool) Type() string                 { return "" }
 func (MsgDestroyPool) ValidateBasic() sdk.Error     { return nil }
 func (MsgDestroyPool) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgProvide - structure for providing tokens as the yield into a farm pool
+type MsgProvide struct {
+	PoolName              string         `json:"pool_name"`
+	Address               sdk.AccAddress `json:"address"`
+	Amount                sdk.DecCoin    `json:"amount"`
+	AmountYieldedPerBlock sdk.Dec        `json:"amount_yielded_per_block"`
+	StartHeightToYield    int64          `json:"start_height_to_yield"`
+}
+
+// NewMsgProvide creates a new instance of MsgProvide
+func NewMsgProvide(address sdk.AccAddress, poolName string, amount sdk.DecCoin, amountYieldedPerBlock sdk.Dec,
+	startHeightToYield int64) MsgProvide {
+	return MsgProvide{
+		PoolName:              poolName,
+		Address:               address,
+		Amount:                amount,
+		AmountYieldedPerBlock: amountYieldedPerBlock,
+		StartHeightToYield:    startHeightToYield,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+func (msg MsgProvide) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+func (MsgProvide) Route() string                { return "" }
+func (MsgProvide) Type() string                 { return "" }
+func (MsgProvide) ValidateBasic() sdk.Error     { return nil }
+func (MsgProvide) GetSigners() []sdk.AccAddress { return nil }

@@ -22,6 +22,9 @@ type FarmTx interface {
 	Lock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Unlock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Claim(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	// SetWhite is used for test
+	// TODO: rm it later
+	SetWhite(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 }
 
 // FarmQuery shows the expected query behavior for inner farm client

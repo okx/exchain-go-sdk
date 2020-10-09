@@ -166,3 +166,31 @@ func (MsgClaim) Route() string                { return "" }
 func (MsgClaim) Type() string                 { return "" }
 func (MsgClaim) ValidateBasic() sdk.Error     { return nil }
 func (MsgClaim) GetSigners() []sdk.AccAddress { return nil }
+
+// MsgSetWhite is used for test
+// TODO: rm it later
+type MsgSetWhite struct {
+	PoolName string         `json:"pool_name"`
+	Address  sdk.AccAddress `json:"address"`
+}
+
+// TODO: rm it later
+func NewMsgSetWhite(poolName string, address sdk.AccAddress) MsgSetWhite {
+	return MsgSetWhite{
+		PoolName: poolName,
+		Address:  address,
+	}
+}
+
+// GetSignBytes encodes the message for signing
+// TODO: rm it later
+func (msg MsgSetWhite) GetSignBytes() []byte {
+	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
+}
+
+// nolint
+// TODO: rm it later
+func (MsgSetWhite) Route() string                { return "" }
+func (MsgSetWhite) Type() string                 { return "" }
+func (MsgSetWhite) ValidateBasic() sdk.Error     { return nil }
+func (MsgSetWhite) GetSigners() []sdk.AccAddress { return nil }

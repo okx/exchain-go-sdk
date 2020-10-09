@@ -98,3 +98,15 @@ func (fc farmClient) Claim(fromInfo keys.Info, passWd, poolName, memo string, ac
 
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
+
+// SetWhite is used for test
+// TODO: remove it later
+func (fc farmClient) SetWhite(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	msg := types.NewMsgSetWhite(poolName, fromInfo.GetAddress())
+
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

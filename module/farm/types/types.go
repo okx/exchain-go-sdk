@@ -23,4 +23,8 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 	cdc.RegisterConcrete(MsgUnlock{}, "okexchain/farm/MsgUnlock")
 	cdc.RegisterConcrete(MsgClaim{}, "okexchain/farm/MsgClaim")
 	cdc.RegisterConcrete(MsgProvide{}, "okexchain/farm/MsgProvide")
+	// MsgSetWhite is used for test
+	// TODO: rm it later
+	cdc.RegisterConcrete(MsgSetWhite{}, "okexchain/farm/MsgSetWhite")
+
 }

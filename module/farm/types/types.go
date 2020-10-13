@@ -5,12 +5,14 @@ import sdk "github.com/okex/okexchain-go-sdk/types"
 // const
 const (
 	ModuleName = "farm"
+
+	QueryPoolPath = "custom/farm/pool"
 )
 
 var (
 	msgCdc = sdk.NewCodec()
 	// FarmPoolPrefix is useful for subspace and store query about pools
-	FarmPoolPrefix              = []byte{0x01}
+	FarmPoolPrefix = []byte{0x01}
 )
 
 func init() {

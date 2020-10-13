@@ -31,4 +31,5 @@ type FarmTx interface {
 // FarmQuery shows the expected query behavior for inner farm client
 type FarmQuery interface {
 	QueryPools() ([]types.FarmPool, error)
+	QueryPool(poolName string) (types.FarmPool, error)
 }

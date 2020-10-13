@@ -249,3 +249,15 @@ func NewQueryProposalsParams(status govtypes.ProposalStatus, limit uint64, voter
 		Limit:          limit,
 	}
 }
+
+// QueryPoolParams defines query params of pool in farm module
+type QueryPoolParams struct {
+	PoolName string
+}
+
+// NewQueryPoolParams creates a new instance of QueryPoolParams
+func NewQueryPoolParams(poolName string) QueryPoolParams {
+	return QueryPoolParams{
+		PoolName: poolName,
+	}
+}

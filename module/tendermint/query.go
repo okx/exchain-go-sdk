@@ -11,8 +11,14 @@ import (
 )
 
 // QueryBlock gets the block info of a specific height
+// latest block info will be returned when height<0
 func (tc tendermintClient) QueryBlock(height int64) (block types.Block, err error) {
-	pTmBlockResult, err := tc.Block(&height)
+	var pHeight *int64
+	if height >= 0 {
+		pHeight = &height
+	}
+
+	pTmBlockResult, err := tc.Block(pHeight)
 	if err != nil {
 		return
 	}

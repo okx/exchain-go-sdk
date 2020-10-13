@@ -6,3 +6,8 @@ import "github.com/okex/okexchain-go-sdk/module/farm/types"
 const (
 	ModuleName = types.ModuleName
 )
+
+type (
+	//nolint
+	FarmPool = types.FarmPool
+)

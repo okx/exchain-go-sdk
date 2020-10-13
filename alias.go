@@ -4,6 +4,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
+	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
 	"github.com/okex/okexchain-go-sdk/module/staking"
@@ -60,4 +61,6 @@ type (
 	ResultTxs        = tendermint.ResultTxs
 	// governance
 	Proposal = governance.Proposal
+	// farm
+	FarmPool = farm.FarmPool
 )

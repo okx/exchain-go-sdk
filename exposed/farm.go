@@ -1,6 +1,7 @@
 package exposed
 
 import (
+	"github.com/okex/okexchain-go-sdk/module/farm/types"
 	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
@@ -28,4 +29,6 @@ type FarmTx interface {
 }
 
 // FarmQuery shows the expected query behavior for inner farm client
-type FarmQuery interface{}
+type FarmQuery interface {
+	QueryPools() ([]types.FarmPool, error)
+}

@@ -32,4 +32,5 @@ type FarmTx interface {
 type FarmQuery interface {
 	QueryPools() ([]types.FarmPool, error)
 	QueryPool(poolName string) (types.FarmPool, error)
+	QueryAccountsLockedTo(poolName string) ([]sdk.AccAddress, error)
 }

@@ -6,7 +6,8 @@ import sdk "github.com/okex/okexchain-go-sdk/types"
 const (
 	ModuleName = "farm"
 
-	QueryPoolPath = "custom/farm/pool"
+	QueryPoolPath             = "custom/farm/pool"
+	QueryAccountsLockedToPath = "custom/farm/accounts-locked-to"
 )
 
 var (

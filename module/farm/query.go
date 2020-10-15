@@ -2,6 +2,7 @@ package farm
 
 import (
 	"github.com/okex/okexchain-go-sdk/module/farm/types"
+	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
@@ -36,5 +37,22 @@ func (fc farmClient) QueryPool(poolName string) (farmPool types.FarmPool, err er
 	}
 
 	fc.GetCodec().MustUnmarshalJSON(res, &farmPool)
+	return
+}
+
+// QueryPools gets the farm pool info by its pool name
+func (fc farmClient) QueryAccountsLockedTo(poolName string) (accAddrs []sdk.AccAddress, err error) {
+	poolParams := params.NewQueryPoolParams(poolName)
+	jsonBytes, err := fc.GetCodec().MarshalJSON(poolParams)
+	if err != nil {
+		return accAddrs, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := fc.Query(types.QueryAccountsLockedToPath, jsonBytes)
+	if err != nil {
+		return accAddrs, utils.ErrClientQuery(err.Error())
+	}
+
+	fc.GetCodec().MustUnmarshalJSON(res, &accAddrs)
 	return
 }

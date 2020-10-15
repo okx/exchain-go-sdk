@@ -610,3 +610,8 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 
 	return mc.cdc.MustMarshalJSON(farmPool)
 }
+
+// BuildFarmPoolNameList generates the farm pool name list bytes for test
+func (mc *MockClient) BuildFarmPoolNameList(poolName ...string) []byte {
+	return mc.cdc.MustMarshalJSON(poolName)
+}

@@ -2,6 +2,7 @@ package farm
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/farm/types"
@@ -145,5 +146,47 @@ func TestFarmClient_QueryPool(t *testing.T) {
 	mockCli.EXPECT().Query(types.QueryPoolPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	require.Panics(t, func() {
 		_, _ = mockCli.Farm().QueryPool(expectedPoolName)
+	})
+}
+
+func TestFarmClient_QueryAccount(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+		1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewFarmClient(mockCli.MockBaseClient))
+
+	poolName1 := fmt.Sprintf("%s%d", expectedPoolName, 1)
+	poolName2 := fmt.Sprintf("%s%d", expectedPoolName, 2)
+	poolName3 := fmt.Sprintf("%s%d", expectedPoolName, 3)
+	expectedRet := mockCli.BuildFarmPoolNameList(poolName1, poolName2, poolName3)
+	expectedCdc := mockCli.GetCodec()
+
+	accAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+
+	queryParams := params.NewQueryAccountParams(accAddr)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	mockCli.EXPECT().Query(types.QueryAccountPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	poolNameList, err := mockCli.Farm().QueryAccount(addr)
+	require.NoError(t, err)
+
+	require.Equal(t, 3, len(poolNameList))
+	require.Equal(t, poolName1, poolNameList[0])
+	require.Equal(t, poolName2, poolNameList[1])
+	require.Equal(t, poolName3, poolNameList[2])
+
+	mockCli.EXPECT().Query(types.QueryAccountPath, cmn.HexBytes(queryBytes)).Return(nil, errors.New("default error"))
+	_, err = mockCli.Farm().QueryAccount(addr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.QueryAccountPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	require.Panics(t, func() {
+		_, _ = mockCli.Farm().QueryAccount(addr)
 	})
 }

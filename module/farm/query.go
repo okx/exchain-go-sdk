@@ -23,7 +23,7 @@ func (fc farmClient) QueryPools() (farmPools []types.FarmPool, err error) {
 	return
 }
 
-// QueryPools gets the farm pool info by its pool name
+// QueryPool gets the farm pool info by its pool name
 func (fc farmClient) QueryPool(poolName string) (farmPool types.FarmPool, err error) {
 	poolParams := params.NewQueryPoolParams(poolName)
 	jsonBytes, err := fc.GetCodec().MarshalJSON(poolParams)

@@ -586,3 +586,27 @@ func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.P
 
 	return mc.cdc.MustMarshalJSON(proposals)
 }
+
+// BuildFarmPoolBytes generates the farm pool bytes for test
+func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
+	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
+	require.NoError(mc.t, err)
+
+	farmPool := farm.FarmPool{
+		Owner:        ownerAddr,
+		Name:         poolName,
+		SymbolLocked: tokenSymbol,
+		YieldedTokenInfos: farm.YieldedTokenInfos{
+			{
+				RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+				StartBlockHeightToYield: height,
+				AmountYieldedPerBlock:   amountDec,
+			},
+		},
+		DepositAmount:    sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+		TotalValueLocked: sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+		AmountYielded:    sdk.NewDecCoins(sdk.NewDecCoinFromDec(tokenSymbol, amountDec)),
+	}
+
+	return mc.cdc.MustMarshalJSON(farmPool)
+}

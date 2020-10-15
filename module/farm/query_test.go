@@ -190,3 +190,39 @@ func TestFarmClient_QueryAccount(t *testing.T) {
 		_, _ = mockCli.Farm().QueryAccount(addr)
 	})
 }
+
+func TestFarmClient_QueryAccountsLockedTo(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+		1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewFarmClient(mockCli.MockBaseClient))
+
+	accAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+	expectedRet := mockCli.BuildAccAddrList(accAddr)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryPoolParams(expectedPoolName)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	mockCli.EXPECT().Query(types.QueryAccountsLockedToPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	accAddrList, err := mockCli.Farm().QueryAccountsLockedTo(expectedPoolName)
+	require.NoError(t, err)
+
+	require.Equal(t, 1, len(accAddrList))
+	require.True(t, accAddrList[0].Equals(accAddr))
+
+	mockCli.EXPECT().Query(types.QueryAccountsLockedToPath, cmn.HexBytes(queryBytes)).Return(nil, errors.New("default error"))
+	_, err = mockCli.Farm().QueryAccountsLockedTo(expectedPoolName)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.QueryAccountsLockedToPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	require.Panics(t, func() {
+		_, _ = mockCli.Farm().QueryAccountsLockedTo(expectedPoolName)
+	})
+}

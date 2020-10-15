@@ -615,3 +615,8 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 func (mc *MockClient) BuildFarmPoolNameList(poolName ...string) []byte {
 	return mc.cdc.MustMarshalJSON(poolName)
 }
+
+// BuildAccAddrList generates the account address list bytes for test
+func (mc *MockClient) BuildAccAddrList(accAddr ...sdk.AccAddress) []byte {
+	return mc.cdc.MustMarshalJSON(accAddr)
+}

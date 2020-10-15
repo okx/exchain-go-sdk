@@ -189,6 +189,9 @@ func TestFarmClient_QueryAccount(t *testing.T) {
 	require.Panics(t, func() {
 		_, _ = mockCli.Farm().QueryAccount(addr)
 	})
+
+	_, err = mockCli.Farm().QueryAccount(addr[1:])
+	require.Error(t, err)
 }
 
 func TestFarmClient_QueryAccountsLockedTo(t *testing.T) {

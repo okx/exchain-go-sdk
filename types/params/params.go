@@ -261,3 +261,15 @@ func NewQueryPoolParams(poolName string) QueryPoolParams {
 		PoolName: poolName,
 	}
 }
+
+// QueryAccountParams defines the query params of account in farm module
+type QueryAccountParams struct {
+	AccAddress types.AccAddress
+}
+
+// NewQueryAccountParams creates a new instance of QueryAccountParams
+func NewQueryAccountParams(accAddr types.AccAddress) QueryAccountParams {
+	return QueryAccountParams{
+		AccAddress: accAddr,
+	}
+}

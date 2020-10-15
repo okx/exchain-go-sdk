@@ -40,7 +40,29 @@ func (fc farmClient) QueryPool(poolName string) (farmPool types.FarmPool, err er
 	return
 }
 
-// QueryPools gets the farm pool info by its pool name
+// QueryAccount gets the name of pools that an account has locked coins in
+func (fc farmClient) QueryAccount(accAddrStr string) (poolNames []string, err error) {
+	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
+	if err != nil {
+		return
+	}
+
+	accParams := params.NewQueryAccountParams(accAddr)
+	jsonBytes, err := fc.GetCodec().MarshalJSON(accParams)
+	if err != nil {
+		return poolNames, utils.ErrMarshalJSON(err.Error())
+	}
+
+	res, err := fc.Query(types.QueryAccountPath, jsonBytes)
+	if err != nil {
+		return poolNames, utils.ErrClientQuery(err.Error())
+	}
+
+	fc.GetCodec().MustUnmarshalJSON(res, &poolNames)
+	return
+}
+
+// QueryAccountsLockedTo gets all addresses of accounts that have locked coins in a pool
 func (fc farmClient) QueryAccountsLockedTo(poolName string) (accAddrs []sdk.AccAddress, err error) {
 	poolParams := params.NewQueryPoolParams(poolName)
 	jsonBytes, err := fc.GetCodec().MarshalJSON(poolParams)

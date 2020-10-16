@@ -36,15 +36,12 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 
 // FarmPool is the pool where an address can lock specified token to yield other tokens
 type FarmPool struct {
-	Owner                  sdk.AccAddress    `json:"owner"`
-	Name                   string            `json:"name"`
-	SymbolLocked           string            `json:"symbol_locked"`
-	YieldedTokenInfos      YieldedTokenInfos `json:"yielded_token_infos"`
-	DepositAmount          sdk.DecCoin       `json:"deposit_amount"`
-	TotalValueLocked       sdk.DecCoin       `json:"total_value_locked"`
-	AmountYielded          sdk.DecCoins      `json:"amount_yielded"`
-	LastClaimedBlockHeight int64             `json:"last_claimed_block_height"`
-	TotalLockedWeight      sdk.Dec           `json:"total_locked_Weight"`
+	Owner             sdk.AccAddress    `json:"owner"`
+	Name              string            `json:"name"`
+	SymbolLocked      string            `json:"symbol_locked"`
+	DepositAmount     sdk.DecCoin       `json:"deposit_amount"`
+	TotalValueLocked  sdk.DecCoin       `json:"total_value_locked"`
+	YieldedTokenInfos YieldedTokenInfos `json:"yielded_token_infos"`
 }
 
 // YieldedTokenInfos is a collection of YieldedTokenInfo

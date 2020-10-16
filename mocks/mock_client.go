@@ -605,7 +605,6 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 		},
 		DepositAmount:    sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
 		TotalValueLocked: sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-		AmountYielded:    sdk.NewDecCoins(sdk.NewDecCoinFromDec(tokenSymbol, amountDec)),
 	}
 
 	return mc.cdc.MustMarshalJSON(farmPool)

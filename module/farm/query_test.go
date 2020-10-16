@@ -30,7 +30,7 @@ const (
 
 var (
 	// an extremely strict way to check
-	rawPoolBytes = []byte{124, 10, 20, 178, 97, 64, 82, 50, 18, 5, 108, 132, 29, 215, 59, 247, 139, 201, 47, 156, 195, 78, 221, 18, 17, 100, 101, 102, 97, 117, 108, 116, 45, 112, 111, 111, 108, 45, 110, 97, 109, 101, 26, 7, 97, 105, 114, 45, 98, 98, 52, 34, 39, 10, 23, 10, 7, 97, 105, 114, 45, 98, 98, 52, 18, 12, 49, 48, 50, 52, 48, 48, 48, 48, 48, 48, 48, 48, 16, 100, 26, 10, 53, 48, 48, 48, 48, 48, 48, 48, 48, 48, 42, 17, 10, 3, 111, 107, 116, 18, 10, 49, 48, 48, 48, 48, 48, 48, 48, 48, 48, 50, 12, 10, 7, 97, 105, 114, 45, 98, 98, 52, 18, 1, 48}
+	rawPoolBytes = []byte{124, 10, 20, 178, 97, 64, 82, 50, 18, 5, 108, 132, 29, 215, 59, 247, 139, 201, 47, 156, 195, 78, 221, 18, 17, 100, 101, 102, 97, 117, 108, 116, 45, 112, 111, 111, 108, 45, 110, 97, 109, 101, 26, 7, 97, 105, 114, 45, 98, 98, 52, 34, 17, 10, 3, 111, 107, 116, 18, 10, 49, 48, 48, 48, 48, 48, 48, 48, 48, 48, 42, 12, 10, 7, 97, 105, 114, 45, 98, 98, 52, 18, 1, 48, 50, 39, 10, 23, 10, 7, 97, 105, 114, 45, 98, 98, 52, 18, 12, 49, 48, 50, 52, 48, 48, 48, 48, 48, 48, 48, 48, 16, 100, 26, 10, 53, 48, 48, 48, 48, 48, 48, 48, 48, 48}
 )
 
 func TestFarmClient_QueryPools(t *testing.T) {
@@ -65,15 +65,14 @@ func TestFarmClient_QueryPools(t *testing.T) {
 	require.Equal(t, "default-pool-name", pools[0].Name)
 	require.Equal(t, expectedOwnerAddr, pools[0].Owner)
 	require.Equal(t, expectedTokenSymbol, pools[0].SymbolLocked)
-	require.Equal(t, 1, len(pools[0].YieldedTokenInfos))
-	require.Equal(t, expectedStartBlockHeightToYield, pools[0].YieldedTokenInfos[0].StartBlockHeightToYield)
-	require.Equal(t, expectedTokenSymbol, pools[0].YieldedTokenInfos[0].RemainingAmount.Denom)
-	require.True(t, pools[0].YieldedTokenInfos[0].RemainingAmount.Amount.Equal(sdk.NewDec(expectedTokenAmount)))
-	require.True(t, pools[0].YieldedTokenInfos[0].AmountYieldedPerBlock.Equal(sdk.NewDec(expectedAmountYieldPerBlock)))
 	require.Equal(t, "okt", pools[0].DepositAmount.Denom)
 	require.True(t, pools[0].DepositAmount.Amount.Equal(sdk.NewDec(10)))
 	require.Equal(t, expectedTokenSymbol, pools[0].TotalValueLocked.Denom)
-	require.Equal(t, 0, len(pools[0].AmountYielded))
+	require.Equal(t, 1, len(pools[0].YieldedTokenInfos))
+	require.Equal(t, expectedTokenSymbol, pools[0].YieldedTokenInfos[0].RemainingAmount.Denom)
+	require.True(t, pools[0].YieldedTokenInfos[0].RemainingAmount.Amount.Equal(sdk.NewDec(expectedTokenAmount)))
+	require.Equal(t, expectedStartBlockHeightToYield, pools[0].YieldedTokenInfos[0].StartBlockHeightToYield)
+	require.True(t, pools[0].YieldedTokenInfos[0].AmountYieldedPerBlock.Equal(sdk.NewDec(expectedAmountYieldPerBlock)))
 
 	mockCli.EXPECT().QuerySubspace(types.FarmPoolPrefix, types.ModuleName).Return(nil, errors.New("default error"))
 	_, err = mockCli.Farm().QueryPools()
@@ -135,9 +134,6 @@ func TestFarmClient_QueryPool(t *testing.T) {
 	require.True(t, pool.DepositAmount.Amount.Equal(expectedDec))
 	require.Equal(t, expectedTokenSymbol, pool.TotalValueLocked.Denom)
 	require.True(t, pool.TotalValueLocked.Amount.Equal(expectedDec))
-	require.Equal(t, 1, len(pool.AmountYielded))
-	require.Equal(t, expectedTokenSymbol, pool.AmountYielded[0].Denom)
-	require.True(t, pool.AmountYielded[0].Amount.Equal(expectedDec))
 
 	mockCli.EXPECT().Query(types.QueryPoolPath, cmn.HexBytes(queryBytes)).Return(nil, errors.New("default error"))
 	_, err = mockCli.Farm().QueryPool(expectedPoolName)

@@ -4,19 +4,19 @@ import sdk "github.com/okex/okexchain-go-sdk/types"
 
 // MsgCreatePool - structure for creating a farm pool
 type MsgCreatePool struct {
-	Owner        sdk.AccAddress `json:"owner"`
-	PoolName     string         `json:"pool_name"`
-	SymbolLocked string         `json:"locked_symbol"`
-	YieldSymbol  string         `json:"yield_symbol"`
+	Owner         sdk.AccAddress `json:"owner"`
+	PoolName      string         `json:"pool_name"`
+	LockedSymbol  string         `json:"locked_symbol"`
+	YieldedSymbol string         `json:"yielded_symbol"`
 }
 
 // NewMsgCreatePool creates a new instance of MsgCreatePool
-func NewMsgCreatePool(address sdk.AccAddress, poolName, lockToken, yieldToken string) MsgCreatePool {
+func NewMsgCreatePool(address sdk.AccAddress, poolName, lockedSymbol, yieldedSymbol string) MsgCreatePool {
 	return MsgCreatePool{
-		Owner:        address,
-		PoolName:     poolName,
-		SymbolLocked: lockToken,
-		YieldSymbol:  yieldToken,
+		Owner:         address,
+		PoolName:      poolName,
+		LockedSymbol:  lockedSymbol,
+		YieldedSymbol: yieldedSymbol,
 	}
 }
 

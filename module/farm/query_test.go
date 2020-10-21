@@ -21,11 +21,13 @@ const (
 	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
 	memo      = "my memo"
 
-	expectedTokenSymbol                   = "air-bb4"
-	expectedTokenAmount             int64 = 1024
-	expectedAmountYieldPerBlock     int64 = 50
-	expectedStartBlockHeightToYield int64 = 100
-	expectedPoolName                      = "default-pool-name"
+	expectedTokenSymbol                    = "air-bb4"
+	expectedTokenAmount             int64  = 1024
+	expectedAmountYieldPerBlock     int64  = 50
+	expectedStartBlockHeightToYield int64  = 100
+	expectedPoolName                       = "default-pool-name"
+	expectedHeight                  int64  = 1024
+	expectedReferencePeriod         uint64 = 1
 )
 
 var (
@@ -157,7 +159,7 @@ func TestFarmClient_QueryAccount(t *testing.T) {
 	poolName1 := fmt.Sprintf("%s%d", expectedPoolName, 1)
 	poolName2 := fmt.Sprintf("%s%d", expectedPoolName, 2)
 	poolName3 := fmt.Sprintf("%s%d", expectedPoolName, 3)
-	expectedRet := mockCli.BuildFarmPoolNameList(poolName1, poolName2, poolName3)
+	expectedRet := mockCli.BuildFarmPoolNameListBytes(poolName1, poolName2, poolName3)
 	expectedCdc := mockCli.GetCodec()
 
 	accAddr, err := sdk.AccAddressFromBech32(addr)
@@ -201,7 +203,7 @@ func TestFarmClient_QueryAccountsLockedTo(t *testing.T) {
 
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
-	expectedRet := mockCli.BuildAccAddrList(accAddr)
+	expectedRet := mockCli.BuildAccAddrListBytes(accAddr)
 	expectedCdc := mockCli.GetCodec()
 
 	queryParams := params.NewQueryPoolParams(expectedPoolName)
@@ -223,5 +225,47 @@ func TestFarmClient_QueryAccountsLockedTo(t *testing.T) {
 	mockCli.EXPECT().Query(types.QueryAccountsLockedToPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	require.Panics(t, func() {
 		_, _ = mockCli.Farm().QueryAccountsLockedTo(expectedPoolName)
+	})
+}
+
+func TestFarmClient_QueryLockInfo(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+		1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewFarmClient(mockCli.MockBaseClient))
+
+	accAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+
+	expectedRet := mockCli.BuildLockInfoBytes(accAddr, expectedPoolName, expectedTokenSymbol, sdk.NewDec(expectedTokenAmount),
+		expectedHeight, expectedReferencePeriod)
+	expectedCdc := mockCli.GetCodec()
+
+	queryParams := params.NewQueryPoolAccountParams(expectedPoolName, accAddr)
+	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	mockCli.EXPECT().Query(types.QueryLockInfoPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+
+	lockInfo, err := mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
+	require.NoError(t, err)
+
+	require.True(t, lockInfo.Owner.Equals(accAddr))
+	require.Equal(t, expectedPoolName, lockInfo.PoolName)
+	require.Equal(t, expectedTokenSymbol, lockInfo.Amount.Denom)
+	require.True(t, lockInfo.Amount.Amount.Equal(sdk.NewDec(expectedTokenAmount)))
+	require.Equal(t, expectedHeight, lockInfo.StartBlockHeight)
+	require.Equal(t, expectedReferencePeriod, lockInfo.ReferencePeriod)
+
+	mockCli.EXPECT().Query(types.QueryLockInfoPath, cmn.HexBytes(queryBytes)).Return(nil, errors.New("default error"))
+	_, err = mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(types.QueryLockInfoPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	require.Panics(t, func() {
+		_, _ = mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
 	})
 }

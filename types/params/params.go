@@ -273,3 +273,17 @@ func NewQueryAccountParams(accAddr types.AccAddress) QueryAccountParams {
 		AccAddress: accAddr,
 	}
 }
+
+// QueryPoolAccountParams defines the query params with an pool name and an account address
+type QueryPoolAccountParams struct {
+	PoolName   string
+	AccAddress types.AccAddress
+}
+
+// NewQueryPoolAccountParams creates a new instance of QueryPoolAccountParams
+func NewQueryPoolAccountParams(poolName string, accAddr types.AccAddress) QueryPoolAccountParams {
+	return QueryPoolAccountParams{
+		PoolName:   poolName,
+		AccAddress: accAddr,
+	}
+}

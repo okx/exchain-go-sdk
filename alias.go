@@ -63,4 +63,5 @@ type (
 	Proposal = governance.Proposal
 	// farm
 	FarmPool = farm.FarmPool
+	LockInfo = farm.LockInfo
 )

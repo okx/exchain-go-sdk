@@ -10,4 +10,5 @@ const (
 type (
 	//nolint
 	FarmPool = types.FarmPool
+	LockInfo = types.LockInfo
 )

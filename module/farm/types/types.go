@@ -9,6 +9,7 @@ const (
 	QueryPoolPath             = "custom/farm/pool"
 	QueryAccountPath          = "custom/farm/account"
 	QueryAccountsLockedToPath = "custom/farm/accounts-locked-to"
+	QueryLockInfoPath         = "custom/farm/lock-info"
 )
 
 var (
@@ -53,4 +54,13 @@ type YieldedTokenInfo struct {
 	RemainingAmount         sdk.DecCoin `json:"remaining_amount"`
 	StartBlockHeightToYield int64       `json:"start_block_height_to_yield"`
 	AmountYieldedPerBlock   sdk.Dec     `json:"amount_yielded_per_block"`
+}
+
+// LockInfo - structure of an address's locked info of
+type LockInfo struct {
+	Owner            sdk.AccAddress `json:"owner"`
+	PoolName         string         `json:"pool_name"`
+	Amount           sdk.DecCoin    `json:"amount"`
+	StartBlockHeight int64          `json:"start_block_height"`
+	ReferencePeriod  uint64         `json:"reference_period"`
 }

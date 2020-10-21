@@ -59,6 +59,11 @@ func (coin DecCoin) Add(coinB DecCoin) DecCoin {
 	return DecCoin{coin.Denom, coin.Amount.Add(coinB.Amount)}
 }
 
+// String implements the Stringer interface for DecCoin. It returns a human-readable representation of a decimal coin
+func (coin DecCoin) String() string {
+	return fmt.Sprintf("%v%v", coin.Amount, coin.Denom)
+}
+
 // DecCoins defines a slice of coins with decimal values
 type DecCoins []DecCoin
 

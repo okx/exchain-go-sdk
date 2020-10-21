@@ -268,4 +268,7 @@ func TestFarmClient_QueryLockInfo(t *testing.T) {
 	require.Panics(t, func() {
 		_, _ = mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
 	})
+
+	_, err = mockCli.Farm().QueryLockInfo(expectedPoolName, addr[1:])
+	require.Error(t, err)
 }

@@ -29,6 +29,8 @@ const (
 var (
 	// NewClientConfig gives an easy way for the callers to set client config
 	NewClientConfig = sdk.NewClientConfig
+	// NewTransferUnit is alias for NewTransferUnit function in types file
+	NewTransferUnit = token.NewTransferUnit
 )
 
 // nolint

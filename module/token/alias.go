@@ -13,3 +13,8 @@ type (
 	AccountTokensInfo = types.AccountTokensInfo
 	TransferUnit      = types.TransferUnit
 )
+
+var (
+	// NewTransferUnit is alias for NewTransferUnit function in types file
+	NewTransferUnit = types.NewTransferUnit
+)

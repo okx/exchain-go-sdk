@@ -42,6 +42,7 @@ type (
 	// token
 	Token             = token.Token
 	AccountTokensInfo = token.AccountTokensInfo
+	TransferUnit      = token.TransferUnit
 	// dex
 	TokenPair = dex.TokenPair
 	// order

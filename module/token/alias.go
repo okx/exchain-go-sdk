@@ -11,4 +11,5 @@ type (
 	// nolint
 	Token             = types.Token
 	AccountTokensInfo = types.AccountTokensInfo
+	TransferUnit      = types.TransferUnit
 )

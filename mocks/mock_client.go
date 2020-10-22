@@ -595,7 +595,7 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 	farmPool := farm.FarmPool{
 		Owner:        ownerAddr,
 		Name:         poolName,
-		SymbolLocked: tokenSymbol,
+		LockedSymbol: tokenSymbol,
 		YieldedTokenInfos: farm.YieldedTokenInfos{
 			{
 				RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),

@@ -17,6 +17,7 @@ var (
 	reDecCoin            = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
 	reDnm                = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
 	reDecCoinPoolToken   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, rePoolTokenDnmString))
+	rePoolTokenDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, rePoolTokenDnmString))
 )
 
 // DecCoin defines a coin which can have additional decimal points
@@ -314,7 +315,7 @@ func mustValidateDenom(denom string) {
 }
 
 func validateDenom(denom string) error {
-	if !reDnm.MatchString(denom) {
+	if !reDnm.MatchString(denom) && !rePoolTokenDnm.MatchString(denom) {
 		return fmt.Errorf("invalid denom: %s", denom)
 	}
 	return nil

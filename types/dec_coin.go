@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"regexp"
 	"sort"
 	"strings"
@@ -9,11 +10,13 @@ import (
 
 var (
 	// Denominations can be 3 ~ 16 characters long
-	reDnmString = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
-	reDecAmt    = `[[:digit:]]*\.?[[:digit:]]+`
-	reSpc       = `[[:space:]]*`
-	reDecCoin   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
-	reDnm       = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
+	reDnmString          = `[a-z][a-z0-9]{0,9}(\-[a-z0-9]{3})?`
+	reDecAmt             = `[[:digit:]]*\.?[[:digit:]]+`
+	reSpc                = `[[:space:]]*`
+	rePoolTokenDnmString = fmt.Sprintf(`(ammswap_)[a-z][a-z0-9]{0,9}(\-[a-f0-9]{3})?_[a-z][a-z0-9]{0,9}(\-[a-f0-9]{3})?`)
+	reDecCoin            = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, reDnmString))
+	reDnm                = regexp.MustCompile(fmt.Sprintf(`^%s$`, reDnmString))
+	reDecCoinPoolToken   = regexp.MustCompile(fmt.Sprintf(`^(%s)%s(%s)$`, reDecAmt, reSpc, rePoolTokenDnmString))
 )
 
 // DecCoin defines a coin which can have additional decimal points
@@ -254,20 +257,20 @@ func ParseDecCoins(coinsStr string) (DecCoins, error) {
 func ParseDecCoin(coinStr string) (coin DecCoin, err error) {
 	coinStr = strings.TrimSpace(coinStr)
 
-	matches := reDecCoin.FindStringSubmatch(coinStr)
+	matches := findStringSubmatch(coinStr)
 	if matches == nil {
-		return coin, fmt.Errorf("invalid decimal coin expression: %s", coinStr)
+		return DecCoin{}, fmt.Errorf("invalid decimal coin expression: %s", coinStr)
 	}
 
 	amountStr, denomStr := matches[1], matches[2]
 
 	amount, err := NewDecFromStr(amountStr)
 	if err != nil {
-		return coin, fmt.Errorf("failed to parse decimal coin amount: %s, %s", amountStr, err.Error())
+		return DecCoin{}, errors.Wrap(err, fmt.Sprintf("failed to parse decimal coin amount: %s", amountStr))
 	}
 
 	if err := validateDenom(denomStr); err != nil {
-		return coin, fmt.Errorf("invalid denom cannot contain upper case characters or spaces: %s", err)
+		return DecCoin{}, fmt.Errorf("invalid denom cannot contain upper case characters or spaces: %s", err)
 	}
 
 	return NewDecCoinFromDec(denomStr, amount), nil
@@ -315,4 +318,15 @@ func validateDenom(denom string) error {
 		return fmt.Errorf("invalid denom: %s", denom)
 	}
 	return nil
+}
+
+func findStringSubmatch(coinStr string) []string {
+
+	matches := reDecCoin.FindStringSubmatch(coinStr)
+
+	if matches != nil {
+		return matches
+	}
+
+	return reDecCoinPoolToken.FindStringSubmatch(coinStr)
 }

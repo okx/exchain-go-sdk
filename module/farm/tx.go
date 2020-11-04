@@ -8,13 +8,18 @@ import (
 )
 
 // CreatePool creates a farm pool
-func (fc farmClient) CreatePool(fromInfo keys.Info, passWd, poolName, lockToken, yieldToken, memo string, accNum,
+func (fc farmClient) CreatePool(fromInfo keys.Info, passWd, poolName, minLockAmountStr, yieldToken, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckCreatePoolParams(fromInfo, passWd, poolName, lockToken, yieldToken); err != nil {
+	if err = params.CheckCreatePoolParams(fromInfo, passWd, poolName, minLockAmountStr, yieldToken); err != nil {
 		return
 	}
 
-	msg := types.NewMsgCreatePool(fromInfo.GetAddress(), poolName, lockToken, yieldToken)
+	minLockAmount, err := sdk.ParseDecCoin(minLockAmountStr)
+	if err != nil {
+		return
+	}
+
+	msg := types.NewMsgCreatePool(fromInfo.GetAddress(), poolName, yieldToken, minLockAmount)
 
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }

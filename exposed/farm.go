@@ -15,7 +15,7 @@ type Farm interface {
 
 // FarmTx shows the expected tx behavior for inner farm client
 type FarmTx interface {
-	CreatePool(fromInfo keys.Info, passWd, poolName, lockToken, yieldToken, memo string, accNum, seqNum uint64) (
+	CreatePool(fromInfo keys.Info, passWd, poolName, minLockAmountStr, yieldToken, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, error)
 	DestroyPool(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Provide(fromInfo keys.Info, passWd, poolName, amountStr, yieldPerBlockStr string, startHeightToYield int64, memo string, accNum,

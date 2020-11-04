@@ -6,16 +6,16 @@ import sdk "github.com/okex/okexchain-go-sdk/types"
 type MsgCreatePool struct {
 	Owner         sdk.AccAddress `json:"owner"`
 	PoolName      string         `json:"pool_name"`
-	LockedSymbol  string         `json:"locked_symbol"`
+	MinLockAmount sdk.DecCoin    `json:"min_lock_amount"`
 	YieldedSymbol string         `json:"yielded_symbol"`
 }
 
 // NewMsgCreatePool creates a new instance of MsgCreatePool
-func NewMsgCreatePool(address sdk.AccAddress, poolName, lockedSymbol, yieldedSymbol string) MsgCreatePool {
+func NewMsgCreatePool(address sdk.AccAddress, poolName, yieldedSymbol string, minLockAmount sdk.DecCoin) MsgCreatePool {
 	return MsgCreatePool{
 		Owner:         address,
 		PoolName:      poolName,
-		LockedSymbol:  lockedSymbol,
+		MinLockAmount: minLockAmount,
 		YieldedSymbol: yieldedSymbol,
 	}
 }

@@ -36,13 +36,13 @@ func CheckPoolNameParams(fromInfo keys.Info, passWd, poolName string) error {
 }
 
 // CheckCreatePoolParams gives a quick validity check for the input params of creating pool in farm
-func CheckCreatePoolParams(fromInfo keys.Info, passWd, poolName, lockToken, yieldToken string) error {
+func CheckCreatePoolParams(fromInfo keys.Info, passWd, poolName, minLockAmountStr, yieldToken string) error {
 	if err := CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
 		return err
 	}
 
-	if len(lockToken) == 0 || len(yieldToken) == 0 {
-		return errors.New("failed. empty lock token or empty yield token")
+	if len(minLockAmountStr) == 0 || len(yieldToken) == 0 {
+		return errors.New("failed. empty min lock token or empty yield token")
 	}
 
 	return nil

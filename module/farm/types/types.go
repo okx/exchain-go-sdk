@@ -39,7 +39,7 @@ func RegisterCodec(cdc sdk.SDKCodec) {
 type FarmPool struct {
 	Owner                   sdk.AccAddress    `json:"owner"`
 	Name                    string            `json:"name"`
-	LockedSymbol            string            `json:"locked_symbol"`
+	MinLockAmount           sdk.DecCoin       `json:"min_lock_amount"`
 	DepositAmount           sdk.DecCoin       `json:"deposit_amount"`
 	TotalValueLocked        sdk.DecCoin       `json:"total_value_locked"`
 	YieldedTokenInfos       YieldedTokenInfos `json:"yielded_token_infos"`

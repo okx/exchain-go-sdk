@@ -68,6 +68,7 @@ func TestFarmClient_QueryPools(t *testing.T) {
 	require.Equal(t, "default-pool-name", pools[0].Name)
 	require.Equal(t, expectedOwnerAddr, pools[0].Owner)
 	require.Equal(t, expectedTokenSymbol, pools[0].MinLockAmount.Denom)
+	require.True(t, pools[0].MinLockAmount.Amount.Equal(expectedDec))
 	require.Equal(t, "okt", pools[0].DepositAmount.Denom)
 	require.True(t, pools[0].DepositAmount.Amount.Equal(sdk.NewDec(10)))
 	require.Equal(t, expectedTokenSymbol, pools[0].TotalValueLocked.Denom)

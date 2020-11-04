@@ -592,10 +592,11 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
 	require.NoError(mc.t, err)
 
+	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
 	farmPool := farm.FarmPool{
-		Owner:        ownerAddr,
-		Name:         poolName,
-		LockedSymbol: tokenSymbol,
+		Owner:         ownerAddr,
+		Name:          poolName,
+		MinLockAmount: testDecCoin,
 		YieldedTokenInfos: farm.YieldedTokenInfos{
 			{
 				RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
@@ -603,8 +604,8 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 				AmountYieldedPerBlock:   amountDec,
 			},
 		},
-		DepositAmount:    sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-		TotalValueLocked: sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+		DepositAmount:    testDecCoin,
+		TotalValueLocked: testDecCoin,
 	}
 
 	return mc.cdc.MustMarshalJSON(farmPool)

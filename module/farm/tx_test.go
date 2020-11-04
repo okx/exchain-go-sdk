@@ -35,12 +35,12 @@ func TestFarmClient_CreatePool(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "test-token1", "test-token2",
+	res, err := mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "0.1024okt", "test-token2",
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "", "test-token1", "test-token2",
+	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "", "0.1024okt", "test-token2",
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
@@ -48,18 +48,18 @@ func TestFarmClient_CreatePool(t *testing.T) {
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "test-token1", "",
+	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "0.1024okt", "",
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Farm().CreatePool(fromInfo, "", "test-pool-name", "test-token1", "test-token2",
+	_, err = mockCli.Farm().CreatePool(fromInfo, "", "test-pool-name", "0.1024okt", "test-token2",
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(sdk.TxResponse{}, errors.New("default error"))
-	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "test-token1", "test-token2",
+	_, err = mockCli.Farm().CreatePool(fromInfo, passWd, "test-pool-name", "0.1024okt", "test-token2",
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }

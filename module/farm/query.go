@@ -9,17 +9,19 @@ import (
 
 // QueryPools gets all farm pools info
 func (fc farmClient) QueryPools() (farmPools []types.FarmPool, err error) {
-	resKVs, err := fc.QuerySubspace(types.FarmPoolPrefix, ModuleName)
+	// fixed to all pools query
+	poolsParams := params.NewQueryPoolsParams(1, 0)
+	jsonBytes, err := fc.GetCodec().MarshalJSON(poolsParams)
 	if err != nil {
-		return
+		return farmPools, utils.ErrMarshalJSON(err.Error())
 	}
 
-	for _, kv := range resKVs {
-		var farmPool types.FarmPool
-		fc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &farmPool)
-		farmPools = append(farmPools, farmPool)
+	res, err := fc.Query(types.QueryPoolsPath, jsonBytes)
+	if err != nil {
+		return farmPools, utils.ErrClientQuery(err.Error())
 	}
 
+	fc.GetCodec().MustUnmarshalJSON(res, &farmPools)
 	return
 }
 

@@ -7,6 +7,7 @@ const (
 	ModuleName = "farm"
 
 	QueryPoolPath             = "custom/farm/pool"
+	QueryPoolsPath            = "custom/farm/pools"
 	QueryAccountPath          = "custom/farm/account"
 	QueryAccountsLockedToPath = "custom/farm/accounts-locked-to"
 	QueryLockInfoPath         = "custom/farm/lock-info"

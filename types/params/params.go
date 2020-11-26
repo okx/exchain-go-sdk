@@ -287,3 +287,17 @@ func NewQueryPoolAccountParams(poolName string, accAddr types.AccAddress) QueryP
 		AccAddress: accAddr,
 	}
 }
+
+// QueryPoolsParams defines the params for the following queries:
+// - 'custom/farm/pools'
+type QueryPoolsParams struct {
+	Page, Limit int
+}
+
+// NewQueryPoolsParams creates a new instance of QueryPoolsParams
+func NewQueryPoolsParams(page, limit int) QueryPoolsParams {
+	return QueryPoolsParams{
+		Page:  page,
+		Limit: limit,
+	}
+}

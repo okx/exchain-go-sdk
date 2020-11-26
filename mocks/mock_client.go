@@ -611,6 +611,46 @@ func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol str
 	return mc.cdc.MustMarshalJSON(farmPool)
 }
 
+// BuildFarmPoolsBytes generates the farm pools bytes for test
+func (mc *MockClient) BuildFarmPoolsBytes(poolName1, poolName2, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
+	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
+	require.NoError(mc.t, err)
+
+	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
+	farmPools := []farm.FarmPool{
+		{
+			Owner:         ownerAddr,
+			Name:          poolName1,
+			MinLockAmount: testDecCoin,
+			YieldedTokenInfos: farm.YieldedTokenInfos{
+				{
+					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+					StartBlockHeightToYield: height,
+					AmountYieldedPerBlock:   amountDec,
+				},
+			},
+			DepositAmount:    testDecCoin,
+			TotalValueLocked: testDecCoin,
+		},
+		{
+			Owner:         ownerAddr,
+			Name:          poolName2,
+			MinLockAmount: testDecCoin,
+			YieldedTokenInfos: farm.YieldedTokenInfos{
+				{
+					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+					StartBlockHeightToYield: height,
+					AmountYieldedPerBlock:   amountDec,
+				},
+			},
+			DepositAmount:    testDecCoin,
+			TotalValueLocked: testDecCoin,
+		},
+	}
+
+	return mc.cdc.MustMarshalJSON(farmPools)
+}
+
 // BuildFarmPoolNameList generates the farm pool name list bytes for test
 func (mc *MockClient) BuildFarmPoolNameListBytes(poolName ...string) []byte {
 	return mc.cdc.MustMarshalJSON(poolName)

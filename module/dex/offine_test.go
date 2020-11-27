@@ -7,7 +7,7 @@ import (
 
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 )

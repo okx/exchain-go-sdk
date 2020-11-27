@@ -16,7 +16,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	"github.com/okex/okexchain-go-sdk/module/token"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // Client - structure of the main client of okexchain gosdk

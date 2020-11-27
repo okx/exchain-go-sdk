@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // const

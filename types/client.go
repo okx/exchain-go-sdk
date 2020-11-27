@@ -2,9 +2,10 @@ package types
 
 import (
 	"errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	rpc "github.com/tendermint/tendermint/rpc/client"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	rpcclient "github.com/tendermint/tendermint/rpc/client"
 )
 
 // BaseClient shows the expected behavior for a base client
@@ -32,41 +33,40 @@ type SimulationHandler interface {
 
 // ClientQuery shows the expected query behavior
 type ClientQuery interface {
-	rpc.SignClient
-	Query(path string, key cmn.HexBytes) ([]byte, error)
-	QueryStore(key cmn.HexBytes, storeName, endPath string) ([]byte, error)
-	QuerySubspace(subspace []byte, storeName string) ([]cmn.KVPair, error)
+	rpcclient.SignClient
+	Query(path string, key tmbytes.HexBytes) ([]byte, error)
+	QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, error)
 }
 
 // ClientTx shows the expected tx behavior
 type ClientTx interface {
-	Broadcast(txBytes []byte, broadcastMode BroadcastMode) (res TxResponse, err error)
+	Broadcast(txBytes []byte, broadcastMode string) (res TxResponse, err error)
 }
 
 // RPCClient shows the expected behavior for a inner exposed client
 type RPCClient interface {
-	rpc.ABCIClient
-	rpc.SignClient
+	rpcclient.ABCIClient
+	rpcclient.SignClient
 }
 
 // ClientConfig records the base config of gosdk client
 type ClientConfig struct {
 	NodeURI       string
 	ChainID       string
-	BroadcastMode BroadcastMode
+	BroadcastMode string
 	Gas           uint64
 	GasAdjustment float64
-	Fees          DecCoins
-	GasPrices     DecCoins
+	Fees          sdk.DecCoins
+	GasPrices     sdk.DecCoins
 }
 
 // NewClientConfig creates a new instance of ClientConfig
-func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesStr string, gas uint64, gasAdjustment float64,
+func NewClientConfig(nodeURI, chainID string, broadcastMode string, feesStr string, gas uint64, gasAdjustment float64,
 	gasPricesStr string) (
 	cliConfig ClientConfig, err error) {
-	var fees, gasPrices DecCoins
+	var fees, gasPrices sdk.DecCoins
 	if len(feesStr) != 0 {
-		fees, err = ParseDecCoins(feesStr)
+		fees, err = sdk.ParseDecCoins(feesStr)
 		if err != nil {
 			return
 		}
@@ -77,7 +77,7 @@ func NewClientConfig(nodeURI, chainID string, broadcastMode BroadcastMode, feesS
 			return cliConfig, errors.New("failed. gasAdjustment must be greater than 1 with the auto gas calculating")
 		}
 
-		gasPrices, err = ParseDecCoins(gasPricesStr)
+		gasPrices, err = sdk.ParseDecCoins(gasPricesStr)
 		if err != nil {
 			return
 		}

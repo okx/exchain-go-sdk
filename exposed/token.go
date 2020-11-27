@@ -1,14 +1,15 @@
 package exposed
 
 import (
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Token shows the expected behavior for inner token client
 type Token interface {
-	sdk.Module
+	gosdktypes.Module
 	TokenTx
 	TokenQuery
 }

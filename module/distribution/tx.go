@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/okex/okexchain-go-sdk/module/distribution/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/okex/okexchain-go-sdk/types/params"
 )
 

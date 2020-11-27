@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/cosmos/go-bip39"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
+	"github.com/bartekn/go-bip39"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file
@@ -38,7 +38,8 @@ func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 
 // GeneratePrivateKeyFromMnemo converts mnemonic to private key
 func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
-	hdPath := hd.NewFundraiserParams(0, 0)
+	// TODO
+	hdPath := hd.NewFundraiserParams(0, 0, 0)
 	seed, err := bip39.NewSeedWithErrorChecking(mnemo, "")
 	if err != nil {
 		return

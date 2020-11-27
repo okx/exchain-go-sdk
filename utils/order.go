@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetOrderIDsFromResponse filters the orderID from the tx response

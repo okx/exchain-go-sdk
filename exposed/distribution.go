@@ -1,13 +1,14 @@
 package exposed
 
 import (
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Distribution shows the expected behavior for inner distribution client
 type Distribution interface {
-	sdk.Module
+	gosdktypes.Module
 	DistrTx
 }
 

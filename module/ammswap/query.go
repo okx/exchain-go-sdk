@@ -5,7 +5,7 @@ import (
 	"math/big"
 
 	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var (

@@ -1,16 +1,13 @@
 package utils
 
 import (
-	"encoding/hex"
 	"errors"
 	"fmt"
-	"log"
-
-	"github.com/cosmos/go-bip39"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys/mintkey"
+	"github.com/bartekn/go-bip39"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/okex/okexchain-go-sdk/types/tx"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"log"
+	"strings"
 )
 
 const (
@@ -29,12 +26,14 @@ func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error
 		log.Println("Default passWd : \"12345678\"")
 	}
 
+	// TODO
 	mnemo, err = GenerateMnemonic()
 	if err != nil {
 		return
 	}
 
-	info, err = tx.Kb.CreateAccount(name, mnemo, "", passWd, 0, 0)
+	hdPath := keys.CreateHDPath(0, 0).String()
+	info, err = tx.Kb.CreateAccount(name, mnemo, "", passWd, hdPath, keys.Secp256k1)
 	if err != nil {
 		return info, mnemo, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}
@@ -59,11 +58,12 @@ func CreateAccountWithMnemo(mnemonic, name, passWd string) (info keys.Info, mnem
 		log.Println("Default passWd : \"12345678\"")
 	}
 
-	if !bip39.IsMnemonicValid(mnemonic) {
+	if strings.Contains(mnemonic, " ") && !bip39.IsMnemonicValid(mnemonic) {
 		return info, mnemo, errors.New("failed. mnemonic is invalid")
 	}
 
-	info, err = tx.Kb.CreateAccount(name, mnemonic, "", passWd, 0, 0)
+	hdPath := keys.CreateHDPath(0, 0).String()
+	info, err = tx.Kb.CreateAccount(name, mnemonic, "", passWd, hdPath, keys.Secp256k1)
 	if err != nil {
 		return info, mnemonic, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}
@@ -76,18 +76,19 @@ func CreateAccountWithPrivateKey(privateKey, name, passWd string) (info keys.Inf
 	if len(privateKey) == 0 {
 		return info, errors.New("failed. empty privateKey")
 	}
-	derivedPrivSlice, err := hex.DecodeString(privateKey)
-	if err != nil {
-		return
-	}
-	derivedPriv, err := sliceToArray(derivedPrivSlice)
-	if err != nil {
-		return
-	}
-	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
-
-	privateKeyArmor := mintkey.EncryptArmorPrivKey(priv, passWd)
-	return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), err
+	return
+	//derivedPrivSlice, err := hex.DecodeString(privateKey)
+	//if err != nil {
+	//	return
+	//}
+	//derivedPriv, err := sliceToArray(derivedPrivSlice)
+	//if err != nil {
+	//	return
+	//}
+	//priv := secp256k1.PrivKeySecp256k1(derivedPriv)
+	//
+	//privateKeyArmor := mintkey.EncryptArmorPrivKey(priv, passWd)
+	//return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), err
 }
 
 // GenerateMnemonic creates a random mnemonic

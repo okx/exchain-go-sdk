@@ -1,14 +1,15 @@
 package exposed
 
 import (
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Order shows the expected behavior for inner order client
 type Order interface {
-	sdk.Module
+	gosdktypes.Module
 	OrderTx
 	OrderQuery
 }

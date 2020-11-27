@@ -3,7 +3,7 @@ package distribution
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/distribution/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ sdk.Module = (*distrClient)(nil)

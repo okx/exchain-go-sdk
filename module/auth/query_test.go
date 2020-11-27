@@ -2,14 +2,16 @@ package auth
 
 import (
 	"errors"
+	gosdk "github.com/okex/okexchain-go-sdk"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )
 
 const (
@@ -20,7 +22,7 @@ const (
 func TestAuthClient_QueryAccount(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdk.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -32,7 +34,7 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	expectedCdc := mockCli.GetCodec()
 	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "1024btc,2048.1024okt", 1, 2)
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.AccountInfoPath, tmbytes.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
 
 	acc, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)

@@ -1,14 +1,15 @@
 package exposed
 
 import (
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Staking shows the expected behavior for inner staking client
 type Staking interface {
-	sdk.Module
+	gosdktypes.Module
 	StakingTx
 	StakingQuery
 }

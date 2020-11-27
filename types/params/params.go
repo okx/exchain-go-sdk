@@ -5,7 +5,7 @@ import (
 	"time"
 
 	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
-	"github.com/okex/okexchain-go-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types"
 )
 
 const (

@@ -3,7 +3,7 @@ package tendermint
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ sdk.Module = (*tendermintClient)(nil)

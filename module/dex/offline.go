@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/okex/okexchain-go-sdk/types/tx"
 	"github.com/okex/okexchain-go-sdk/utils"
 )

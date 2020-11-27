@@ -2,9 +2,8 @@ package auth
 
 import (
 	"errors"
-
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
 

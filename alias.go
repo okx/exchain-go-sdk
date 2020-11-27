@@ -1,6 +1,7 @@
 package gosdk
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
@@ -9,14 +10,14 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	"github.com/okex/okexchain-go-sdk/module/token"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain-go-sdk/types"
 )
 
 // const
 const (
-	BroadcastSync  = sdk.BroadcastSync
-	BroadcastAsync = sdk.BroadcastAsync
-	BroadcastBlock = sdk.BroadcastBlock
+	BroadcastSync  = types.BroadcastSync
+	BroadcastAsync = types.BroadcastAsync
+	BroadcastBlock = types.BroadcastBlock
 
 	// vote for the proposal
 	VoteYes        = "yes"
@@ -27,7 +28,7 @@ const (
 
 var (
 	// NewClientConfig gives an easy way for the callers to set client config
-	NewClientConfig = sdk.NewClientConfig
+	NewClientConfig = types.NewClientConfig
 )
 
 // nolint

@@ -10,7 +10,8 @@ import (
 const (
 	defaultName       = "alice"
 	defaultPassWd     = "12345678"
-	defaultMnemonic   = "sustain hole urban away boy core lazy brick wait drive tiger tell"
+	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
+	defaultAddr       = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
 	defaultMemo       = "my memo"
 	valConsPK         = "okexchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqttvmqv"
@@ -73,4 +74,11 @@ func TestGenerateMnemonic(t *testing.T) {
 	mnemo, err := GenerateMnemonic()
 	require.NoError(t, err)
 	require.NotNil(t, mnemo)
+}
+
+func TestMichael(t *testing.T) {
+	info, mnemo, err := CreateAccountWithMnemo(defaultMnemonic, defaultName, defaultPassWd)
+	require.NoError(t, err)
+	fmt.Println(info.GetAddress().String())
+	fmt.Println(mnemo)
 }

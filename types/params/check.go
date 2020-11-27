@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
 )
 
 const (

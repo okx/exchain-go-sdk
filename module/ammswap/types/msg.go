@@ -1,6 +1,6 @@
 package types
 
-import sdk "github.com/okex/okexchain-go-sdk/types"
+import sdk "github.com/cosmos/cosmos-sdk/types"
 
 // AmmSwap message types and routes
 const (

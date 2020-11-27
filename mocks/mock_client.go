@@ -3,12 +3,15 @@ package mocks
 import (
 	"encoding/json"
 	"fmt"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
 	"time"
 
 	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
@@ -19,42 +22,40 @@ import (
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
 	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"github.com/tendermint/tendermint/libs/common"
-	cmn "github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmstate "github.com/tendermint/tendermint/state"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // MockClient - structure of the mock client for gosdk testing
 type MockClient struct {
 	t *testing.T
-	*sdk.MockBaseClient
-	config  sdk.ClientConfig
-	cdc     sdk.SDKCodec
-	modules map[string]sdk.Module
+	*gosdktypes.MockBaseClient
+	config  gosdktypes.ClientConfig
+	cdc     gosdktypes.SDKCodec
+	modules map[string]gosdktypes.Module
 }
 
 // NewMockClient creates a new instance of MockClient
-func NewMockClient(t *testing.T, ctrl *gomock.Controller, config sdk.ClientConfig) MockClient {
-	cdc := sdk.NewCodec()
+func NewMockClient(t *testing.T, ctrl *gomock.Controller, config gosdktypes.ClientConfig) MockClient {
+	cdc := gosdktypes.NewCodec()
 	pMockClient := &MockClient{
 		t:              t,
-		MockBaseClient: sdk.NewMockBaseClient(ctrl),
+		MockBaseClient: gosdktypes.NewMockBaseClient(ctrl),
 		config:         config,
 		cdc:            cdc,
-		modules:        make(map[string]sdk.Module),
+		modules:        make(map[string]gosdktypes.Module),
 	}
 
 	return *pMockClient
 }
 
 // RegisterModule registers the specific module for MockClient
-func (mc *MockClient) RegisterModule(mods ...sdk.Module) {
+func (mc *MockClient) RegisterModule(mods ...gosdktypes.Module) {
 	for _, mod := range mods {
 		moduleName := mod.Name()
 		if _, ok := mc.modules[moduleName]; ok {
@@ -64,17 +65,17 @@ func (mc *MockClient) RegisterModule(mods ...sdk.Module) {
 		mod.RegisterCodec(mc.cdc)
 		mc.modules[moduleName] = mod
 	}
-	sdk.RegisterBasicCodec(mc.cdc)
+	gosdktypes.RegisterBasicCodec(mc.cdc)
 	mc.cdc.Seal()
 }
 
 // GetConfig returns the client config
-func (mc *MockClient) GetConfig() sdk.ClientConfig {
+func (mc *MockClient) GetConfig() gosdktypes.ClientConfig {
 	return mc.config
 }
 
 // GetCodec returns the client codec
-func (mc *MockClient) GetCodec() sdk.SDKCodec {
+func (mc *MockClient) GetCodec() gosdktypes.SDKCodec {
 	return mc.cdc
 }
 
@@ -114,7 +115,7 @@ func (mc *MockClient) Tendermint() exposed.Tendermint {
 func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr string, accNum, seqNum uint64) []byte {
 	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
 	require.NoError(mc.t, err)
-	accPubkey, err := sdk.GetAccPubKeyBech32(accPubkeyStr)
+	accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
 	require.NoError(mc.t, err)
 	coins, err := sdk.ParseDecCoins(coinsStr)
 	require.NoError(mc.t, err)
@@ -252,7 +253,7 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
 	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
 	jailed bool) []byte {
-	consPK, err := sdk.GetConsPubKeyBech32(consPubKey)
+	consPK, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, consPubKey)
 	require.NoError(mc.t, err)
 	val := staking.ValidatorInner{
 		OperatorAddress: valAddr,
@@ -304,7 +305,7 @@ func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sd
 
 // GetRawResultBlockPointer generates the raw tendermint block result pointer for test
 func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, time time.Time, appHash,
-	blockIDHash cmn.HexBytes) *ctypes.ResultBlock {
+	blockIDHash tmbytes.HexBytes) *ctypes.ResultBlock {
 	return &ctypes.ResultBlock{
 		Block: &tmtypes.Block{
 			Header: tmtypes.Header{
@@ -357,7 +358,7 @@ func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkTyp
 
 // GetRawCommitResultPointer generates the raw tendermint commit result pointer for test
 func (mc *MockClient) GetRawCommitResultPointer(canonicalCommit bool, chainID string, height int64, time time.Time, appHash,
-	blockIDHash cmn.HexBytes) *ctypes.ResultCommit {
+	blockIDHash tmbytes.HexBytes) *ctypes.ResultCommit {
 	return &ctypes.ResultCommit{
 		CanonicalCommit: canonicalCommit,
 		SignedHeader: tmtypes.SignedHeader{
@@ -392,7 +393,7 @@ func (mc *MockClient) GetRawValidatorsResultPointer(height, votingPower, propose
 }
 
 // GetRawTxResultPointer generates the raw tendermint tx result pointer for test
-func (mc *MockClient) GetRawTxResultPointer(hash cmn.HexBytes, height int64, code uint32, log, eventType string,
+func (mc *MockClient) GetRawTxResultPointer(hash tmbytes.HexBytes, height int64, code uint32, log, eventType string,
 	tx []byte) *ctypes.ResultTx {
 	return &ctypes.ResultTx{
 		Hash:   hash,
@@ -411,7 +412,7 @@ func (mc *MockClient) GetRawTxResultPointer(hash cmn.HexBytes, height int64, cod
 }
 
 // GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
-func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash cmn.HexBytes, height int64, code uint32, log,
+func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.HexBytes, height int64, code uint32, log,
 	eventType string, tx []byte) *ctypes.ResultTxSearch {
 	return &ctypes.ResultTxSearch{
 		TotalCount: totalCount,

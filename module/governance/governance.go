@@ -3,7 +3,7 @@ package governance
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ sdk.Module = (*govClient)(nil)

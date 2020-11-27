@@ -1,14 +1,15 @@
 package exposed
 
 import (
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Dex shows the expected behavior for inner dex client
 type Dex interface {
-	sdk.Module
+	gosdktypes.Module
 	DexTx
 	DexQuery
 	DexOffline

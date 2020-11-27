@@ -3,7 +3,7 @@ package types
 import (
 	"strings"
 
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // MsgUpdateOperator - structure to update an existed DEXOperator

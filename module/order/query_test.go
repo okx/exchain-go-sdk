@@ -8,7 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
 	cmn "github.com/tendermint/tendermint/libs/common"

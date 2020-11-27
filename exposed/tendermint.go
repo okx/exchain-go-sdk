@@ -2,12 +2,12 @@ package exposed
 
 import (
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Tendermint shows the expected behavior for inner tendermint client
 type Tendermint interface {
-	sdk.Module
+	gosdktypes.Module
 	TendermintQuery
 }
 

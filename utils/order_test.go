@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 

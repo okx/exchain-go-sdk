@@ -2,7 +2,7 @@ package governance
 
 import (
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"

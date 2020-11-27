@@ -1,6 +1,8 @@
 package types
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/ed25519"
@@ -34,7 +36,7 @@ type SDKCodec interface {
 
 var _ SDKCodec = (*Codec)(nil)
 
-// Codec defines the codec only for okexchain gosdk
+// Codec defines the codec only for OKExChain gosdk
 type Codec struct {
 	*amino.Codec
 }
@@ -70,8 +72,8 @@ func RegisterBasicCodec(cdc SDKCodec) {
 	cdc.RegisterConcrete(ed25519.PrivKeyEd25519{}, ed25519.PrivKeyAminoName)
 	cdc.RegisterConcrete(secp256k1.PrivKeySecp256k1{}, secp256k1.PrivKeyAminoName)
 	// stdTx
-	cdc.RegisterInterface((*Tx)(nil))
-	cdc.RegisterConcrete(StdTx{}, "cosmos-sdk/StdTx")
+	cdc.RegisterInterface((*sdk.Tx)(nil))
+	cdc.RegisterConcrete(authtypes.StdTx{}, "cosmos-sdk/StdTx")
 	// msg
-	cdc.RegisterInterface((*Msg)(nil))
+	cdc.RegisterInterface((*sdk.Msg)(nil))
 }

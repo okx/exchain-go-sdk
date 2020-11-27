@@ -2,12 +2,12 @@ package exposed
 
 import (
 	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Auth shows the expected behavior for inner auth client
 type Auth interface {
-	sdk.Module
+	gosdktypes.Module
 	AuthQuery
 }
 

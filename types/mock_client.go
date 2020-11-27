@@ -5,8 +5,13 @@
 package types
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	gomock "github.com/golang/mock/gomock"
-	common "github.com/tendermint/tendermint/libs/common"
+	"github.com/tendermint/iavl/common"
+	"github.com/tendermint/tendermint/libs/kv"
+
+	//common "github.com/tendermint/tendermint/libs/common"
 	client "github.com/tendermint/tendermint/rpc/client"
 	core_types "github.com/tendermint/tendermint/rpc/core/types"
 	types "github.com/tendermint/tendermint/types"
@@ -157,10 +162,10 @@ func (mr *MockBaseClientMockRecorder) QueryStore(key, storeName, endPath interfa
 }
 
 // QuerySubspace mocks base method
-func (m *MockBaseClient) QuerySubspace(subspace []byte, storeName string) ([]common.KVPair, error) {
+func (m *MockBaseClient) QuerySubspace(subspace []byte, storeName string) ([]kv.Pair, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "QuerySubspace", subspace, storeName)
-	ret0, _ := ret[0].([]common.KVPair)
+	ret0, _ := ret[0].([]kv.Pair)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -172,10 +177,10 @@ func (mr *MockBaseClientMockRecorder) QuerySubspace(subspace, storeName interfac
 }
 
 // Broadcast mocks base method
-func (m *MockBaseClient) Broadcast(txBytes []byte, broadcastMode BroadcastMode) (TxResponse, error) {
+func (m *MockBaseClient) Broadcast(txBytes []byte, broadcastMode string) (sdk.TxResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Broadcast", txBytes, broadcastMode)
-	ret0, _ := ret[0].(TxResponse)
+	ret0, _ := ret[0].(sdk.TxResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -187,10 +192,10 @@ func (mr *MockBaseClientMockRecorder) Broadcast(txBytes, broadcastMode interface
 }
 
 // BuildAndBroadcast mocks base method
-func (m *MockBaseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error) {
+func (m *MockBaseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (sdk.TxResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildAndBroadcast", fromName, passphrase, memo, msgs, accNumber, seqNumber)
-	ret0, _ := ret[0].(TxResponse)
+	ret0, _ := ret[0].(sdk.TxResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -202,10 +207,10 @@ func (mr *MockBaseClientMockRecorder) BuildAndBroadcast(fromName, passphrase, me
 }
 
 // BuildStdTx mocks base method
-func (m *MockBaseClient) BuildStdTx(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (StdTx, error) {
+func (m *MockBaseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (authtypes.StdTx, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildStdTx", fromName, passphrase, memo, msgs, accNumber, seqNumber)
-	ret0, _ := ret[0].(StdTx)
+	ret0, _ := ret[0].(authtypes.StdTx)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -217,10 +222,10 @@ func (mr *MockBaseClientMockRecorder) BuildStdTx(fromName, passphrase, memo, msg
 }
 
 // BuildUnsignedStdTxOffline mocks base method
-func (m *MockBaseClient) BuildUnsignedStdTxOffline(msgs []Msg, memo string) StdTx {
+func (m *MockBaseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) authtypes.StdTx {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildUnsignedStdTxOffline", msgs, memo)
-	ret0, _ := ret[0].(StdTx)
+	ret0, _ := ret[0].(authtypes.StdTx)
 	return ret0
 }
 
@@ -231,10 +236,10 @@ func (mr *MockBaseClientMockRecorder) BuildUnsignedStdTxOffline(msgs, memo inter
 }
 
 // CalculateGas mocks base method
-func (m *MockBaseClient) CalculateGas(txBytes []byte) (StdFee, error) {
+func (m *MockBaseClient) CalculateGas(txBytes []byte) (authtypes.StdFee, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CalculateGas", txBytes)
-	ret0, _ := ret[0].(StdFee)
+	ret0, _ := ret[0].(authtypes.StdFee)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -246,7 +251,7 @@ func (mr *MockBaseClientMockRecorder) CalculateGas(txBytes interface{}) *gomock.
 }
 
 // BuildTxForSim mocks base method
-func (m *MockBaseClient) BuildTxForSim(msgs []Msg, memo string, accNumber, seqNumber uint64) ([]byte, error) {
+func (m *MockBaseClient) BuildTxForSim(msgs []sdk.Msg, memo string, accNumber, seqNumber uint64) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildTxForSim", msgs, memo, accNumber, seqNumber)
 	ret0, _ := ret[0].([]byte)
@@ -312,10 +317,10 @@ func (m *MockTxHandler) EXPECT() *MockTxHandlerMockRecorder {
 }
 
 // BuildAndBroadcast mocks base method
-func (m *MockTxHandler) BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error) {
+func (m *MockTxHandler) BuildAndBroadcast(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (sdk.TxResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildAndBroadcast", fromName, passphrase, memo, msgs, accNumber, seqNumber)
-	ret0, _ := ret[0].(TxResponse)
+	ret0, _ := ret[0].(sdk.TxResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -327,10 +332,10 @@ func (mr *MockTxHandlerMockRecorder) BuildAndBroadcast(fromName, passphrase, mem
 }
 
 // BuildStdTx mocks base method
-func (m *MockTxHandler) BuildStdTx(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (StdTx, error) {
+func (m *MockTxHandler) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (authtypes.StdTx, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildStdTx", fromName, passphrase, memo, msgs, accNumber, seqNumber)
-	ret0, _ := ret[0].(StdTx)
+	ret0, _ := ret[0].(authtypes.StdTx)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -342,10 +347,10 @@ func (mr *MockTxHandlerMockRecorder) BuildStdTx(fromName, passphrase, memo, msgs
 }
 
 // BuildUnsignedStdTxOffline mocks base method
-func (m *MockTxHandler) BuildUnsignedStdTxOffline(msgs []Msg, memo string) StdTx {
+func (m *MockTxHandler) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) authtypes.StdTx {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildUnsignedStdTxOffline", msgs, memo)
-	ret0, _ := ret[0].(StdTx)
+	ret0, _ := ret[0].(authtypes.StdTx)
 	return ret0
 }
 
@@ -379,10 +384,10 @@ func (m *MockSimulationHandler) EXPECT() *MockSimulationHandlerMockRecorder {
 }
 
 // CalculateGas mocks base method
-func (m *MockSimulationHandler) CalculateGas(txBytes []byte) (StdFee, error) {
+func (m *MockSimulationHandler) CalculateGas(txBytes []byte) (authtypes.StdFee, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CalculateGas", txBytes)
-	ret0, _ := ret[0].(StdFee)
+	ret0, _ := ret[0].(authtypes.StdFee)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -394,7 +399,7 @@ func (mr *MockSimulationHandlerMockRecorder) CalculateGas(txBytes interface{}) *
 }
 
 // BuildTxForSim mocks base method
-func (m *MockSimulationHandler) BuildTxForSim(msgs []Msg, memo string, accNumber, seqNumber uint64) ([]byte, error) {
+func (m *MockSimulationHandler) BuildTxForSim(msgs []sdk.Msg, memo string, accNumber, seqNumber uint64) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildTxForSim", msgs, memo, accNumber, seqNumber)
 	ret0, _ := ret[0].([]byte)
@@ -552,10 +557,10 @@ func (mr *MockClientQueryMockRecorder) QueryStore(key, storeName, endPath interf
 }
 
 // QuerySubspace mocks base method
-func (m *MockClientQuery) QuerySubspace(subspace []byte, storeName string) ([]common.KVPair, error) {
+func (m *MockClientQuery) QuerySubspace(subspace []byte, storeName string) ([]kv.Pair, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "QuerySubspace", subspace, storeName)
-	ret0, _ := ret[0].([]common.KVPair)
+	ret0, _ := ret[0].([]kv.Pair)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -590,10 +595,10 @@ func (m *MockClientTx) EXPECT() *MockClientTxMockRecorder {
 }
 
 // Broadcast mocks base method
-func (m *MockClientTx) Broadcast(txBytes []byte, broadcastMode BroadcastMode) (TxResponse, error) {
+func (m *MockClientTx) Broadcast(txBytes []byte, broadcastMode string) (sdk.TxResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Broadcast", txBytes, broadcastMode)
-	ret0, _ := ret[0].(TxResponse)
+	ret0, _ := ret[0].(sdk.TxResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

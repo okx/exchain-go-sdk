@@ -4,6 +4,8 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"io/ioutil"
 
 	"github.com/bartekn/go-bip39"
@@ -12,7 +14,7 @@ import (
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(codec sdk.SDKCodec, filePath string) (stdTx sdk.StdTx, err error) {
+func GetStdTxFromFile(codec gosdktypes.SDKCodec, filePath string) (stdTx authtypes.StdTx, err error) {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return

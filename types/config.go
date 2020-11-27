@@ -5,7 +5,7 @@ package types
 type Config struct {
 	sealed              bool
 	bech32AddressPrefix map[string]string
-	txEncoder           TxEncoder
+	//txEncoder           TxEncoder
 	addressVerifier     func([]byte) error
 }
 
@@ -21,7 +21,7 @@ var (
 			"validator_pub":  Bech32PrefixValPub,
 			"consensus_pub":  Bech32PrefixConsPub,
 		},
-		txEncoder: nil,
+		//txEncoder: nil,
 	}
 )
 

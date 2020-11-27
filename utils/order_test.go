@@ -29,38 +29,38 @@ func TestGetOrderIDsFromResponse(t *testing.T) {
 
 	// build mock TxResponse
 	mockTxResp := sdk.TxResponse{
-		Events: sdk.StringEvents{
-			{
-				Type: "message",
-				Attributes: []sdk.Attribute{
-					{
-						Key:   "not orders",
-						Value: rawStrs[1],
-					},
-					{
-						Key:   "orders",
-						Value: rawStrs[3], // log error
-					},
-					{
-						Key:   "orders",
-						Value: rawStrs[0], // target
-					},
-				},
-			},
-			{
-				Type: "not message",
-				Attributes: []sdk.Attribute{
-					{
-						Key:   "not orders",
-						Value: rawStrs[1],
-					},
-					{
-						Key:   "orders",
-						Value: rawStrs[2],
-					},
-				},
-			},
-		},
+		//Events: sdk.StringEvents{
+		//	{
+		//		Type: "message",
+		//		Attributes: []sdk.Attribute{
+		//			{
+		//				Key:   "not orders",
+		//				Value: rawStrs[1],
+		//			},
+		//			{
+		//				Key:   "orders",
+		//				Value: rawStrs[3], // log error
+		//			},
+		//			{
+		//				Key:   "orders",
+		//				Value: rawStrs[0], // target
+		//			},
+		//		},
+		//	},
+		//	{
+		//		Type: "not message",
+		//		Attributes: []sdk.Attribute{
+		//			{
+		//				Key:   "not orders",
+		//				Value: rawStrs[1],
+		//			},
+		//			{
+		//				Key:   "orders",
+		//				Value: rawStrs[2],
+		//			},
+		//		},
+		//	},
+		//},
 	}
 
 	orderIDs := GetOrderIDsFromResponse(&mockTxResp)

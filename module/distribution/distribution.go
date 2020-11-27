@@ -3,17 +3,17 @@ package distribution
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/distribution/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
-var _ sdk.Module = (*distrClient)(nil)
+var _ gosdktypes.Module = (*distrClient)(nil)
 
 type distrClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in distribution module
-func (dc distrClient) RegisterCodec(cdc sdk.SDKCodec) {
+func (dc distrClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
 	types.RegisterCodec(cdc)
 }
 
@@ -23,6 +23,6 @@ func (distrClient) Name() string {
 }
 
 // NewDistrClient creates a new instance of distribution client as implement
-func NewDistrClient(baseClient sdk.BaseClient) exposed.Distribution {
+func NewDistrClient(baseClient gosdktypes.BaseClient) exposed.Distribution {
 	return distrClient{baseClient}
 }

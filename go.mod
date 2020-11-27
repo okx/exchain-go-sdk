@@ -10,6 +10,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/go-amino v0.15.1
+	github.com/tendermint/iavl v0.14.1
 	github.com/tendermint/tendermint v0.33.9
 
 )

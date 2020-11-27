@@ -1,9 +1,10 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/tendermint/tendermint/crypto"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	//cmn "github.com/tendermint/tendermint/libs/common"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -34,11 +35,11 @@ func NewBlock(header tmtypes.Header, data Data, evidence tmtypes.EvidenceData, l
 
 // Data - structure of the stdTxs in a block
 type Data struct {
-	Txs []sdk.StdTx `json:"txs"`
+	Txs []authtypes.StdTx `json:"txs"`
 }
 
 // NewData creates a new instance of Data
-func NewData(stdTxs []sdk.StdTx) Data {
+func NewData(stdTxs []authtypes.StdTx) Data {
 	return Data{
 		Txs: stdTxs,
 	}
@@ -160,7 +161,7 @@ type Validator struct {
 
 // ResultTx - structure of querying result for a tx
 type ResultTx struct {
-	Hash     cmn.HexBytes
+	Hash     tmbytes.HexBytes
 	Height   int64
 	Index    uint32
 	TxResult ResponseDeliverTx

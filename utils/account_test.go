@@ -75,10 +75,3 @@ func TestGenerateMnemonic(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, mnemo)
 }
-
-func TestMichael(t *testing.T) {
-	info, mnemo, err := CreateAccountWithMnemo(defaultMnemonic, defaultName, defaultPassWd)
-	require.NoError(t, err)
-	fmt.Println(info.GetAddress().String())
-	fmt.Println(mnemo)
-}

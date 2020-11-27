@@ -26,9 +26,9 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/libs/common"
+	//"github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	tmstate "github.com/tendermint/tendermint/state"
+	//tmstate "github.com/tendermint/tendermint/state"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -113,24 +113,26 @@ func (mc *MockClient) Tendermint() exposed.Tendermint {
 
 // BuildAccountBytes generates the account bytes for test
 func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr string, accNum, seqNum uint64) []byte {
-	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
-	require.NoError(mc.t, err)
-	accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
-	require.NoError(mc.t, err)
-	coins, err := sdk.ParseDecCoins(coinsStr)
-	require.NoError(mc.t, err)
-	account := auth.BaseAccount{
-		Address:       accAddr,
-		Coins:         coins,
-		PubKey:        accPubkey,
-		AccountNumber: accNum,
-		Sequence:      seqNum,
-	}
-
-	bytes, err := mc.cdc.MarshalBinaryBare(account)
-	require.NoError(mc.t, err)
-
-	return bytes
+	//accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
+	//require.NoError(mc.t, err)
+	//accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
+	//require.NoError(mc.t, err)
+	//coins, err := sdk.ParseDecCoins(coinsStr)
+	//require.NoError(mc.t, err)
+	// TODO
+	//account := auth.BaseAccount{
+	//	Address:       accAddr,
+	//	Coins:         coins,
+	//	PubKey:        accPubkey,
+	//	AccountNumber: accNum,
+	//	Sequence:      seqNum,
+	//}
+	//
+	//bytes, err := mc.cdc.MarshalBinaryBare(account)
+	//require.NoError(mc.t, err)
+	//
+	//return bytes
+	return nil
 }
 
 // BuildTokenPairsBytes generates the token pairs bytes for test
@@ -329,30 +331,31 @@ func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkTyp
 	kvPairKey []byte) *ctypes.ResultBlockResults {
 	return &ctypes.ResultBlockResults{
 		Height: height,
-		Results: &tmstate.ABCIResponses{
-			BeginBlock: &abci.ResponseBeginBlock{
-				Events: []abci.Event{
-					{
-						Type: eventType,
-						Attributes: []common.KVPair{
-							{
-								Key: kvPairKey,
-							},
-						},
-					},
-				},
-			},
-			EndBlock: &abci.ResponseEndBlock{
-				ValidatorUpdates: []abci.ValidatorUpdate{
-					{
-						PubKey: abci.PubKey{
-							Type: pkType,
-						},
-						Power: power,
-					},
-				},
-			},
-		},
+		// TODO
+		//Results: &tmstate.ABCIResponses{
+		//	BeginBlock: &abci.ResponseBeginBlock{
+		//		Events: []abci.Event{
+		//			{
+		//				Type: eventType,
+		//				Attributes: []common.KVPair{
+		//					{
+		//						Key: kvPairKey,
+		//					},
+		//				},
+		//			},
+		//		},
+		//	},
+		//	EndBlock: &abci.ResponseEndBlock{
+		//		ValidatorUpdates: []abci.ValidatorUpdate{
+		//			{
+		//				PubKey: abci.PubKey{
+		//					Type: pkType,
+		//				},
+		//				Power: power,
+		//			},
+		//		},
+		//	},
+		//},
 	}
 }
 

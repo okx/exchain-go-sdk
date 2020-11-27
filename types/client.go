@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
@@ -20,15 +21,15 @@ type BaseClient interface {
 
 // TxHandler shows the expected behavior to handle tx
 type TxHandler interface {
-	BuildAndBroadcast(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (TxResponse, error)
-	BuildStdTx(fromName, passphrase, memo string, msgs []Msg, accNumber, seqNumber uint64) (StdTx, error)
-	BuildUnsignedStdTxOffline(msgs []Msg, memo string) StdTx
+	BuildAndBroadcast(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (sdk.TxResponse, error)
+	BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (authtypes.StdTx, error)
+	BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) authtypes.StdTx
 }
 
 // SimulationHandler shows the expected behavior to handle simulation
 type SimulationHandler interface {
-	CalculateGas(txBytes []byte) (StdFee, error)
-	BuildTxForSim(msgs []Msg, memo string, accNumber, seqNumber uint64) ([]byte, error)
+	CalculateGas(txBytes []byte) (authtypes.StdFee, error)
+	BuildTxForSim(msgs []sdk.Msg, memo string, accNumber, seqNumber uint64) ([]byte, error)
 }
 
 // ClientQuery shows the expected query behavior
@@ -40,7 +41,7 @@ type ClientQuery interface {
 
 // ClientTx shows the expected tx behavior
 type ClientTx interface {
-	Broadcast(txBytes []byte, broadcastMode string) (res TxResponse, err error)
+	Broadcast(txBytes []byte, broadcastMode string) (res sdk.TxResponse, err error)
 }
 
 // RPCClient shows the expected behavior for a inner exposed client

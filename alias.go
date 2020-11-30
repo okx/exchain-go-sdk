@@ -40,7 +40,6 @@ type (
 	Validator     = staking.Validator
 	DelegatorResp = staking.DelegatorResp
 	// token
-	Token     = token.Token
 	TokenResp = token.TokenResp
 	// dex
 	TokenPair = dex.TokenPair

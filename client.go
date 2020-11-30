@@ -7,7 +7,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
 	"github.com/okex/okexchain-go-sdk/module/auth"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
+	authtypes "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
@@ -17,6 +17,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	"github.com/okex/okexchain-go-sdk/module/token"
+	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
@@ -75,7 +76,7 @@ func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 
 // nolint
 func (cli *Client) Auth() exposed.Auth {
-	return cli.modules[types.ModuleName].(exposed.Auth)
+	return cli.modules[authtypes.ModuleName].(exposed.Auth)
 }
 func (cli *Client) Backend() exposed.Backend {
 	return cli.modules[backend.ModuleName].(exposed.Backend)
@@ -99,7 +100,7 @@ func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashing.ModuleName].(exposed.Slashing)
 }
 func (cli *Client) Token() exposed.Token {
-	return cli.modules[token.ModuleName].(exposed.Token)
+	return cli.modules[tokentypes.ModuleName].(exposed.Token)
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)

@@ -15,13 +15,13 @@ import (
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
-	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
-	recAddr   = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
+	recAddr   = "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u"
 
 	tokenSymbol = "btc-000"
 )

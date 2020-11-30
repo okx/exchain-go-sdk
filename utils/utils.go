@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -32,14 +31,4 @@ func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 		}
 	}
 	return valAddrs, nil
-}
-
-func sliceToArray(s []byte) (byteArray [32]byte, err error) {
-	if len(s) != 32 {
-		return byteArray, errors.New("failed. byte slice's length is not 32")
-	}
-	for i := 0; i < 32; i++ {
-		byteArray[i] = s[i]
-	}
-	return
 }

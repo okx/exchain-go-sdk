@@ -14,9 +14,8 @@ import (
 )
 
 const (
-	addr         = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
-	accPubkey    = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
-	mockCodeHash = "1234567890abcdef"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
 )
 
 func TestAuthClient_QueryAccount(t *testing.T) {
@@ -32,7 +31,7 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedCdc := mockCli.GetCodec()
-	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, mockCodeHash, "1024btc,2048.1024okt", 1, 2)
+	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024btc,2048.1024okt", 1, 2)
 	expectedPath := fmt.Sprintf("custom/%s/%s", auth.QuerierRoute, auth.QueryAccount)
 	expectedParams, err := expectedCdc.MarshalJSON(auth.NewQueryAccountParams(accAddr))
 	require.NoError(t, err)

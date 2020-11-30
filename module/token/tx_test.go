@@ -4,21 +4,21 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"testing"
-
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 func TestTokenClient_Send(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -27,10 +27,10 @@ func TestTokenClient_Send(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -64,7 +64,7 @@ func TestTokenClient_Send(t *testing.T) {
 func TestTokenClient_MultiSend(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -73,7 +73,7 @@ func TestTokenClient_MultiSend(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -106,7 +106,7 @@ okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs 20.48okt`
 func TestTokenClient_Issue(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -115,7 +115,7 @@ func TestTokenClient_Issue(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -169,7 +169,7 @@ func TestTokenClient_Issue(t *testing.T) {
 func TestTokenClient_Mint(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -178,7 +178,7 @@ func TestTokenClient_Mint(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -215,7 +215,7 @@ func TestTokenClient_Mint(t *testing.T) {
 func TestTokenClient_Burn(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -224,7 +224,7 @@ func TestTokenClient_Burn(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -261,7 +261,7 @@ func TestTokenClient_Burn(t *testing.T) {
 func TestTokenClient_Edit(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -270,7 +270,7 @@ func TestTokenClient_Edit(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)

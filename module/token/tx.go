@@ -2,11 +2,11 @@ package token
 
 import (
 	"fmt"
-
-	"github.com/okex/okexchain-go-sdk/module/token/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	token "github.com/okex/okexchain/x/token/types"
 )
 
 // Send transfers coins to other receiver
@@ -26,10 +26,8 @@ func (tc tokenClient) Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo
 		return resp, fmt.Errorf("failed. parse DecCoins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgTokenSend(fromInfo.GetAddress(), toAddr, coins)
-
+	msg := token.NewMsgTokenSend(fromInfo.GetAddress(), toAddr, coins)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // MultiSend multi-sends coins to several receivers

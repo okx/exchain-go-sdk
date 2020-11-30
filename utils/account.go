@@ -49,7 +49,6 @@ func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error
 	}
 
 	return
-
 }
 
 // CreateAccountWithMnemo creates the key info with the given mnemonic, name and password
@@ -86,19 +85,24 @@ func CreateAccountWithPrivateKey(privateKey, name, passWd string) (info keys.Inf
 	if len(privateKey) == 0 {
 		return info, errors.New("failed. empty privateKey")
 	}
+
+	if len(name) == 0 {
+		name = "alice"
+		log.Println("Default name : \"alice\"")
+	}
+
+	if len(passWd) == 0 {
+		passWd = "12345678"
+		log.Println("Default passWd : \"12345678\"")
+	}
+
+	hdPath := keys.CreateHDPath(0, 0).String()
+	info, err = tx.Kb.CreateAccount(name, privateKey, "", passWd, hdPath, hd.EthSecp256k1)
+	if err != nil {
+		return info, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
+	}
+
 	return
-	//derivedPrivSlice, err := hex.DecodeString(privateKey)
-	//if err != nil {
-	//	return
-	//}
-	//derivedPriv, err := sliceToArray(derivedPrivSlice)
-	//if err != nil {
-	//	return
-	//}
-	//priv := secp256k1.PrivKeySecp256k1(derivedPriv)
-	//
-	//privateKeyArmor := mintkey.EncryptArmorPrivKey(priv, passWd)
-	//return keys.NewLocalInfo(name, priv.PubKey(), privateKeyArmor), err
 }
 
 // GenerateMnemonic creates a random mnemonic

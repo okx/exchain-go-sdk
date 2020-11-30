@@ -14,6 +14,8 @@ import (
 )
 
 const (
+	defaultName         = "alice"
+	defaultPassWd       = "12345678"
 	mnemonicEntropySize = 128
 )
 
@@ -27,16 +29,15 @@ func init() {
 // CreateAccount creates a random key info with the given name and password
 func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error) {
 	if len(name) == 0 {
-		name = "alice"
-		log.Println("Default name : \"OKer\"")
+		name = defaultName
+		log.Printf("Default name: \"%s\"\n", name)
 	}
 
 	if len(passWd) == 0 {
-		passWd = "12345678"
-		log.Println("Default passWd : \"12345678\"")
+		passWd = defaultPassWd
+		log.Printf("Default password: \"%s\"\n", passWd)
 	}
 
-	// TODO
 	mnemo, err = GenerateMnemonic()
 	if err != nil {
 		return
@@ -58,13 +59,13 @@ func CreateAccountWithMnemo(mnemonic, name, passWd string) (info keys.Info, mnem
 	}
 
 	if len(name) == 0 {
-		name = "alice"
-		log.Println("Default name : \"alice\"")
+		name = defaultName
+		log.Printf("Default name: \"%s\"\n", name)
 	}
 
 	if len(passWd) == 0 {
-		passWd = "12345678"
-		log.Println("Default passWd : \"12345678\"")
+		passWd = defaultPassWd
+		log.Printf("Default password: \"%s\"\n", passWd)
 	}
 
 	if strings.Contains(mnemonic, " ") && !bip39.IsMnemonicValid(mnemonic) {

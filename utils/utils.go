@@ -1,16 +1,12 @@
 package utils
 
 import (
-	"encoding/hex"
 	"errors"
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"io/ioutil"
-
-	"github.com/bartekn/go-bip39"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file
@@ -36,22 +32,6 @@ func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 		}
 	}
 	return valAddrs, nil
-}
-
-// GeneratePrivateKeyFromMnemo converts mnemonic to private key
-func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
-	// TODO
-	hdPath := hd.NewFundraiserParams(0, 0, 0)
-	seed, err := bip39.NewSeedWithErrorChecking(mnemo, "")
-	if err != nil {
-		return
-	}
-	masterPrivateKey, ch := hd.ComputeMastersFromSeed(seed)
-	derivedPrivateKey, err := hd.DerivePrivateKeyForPath(masterPrivateKey, ch, hdPath.String())
-	if err != nil {
-		return
-	}
-	return hex.EncodeToString(derivedPrivateKey[:]), nil
 }
 
 func sliceToArray(s []byte) (byteArray [32]byte, err error) {

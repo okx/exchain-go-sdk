@@ -80,10 +80,8 @@ func (tc tokenClient) Burn(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgTokenBurn(coin, fromInfo.GetAddress())
-
+	msg := token.NewMsgTokenBurn(coin, fromInfo.GetAddress())
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Edit modifies the info of a specific token by its owner

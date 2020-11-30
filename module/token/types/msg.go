@@ -4,31 +4,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgTokenBurn - structure to burn token
-type MsgTokenBurn struct {
-	Amount sdk.DecCoin    `json:"amount"`
-	Owner  sdk.AccAddress `json:"owner"`
-}
-
-// NewMsgTokenBurn is a constructor function for MsgTokenBurn
-func NewMsgTokenBurn(amount sdk.DecCoin, owner sdk.AccAddress) MsgTokenBurn {
-	return MsgTokenBurn{
-		Amount: amount,
-		Owner:  owner,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgTokenBurn) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (msg MsgTokenBurn) Route() string                { return "" }
-func (msg MsgTokenBurn) Type() string                 { return "" }
-func (msg MsgTokenBurn) ValidateBasic() sdk.Error     { return nil }
-func (msg MsgTokenBurn) GetSigners() []sdk.AccAddress { return nil }
-
 // MsgTokenModify - structure to edit the info of a specific token
 type MsgTokenModify struct {
 	Owner                 sdk.AccAddress `json:"owner"`

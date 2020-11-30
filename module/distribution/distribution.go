@@ -1,6 +1,7 @@
 package distribution
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/distribution/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type distrClient struct {
 }
 
 // RegisterCodec registers the msg type in distribution module
-func (dc distrClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (dc distrClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

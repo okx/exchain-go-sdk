@@ -1,6 +1,7 @@
 package staking
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type stakingClient struct {
 }
 
 // RegisterCodec registers the msg type in staking module
-func (sc stakingClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (sc stakingClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

@@ -1,8 +1,10 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/ammswap"
 )
 
 // const
@@ -21,11 +23,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for ammswap module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgAddLiquidity{}, "okexchain/ammswap/MsgAddLiquidity")
-	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okexchain/ammswap/MsgRemoveLiquidity")
-	cdc.RegisterConcrete(MsgCreateExchange{}, "okexchain/ammswap/MsgCreateExchange")
-	cdc.RegisterConcrete(MsgTokenToNativeToken{}, "okexchain/ammswap/MsgSwapToken")
+func RegisterCodec(cdc *codec.Codec) {
+	ammswap.RegisterCodec(cdc)
 }
 
 // SwapTokenPair defines token pair exchange

@@ -1,6 +1,7 @@
 package slashing
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/slashing/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type slashingClient struct {
 }
 
 // RegisterCodec registers the msg type in slashing module
-func (sc slashingClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (sc slashingClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

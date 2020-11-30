@@ -1,6 +1,7 @@
 package token
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type tokenClient struct {
 }
 
 // RegisterCodec registers the msg type in token module
-func (tokenClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (tokenClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

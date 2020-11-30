@@ -3,6 +3,7 @@ package mocks
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/okex/okexchain-go-sdk/module/auth/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
@@ -14,7 +15,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/exposed"
-	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
@@ -81,7 +81,7 @@ func (mc *MockClient) GetCodec() gosdktypes.SDKCodec {
 
 // nolint
 func (mc *MockClient) Auth() exposed.Auth {
-	return mc.modules[auth.ModuleName].(exposed.Auth)
+	return mc.modules[types.ModuleName].(exposed.Auth)
 }
 func (mc *MockClient) Backend() exposed.Backend {
 	return mc.modules[backend.ModuleName].(exposed.Backend)

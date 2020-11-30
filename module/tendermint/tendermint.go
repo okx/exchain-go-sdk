@@ -1,6 +1,7 @@
 package tendermint
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type tendermintClient struct {
 }
 
 // nolint
-func (tendermintClient) RegisterCodec(cdc gosdktypes.SDKCodec) {}
+func (tendermintClient) RegisterCodec(_ *codec.Codec) {}
 
 // Name returns the module name
 func (tendermintClient) Name() string {

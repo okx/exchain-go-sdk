@@ -1,6 +1,7 @@
 package governance
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type govClient struct {
 }
 
 // RegisterCodec registers the msg type in governance module
-func (gc govClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (gc govClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

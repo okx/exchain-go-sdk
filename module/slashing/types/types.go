@@ -1,7 +1,9 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/slashing"
 )
 
 // const
@@ -18,6 +20,6 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for slashing module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgUnjail{}, "cosmos-sdk/MsgUnjail")
+func RegisterCodec(cdc *codec.Codec) {
+	slashing.RegisterCodec(cdc)
 }

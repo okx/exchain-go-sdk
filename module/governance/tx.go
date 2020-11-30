@@ -5,6 +5,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	dexutils "github.com/okex/okexchain/x/dex/client/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
+	"github.com/okex/okexchain/x/gov"
 )
 
 // SubmitTextProposal submits the text proposal on OKChain
@@ -68,13 +71,13 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 		return
 	}
 
-	proposal, err := parseDelistProposalFromFile(proposalPath)
+	proposal, err := dexutils.ParseDelistProposalJSON(gc.GetCodec(), proposalPath)
 	if err != nil {
 		return
 	}
 
-	msg := types.NewMsgSubmitProposal(
-		types.NewDelistProposal(
+	msg := gov.NewMsgSubmitProposal(
+		dextypes.NewDelistProposal(
 			proposal.Title,
 			proposal.Description,
 			fromInfo.GetAddress(),

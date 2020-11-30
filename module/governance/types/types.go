@@ -3,10 +3,11 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"time"
-
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/gov"
+	"time"
 )
 
 // const
@@ -34,16 +35,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for governance module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgSubmitProposal{}, "okexchain/gov/MsgSubmitProposal")
-	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/gov/MsgDeposit")
-	cdc.RegisterConcrete(MsgVote{}, "okexchain/gov/MsgVote")
-
-	cdc.RegisterInterface((*Content)(nil))
-	cdc.RegisterConcrete(TextProposal{}, "okexchain/gov/TextProposal")
-	cdc.RegisterConcrete(ParameterChangeProposal{}, "okexchain/params/ParameterChangeProposal")
-	cdc.RegisterConcrete(DelistProposal{}, "okexchain/dex/DelistProposal")
-	cdc.RegisterConcrete(CommunityPoolSpendProposal{}, "okexchain/distribution/CommunityPoolSpendProposal")
+func RegisterCodec(cdc *codec.Codec) {
+	gov.RegisterCodec(cdc)
 }
 
 type (
@@ -63,15 +56,6 @@ type (
 		Changes     ParamChangesJSON `json:"changes"`
 		Deposit     sdk.DecCoins     `json:"deposit"`
 		Height      uint64           `json:"height"`
-	}
-
-	// DelistProposalJSON - structure for a DelistProposal with a deposit used to parse delist proposals from the JSON file
-	DelistProposalJSON struct {
-		Title       string       `json:"title"`
-		Description string       `json:"description"`
-		BaseAsset   string       `json:"base_asset"`
-		QuoteAsset  string       `json:"quote_asset"`
-		Deposit     sdk.DecCoins `json:"deposit"`
 	}
 
 	// CommunityPoolSpendProposalJSON - structure for a CommunityPoolSpendProposal used to parse community pool spend proposals
@@ -131,7 +115,6 @@ type Content interface {
 var (
 	_ Content = (*TextProposal)(nil)
 	_ Content = (*ParameterChangeProposal)(nil)
-	_ Content = (*DelistProposal)(nil)
 	_ Content = (*CommunityPoolSpendProposal)(nil)
 )
 
@@ -194,35 +177,6 @@ func (ParameterChangeProposal) ProposalRoute() string    { return "" }
 func (ParameterChangeProposal) ProposalType() string     { return "" }
 func (ParameterChangeProposal) String() string           { return "" }
 func (ParameterChangeProposal) ValidateBasic() sdk.Error { return nil }
-
-// DelistProposal - structure of a delist proposal that implements interface Content
-type DelistProposal struct {
-	Title       string         `json:"title"`
-	Description string         `json:"description"`
-	Proposer    sdk.AccAddress `json:"proposer"`
-	BaseAsset   string         `json:"base_asset"`
-	QuoteAsset  string         `json:"quote_asset"`
-}
-
-// NewDelistProposal is a constructor function for DelistProposal
-func NewDelistProposal(title, description string, proposer sdk.AccAddress, baseAsset, quoteAsset string,
-) DelistProposal {
-	return DelistProposal{
-		Title:       title,
-		Description: description,
-		Proposer:    proposer,
-		BaseAsset:   baseAsset,
-		QuoteAsset:  quoteAsset,
-	}
-}
-
-// nolint
-func (DelistProposal) GetTitle() string         { return "" }
-func (DelistProposal) GetDescription() string   { return "" }
-func (DelistProposal) ProposalRoute() string    { return "" }
-func (DelistProposal) ProposalType() string     { return "" }
-func (DelistProposal) String() string           { return "" }
-func (DelistProposal) ValidateBasic() sdk.Error { return nil }
 
 // CommunityPoolSpendProposal - structure of a community pool spend proposal that implements interface Content
 type CommunityPoolSpendProposal struct {

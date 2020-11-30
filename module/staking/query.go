@@ -3,8 +3,8 @@ package staking
 import (
 	"fmt"
 
-	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
@@ -38,7 +38,7 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, 
 		return
 	}
 
-	res, err := sc.QueryStore(types.GetValidatorKey(valAddr), ModuleName, "key")
+	res, _, err := sc.QueryStore(types.GetValidatorKey(valAddr), ModuleName, "key")
 	if err != nil {
 		return
 	}
@@ -60,7 +60,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 		return
 	}
 
-	resp, err := sc.QueryStore(types.GetDelegatorKey(delAddr), ModuleName, "key")
+	resp, _, err := sc.QueryStore(types.GetDelegatorKey(delAddr), ModuleName, "key")
 	if err != nil {
 		return delResp, utils.ErrClientQuery(err.Error())
 	}
@@ -76,7 +76,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 		return delResp, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := sc.Query(types.UnbondDelegationPath, jsonBytes)
+	res, _, err := sc.Query(types.UnbondDelegationPath, jsonBytes)
 	// if err!= nil , we treat it as there's no undelegation of the delegator
 	if err == nil {
 		if err = sc.GetCodec().UnmarshalJSON(res, &undelegation); err != nil {

@@ -18,7 +18,7 @@ var (
 func (pc ammswapClient) QuerySwapTokenPair(token string) (types.SwapTokenPair, error) {
 	var exchange types.SwapTokenPair
 
-	res, err := pc.QueryStore(types.GetTokenPairKey(token), ModuleName, "key")
+	res, _, err := pc.QueryStore(types.GetTokenPairKey(token), ModuleName, "key")
 	if err != nil {
 		return exchange, err
 	}

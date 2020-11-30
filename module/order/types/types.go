@@ -1,8 +1,10 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/order"
 )
 
 // const
@@ -22,9 +24,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for token module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgNewOrders{}, "okexchain/order/MsgNew")
-	cdc.RegisterConcrete(MsgCancelOrders{}, "okexchain/order/MsgCancel")
+func RegisterCodec(cdc *codec.Codec) {
+	order.RegisterCodec(cdc)
 }
 
 // OrderItem - structure for a item in MsgNewOrders

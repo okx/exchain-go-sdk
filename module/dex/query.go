@@ -18,7 +18,7 @@ func (dc dexClient) QueryProducts(ownerAddr string, page, perPage int) (tokenPai
 		return
 	}
 
-	res, err := dc.Query(types.ProductsPath, jsonBytes)
+	res, _, err := dc.Query(types.ProductsPath, jsonBytes)
 	if err != nil {
 		return
 	}

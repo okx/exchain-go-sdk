@@ -21,7 +21,7 @@ func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (accTokensIn
 		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	res, _, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
 		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}
@@ -45,7 +45,7 @@ func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo type
 		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+	res, _, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
 	if err != nil {
 		return accTokensInfo, utils.ErrClientQuery(err.Error())
 	}
@@ -63,7 +63,7 @@ func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.T
 	}
 
 	if len(symbol) != 0 {
-		res, err := tc.Query(fmt.Sprintf("custom/%s/info/%s", types.ModuleName, symbol), nil)
+		res, _, err := tc.Query(fmt.Sprintf("custom/%s/info/%s", types.ModuleName, symbol), nil)
 		if err != nil {
 			return tokens, fmt.Errorf("failed. token %s doesn't exist", symbol)
 		}
@@ -74,7 +74,7 @@ func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.T
 		return tokens, err
 	}
 
-	res, err := tc.Query(fmt.Sprintf("custom/%s/tokens/%s", types.ModuleName, ownerAddr), nil)
+	res, _, err := tc.Query(fmt.Sprintf("custom/%s/tokens/%s", types.ModuleName, ownerAddr), nil)
 	if err != nil {
 		return tokens, fmt.Errorf("failed. %s doesn't own any tokens: %s", ownerAddr, err.Error())
 	}

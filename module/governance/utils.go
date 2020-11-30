@@ -35,19 +35,6 @@ func parseParamChangeProposalFromFile(path string) (proposal types.ParamChangePr
 	return
 }
 
-func parseDelistProposalFromFile(path string) (proposal types.DelistProposalJSON, err error) {
-	contents, err := ioutil.ReadFile(path)
-	if err != nil {
-		return
-	}
-
-	if err = types.MsgCdc.UnmarshalJSON(contents, &proposal); err != nil {
-		return proposal, utils.ErrUnmarshalJSON(err.Error())
-	}
-
-	return
-}
-
 func parseCommunityPoolSpendProposalFromFile(path string) (proposal types.CommunityPoolSpendProposalJSON, err error) {
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {

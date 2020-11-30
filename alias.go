@@ -2,7 +2,7 @@ package gosdk
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/auth"
+	types2 "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/governance"
@@ -35,7 +35,7 @@ var (
 type (
 	TxResponse = sdk.TxResponse
 	// auth
-	Account = auth.Account
+	Account = types2.Account
 	// staking
 	Validator     = staking.Validator
 	DelegatorResp = staking.DelegatorResp

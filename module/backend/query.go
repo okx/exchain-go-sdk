@@ -14,7 +14,7 @@ func (bc backendClient) QueryCandles(product string, granularity, size int) (can
 		return candles, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.CandlesPath, jsonBytes)
+	res, _, err := bc.Query(types.CandlesPath, jsonBytes)
 	if err != nil {
 		return candles, utils.ErrClientQuery(err.Error())
 	}
@@ -40,7 +40,7 @@ func (bc backendClient) QueryTickers(product string, count ...int) (tickers []ty
 		return tickers, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.TickersPath, jsonBytes)
+	res, _, err := bc.Query(types.TickersPath, jsonBytes)
 	if err != nil {
 		return tickers, utils.ErrClientQuery(err.Error())
 	}
@@ -66,7 +66,7 @@ func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, pe
 		return record, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.RecentTxRecordPath, jsonBytes)
+	res, _, err := bc.Query(types.RecentTxRecordPath, jsonBytes)
 	if err != nil {
 		return record, utils.ErrClientQuery(err.Error())
 	}
@@ -93,7 +93,7 @@ func (bc backendClient) QueryOpenOrders(addrStr, product, side string, start, en
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.OpenOrdersPath, jsonBytes)
+	res, _, err := bc.Query(types.OpenOrdersPath, jsonBytes)
 	if err != nil {
 		return orders, utils.ErrClientQuery(err.Error())
 	}
@@ -120,7 +120,7 @@ func (bc backendClient) QueryClosedOrders(addrStr, product, side string, start, 
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.ClosedOrdersPath, jsonBytes)
+	res, _, err := bc.Query(types.ClosedOrdersPath, jsonBytes)
 	if err != nil {
 		return orders, utils.ErrClientQuery(err.Error())
 	}
@@ -145,7 +145,7 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 		return deals, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.DealsPath, jsonBytes)
+	res, _, err := bc.Query(types.DealsPath, jsonBytes)
 	if err != nil {
 		return deals, utils.ErrClientQuery(err.Error())
 	}
@@ -170,7 +170,7 @@ func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, 
 		return transactions, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.TransactionsPath, jsonBytes)
+	res, _, err := bc.Query(types.TransactionsPath, jsonBytes)
 	if err != nil {
 		return transactions, utils.ErrClientQuery(err.Error())
 	}

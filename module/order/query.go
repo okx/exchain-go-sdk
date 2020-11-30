@@ -16,7 +16,7 @@ func (oc orderClient) QueryDepthBook(product string) (depthBook types.BookRes, e
 		return depthBook, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := oc.Query(types.DepthbookPath, jsonBytes)
+	res, _, err := oc.Query(types.DepthbookPath, jsonBytes)
 	if err != nil {
 		return depthBook, utils.ErrClientQuery(err.Error())
 	}
@@ -34,7 +34,7 @@ func (oc orderClient) QueryOrderDetail(orderID string) (orderDetail types.OrderD
 		return
 	}
 
-	res, err := oc.Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil)
+	res, _, err := oc.Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil)
 	if err != nil {
 		return orderDetail, utils.ErrClientQuery(err.Error())
 	}

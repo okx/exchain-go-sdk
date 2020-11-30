@@ -1,6 +1,7 @@
 package dex
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type dexClient struct {
 }
 
 // RegisterCodec registers the msg type in dex module
-func (dexClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (dexClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

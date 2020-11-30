@@ -1,8 +1,8 @@
 package governance
 
 import (
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
@@ -47,7 +47,7 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 		return proposals, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := gc.Query(types.ProposalsPath, jsonBytes)
+	res, _, err := gc.Query(types.ProposalsPath, jsonBytes)
 	if err != nil {
 		return proposals, utils.ErrClientQuery(err.Error())
 	}

@@ -1,8 +1,10 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/dex"
 )
 
 // const
@@ -22,13 +24,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for dex module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgList{}, "okexchain/dex/MsgList")
-	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/dex/MsgDeposit")
-	cdc.RegisterConcrete(MsgWithdraw{}, "okexchain/dex/MsgWithdraw")
-	cdc.RegisterConcrete(MsgTransferOwnership{}, "okexchain/dex/MsgTransferTradingPairOwnership")
-	cdc.RegisterConcrete(MsgCreateOperator{}, "okexchain/dex/CreateOperator")
-	cdc.RegisterConcrete(MsgUpdateOperator{}, "okexchain/dex/UpdateOperator")
+func RegisterCodec(cdc *codec.Codec) {
+	dex.RegisterCodec(cdc)
 }
 
 // TokenPair represents token pair object

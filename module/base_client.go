@@ -3,7 +3,7 @@ package module
 import (
 	"errors"
 	"fmt"
-
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/okex/okexchain-go-sdk/types"
@@ -21,11 +21,11 @@ const (
 type baseClient struct {
 	rpcclient.Client
 	config *types.ClientConfig
-	cdc    types.SDKCodec
+	cdc    *codec.Codec
 }
 
 // NewBaseClient creates a new instance of baseClient
-func NewBaseClient(cdc types.SDKCodec, pConfig *types.ClientConfig) *baseClient {
+func NewBaseClient(cdc *codec.Codec, pConfig *types.ClientConfig) *baseClient {
 	rpc, err := rpchttp.New(pConfig.NodeURI, "/websocket")
 	if err != nil {
 		panic(fmt.Sprintf("failed to get client: %s", err))
@@ -38,7 +38,7 @@ func NewBaseClient(cdc types.SDKCodec, pConfig *types.ClientConfig) *baseClient 
 }
 
 // Query executes the basic query
-func (bc *baseClient) Query(path string, key tmbytes.HexBytes) ([]byte, error) {
+func (bc *baseClient) Query(path string, key tmbytes.HexBytes) (res []byte, height int64, err error) {
 	opts := rpcclient.ABCIQueryOptions{
 		Height: 0,
 		Prove:  false,
@@ -46,19 +46,19 @@ func (bc *baseClient) Query(path string, key tmbytes.HexBytes) ([]byte, error) {
 
 	result, err := bc.ABCIQueryWithOptions(path, key, opts)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	resp := result.Response
 	if !resp.IsOK() {
-		return nil, errors.New(resp.Log)
+		return res, height, errors.New(resp.Log)
 	}
 
-	return resp.Value, nil
+	return resp.Value, resp.Height, err
 }
 
 // QueryStore executes the direct query to the store
-func (bc *baseClient) QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, error) {
+func (bc *baseClient) QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, int64, error) {
 	path := fmt.Sprintf("/store/%s/%s", storeName, endPath)
 	return bc.Query(path, key)
 }
@@ -94,7 +94,7 @@ func (bc *baseClient) Broadcast(txBytes []byte, broadcastMode string) (res sdk.T
 }
 
 // GetCodec gets the codec of the base client
-func (bc *baseClient) GetCodec() types.SDKCodec {
+func (bc *baseClient) GetCodec() *codec.Codec {
 	return bc.cdc
 }
 
@@ -173,7 +173,7 @@ func (bc *baseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) aut
 func (bc *baseClient) CalculateGas(txBytes []byte) (stdFee authtypes.StdFee, err error) {
 	config := bc.GetConfig()
 	// estimate the gas by a simulation query
-	rawRes, err := bc.Query(simulationPath, txBytes)
+	rawRes, _, err := bc.Query(simulationPath, txBytes)
 	if err != nil {
 		return stdFee, utils.ErrClientQuery(err.Error())
 	}

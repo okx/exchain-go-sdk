@@ -1,8 +1,10 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/token"
 )
 
 // const
@@ -21,13 +23,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for token module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgSend{}, "okexchain/token/MsgTransfer")
-	cdc.RegisterConcrete(MsgMultiSend{}, "okexchain/token/MsgMultiTransfer")
-	cdc.RegisterConcrete(MsgTokenIssue{}, "okexchain/token/MsgIssue")
-	cdc.RegisterConcrete(MsgTokenMint{}, "okexchain/token/MsgMint")
-	cdc.RegisterConcrete(MsgTokenBurn{}, "okexchain/token/MsgBurn")
-	cdc.RegisterConcrete(MsgTokenModify{}, "okexchain/token/MsgModify")
+func RegisterCodec(cdc *codec.Codec) {
+	token.RegisterCodec(cdc)
 }
 
 // TransferUnit - amount part for multi-send

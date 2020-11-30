@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/backend/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type backendClient struct {
 }
 
 // nolint
-func (backendClient) RegisterCodec(cdc gosdktypes.SDKCodec) {}
+func (backendClient) RegisterCodec(_ *codec.Codec) {}
 
 // Name returns the module name
 func (backendClient) Name() string {

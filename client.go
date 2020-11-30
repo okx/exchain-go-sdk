@@ -2,10 +2,12 @@ package gosdk
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
 	"github.com/okex/okexchain-go-sdk/module/auth"
+	"github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
@@ -18,12 +20,10 @@ import (
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
-
-
-// Client - structure of the main client of okexchain gosdk
+// Client - structure of the main client of OKExChain GoSDK
 type Client struct {
 	config  gosdktypes.ClientConfig
-	cdc     gosdktypes.SDKCodec
+	cdc     *codec.Codec
 	modules map[string]gosdktypes.Module
 }
 
@@ -75,7 +75,7 @@ func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 
 // nolint
 func (cli *Client) Auth() exposed.Auth {
-	return cli.modules[auth.ModuleName].(exposed.Auth)
+	return cli.modules[types.ModuleName].(exposed.Auth)
 }
 func (cli *Client) Backend() exposed.Backend {
 	return cli.modules[backend.ModuleName].(exposed.Backend)

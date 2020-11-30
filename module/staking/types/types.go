@@ -1,7 +1,9 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/staking"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,16 +32,8 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for staking module
-func RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterConcrete(MsgCreateValidator{}, "okexchain/staking/MsgCreateValidator")
-	cdc.RegisterConcrete(MsgEditValidator{}, "okexchain/staking/MsgEditValidator")
-	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/staking/MsgDeposit")
-	cdc.RegisterConcrete(MsgWithdraw{}, "okexchain/staking/MsgWithdraw")
-	cdc.RegisterConcrete(MsgAddShares{}, "okexchain/staking/MsgAddShares")
-	cdc.RegisterConcrete(MsgDestroyValidator{}, "okexchain/staking/MsgDestroyValidator")
-	cdc.RegisterConcrete(MsgRegProxy{}, "okexchain/staking/MsgRegProxy")
-	cdc.RegisterConcrete(MsgBindProxy{}, "okexchain/staking/MsgBindProxy")
-	cdc.RegisterConcrete(MsgUnbindProxy{}, "okexchain/staking/MsgUnbindProxy")
+func RegisterCodec(cdc *codec.Codec) {
+	staking.RegisterCodec(cdc)
 }
 
 // ValidatorInner is the struct of validator's detail info(inner)

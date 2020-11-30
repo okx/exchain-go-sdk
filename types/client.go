@@ -2,9 +2,9 @@ package types
 
 import (
 	"errors"
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 )
@@ -15,7 +15,7 @@ type BaseClient interface {
 	ClientTx
 	TxHandler
 	SimulationHandler
-	GetCodec() SDKCodec
+	GetCodec() *codec.Codec
 	GetConfig() ClientConfig
 }
 
@@ -35,8 +35,8 @@ type SimulationHandler interface {
 // ClientQuery shows the expected query behavior
 type ClientQuery interface {
 	rpcclient.SignClient
-	Query(path string, key tmbytes.HexBytes) ([]byte, error)
-	QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, error)
+	Query(path string, key tmbytes.HexBytes) ([]byte, int64, error)
+	QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, int64, error)
 }
 
 // ClientTx shows the expected tx behavior

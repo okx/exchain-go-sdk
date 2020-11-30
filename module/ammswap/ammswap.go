@@ -1,6 +1,7 @@
 package ammswap
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type ammswapClient struct {
 }
 
 // RegisterCodec registers the msg type in ammswap module
-func (pc ammswapClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (pc ammswapClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

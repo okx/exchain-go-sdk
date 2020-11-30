@@ -1,6 +1,7 @@
 package order
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -13,7 +14,7 @@ type orderClient struct {
 }
 
 // RegisterCodec registers the msg type in order module
-func (orderClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
+func (orderClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

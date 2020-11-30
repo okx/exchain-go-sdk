@@ -75,8 +75,8 @@ func TestTokenClient_MultiSend(t *testing.T) {
 
 	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -85,8 +85,7 @@ func TestTokenClient_MultiSend(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	transfersStr := `okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys 1024okt,2048btc
-okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs 20.48okt`
+	transfersStr := "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u 1024okt,2048btc\nokexchain1zfy46z8tqlu0cjmuj5t9dple276der4rtq5tu3 20.48okt"
 	transfers, err := utils.ParseTransfersStr(transfersStr)
 	require.NoError(t, err)
 	res, err := mockCli.Token().MultiSend(fromInfo, passWd, transfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())

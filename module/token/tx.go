@@ -37,10 +37,8 @@ func (tc tokenClient) MultiSend(fromInfo keys.Info, passWd string, transfers []t
 		return
 	}
 
-	msg := types.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
-
+	msg := token.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Issue issues a kind of token

@@ -4,31 +4,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgMultiSend - structure to transfer to multi receivers
-type MsgMultiSend struct {
-	From      sdk.AccAddress `json:"from"`
-	Transfers []TransferUnit `json:"transfers"`
-}
-
-// NewMsgMultiSend is a constructor function for MsgMultiSend
-func NewMsgMultiSend(fromAddr sdk.AccAddress, transfers []TransferUnit) MsgMultiSend {
-	return MsgMultiSend{
-		From:      fromAddr,
-		Transfers: transfers,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgMultiSend) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgMultiSend) Route() string                { return "" }
-func (MsgMultiSend) Type() string                 { return "" }
-func (MsgMultiSend) ValidateBasic() sdk.Error     { return nil }
-func (MsgMultiSend) GetSigners() []sdk.AccAddress { return nil }
-
 // MsgTokenBurn - structure to burn token
 type MsgTokenBurn struct {
 	Amount sdk.DecCoin    `json:"amount"`

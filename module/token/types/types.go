@@ -3,43 +3,24 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/token"
+	tokentypes "github.com/okex/okexchain/x/token/types"
 )
 
 // const
 const (
-	ModuleName = "token"
+	ModuleName = token.ModuleName
 
 	AccountTokensInfoPath = "custom/token/accounts"
 )
 
-var (
-	msgCdc = gosdktypes.NewCodec()
+type (
+	TransferUnit = tokentypes.TransferUnit
 )
 
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for token module
-func RegisterCodec(cdc *codec.Codec) {
-	token.RegisterCodec(cdc)
-}
-
-// TransferUnit - amount part for multi-send
-type TransferUnit struct {
-	To    sdk.AccAddress `json:"to"`
-	Coins sdk.DecCoins   `json:"coins"`
-}
-
-// NewTransferUnit creates a new instance of TransferUnit
-func NewTransferUnit(addr sdk.AccAddress, coins sdk.DecCoins) TransferUnit {
-	return TransferUnit{
-		To:    addr,
-		Coins: coins,
-	}
-}
+var (
+	msgCdc = codec.New()
+)
 
 // Token - structure for detail info of a kind of token
 type Token struct {

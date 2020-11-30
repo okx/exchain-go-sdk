@@ -64,10 +64,8 @@ func (tc tokenClient) Mint(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgTokenMint(coin, fromInfo.GetAddress())
-
+	msg := token.NewMsgTokenMint(coin, fromInfo.GetAddress())
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Burn decreases the total supply of a kind of token by burning a specific amount of that from the own account

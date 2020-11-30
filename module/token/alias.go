@@ -10,5 +10,4 @@ const (
 type (
 	// nolint
 	Token             = types.Token
-	AccountTokensInfo = types.AccountTokensInfo
 )

@@ -2,6 +2,7 @@ package token
 
 import (
 	"fmt"
+	"github.com/okex/okexchain/x/token"
 
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
@@ -9,52 +10,47 @@ import (
 )
 
 // QueryAccountTokenInfo gets a specific available token info of an account
-func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (accTokensInfo types.AccountTokensInfo, err error) {
+func (tc tokenClient) QueryAccountTokenInfo(addrStr, symbol string) (tokenResp types.TokenResp, err error) {
 	if err = params.IsValidAccAddr(addrStr); err != nil {
 		return
 	}
 
-	accountParams := params.NewQueryAccTokenParams(symbol, "partial")
-
-	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
+	path := fmt.Sprintf("custom/%s/info/%s", token.QuerierRoute, symbol)
+	res, _, err := tc.Query(path, nil)
 	if err != nil {
-		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
+		return tokenResp, utils.ErrClientQuery(err.Error())
 	}
 
-	res, _, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
-	if err != nil {
-		return accTokensInfo, utils.ErrClientQuery(err.Error())
+	if err = tc.GetCodec().UnmarshalJSON(res, &tokenResp); err != nil {
+		return tokenResp, utils.ErrUnmarshalJSON(err.Error())
 	}
 
-	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return accTokensInfo, utils.ErrUnmarshalJSON(err.Error())
-	}
 	return
 }
 
-// QueryAccountTokensInfo gets all the available tokens info of an account
-func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo types.AccountTokensInfo, err error) {
-	if err = params.IsValidAccAddr(addrStr); err != nil {
-		return
-	}
-
-	accountParams := params.NewQueryAccTokenParams("", "all")
-
-	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
-	if err != nil {
-		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
-	}
-
-	res, _, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
-	if err != nil {
-		return accTokensInfo, utils.ErrClientQuery(err.Error())
-	}
-
-	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
-		return accTokensInfo, utils.ErrUnmarshalJSON(err.Error())
-	}
-	return
-}
+//// QueryAccountTokensInfo gets all the available tokens info of an account
+//func (tc tokenClient) QueryAccountTokensInfo(addrStr string) (accTokensInfo types.AccountTokensInfo, err error) {
+//	if err = params.IsValidAccAddr(addrStr); err != nil {
+//		return
+//	}
+//
+//	accountParams := params.NewQueryAccTokenParams("", "all")
+//
+//	jsonBytes, err := tc.GetCodec().MarshalJSON(accountParams)
+//	if err != nil {
+//		return accTokensInfo, utils.ErrMarshalJSON(err.Error())
+//	}
+//
+//	res, _, err := tc.Query(fmt.Sprintf("%s/%s", types.AccountTokensInfoPath, addrStr), jsonBytes)
+//	if err != nil {
+//		return accTokensInfo, utils.ErrClientQuery(err.Error())
+//	}
+//
+//	if err = tc.GetCodec().UnmarshalJSON(res, &accTokensInfo); err != nil {
+//		return accTokensInfo, utils.ErrUnmarshalJSON(err.Error())
+//	}
+//	return
+//}
 
 // QueryTokenInfo gets token info with a specific symbol or the owner address
 func (tc tokenClient) QueryTokenInfo(ownerAddr, symbol string) (tokens []types.Token, err error) {

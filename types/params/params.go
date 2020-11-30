@@ -14,20 +14,6 @@ const (
 	defaultPerPage  = 50
 )
 
-// QueryAccTokenParams - structure of params to query a specific token in an account
-type QueryAccTokenParams struct {
-	Symbol string
-	Show   string
-}
-
-// NewQueryAccTokenParams creates a new instance of QueryAccTokenParams
-func NewQueryAccTokenParams(symbol, show string) QueryAccTokenParams {
-	return QueryAccTokenParams{
-		symbol,
-		show,
-	}
-}
-
 // QueryDepthBookParams - structure of params to query the depthbook of a specific product
 type QueryDepthBookParams struct {
 	Product string

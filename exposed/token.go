@@ -30,6 +30,6 @@ type TokenTx interface {
 // TokenQuery shows the expected query behavior for inner token client
 type TokenQuery interface {
 	QueryTokenInfo(ownerAddr, symbol string) ([]types.Token, error)
-	QueryAccountTokensInfo(addrStr string) (types.AccountTokensInfo, error)
-	QueryAccountTokenInfo(addrStr, symbol string) (types.AccountTokensInfo, error)
+	//QueryAccountTokensInfo(addrStr string) (types.AccountTokensInfo, error)
+	QueryAccountTokenInfo(addrStr, symbol string) (types.TokenResp, error)
 }

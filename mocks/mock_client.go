@@ -3,8 +3,11 @@ package mocks
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/auth/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	evmtypes "github.com/okex/okexchain/app/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
 	"time"
@@ -36,7 +39,7 @@ type MockClient struct {
 	t *testing.T
 	*gosdktypes.MockBaseClient
 	config  gosdktypes.ClientConfig
-	cdc     gosdktypes.SDKCodec
+	cdc     *codec.Codec
 	modules map[string]gosdktypes.Module
 }
 
@@ -112,27 +115,29 @@ func (mc *MockClient) Tendermint() exposed.Tendermint {
 }
 
 // BuildAccountBytes generates the account bytes for test
-func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr string, accNum, seqNum uint64) []byte {
-	//accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
-	//require.NoError(mc.t, err)
-	//accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
-	//require.NoError(mc.t, err)
-	//coins, err := sdk.ParseDecCoins(coinsStr)
-	//require.NoError(mc.t, err)
-	// TODO
-	//account := auth.BaseAccount{
-	//	Address:       accAddr,
-	//	Coins:         coins,
-	//	PubKey:        accPubkey,
-	//	AccountNumber: accNum,
-	//	Sequence:      seqNum,
-	//}
-	//
-	//bytes, err := mc.cdc.MarshalBinaryBare(account)
-	//require.NoError(mc.t, err)
-	//
-	//return bytes
-	return nil
+func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, codeHash, coinsStr string, accNum, seqNum uint64) []byte {
+	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
+	require.NoError(mc.t, err)
+	accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
+	require.NoError(mc.t, err)
+	coins, err := sdk.ParseDecCoins(coinsStr)
+	require.NoError(mc.t, err)
+
+	account := evmtypes.EthAccount{
+		BaseAccount: &authtypes.BaseAccount{
+			Address:       accAddr,
+			Coins:         coins,
+			PubKey:        accPubkey,
+			AccountNumber: accNum,
+			Sequence:      seqNum,
+		},
+		CodeHash: []byte(codeHash),
+	}
+
+	bytes, err := mc.cdc.MarshalJSON(account)
+	require.NoError(mc.t, err)
+
+	return bytes
 }
 
 // BuildTokenPairsBytes generates the token pairs bytes for test

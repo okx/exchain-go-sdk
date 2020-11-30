@@ -48,10 +48,8 @@ func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, to
 		return
 	}
 
-	msg := types.NewMsgTokenIssue(fromInfo.GetAddress(), tokenDesc, "", orgSymbol, wholeName, totalSupply, mintable)
-
+	msg := token.NewMsgTokenIssue(tokenDesc, "", orgSymbol, wholeName, totalSupply, fromInfo.GetAddress(), mintable)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Mint increases the total supply of a kind of token by its owner

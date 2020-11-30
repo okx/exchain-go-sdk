@@ -6,9 +6,13 @@ import (
 	"github.com/bartekn/go-bip39"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/okex/okexchain-go-sdk/types/tx"
+	"github.com/okex/okexchain/app/crypto/ethsecp256k1"
 	"github.com/okex/okexchain/app/crypto/hd"
 	okexchain "github.com/okex/okexchain/app/types"
+	tmamino "github.com/tendermint/tendermint/crypto/encoding/amino"
 	"log"
 	"strings"
 )
@@ -20,10 +24,13 @@ const (
 )
 
 func init() {
+	tmamino.RegisterKeyType(ethsecp256k1.PubKey{}, ethsecp256k1.PubKeyName)
+	tmamino.RegisterKeyType(ethsecp256k1.PrivKey{}, ethsecp256k1.PrivKeyName)
 	// set the address prefixes
 	config := sdk.GetConfig()
 	okexchain.SetBech32Prefixes(config)
 	okexchain.SetBip44CoinType(config)
+	config.Seal()
 }
 
 // CreateAccount creates a random key info with the given name and password
@@ -119,4 +126,32 @@ func GenerateMnemonic() (mnemo string, err error) {
 	}
 
 	return
+}
+
+// GeneratePrivateKeyFromMnemo converts mnemonic to private key
+func GeneratePrivateKeyFromMnemo(mnemonic string) (privKey string, err error) {
+	if len(mnemonic) == 0 {
+		return privKey, errors.New("failed. no mnemonic input")
+	}
+
+	if !bip39.IsMnemonicValid(mnemonic) {
+		return privKey, errors.New("failed. mnemonic is invalid")
+	}
+
+	hdPath := keys.CreateHDPath(0, 0).String()
+	if _, err = tx.Kb.CreateAccount(defaultName, mnemonic, "", defaultPassWd, hdPath, hd.EthSecp256k1); err != nil {
+		return
+	}
+
+	priv, err := tx.Kb.ExportPrivateKeyObject(defaultName, defaultPassWd)
+	if err != nil {
+		return
+	}
+
+	privBytes, ok := priv.(ethsecp256k1.PrivKey)
+	if !ok {
+		return privKey, fmt.Errorf("invalid private key type, must be Ethereum key: %T", privKey)
+	}
+
+	return strings.ToUpper(hexutil.Encode(ethcrypto.FromECDSA(privBytes.ToECDSA()))[2:]), err
 }

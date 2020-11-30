@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -57,4 +58,15 @@ func TestGenerateMnemonic(t *testing.T) {
 	mnemo, err := GenerateMnemonic()
 	require.NoError(t, err)
 	require.NotNil(t, mnemo)
+}
+
+func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
+	priKey, err := GeneratePrivateKeyFromMnemo(defaultMnemonic)
+	require.NoError(t, err)
+	require.Equal(t, defaultPrivateKey, priKey)
+
+	// bad mnemonic, add one word in it
+	// https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt
+	_, err = GeneratePrivateKeyFromMnemo(fmt.Sprintf("%s %s", defaultMnemonic, "abandon"))
+	require.Error(t, err)
 }

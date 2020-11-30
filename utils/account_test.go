@@ -10,7 +10,8 @@ import (
 const (
 	defaultName       = "alice"
 	defaultPassWd     = "12345678"
-	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
+	//defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
+	defaultMnemonic   = "plunge silk glide glass curve cycle snack garbage obscure express decade dirt"
 	defaultAddr       = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	defaultPrivateKey = "de0e9d9e7bac1366f7d8719a450dab03c9b704172ba43e0a25a7be1d51c69a87"
 	defaultMemo       = "my memo"

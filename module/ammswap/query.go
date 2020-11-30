@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 )
 
 var (
@@ -35,18 +35,20 @@ func (pc ammswapClient) QuerySwapTokenPair(token string) (types.SwapTokenPair, e
 
 // QuerySwapTokenPairs used for querying the all the swap token pairs
 func (pc ammswapClient) QuerySwapTokenPairs() ([]types.SwapTokenPair, error) {
-	var exchanges []types.SwapTokenPair
-
-	resKVs, err := pc.QuerySubspace(types.TokenPairPrefixKey, ModuleName)
-	if err != nil {
-		return nil, err
-	}
-	for _, kv := range resKVs {
-		var exchange types.SwapTokenPair
-		pc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &exchange)
-		exchanges = append(exchanges, exchange)
-	}
-	return exchanges, nil
+	//TODO
+	//var exchanges []types.SwapTokenPair
+	//
+	//resKVs, err := pc.QuerySubspace(types.TokenPairPrefixKey, ModuleName)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//for _, kv := range resKVs {
+	//	var exchange types.SwapTokenPair
+	//	pc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &exchange)
+	//	exchanges = append(exchanges, exchange)
+	//}
+	//return exchanges, nil
+	return nil, nil
 }
 
 // QueryBuyAmount used for querying how much token would get from a pool

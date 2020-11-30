@@ -2,12 +2,12 @@ package staking
 
 import (
 	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
 // Deposit deposits an amount of okt to delegator account
@@ -82,7 +82,7 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 		return
 	}
 
-	pubkey, err := sdk.GetConsPubKeyBech32(pubkeyStr)
+	pubkey, err := stakingtypes.GetConsPubKeyBech32(pubkeyStr)
 	if err != nil {
 		return
 	}

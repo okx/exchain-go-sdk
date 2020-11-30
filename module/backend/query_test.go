@@ -2,6 +2,7 @@ package backend
 
 import (
 	"errors"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
 	"time"
 
@@ -10,9 +11,8 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )
 
 const (
@@ -23,7 +23,7 @@ const (
 func TestBackendClient_QueryCandles(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -42,7 +42,7 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	candles, err := mockCli.Backend().QueryCandles(product, granularity, size)
 	require.NoError(t, err)
@@ -55,11 +55,11 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 	require.Equal(t, "40.96", candles[1][2])
 	require.Equal(t, "81.92", candles[1][3])
 
-	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.CandlesPath, cmn.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
+	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
 	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
 	require.Error(t, err)
 }
@@ -67,7 +67,7 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 func TestBackendClient_QueryTickers(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -83,7 +83,7 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(7)
-	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
+	mockCli.EXPECT().Query(types.TickersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
 
 	tickers, err := mockCli.Backend().QueryTickers(product)
 	require.NoError(t, err)
@@ -101,13 +101,13 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 	require.Equal(t, volume, tickers[0].Volume)
 	require.Equal(t, change, tickers[0].Change)
 
-	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.TickersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryTickers(product)
 	require.Error(t, err)
 
 	queryParams = params.NewQueryTickerParams("", 10, true)
 	queryBytes = expectedCdc.MustMarshalJSON(queryParams)
-	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
+	mockCli.EXPECT().Query(types.TickersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil).Times(2)
 
 	_, err = mockCli.Backend().QueryTickers("")
 	require.NoError(t, err)
@@ -137,11 +137,11 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 	_, err = mockCli.Backend().QueryTickers("", -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.TickersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryTickers("")
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TickersPath, cmn.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
+	mockCli.EXPECT().Query(types.TickersPath, tmbytes.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
 	_, err = mockCli.Backend().QueryTickers("")
 	require.Error(t, err)
 
@@ -150,7 +150,7 @@ func TestBackendClient_QueryTickers(t *testing.T) {
 func TestBackendClient_QueryDeals(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -168,7 +168,7 @@ func TestBackendClient_QueryDeals(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.DealsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.DealsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	deals, err := mockCli.Backend().QueryDeals(addr, product, side, start, end, page, perPage)
 	require.NoError(t, err)
@@ -206,11 +206,11 @@ func TestBackendClient_QueryDeals(t *testing.T) {
 	_, err = mockCli.Backend().QueryDeals(addr, product, side, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.DealsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.DealsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryDeals(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.DealsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.DealsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Backend().QueryDeals(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 
@@ -219,7 +219,7 @@ func TestBackendClient_QueryDeals(t *testing.T) {
 func TestBackendClient_QueryOpenOrders(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -238,7 +238,7 @@ func TestBackendClient_QueryOpenOrders(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.OpenOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	openOrders, err := mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.NoError(t, err)
@@ -278,11 +278,11 @@ func TestBackendClient_QueryOpenOrders(t *testing.T) {
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.OpenOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.OpenOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 }
@@ -290,7 +290,7 @@ func TestBackendClient_QueryOpenOrders(t *testing.T) {
 func TestBackendClient_QueryClosedOrders(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -309,7 +309,7 @@ func TestBackendClient_QueryClosedOrders(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.ClosedOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.ClosedOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	openOrders, err := mockCli.Backend().QueryClosedOrders(addr, product, side, start, end, page, perPage)
 	require.NoError(t, err)
@@ -349,11 +349,11 @@ func TestBackendClient_QueryClosedOrders(t *testing.T) {
 	_, err = mockCli.Backend().QueryClosedOrders(addr, product, side, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.ClosedOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.ClosedOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryClosedOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.ClosedOrdersPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.ClosedOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Backend().QueryClosedOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 }
@@ -361,7 +361,7 @@ func TestBackendClient_QueryClosedOrders(t *testing.T) {
 func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -378,7 +378,7 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	txRecord, err := mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.NoError(t, err)
@@ -406,11 +406,11 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.Error(t, err)
 }
@@ -418,7 +418,7 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 func TestBackendClient_QueryTransactions(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -435,7 +435,7 @@ func TestBackendClient_QueryTransactions(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	txs, err := mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.NoError(t, err)
@@ -469,11 +469,11 @@ func TestBackendClient_QueryTransactions(t *testing.T) {
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TransactionsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.Error(t, err)
 }

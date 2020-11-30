@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/tendermint/crypto"
 )
@@ -147,10 +146,12 @@ func (msg MsgCreateValidator) GetSignBytes() []byte {
 // MarshalJSON is useful for the signing of msg MsgCreateValidator
 func (msg MsgCreateValidator) MarshalJSON() ([]byte, error) {
 	return json.Marshal(msgCreateValidatorJSON{
-		Description:       msg.Description,
-		DelegatorAddress:  msg.DelegatorAddress,
-		ValidatorAddress:  msg.ValidatorAddress,
-		PubKey:            sdk.MustBech32ifyConsPub(msg.PubKey),
+		Description:      msg.Description,
+		DelegatorAddress: msg.DelegatorAddress,
+		ValidatorAddress: msg.ValidatorAddress,
+		// TODO
+		//PubKey:            sdk.MustBech32ifyConsPub(msg.PubKey),
+		PubKey:            sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, msg.PubKey),
 		MinSelfDelegation: msg.MinSelfDelegation,
 	})
 }

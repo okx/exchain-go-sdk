@@ -26,7 +26,8 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewAuthClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewAuthClient(mockCli.MockBaseClient))
 
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
@@ -57,18 +58,17 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	_, err = mockCli.Auth().QueryAccount(addr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, nil)
+	mockCli.EXPECT().Query(types.AccountInfoPath, tmbytes.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, nil)
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
+	mockCli.EXPECT().Query(types.AccountInfoPath, tmbytes.HexBytes(types.GetAddressStoreKey(accAddr))).
 		Return(nil, errors.New("default error"))
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
+	mockCli.EXPECT().Query(types.AccountInfoPath, tmbytes.HexBytes(types.GetAddressStoreKey(accAddr))).
 		Return(expectedRet[1:], nil)
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
-
 }

@@ -3,17 +3,17 @@ package token
 import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
-var _ sdk.Module = (*tokenClient)(nil)
+var _ gosdktypes.Module = (*tokenClient)(nil)
 
 type tokenClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in token module
-func (tokenClient) RegisterCodec(cdc sdk.SDKCodec) {
+func (tokenClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
 	types.RegisterCodec(cdc)
 }
 
@@ -23,6 +23,6 @@ func (tokenClient) Name() string {
 }
 
 // NewTokenClient creates a new instance of token client as implement
-func NewTokenClient(baseClient sdk.BaseClient) exposed.Token {
+func NewTokenClient(baseClient gosdktypes.BaseClient) exposed.Token {
 	return tokenClient{baseClient}
 }

@@ -11,20 +11,21 @@ import (
 
 // QueryValidators gets all the validators info
 func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
-	resKVs, err := sc.QuerySubspace(types.ValidatorsKey, ModuleName)
-	if err != nil {
-		return
-	}
-
-	for _, kv := range resKVs {
-		var innerVal types.ValidatorInner
-		sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &innerVal)
-		val, err := innerVal.Standardize()
-		if err != nil {
-			return nil, err
-		}
-		vals = append(vals, val)
-	}
+	// TODO
+	//resKVs, err := sc.QuerySubspace(types.ValidatorsKey, ModuleName)
+	//if err != nil {
+	//	return
+	//}
+	//
+	//for _, kv := range resKVs {
+	//	var innerVal types.ValidatorInner
+	//	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &innerVal)
+	//	val, err := innerVal.Standardize()
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	vals = append(vals, val)
+	//}
 
 	return
 

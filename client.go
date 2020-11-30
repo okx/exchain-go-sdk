@@ -2,7 +2,6 @@ package gosdk
 
 import (
 	"fmt"
-
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
@@ -16,23 +15,25 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	"github.com/okex/okexchain-go-sdk/module/token"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
+
+
 
 // Client - structure of the main client of okexchain gosdk
 type Client struct {
-	config  sdk.ClientConfig
-	cdc     sdk.SDKCodec
-	modules map[string]sdk.Module
+	config  gosdktypes.ClientConfig
+	cdc     gosdktypes.SDKCodec
+	modules map[string]gosdktypes.Module
 }
 
 // NewClient creates a new instance of Client
-func NewClient(config sdk.ClientConfig) Client {
-	cdc := sdk.NewCodec()
+func NewClient(config gosdktypes.ClientConfig) Client {
+	cdc := gosdktypes.NewCodec()
 	pClient := &Client{
 		config:  config,
 		cdc:     cdc,
-		modules: make(map[string]sdk.Module),
+		modules: make(map[string]gosdktypes.Module),
 	}
 	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
@@ -53,7 +54,7 @@ func NewClient(config sdk.ClientConfig) Client {
 	return *pClient
 }
 
-func (cli *Client) registerModule(mods ...sdk.Module) {
+func (cli *Client) registerModule(mods ...gosdktypes.Module) {
 	for _, mod := range mods {
 		moduleName := mod.Name()
 		if _, ok := cli.modules[moduleName]; ok {
@@ -63,12 +64,12 @@ func (cli *Client) registerModule(mods ...sdk.Module) {
 		mod.RegisterCodec(cli.cdc)
 		cli.modules[moduleName] = mod
 	}
-	sdk.RegisterBasicCodec(cli.cdc)
+	gosdktypes.RegisterBasicCodec(cli.cdc)
 	cli.cdc.Seal()
 }
 
 // GetConfig returns the client config
-func (cli *Client) GetConfig() sdk.ClientConfig {
+func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 	return cli.config
 }
 

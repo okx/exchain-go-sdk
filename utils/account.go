@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/bartekn/go-bip39"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/tx"
+	"github.com/okex/okexchain/app/crypto/hd"
+	okexchain "github.com/okex/okexchain/app/types"
 	"log"
 	"strings"
 )
@@ -13,6 +16,13 @@ import (
 const (
 	mnemonicEntropySize = 128
 )
+
+func init() {
+	// set the address prefixes
+	config := sdk.GetConfig()
+	okexchain.SetBech32Prefixes(config)
+	okexchain.SetBip44CoinType(config)
+}
 
 // CreateAccount creates a random key info with the given name and password
 func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error) {
@@ -33,7 +43,7 @@ func CreateAccount(name, passWd string) (info keys.Info, mnemo string, err error
 	}
 
 	hdPath := keys.CreateHDPath(0, 0).String()
-	info, err = tx.Kb.CreateAccount(name, mnemo, "", passWd, hdPath, keys.Secp256k1)
+	info, err = tx.Kb.CreateAccount(name, mnemo, "", passWd, hdPath, hd.EthSecp256k1)
 	if err != nil {
 		return info, mnemo, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}
@@ -63,7 +73,7 @@ func CreateAccountWithMnemo(mnemonic, name, passWd string) (info keys.Info, mnem
 	}
 
 	hdPath := keys.CreateHDPath(0, 0).String()
-	info, err = tx.Kb.CreateAccount(name, mnemonic, "", passWd, hdPath, keys.Secp256k1)
+	info, err = tx.Kb.CreateAccount(name, mnemonic, "", passWd, hdPath, hd.EthSecp256k1)
 	if err != nil {
 		return info, mnemonic, fmt.Errorf("failed. Kb.CreateAccount err : %s", err.Error())
 	}

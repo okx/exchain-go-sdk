@@ -1,6 +1,7 @@
 package types
 
 import (
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -17,7 +18,7 @@ const (
 )
 
 var (
-	msgCdc = sdk.NewCodec()
+	msgCdc = gosdktypes.NewCodec()
 	// ValidatorsKey is useful for subspace and store query about validator
 	ValidatorsKey = []byte{0x21}
 	// DelegatorKey is useful for subspace and store query about delegator
@@ -29,7 +30,7 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for staking module
-func RegisterCodec(cdc sdk.SDKCodec) {
+func RegisterCodec(cdc gosdktypes.SDKCodec) {
 	cdc.RegisterConcrete(MsgCreateValidator{}, "okexchain/staking/MsgCreateValidator")
 	cdc.RegisterConcrete(MsgEditValidator{}, "okexchain/staking/MsgEditValidator")
 	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/staking/MsgDeposit")
@@ -58,7 +59,7 @@ type ValidatorInner struct {
 
 // Standardize converts the inner validator to the standard one
 func (vi ValidatorInner) Standardize() (val Validator, err error) {
-	bechConsPubKey, err := sdk.Bech32ifyConsPub(vi.ConsPubKey)
+	bechConsPubKey, err := sdk.Bech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, vi.ConsPubKey)
 	if err != nil {
 		return
 	}

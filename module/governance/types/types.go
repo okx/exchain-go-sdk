@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -25,7 +26,7 @@ const (
 )
 
 var (
-	MsgCdc = sdk.NewCodec()
+	MsgCdc = gosdktypes.NewCodec()
 )
 
 func init() {
@@ -33,7 +34,7 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for governance module
-func RegisterCodec(cdc sdk.SDKCodec) {
+func RegisterCodec(cdc gosdktypes.SDKCodec) {
 	cdc.RegisterConcrete(MsgSubmitProposal{}, "okexchain/gov/MsgSubmitProposal")
 	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/gov/MsgDeposit")
 	cdc.RegisterConcrete(MsgVote{}, "okexchain/gov/MsgVote")

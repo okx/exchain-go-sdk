@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // const
@@ -10,7 +11,7 @@ const (
 )
 
 var (
-	msgCdc = sdk.NewCodec()
+	msgCdc = gosdktypes.NewCodec()
 	// TokenPairPrefixKey to be used for KVStore
 	TokenPairPrefixKey = []byte{0x01}
 )
@@ -20,7 +21,7 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for ammswap module
-func RegisterCodec(cdc sdk.SDKCodec) {
+func RegisterCodec(cdc gosdktypes.SDKCodec) {
 	cdc.RegisterConcrete(MsgAddLiquidity{}, "okexchain/ammswap/MsgAddLiquidity")
 	cdc.RegisterConcrete(MsgRemoveLiquidity{}, "okexchain/ammswap/MsgRemoveLiquidity")
 	cdc.RegisterConcrete(MsgCreateExchange{}, "okexchain/ammswap/MsgCreateExchange")

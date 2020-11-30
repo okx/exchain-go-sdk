@@ -3,11 +3,12 @@ package dex
 import (
 	"errors"
 	"fmt"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"io/ioutil"
 
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/types/tx"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
@@ -58,7 +59,11 @@ func (dc dexClient) MultiSign(fromInfo keys.Info, passWd, inputPath, outputPath 
 		return fmt.Errorf("failed. sign error: %s", err.Error())
 	}
 
-	msg.ToSignature = sdk.NewStdSignature(fromInfo.GetPubKey(), signature)
+	msg.ToSignature = authtypes.StdSignature{
+		Signature: signature,
+		PubKey:    fromInfo.GetPubKey(),
+	}
+
 	jsonBytes, err := dc.GetCodec().MarshalJSON(dc.BuildUnsignedStdTxOffline([]sdk.Msg{msg}, stdTx.Memo))
 	if err != nil {
 		return err

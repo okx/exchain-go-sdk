@@ -3,15 +3,15 @@ package order
 import (
 	"errors"
 	"fmt"
-	"testing"
-
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"testing"
 )
 
 const (
@@ -28,11 +28,12 @@ const (
 func TestOrderClient_QueryOrderDetail(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
+	//TODO
+	//mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
 
 	sender, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
@@ -93,11 +94,12 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 func TestOrderClient_QueryDepthBook(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
 
 	expectedRet := mockCli.BuildBookResBytes("1.024", "10.24", "2.048", "20.48")
 	expectedCdc := mockCli.GetCodec()
@@ -107,7 +109,7 @@ func TestOrderClient_QueryDepthBook(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
-	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	depthBook, err := mockCli.Order().QueryDepthBook(product)
 	require.NoError(t, err)
@@ -117,11 +119,11 @@ func TestOrderClient_QueryDepthBook(t *testing.T) {
 	require.Equal(t, "2.048", depthBook.Bids[0].Price)
 	require.Equal(t, "20.48", depthBook.Bids[0].Quantity)
 
-	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Order().QueryDepthBook(product)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.DepthbookPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Order().QueryDepthBook(product)
 	require.Error(t, err)
 }

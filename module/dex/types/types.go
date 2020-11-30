@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // const
@@ -12,16 +13,16 @@ const (
 )
 
 var (
-	msgCdc = sdk.NewCodec()
+	msgCdc = gosdktypes.NewCodec()
 )
 
 func init() {
-	sdk.RegisterBasicCodec(msgCdc)
+	gosdktypes.RegisterBasicCodec(msgCdc)
 	RegisterCodec(msgCdc)
 }
 
 // RegisterCodec registers the msg type for dex module
-func RegisterCodec(cdc sdk.SDKCodec) {
+func RegisterCodec(cdc gosdktypes.SDKCodec) {
 	cdc.RegisterConcrete(MsgList{}, "okexchain/dex/MsgList")
 	cdc.RegisterConcrete(MsgDeposit{}, "okexchain/dex/MsgDeposit")
 	cdc.RegisterConcrete(MsgWithdraw{}, "okexchain/dex/MsgWithdraw")

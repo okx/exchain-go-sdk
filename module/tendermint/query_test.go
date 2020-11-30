@@ -3,14 +3,15 @@ package tendermint
 import (
 	"errors"
 	"fmt"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -22,14 +23,15 @@ const (
 func TestTendermintClient_QueryBlock(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	height, blockTime := int64(1024), time.Now()
-	appHash, blockIDHash := cmn.HexBytes("default app hash"), cmn.HexBytes("default block ID hash")
+	appHash, blockIDHash := tmbytes.HexBytes("default app hash"), tmbytes.HexBytes("default block ID hash")
 
 	expectedRet := mockCli.GetRawResultBlockPointer("default chainID", height, blockTime, appHash, blockIDHash)
 	expectedCdc := mockCli.GetCodec()
@@ -53,11 +55,12 @@ func TestTendermintClient_QueryBlock(t *testing.T) {
 func TestTendermintClient_QueryBlockResults(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	power, height := int64(1000), int64(1024)
 	pubkeyType, eventType := "default pubkey type", "default event type"
@@ -82,14 +85,15 @@ func TestTendermintClient_QueryBlockResults(t *testing.T) {
 func TestTendermintClient_QueryCommitResult(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	height, blockTime := int64(1024), time.Now()
-	appHash, blockIDHash := cmn.HexBytes("default app hash"), cmn.HexBytes("default block ID hash")
+	appHash, blockIDHash := tmbytes.HexBytes("default app hash"), tmbytes.HexBytes("default block ID hash")
 
 	expectedRet := mockCli.GetRawCommitResultPointer(true, "default chainID", height, blockTime, appHash, blockIDHash)
 	mockCli.EXPECT().Commit(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
@@ -111,14 +115,15 @@ func TestTendermintClient_QueryCommitResult(t *testing.T) {
 func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
-	consPubkey, err := sdk.GetConsPubKeyBech32(valConsPK)
+	consPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, valConsPK)
 	require.NoError(t, err)
 
 	expectedRet := mockCli.GetRawValidatorsResultPointer(height, votingPower, proposerPriority, consPubkey)
@@ -139,11 +144,12 @@ func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 func TestTendermintClient_QueryTxResult(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	//TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	txHash, tx := []byte("default tx hash"), []byte("default tx")
 	height, code := int64(1024), uint32(0)
@@ -155,7 +161,7 @@ func TestTendermintClient_QueryTxResult(t *testing.T) {
 	txResult, err := mockCli.Tendermint().QueryTxResult(txHash, true)
 	require.NoError(t, err)
 	require.Equal(t, height, txResult.Height)
-	require.Equal(t, cmn.HexBytes(txHash), txResult.Hash)
+	require.Equal(t, tmbytes.HexBytes(txHash), txResult.Hash)
 	require.Equal(t, tmtypes.Tx(tx), txResult.Tx)
 	require.Equal(t, log, txResult.TxResult.Log)
 	require.Equal(t, code, txResult.TxResult.Code)
@@ -169,11 +175,12 @@ func TestTendermintClient_QueryTxResult(t *testing.T) {
 func TestTendermintClient_QueryTxsResult(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+	//TODO
+	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	txHash, tx := []byte("default tx hash"), []byte("default tx")
 	height, code := int64(1024), uint32(0)
@@ -188,7 +195,7 @@ func TestTendermintClient_QueryTxsResult(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 1, txSearchResult.TotalCount)
 	require.Equal(t, height, txSearchResult.Txs[0].Height)
-	require.Equal(t, cmn.HexBytes(txHash), txSearchResult.Txs[0].Hash)
+	require.Equal(t, tmbytes.HexBytes(txHash), txSearchResult.Txs[0].Hash)
 	require.Equal(t, tmtypes.Tx(tx), txSearchResult.Txs[0].Tx)
 	require.Equal(t, log, txSearchResult.Txs[0].TxResult.Log)
 	require.Equal(t, code, txSearchResult.Txs[0].TxResult.Code)

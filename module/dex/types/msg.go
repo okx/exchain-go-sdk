@@ -1,6 +1,7 @@
 package types
 
 import (
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -146,7 +147,7 @@ type MsgTransferOwnership struct {
 	FromAddress sdk.AccAddress   `json:"from_address"`
 	ToAddress   sdk.AccAddress   `json:"to_address"`
 	Product     string           `json:"product"`
-	ToSignature sdk.StdSignature `json:"to_signature"`
+	ToSignature authtypes.StdSignature `json:"to_signature"`
 }
 
 // NewMsgTransferOwnership creates a msg of changing product's owner
@@ -155,7 +156,7 @@ func NewMsgTransferOwnership(fromAddr, toAddr sdk.AccAddress, product string) Ms
 		FromAddress: fromAddr,
 		ToAddress:   toAddr,
 		Product:     product,
-		ToSignature: sdk.StdSignature{},
+		ToSignature: authtypes.StdSignature{},
 	}
 }
 

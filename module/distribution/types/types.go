@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // const
@@ -10,7 +10,7 @@ const (
 )
 
 var (
-	msgCdc = sdk.NewCodec()
+	msgCdc = gosdktypes.NewCodec()
 )
 
 func init() {
@@ -18,7 +18,7 @@ func init() {
 }
 
 // RegisterCodec registers the msg type for distribution module
-func RegisterCodec(cdc sdk.SDKCodec) {
+func RegisterCodec(cdc gosdktypes.SDKCodec) {
 	cdc.RegisterConcrete(MsgSetWithdrawAddr{}, "okexchain/distribution/MsgModifyWithdrawAddress")
 	cdc.RegisterConcrete(MsgWithdrawValCommission{}, "okexchain/distribution/MsgWithdrawReward")
 }

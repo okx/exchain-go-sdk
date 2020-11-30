@@ -3,6 +3,7 @@ package tx
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/okexchain/app/crypto/hd"
 )
 
 var (
@@ -11,7 +12,7 @@ var (
 )
 
 func init() {
-	Kb = keys.NewInMemory()
+	Kb = keys.NewInMemory(hd.EthSecp256k1Options()...)
 }
 
 // MakeSignature completes the signature

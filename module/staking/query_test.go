@@ -2,16 +2,17 @@ package staking
 
 import (
 	"errors"
-	"testing"
-	"time"
-
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"github.com/tendermint/tendermint/libs/kv"
+	"testing"
+	"time"
 )
 
 const (
@@ -34,11 +35,12 @@ var (
 func TestStakingClient_QueryValidators(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	//TODO
+	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
 	valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
 	require.NoError(t, err)
@@ -48,7 +50,7 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.NoError(t, err)
 
 	// build expected return of the slice of cmn.KVPair
-	expectedRet := []cmn.KVPair{
+	expectedRet := []kv.Pair{
 		{
 			Key:   append(types.ValidatorsKey, valOperAddr.Bytes()...),
 			Value: rawValBytes,
@@ -80,11 +82,12 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 func TestStakingClient_QueryValidator(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	//TODO
+	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
 	valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
 	require.NoError(t, err)
@@ -100,7 +103,7 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 	expectedCdc := mockCli.GetCodec()
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
 		Return(expectedRet, nil)
 
 	val, err := mockCli.Staking().QueryValidator(valAddr)
@@ -122,25 +125,25 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 	_, err = mockCli.Staking().QueryValidator(valAddr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
 		Return([]byte{1}, errors.New("default error"))
 	_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(nil, nil)
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(nil, nil)
 	_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
-
 }
 
 func TestStakingClient_QueryDelegator(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
 	delAddr, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
@@ -165,9 +168,9 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(params.NewQueryDelegatorParams(delAddr))
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
-	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
 		Return(expectedRet1, nil).Times(2)
-	mockCli.EXPECT().Query(types.UnbondDelegationPath, cmn.HexBytes(queryBytes)).Return(expectedRet2, nil)
+	mockCli.EXPECT().Query(types.UnbondDelegationPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet2, nil)
 
 	delResp, err := mockCli.Staking().QueryDelegator(addr)
 	require.NoError(t, err)
@@ -184,13 +187,12 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 	_, err = mockCli.Staking().QueryDelegator(addr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.UnbondDelegationPath, cmn.HexBytes(queryBytes)).Return(expectedRet2[1:], nil)
+	mockCli.EXPECT().Query(types.UnbondDelegationPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet2[1:], nil)
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(cmn.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
 		Return(expectedRet1, errors.New("default error"))
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
-
 }

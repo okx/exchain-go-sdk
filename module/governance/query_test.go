@@ -2,16 +2,17 @@ package governance
 
 import (
 	"errors"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )
 
 const (
@@ -26,11 +27,12 @@ const (
 func TestGovClient_QueryProposals(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	mockCli.RegisterModule(NewGovClient(mockCli.MockBaseClient))
+	// TODO
+	//mockCli.RegisterModule(NewGovClient(mockCli.MockBaseClient))
 
 	proposalID, status, mockTime := uint64(1024), ProposalStatus(0x01), time.Now()
 	mockPower, err := sdk.NewDecFromStr("0.25")
@@ -47,7 +49,7 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.ProposalsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	proposals, err := mockCli.Governance().QueryProposals("", "", "", 0)
 	require.NoError(t, err)
@@ -70,12 +72,12 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	require.True(t, mockTime.Equal(proposals[0].VotingEndTime))
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(types.ProposalsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Governance().QueryProposals("", "", "", 0)
 	require.Error(t, err)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(types.ProposalsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
 	_, err = mockCli.Governance().QueryProposals("", "", "", 0)
 	require.Error(t, err)
 
@@ -96,7 +98,7 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	queryBytes = expectedCdc.MustMarshalJSON(queryParams)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(types.ProposalsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
 
 	proposals, err = mockCli.Governance().QueryProposals(addr, addr, "deposit_period", 1)
 	require.NoError(t, err)

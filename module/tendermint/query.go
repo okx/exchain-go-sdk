@@ -42,7 +42,9 @@ func (tc tendermintClient) QueryCommitResult(height int64) (commitResult types.R
 
 // QueryValidatorsResult gets the validators info on a specific height
 func (tc tendermintClient) QueryValidatorsResult(height int64) (valsResult types.ResultValidators, err error) {
-	pTmValsResult, err := tc.Validators(&height)
+	//pTmValsResult, err := tc.Validators(&height)
+	// TODO
+	pTmValsResult, err := tc.Validators(&height, 1, 0)
 	if err != nil {
 		return
 	}
@@ -75,8 +77,8 @@ func (tc tendermintClient) QueryTxsResult(searchStr string, page, perPage int) (
 	}
 
 	queryStr := strings.Join(tmEventStrs, " AND ")
-
-	pTmTxsResult, err := tc.TxSearch(queryStr, false, page, perPage)
+	// TODO
+	pTmTxsResult, err := tc.TxSearch(queryStr, false, page, perPage, "")
 	if err != nil {
 		return
 	}

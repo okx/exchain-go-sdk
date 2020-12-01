@@ -118,10 +118,8 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 		return
 	}
 
-	//msg := types.NewMsgRegProxy(fromInfo.GetAddress(), false)
-	//
-	//return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-	return
+	msg := stakingtypes.NewMsgRegProxy(fromInfo.GetAddress(), false)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 // BindProxy binds the staking tokens to a proxy

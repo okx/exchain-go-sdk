@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
-	token "github.com/okex/okexchain/x/token/types"
+	tokentypes "github.com/okex/okexchain/x/token/types"
 )
 
 // Send transfers coins to other receiver
@@ -26,7 +26,7 @@ func (tc tokenClient) Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo
 		return resp, fmt.Errorf("failed. parse DecCoins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := token.NewMsgTokenSend(fromInfo.GetAddress(), toAddr, coins)
+	msg := tokentypes.NewMsgTokenSend(fromInfo.GetAddress(), toAddr, coins)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -37,7 +37,7 @@ func (tc tokenClient) MultiSend(fromInfo keys.Info, passWd string, transfers []t
 		return
 	}
 
-	msg := token.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
+	msg := tokentypes.NewMsgMultiSend(fromInfo.GetAddress(), transfers)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -48,7 +48,7 @@ func (tc tokenClient) Issue(fromInfo keys.Info, passWd, orgSymbol, wholeName, to
 		return
 	}
 
-	msg := token.NewMsgTokenIssue(tokenDesc, "", orgSymbol, wholeName, totalSupply, fromInfo.GetAddress(), mintable)
+	msg := tokentypes.NewMsgTokenIssue(tokenDesc, "", orgSymbol, wholeName, totalSupply, fromInfo.GetAddress(), mintable)
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -64,7 +64,7 @@ func (tc tokenClient) Mint(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := token.NewMsgTokenMint(coin, fromInfo.GetAddress())
+	msg := tokentypes.NewMsgTokenMint(coin, fromInfo.GetAddress())
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -80,7 +80,7 @@ func (tc tokenClient) Burn(fromInfo keys.Info, passWd, coinsStr, memo string, ac
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := token.NewMsgTokenBurn(coin, fromInfo.GetAddress())
+	msg := tokentypes.NewMsgTokenBurn(coin, fromInfo.GetAddress())
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -91,6 +91,6 @@ func (tc tokenClient) Edit(fromInfo keys.Info, passWd, symbol, description, whol
 		return
 	}
 
-	msg := token.NewMsgTokenModify(symbol, description, wholeName, isDescEdit, isWholeNameEdit, fromInfo.GetAddress())
+	msg := tokentypes.NewMsgTokenModify(symbol, description, wholeName, isDescEdit, isWholeNameEdit, fromInfo.GetAddress())
 	return tc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }

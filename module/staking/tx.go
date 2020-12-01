@@ -7,7 +7,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
-	"github.com/okex/okexchain/x/staking"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
@@ -23,7 +22,7 @@ func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo strin
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := staking.NewMsgDeposit(fromInfo.GetAddress(), coin)
+	msg := stakingtypes.NewMsgDeposit(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -39,7 +38,7 @@ func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo stri
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := staking.NewMsgWithdraw(fromInfo.GetAddress(), coin)
+	msg := stakingtypes.NewMsgWithdraw(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -55,7 +54,7 @@ func (sc stakingClient) AddShares(fromInfo keys.Info, passWd string, valAddrsStr
 		return resp, fmt.Errorf("failed. validator address parsed error: %s", err.Error())
 	}
 
-	msg := staking.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
+	msg := stakingtypes.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -66,8 +65,7 @@ func (sc stakingClient) DestroyValidator(fromInfo keys.Info, passWd string, memo
 		return
 	}
 
-	msg := types.NewMsgDestroyValidator(fromInfo.GetAddress())
-
+	msg := stakingtypes.NewMsgDestroyValidator(fromInfo.GetAddress())
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 

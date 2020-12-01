@@ -6,29 +6,6 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
-// MsgDestroyValidator - structure to deregister a validator
-type MsgDestroyValidator struct {
-	DelAddr sdk.AccAddress `json:"delegator_address"`
-}
-
-// NewMsgDestroyValidator creates a msg of destroy-validator
-func NewMsgDestroyValidator(delAddr sdk.AccAddress) MsgDestroyValidator {
-	return MsgDestroyValidator{
-		DelAddr: delAddr,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgDestroyValidator) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgDestroyValidator) Route() string                { return "" }
-func (MsgDestroyValidator) Type() string                 { return "" }
-func (MsgDestroyValidator) ValidateBasic() sdk.Error     { return nil }
-func (MsgDestroyValidator) GetSigners() []sdk.AccAddress { return nil }
-
 // MsgCreateValidator - structure for creating a validator
 type MsgCreateValidator struct {
 	Description       Description    `json:"description"`

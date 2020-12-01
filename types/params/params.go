@@ -1,7 +1,6 @@
 package params
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/types"
@@ -155,37 +154,6 @@ func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, p
 		Page:      page,
 		PerPage:   perPage,
 	}
-}
-
-// QueryDexInfoParams defines query params of dex info
-type QueryDexInfoParams struct {
-	Owner   string
-	Page    int
-	PerPage int
-}
-
-// NewQueryDexInfoParams creates a new instance of QueryDexInfoParams
-func NewQueryDexInfoParams(owner string, page, perPage int) (QueryDexInfoParams, error) {
-	if len(owner) == 0 {
-		owner = ""
-	} else {
-		_, err := types.AccAddressFromBech32(owner)
-		if err != nil {
-			return QueryDexInfoParams{}, fmt.Errorf("failed. invalid address: %s", owner)
-		}
-	}
-
-	if page <= 0 {
-		return QueryDexInfoParams{}, fmt.Errorf("failed. invalid page: %d", page)
-	}
-	if perPage <= 0 {
-		return QueryDexInfoParams{}, fmt.Errorf("failed. invalid per-page: %d", perPage)
-	}
-	return QueryDexInfoParams{
-		Owner:   owner,
-		Page:    page,
-		PerPage: perPage,
-	}, nil
 }
 
 // QueryProposalsParams defines query params of proposals in gov

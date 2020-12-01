@@ -1,31 +1,32 @@
 package dex
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 )
 
 // QueryProducts gets token pair info
 func (dc dexClient) QueryProducts(ownerAddr string, page, perPage int) (tokenPairs []types.TokenPair, err error) {
-	queryParams, err := params.NewQueryDexInfoParams(ownerAddr, page, perPage)
+	jsonBytes, err := dc.GetCodec().MarshalJSON(dextypes.NewQueryDexInfoParams(ownerAddr, page, perPage))
 	if err != nil {
 		return
 	}
 
-	jsonBytes, err := dc.GetCodec().MarshalJSON(queryParams)
+	path := fmt.Sprintf("custom/%s/%s", dextypes.QuerierRoute, dextypes.QueryProducts)
+	res, _, err := dc.Query(path, jsonBytes)
 	if err != nil {
 		return
 	}
 
-	res, _, err := dc.Query(types.ProductsPath, jsonBytes)
-	if err != nil {
-		return
-	}
-
-	if err = dc.GetCodec().UnmarshalJSON(res, &tokenPairs); err != nil {
+	var response types.ListResponse
+	if err = json.Unmarshal(res, &response); err != nil {
 		return tokenPairs, utils.ErrUnmarshalJSON(err.Error())
 	}
 
-	return
+	// TODO:
+	// not friendly
+	return response.Data.Data, err
 }

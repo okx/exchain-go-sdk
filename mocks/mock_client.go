@@ -138,42 +138,48 @@ func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, codeHash, coin
 	return bytes
 }
 
-// BuildTokenPairsBytes generates the token pairs bytes for test
-func (mc *MockClient) BuildTokenPairsBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
+// BuildTokenPairsResponseBytes generates the response of token pairs bytes for test
+func (mc *MockClient) BuildTokenPairsResponseBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
 	minQuantity sdk.Dec, maxPriceDigit, maxQuantityDigit, blockHeight1, blockHeight2 int64, ID1, ID2 uint64, delisting bool,
 	owner sdk.AccAddress, deposits sdk.DecCoin) []byte {
+	tokenPairs := []dex.TokenPair{
+		{
+			BaseAssetSymbol:  baseAssetSymbol1,
+			QuoteAssetSymbol: quoteAssetSymbol,
+			InitPrice:        initPrice,
+			MaxPriceDigit:    maxPriceDigit,
+			MaxQuantityDigit: maxQuantityDigit,
+			MinQuantity:      minQuantity,
+			ID:               ID1,
+			Delisting:        delisting,
+			Owner:            owner,
+			Deposits:         deposits,
+			BlockHeight:      blockHeight1,
+		},
+		{
+			BaseAssetSymbol:  baseAssetSymbol2,
+			QuoteAssetSymbol: quoteAssetSymbol,
+			InitPrice:        initPrice,
+			MaxPriceDigit:    maxPriceDigit,
+			MaxQuantityDigit: maxQuantityDigit,
+			MinQuantity:      minQuantity,
+			ID:               ID2,
+			Delisting:        delisting,
+			Owner:            owner,
+			Deposits:         deposits,
+			BlockHeight:      blockHeight2,
+		},
+	}
 
-	var tokenPairs []dex.TokenPair
+	response := dex.ListResponse{
+		Data: dex.ListDataRes{
+			Data: tokenPairs,
+		},
+	}
 
-	tokenPairs = append(tokenPairs, dex.TokenPair{
-		BaseAssetSymbol:  baseAssetSymbol1,
-		QuoteAssetSymbol: quoteAssetSymbol,
-		InitPrice:        initPrice,
-		MaxPriceDigit:    maxPriceDigit,
-		MaxQuantityDigit: maxQuantityDigit,
-		MinQuantity:      minQuantity,
-		ID:               ID1,
-		Delisting:        delisting,
-		Owner:            owner,
-		Deposits:         deposits,
-		BlockHeight:      blockHeight1,
-	})
-
-	tokenPairs = append(tokenPairs, dex.TokenPair{
-		BaseAssetSymbol:  baseAssetSymbol2,
-		QuoteAssetSymbol: quoteAssetSymbol,
-		InitPrice:        initPrice,
-		MaxPriceDigit:    maxPriceDigit,
-		MaxQuantityDigit: maxQuantityDigit,
-		MinQuantity:      minQuantity,
-		ID:               ID2,
-		Delisting:        delisting,
-		Owner:            owner,
-		Deposits:         deposits,
-		BlockHeight:      blockHeight2,
-	})
-
-	return mc.cdc.MustMarshalJSON(tokenPairs)
+	res, err := json.Marshal(response)
+	require.NoError(mc.t, err)
+	return res
 }
 
 // BuildOrderDetailBytes generates the order detail bytes for test

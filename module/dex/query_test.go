@@ -2,40 +2,39 @@ package dex
 
 import (
 	"errors"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"testing"
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
-	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
 
 	product = "btc-000_okt"
 
-	recMnemonic = "length borrow act busy blur mouse salad suspect demise dizzy obey rookie"
-	recAddr     = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
+	recMnemonic = "plunge silk glide glass curve cycle snack garbage obscure express decade dirt"
+	recAddr     = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
 )
 
 func TestDexClient_QueryProducts(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	// TODO
-	//mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient))
 
 	initPrice, err := sdk.NewDecFromStr("10.24")
 	require.NoError(t, err)
@@ -46,19 +45,16 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	deposit, err := sdk.ParseDecCoin("1024.1024okt")
 	require.NoError(t, err)
 
-	expectedRet := mockCli.BuildTokenPairsBytes("btc", "eth", "okt",
+	expectedRet := mockCli.BuildTokenPairsResponseBytes("btc", "eth", "okt",
 		initPrice, minQuantity, 4, 4, 512, 1024, 2048, 4096,
 		true, ownerAddr, deposit)
 	expectedCdc := mockCli.GetCodec()
+	expectedParams := expectedCdc.MustMarshalJSON(dextypes.NewQueryDexInfoParams(addr, dextypes.DefaultPage, dextypes.DefaultPerPage))
+	expectedPath := fmt.Sprintf("custom/%s/%s", dextypes.QuerierRoute, dextypes.QueryProducts)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
-	queryParams, err := params.NewQueryDexInfoParams(addr, 1, 30)
-	require.NoError(t, err)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
-
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
-	mockCli.EXPECT().Query(types.ProductsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
-
-	tokenPairs, err := mockCli.Dex().QueryProducts(addr, 1, 30)
+	tokenPairs, err := mockCli.Dex().QueryProducts(addr, dextypes.DefaultPage, dextypes.DefaultPerPage)
 	require.NoError(t, err)
 
 	require.Equal(t, 2, len(tokenPairs))
@@ -76,21 +72,11 @@ func TestDexClient_QueryProducts(t *testing.T) {
 	require.Equal(t, int64(512), tokenPairs[0].BlockHeight)
 	require.Equal(t, int64(1024), tokenPairs[1].BlockHeight)
 
-	_, err = mockCli.Dex().QueryProducts(addr, -1, 30)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
+	_, err = mockCli.Dex().QueryProducts(addr, dextypes.DefaultPage, dextypes.DefaultPerPage)
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().QueryProducts(addr, 1, -30)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
+	_, err = mockCli.Dex().QueryProducts(addr, dextypes.DefaultPage, dextypes.DefaultPerPage)
 	require.Error(t, err)
-
-	_, err = mockCli.Dex().QueryProducts(addr[1:], 1, 30)
-	require.Error(t, err)
-
-	mockCli.EXPECT().Query(types.ProductsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
-	_, err = mockCli.Dex().QueryProducts(addr, 1, 30)
-	require.Error(t, err)
-
-	mockCli.EXPECT().Query(types.ProductsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
-	_, err = mockCli.Dex().QueryProducts(addr, 1, 30)
-	require.Error(t, err)
-
 }

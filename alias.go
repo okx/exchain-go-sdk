@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
-	"github.com/okex/okexchain-go-sdk/module/dex"
+	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"

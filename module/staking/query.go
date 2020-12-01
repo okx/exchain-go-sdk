@@ -1,33 +1,33 @@
 package staking
 
 import (
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
 // QueryValidators gets all the validators info
-//func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
-	// TODO
-	//resKVs, err := sc.QuerySubspace(types.ValidatorsKey, ModuleName)
-	//if err != nil {
-	//	return
-	//}
-	//
-	//for _, kv := range resKVs {
-	//	var innerVal types.ValidatorInner
-	//	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &innerVal)
-	//	val, err := innerVal.Standardize()
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	vals = append(vals, val)
-	//}
-//
-//	return
-//
-//}
+func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
+	jsonBytes, err := sc.GetCodec().MarshalJSON(stakingtypes.NewQueryValidatorsParams(1, 0, "all"))
+	if err != nil {
+		return vals, utils.ErrMarshalJSON(err.Error())
+	}
+
+	path := fmt.Sprintf("custom/%s/%s", stakingtypes.QuerierRoute, stakingtypes.QueryValidators)
+	res, _, err := sc.Query(path, jsonBytes)
+	if err != nil {
+		return vals, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = sc.GetCodec().UnmarshalJSON(res, &vals); err != nil {
+		return vals, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}
 
 // QueryValidator gets the info of a specific validator
 //func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, err error) {

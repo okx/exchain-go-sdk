@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/staking"
 )
 
 var _ gosdktypes.Module = (*stakingClient)(nil)
@@ -15,7 +16,7 @@ type stakingClient struct {
 
 // RegisterCodec registers the msg type in staking module
 func (sc stakingClient) RegisterCodec(cdc *codec.Codec) {
-	types.RegisterCodec(cdc)
+	staking.RegisterCodec(cdc)
 }
 
 // Name returns the module name

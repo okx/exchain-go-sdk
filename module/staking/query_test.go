@@ -2,12 +2,14 @@ package staking
 
 import (
 	"errors"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"testing"
@@ -26,11 +28,6 @@ const (
 	proxyAddr = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
 )
 
-var (
-	// an extremely strict way to check
-	rawValBytes = []byte{123, 10, 20, 239, 192, 89, 246, 165, 153, 72, 76, 18, 23, 57, 202, 63, 149, 232, 44, 239, 154, 31, 248, 18, 37, 22, 36, 222, 100, 32, 12, 128, 89, 157, 26, 76, 228, 50, 66, 139, 127, 176, 12, 55, 1, 95, 40, 215, 233, 97, 51, 46, 222, 62, 187, 104, 241, 94, 98, 144, 118, 246, 32, 2, 42, 1, 48, 50, 9, 49, 48, 48, 48, 48, 48, 48, 48, 48, 58, 7, 10, 5, 110, 111, 100, 101, 50, 82, 27, 10, 25, 10, 9, 49, 48, 48, 48, 48, 48, 48, 48, 48, 18, 9, 49, 48, 48, 48, 48, 48, 48, 48, 48, 26, 1, 48, 90, 6, 49, 48, 48, 48, 48, 48}
-)
-
 func TestStakingClient_QueryValidators(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -38,43 +35,47 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	//TODO
-	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
-	//valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
-	//require.NoError(t, err)
-	//delegatorShares, err := sdk.NewDecFromStr("1")
-	//require.NoError(t, err)
-	//minSelfDelegation, err := sdk.NewDecFromStr("0.001")
-	//require.NoError(t, err)
+	valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
+	require.NoError(t, err)
+	delegatorShares, err := sdk.NewDecFromStr("1")
+	require.NoError(t, err)
+	minSelfDelegation, err := sdk.NewDecFromStr("10000")
+	require.NoError(t, err)
+	unbondingCompletionTime := time.Now()
 
-	// build expected return of the slice of cmn.KVPair
-	//expectedRet := []kv.Pair{
-	//	{
-	//		Key:   append(types.ValidatorsKey, valOperAddr.Bytes()...),
-	//		Value: rawValBytes,
-	//	},
-	//}
+	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, "default moniker", "default identity",
+		"default website", "default details", 2, delegatorShares, minSelfDelegation, 0,
+		unbondingCompletionTime, false, true)
 	expectedCdc := mockCli.GetCodec()
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	expectedPath := fmt.Sprintf("custom/%s/%s", stakingtypes.QuerierRoute, stakingtypes.QueryValidators)
+	expectedParams, err := expectedCdc.MarshalJSON(stakingtypes.NewQueryValidatorsParams(1, 0, "all"))
+	require.NoError(t, err)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	//mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, nil)
-
-	//vals, err := mockCli.Staking().QueryValidators()
+	vals, err := mockCli.Staking().QueryValidators()
 	require.NoError(t, err)
 
-	// an extremely strict way to check by raw bytes
-	//require.Equal(t, valOperAddr, vals[0].OperatorAddress)
-	//require.Equal(t, valConsPK, vals[0].ConsPubKey)
-	//require.Equal(t, false, vals[0].Jailed)
-	//require.Equal(t, byte(2), vals[0].Status)
-	//require.Equal(t, delegatorShares, vals[0].DelegatorShares)
-	//require.Equal(t, int64(0), vals[0].UnbondingHeight)
-	//require.Equal(t, minSelfDelegation, vals[0].MinSelfDelegation)
-	//require.True(t, time.Unix(0, 0).UTC().Equal(vals[0].UnbondingCompletionTime))
+	require.Equal(t, 1, len(vals))
+	require.Equal(t, valOperAddr, vals[0].OperatorAddress)
+	expectedValConsPK, err := stakingtypes.GetConsPubKeyBech32(valConsPK)
+	require.NoError(t, err)
+	require.True(t, expectedValConsPK.Equals(vals[0].ConsPubKey))
+	require.Equal(t, false, vals[0].Jailed)
+	require.Equal(t, sdk.BondStatus(2), vals[0].Status)
+	require.Equal(t, delegatorShares, vals[0].DelegatorShares)
+	require.Equal(t, int64(0), vals[0].UnbondingHeight)
+	require.Equal(t, minSelfDelegation, vals[0].MinSelfDelegation)
+	require.True(t, unbondingCompletionTime.Equal(vals[0].UnbondingCompletionTime))
 
-	//mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, errors.New("default error"))
-	//_, err = mockCli.Staking().QueryValidators()
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
+	_, err = mockCli.Staking().QueryValidators()
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
+	_, err = mockCli.Staking().QueryValidators()
 	require.Error(t, err)
 }
 
@@ -96,9 +97,9 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 	require.NoError(t, err)
 	unbondingCompletionTime := time.Now()
 
-	expectedRet := mockCli.BuildValidatorBytes(valOperAddr, valConsPK, "default moniker", "default identity",
+	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, "default moniker", "default identity",
 		"default website", "default details", 2, delegatorShares, minSelfDelegation, 0,
-		unbondingCompletionTime, false)
+		unbondingCompletionTime, false, false)
 	expectedCdc := mockCli.GetCodec()
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)

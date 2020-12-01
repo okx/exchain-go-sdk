@@ -4,34 +4,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	evmtypes "github.com/okex/okexchain/app/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-	"testing"
-	"time"
-
-	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
-	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/exposed"
+	"github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	slashing "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
 	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	evmtypes "github.com/okex/okexchain/app/types"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	//"github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	//tmstate "github.com/tendermint/tendermint/state"
+	tmtypes "github.com/tendermint/tendermint/types"
+	"testing"
+	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -242,31 +239,33 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 }
 
 // BuildValidatorsBytes generates the validator bytes for test
-func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
+func (mc *MockClient) BuildValidatorsBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
 	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
-	jailed bool) []byte {
-	//consPK, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, consPubKey)
-	//require.NoError(mc.t, err)
-	//val := staking.ValidatorInner{
-	//	OperatorAddress: valAddr,
-	//	ConsPubKey:      consPK,
-	//	Jailed:          jailed,
-	//	Status:          status,
-	//	DelegatorShares: delegatorShares,
-	//	Description: staking.Description{
-	//		Moniker:  moniker,
-	//		Identity: identity,
-	//		Website:  website,
-	//		Details:  details,
-	//	},
-	//	UnbondingHeight:         unbondingHeight,
-	//	UnbondingCompletionTime: unbondingCompletionTime,
-	//	MinSelfDelegation:       minSelfDelegation,
-	//}
-	//
-	//return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
-	return nil
+	jailed, isSlice bool) []byte {
+	consPK, err := stakingtypes.GetConsPubKeyBech32(consPubKey)
+	require.NoError(mc.t, err)
+	val := stakingtypes.Validator{
+		OperatorAddress: valAddr,
+		ConsPubKey:      consPK,
+		Jailed:          jailed,
+		Status:          sdk.BondStatus(status),
+		DelegatorShares: delegatorShares,
+		Description: stakingtypes.Description{
+			Moniker:  moniker,
+			Identity: identity,
+			Website:  website,
+			Details:  details,
+		},
+		UnbondingHeight:         unbondingHeight,
+		UnbondingCompletionTime: unbondingCompletionTime,
+		MinSelfDelegation:       minSelfDelegation,
+	}
 
+	if isSlice {
+		return mc.cdc.MustMarshalJSON([]stakingtypes.Validator{val})
+	}
+
+	return mc.cdc.MustMarshalJSON(val)
 }
 
 // BuildDelegatorBytes generates the delegator bytes for test

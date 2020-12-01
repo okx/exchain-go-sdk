@@ -1,10 +1,7 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/staking"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"time"
 )
@@ -19,21 +16,15 @@ const (
 )
 
 var (
-	msgCdc = gosdktypes.NewCodec()
 	// ValidatorsKey is useful for subspace and store query about validator
 	ValidatorsKey = []byte{0x21}
 	// DelegatorKey is useful for subspace and store query about delegator
 	DelegatorKey = []byte{0x52}
 )
 
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for staking module
-func RegisterCodec(cdc *codec.Codec) {
-	staking.RegisterCodec(cdc)
-}
+type (
+	Validator = stakingtypes.Validator
+)
 
 // CommissionRates is a part of Commission
 type CommissionRates struct {

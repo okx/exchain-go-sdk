@@ -2,11 +2,11 @@ package distribution
 
 import (
 	"fmt"
-
-	"github.com/okex/okexchain-go-sdk/module/distribution/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/distribution/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	distrtypes "github.com/okex/okexchain/x/distribution/types"
 )
 
 // SetWithdrawAddr changes the withdraw address of validator to receive rewards
@@ -21,10 +21,8 @@ func (dc distrClient) SetWithdrawAddr(fromInfo keys.Info, passWd, withdrawAddrSt
 		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", withdrawAddrStr, err)
 	}
 
-	msg := types.NewMsgSetWithdrawAddr(fromInfo.GetAddress(), withdrawAddr)
-
+	msg := distrtypes.NewMsgSetWithdrawAddress(fromInfo.GetAddress(), withdrawAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // WithdrawRewards withdraws the rewards of validator by himself

@@ -92,10 +92,9 @@ func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAdd
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgCreateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
+	msg := dextypes.NewMsgCreateOperator(website, fromInfo.GetAddress(), handleFeeAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (

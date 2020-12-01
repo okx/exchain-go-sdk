@@ -86,3 +86,14 @@ func (fc farmClient) Unlock(fromInfo keys.Info, passWd, poolName, amountStr, mem
 	msg := farmtypes.NewMsgUnlock(poolName, fromInfo.GetAddress(), amount)
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
+
+// Claim claims yield farming rewards
+func (fc farmClient) Claim(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	msg := farmtypes.NewMsgClaim(poolName, fromInfo.GetAddress())
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

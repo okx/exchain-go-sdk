@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/slashing/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/slashing"
 )
 
 var _ gosdktypes.Module = (*slashingClient)(nil)
@@ -15,7 +16,7 @@ type slashingClient struct {
 
 // RegisterCodec registers the msg type in slashing module
 func (sc slashingClient) RegisterCodec(cdc *codec.Codec) {
-	types.RegisterCodec(cdc)
+	slashing.RegisterCodec(cdc)
 }
 
 // Name returns the module name

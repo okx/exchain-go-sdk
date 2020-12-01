@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/order"
 )
 
 var _ gosdktypes.Module = (*orderClient)(nil)
@@ -15,7 +16,7 @@ type orderClient struct {
 
 // RegisterCodec registers the msg type in order module
 func (orderClient) RegisterCodec(cdc *codec.Codec) {
-	types.RegisterCodec(cdc)
+	order.RegisterCodec(cdc)
 }
 
 // Name returns the module name

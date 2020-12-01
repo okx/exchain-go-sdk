@@ -8,18 +8,19 @@ import (
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
+	orderkeeper "github.com/okex/okexchain/x/order/keeper"
+	ordertypes "github.com/okex/okexchain/x/order/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"testing"
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
-	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
 
 	product = "btc-000_okt"
@@ -32,8 +33,7 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	//TODO
-	//mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
 
 	sender, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
@@ -94,22 +94,18 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 func TestOrderClient_QueryDepthBook(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	// TODO
-	//mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewOrderClient(mockCli.MockBaseClient))
 
 	expectedRet := mockCli.BuildBookResBytes("1.024", "10.24", "2.048", "20.48")
 	expectedCdc := mockCli.GetCodec()
-
-	queryParams := params.NewQueryDepthBookParams(product, 200)
-	require.NoError(t, err)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
-
+	expectedPath := fmt.Sprintf("custom/%s/%s", ordertypes.QuerierRoute, ordertypes.QueryDepthBook)
+	expectedParams := expectedCdc.MustMarshalJSON(orderkeeper.NewQueryDepthBookParams(product, orderkeeper.DefaultBookSize))
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
-	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	depthBook, err := mockCli.Order().QueryDepthBook(product)
 	require.NoError(t, err)
@@ -119,11 +115,11 @@ func TestOrderClient_QueryDepthBook(t *testing.T) {
 	require.Equal(t, "2.048", depthBook.Bids[0].Price)
 	require.Equal(t, "20.48", depthBook.Bids[0].Quantity)
 
-	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Order().QueryDepthBook(product)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.DepthbookPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Order().QueryDepthBook(product)
 	require.Error(t, err)
 }

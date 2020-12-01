@@ -4,32 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/cosmos/cosmos-sdk/types"
+	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
 )
 
 const (
-	defaultBookSize = 200
-	defaultPage     = 1
-	defaultPerPage  = 50
+	defaultPage    = 1
+	defaultPerPage = 50
 )
-
-// QueryDepthBookParams - structure of params to query the depthbook of a specific product
-type QueryDepthBookParams struct {
-	Product string
-	Size    int
-}
-
-// NewQueryDepthBookParams creates a new instance of QueryDepthBookParams
-func NewQueryDepthBookParams(product string, size int) QueryDepthBookParams {
-	if size == 0 {
-		size = defaultBookSize
-	}
-	return QueryDepthBookParams{
-		Product: product,
-		Size:    size,
-	}
-}
 
 // QueryKlinesParams - structure of params to query the klines of a specific product
 type QueryKlinesParams struct {

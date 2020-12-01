@@ -20,6 +20,7 @@ import (
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	evmtypes "github.com/okex/okexchain/app/types"
+	orderkeeper "github.com/okex/okexchain/x/order/keeper"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -202,13 +203,13 @@ func (mc *MockClient) BuildOrderDetailBytes(txHash, orderID, extraInfo, product,
 
 // BuildBookResBytes generates the book result bytes for test
 func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuantity string) []byte {
-	var bookRes order.BookRes
-	bookRes.Asks = append(bookRes.Asks, order.BookResItem{
+	var bookRes orderkeeper.BookRes
+	bookRes.Asks = append(bookRes.Asks, orderkeeper.BookResItem{
 		Price:    askPrice,
 		Quantity: askQuantity,
 	})
 
-	bookRes.Bids = append(bookRes.Bids, order.BookResItem{
+	bookRes.Bids = append(bookRes.Bids, orderkeeper.BookResItem{
 		Price:    bidPrice,
 		Quantity: bidQuantity,
 	})

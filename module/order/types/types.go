@@ -1,45 +1,20 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/order"
+	orderkeeper "github.com/okex/okexchain/x/order/keeper"
 	ordertypes "github.com/okex/okexchain/x/order/types"
 )
 
 // const
 const (
 	ModuleName = ordertypes.ModuleName
-
-	DepthbookPath   = "custom/order/depthbook"
 	OrderDetailPath = "custom/order/detail"
 )
 
-var (
-	msgCdc = gosdktypes.NewCodec()
+type (
+	BookRes = orderkeeper.BookRes
 )
-
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for token module
-func RegisterCodec(cdc *codec.Codec) {
-	order.RegisterCodec(cdc)
-}
-
-// BookRes - structure of depthbook
-type BookRes struct {
-	Asks []BookResItem `json:"asks"`
-	Bids []BookResItem `json:"bids"`
-}
-
-// BookResItem - structure of an item in BookRes
-type BookResItem struct {
-	Price    string `json:"price"`
-	Quantity string `json:"quantity"`
-}
 
 // OrderDetail - structure for the detail info of an order
 type OrderDetail struct {

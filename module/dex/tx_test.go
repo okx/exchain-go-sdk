@@ -163,8 +163,8 @@ func TestDexClient_Deposit(t *testing.T) {
 
 	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -172,8 +172,8 @@ func TestDexClient_Deposit(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
 		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24okt", memo,
-		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Dex().Deposit(fromInfo, passWd, product, "10.24okt", memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 

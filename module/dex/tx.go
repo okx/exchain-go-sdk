@@ -34,10 +34,9 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), product, amount)
 
+	msg := dextypes.NewMsgDeposit(product, amount, fromInfo.GetAddress())
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Withdraw withdraws some tokens from a specific product

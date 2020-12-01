@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/okex/okexchain/x/common"
@@ -145,8 +144,6 @@ func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, acc
 		return
 	}
 
-	msg := types.NewMsgUnbindProxy(fromInfo.GetAddress())
-
+	msg := stakingtypes.NewMsgUnbindProxy(fromInfo.GetAddress())
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

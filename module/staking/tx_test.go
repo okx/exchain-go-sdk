@@ -37,21 +37,21 @@ func TestStakingClient_CreateValidator(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().CreateValidator(fromInfo, passWd, valConsPK, "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().CreateValidator(fromInfo, passWd, valConsPK, defaultMoniker, defaultIdentity,
+		defaultWebsite, defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().CreateValidator(fromInfo, "", valConsPK[1:], "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().CreateValidator(fromInfo, "", valConsPK[1:], defaultMoniker, defaultIdentity,
+		defaultWebsite, defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().CreateValidator(fromInfo, passWd, valConsPK[1:], "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().CreateValidator(fromInfo, passWd, valConsPK[1:], defaultMoniker, defaultIdentity,
+		defaultWebsite, defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Staking().CreateValidator(fromInfo, "", valConsPK, "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().CreateValidator(fromInfo, "", valConsPK, defaultMoniker, defaultIdentity,
+		defaultWebsite, defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 
@@ -79,17 +79,13 @@ func TestStakingClient_EditValidator(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	res, err := mockCli.Staking().EditValidator(fromInfo, passWd, "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Staking().EditValidator(fromInfo, passWd, defaultMoniker, defaultIdentity, defaultWebsite,
+		defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Staking().EditValidator(fromInfo, "", "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
-	require.Error(t, err)
-
-	_, err = mockCli.Staking().EditValidator(fromInfo, "", "default moniker", "default identity",
-		"default website", "default detail", memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Staking().EditValidator(fromInfo, "", defaultMoniker, defaultIdentity, defaultWebsite,
+		defaultDetails, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
 }
 

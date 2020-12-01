@@ -33,6 +33,6 @@ type StakingTx interface {
 // StakingQuery shows the expected query behavior for inner staking client
 type StakingQuery interface {
 	QueryValidators() ([]types.Validator, error)
-	//QueryValidator(valAddrStr string) (types.Validator, error)
+	QueryValidator(valAddrStr string) (types.Validator, error)
 	QueryDelegator(delAddrStr string) (types.DelegatorResp, error)
 }

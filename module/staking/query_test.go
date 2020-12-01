@@ -26,6 +26,11 @@ const (
 	valAddr   = "okexchainvaloper1ntvyep3suq5z7789g7d5dejwzameu08mmv8pca"
 	valConsPK = "okexchainvalconspub1zcjduepq24jtmdyzapg50mevhfnhjl09q876xe5dj4ajsda9q6at2dtrpvmse0tav6"
 	proxyAddr = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
+
+	defaultMoniker  = "default moniker"
+	defaultIdentity = "default identity"
+	defaultWebsite  = "default website"
+	defaultDetails  = "default details"
 )
 
 func TestStakingClient_QueryValidators(t *testing.T) {
@@ -45,9 +50,9 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.NoError(t, err)
 	unbondingCompletionTime := time.Now()
 
-	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, "default moniker", "default identity",
-		"default website", "default details", 2, delegatorShares, minSelfDelegation, 0,
-		unbondingCompletionTime, false, true)
+	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, defaultMoniker, defaultIdentity, defaultWebsite,
+		defaultDetails, 2, delegatorShares, minSelfDelegation, 0, unbondingCompletionTime, false,
+		true)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
 	expectedPath := fmt.Sprintf("custom/%s/%s", stakingtypes.QuerierRoute, stakingtypes.QueryValidators)
@@ -69,6 +74,10 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.Equal(t, int64(0), vals[0].UnbondingHeight)
 	require.Equal(t, minSelfDelegation, vals[0].MinSelfDelegation)
 	require.True(t, unbondingCompletionTime.Equal(vals[0].UnbondingCompletionTime))
+	require.Equal(t, defaultMoniker, vals[0].Description.Moniker)
+	require.Equal(t, defaultIdentity, vals[0].Description.Identity)
+	require.Equal(t, defaultWebsite, vals[0].Description.Website)
+	require.Equal(t, defaultDetails, vals[0].Description.Details)
 
 	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Staking().QueryValidators()
@@ -86,52 +95,53 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	//TODO
-	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
 	valOperAddr, err := sdk.ValAddressFromBech32(valAddr)
 	require.NoError(t, err)
 	delegatorShares, err := sdk.NewDecFromStr("1")
 	require.NoError(t, err)
-	minSelfDelegation, err := sdk.NewDecFromStr("0.001")
+	minSelfDelegation, err := sdk.NewDecFromStr("10000")
 	require.NoError(t, err)
 	unbondingCompletionTime := time.Now()
 
-	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, "default moniker", "default identity",
-		"default website", "default details", 2, delegatorShares, minSelfDelegation, 0,
+	expectedRet := mockCli.BuildValidatorsBytes(valOperAddr, valConsPK, defaultMoniker, defaultIdentity, defaultWebsite,
+		defaultDetails, 2, delegatorShares, minSelfDelegation, 0,
 		unbondingCompletionTime, false, false)
 	expectedCdc := mockCli.GetCodec()
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	expectedPath := fmt.Sprintf("custom/%s/%s", stakingtypes.QuerierRoute, stakingtypes.QueryValidator)
+	expectedParams, err := expectedCdc.MarshalJSON(stakingtypes.NewQueryValidatorParams(valOperAddr))
+	require.NoError(t, err)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").
-		Return(expectedRet, nil)
-
-	//val, err := mockCli.Staking().QueryValidator(valAddr)
+	val, err := mockCli.Staking().QueryValidator(valAddr)
 	require.NoError(t, err)
 
-	//require.Equal(t, valOperAddr, val.OperatorAddress)
-	//require.Equal(t, valConsPK, val.ConsPubKey)
-	//require.Equal(t, false, val.Jailed)
-	//require.Equal(t, byte(2), val.Status)
-	//require.Equal(t, delegatorShares, val.DelegatorShares)
-	//require.Equal(t, "default moniker", val.Description.Moniker)
-	//require.Equal(t, "default identity", val.Description.Identity)
-	//require.Equal(t, "default website", val.Description.Website)
-	//require.Equal(t, "default details", val.Description.Details)
-	//require.Equal(t, int64(0), val.UnbondingHeight)
-	//require.Equal(t, minSelfDelegation, val.MinSelfDelegation)
-	//require.True(t, unbondingCompletionTime.Equal(val.UnbondingCompletionTime))
-	//
-	//_, err = mockCli.Staking().QueryValidator(valAddr[1:])
+	require.Equal(t, valOperAddr, val.OperatorAddress)
+	expectedValConsPK, err := stakingtypes.GetConsPubKeyBech32(valConsPK)
+	require.NoError(t, err)
+	require.True(t, expectedValConsPK.Equals(val.ConsPubKey))
+	require.Equal(t, false, val.Jailed)
+	require.Equal(t, sdk.BondStatus(2), val.Status)
+	require.Equal(t, delegatorShares, val.DelegatorShares)
+	require.Equal(t, int64(0), val.UnbondingHeight)
+	require.Equal(t, minSelfDelegation, val.MinSelfDelegation)
+	require.True(t, unbondingCompletionTime.Equal(val.UnbondingCompletionTime))
+	require.Equal(t, defaultMoniker, val.Description.Moniker)
+	require.Equal(t, defaultIdentity, val.Description.Identity)
+	require.Equal(t, defaultWebsite, val.Description.Website)
+	require.Equal(t, defaultDetails, val.Description.Details)
+
+	_, err = mockCli.Staking().QueryValidator(valAddr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").
-		Return([]byte{1}, errors.New("default error"))
-	//_, err = mockCli.Staking().QueryValidator(valAddr)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
+	_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").Return(nil, nil)
-	//_, err = mockCli.Staking().QueryValidator(valAddr)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
+	_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
 }
 

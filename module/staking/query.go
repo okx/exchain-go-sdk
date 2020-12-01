@@ -30,26 +30,29 @@ func (sc stakingClient) QueryValidators() (vals []types.Validator, err error) {
 }
 
 // QueryValidator gets the info of a specific validator
-//func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, err error) {
-//	valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
-//	if err != nil {
-//		return
-//	}
-//
-//	res, _, err := sc.QueryStore(types.GetValidatorKey(valAddr), ModuleName, "key")
-//	if err != nil {
-//		return
-//	}
-//	if len(res) == 0 {
-//		return val, fmt.Errorf("failed. no validator found with address %s", valAddrStr)
-//	}
-//
-//	var innerVal types.ValidatorInner
-//	sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(res, &innerVal)
-//
-//	return innerVal.Standardize()
-//
-//}
+func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, err error) {
+	valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
+	if err != nil {
+		return
+	}
+
+	jsonBytes, err := sc.GetCodec().MarshalJSON(stakingtypes.NewQueryValidatorParams(valAddr))
+	if err != nil {
+		return val, utils.ErrMarshalJSON(err.Error())
+	}
+
+	path := fmt.Sprintf("custom/%s/%s", stakingtypes.QuerierRoute, stakingtypes.QueryValidator)
+	res, _, err := sc.Query(path, jsonBytes)
+	if err != nil {
+		return val, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = sc.GetCodec().UnmarshalJSON(res, &val); err != nil {
+		return val, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}
 
 // QueryDelegator gets the detail info of a delegator
 func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.DelegatorResp, err error) {

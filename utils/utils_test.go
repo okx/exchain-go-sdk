@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	valAddrStr = "okexchainvaloper10q0rk5qnyag7wfvvt7rtphlw589m7frshchly8"
+	valAddrStr = "okexchainvaloper1ntvyep3suq5z7789g7d5dejwzameu08mmv8pca"
 )
 
 func TestParseValAddresses(t *testing.T) {

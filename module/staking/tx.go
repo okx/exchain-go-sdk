@@ -55,10 +55,8 @@ func (sc stakingClient) AddShares(fromInfo keys.Info, passWd string, valAddrsStr
 		return resp, fmt.Errorf("failed. validator address parsed error: %s", err.Error())
 	}
 
-	msg := types.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
-
+	msg := staking.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // DestroyValidator deregisters the validator and unbond the min-self-delegation

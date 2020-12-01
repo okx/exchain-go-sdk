@@ -107,8 +107,7 @@ func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgUpdateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
+	msg := dextypes.NewMsgUpdateOperator(website, fromInfo.GetAddress(), handleFeeAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

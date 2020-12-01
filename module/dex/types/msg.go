@@ -1,37 +1,9 @@
 package types
 
 import (
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"strings"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
-
-// MsgUpdateOperator - structure to update an existed DEXOperator
-type MsgUpdateOperator struct {
-	Owner              sdk.AccAddress `json:"owner"`
-	Website            string         `json:"website"`
-	HandlingFeeAddress sdk.AccAddress `json:"handling_fee_address"`
-}
-
-// NewMsgUpdateOperator creates a new MsgUpdateOperator
-func NewMsgUpdateOperator(owner, handlingFeeAddress sdk.AccAddress, website string) MsgUpdateOperator {
-	if handlingFeeAddress.Empty() {
-		handlingFeeAddress = owner
-	}
-	return MsgUpdateOperator{owner, strings.TrimSpace(website), handlingFeeAddress}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgUpdateOperator) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgUpdateOperator) Route() string                { return "" }
-func (MsgUpdateOperator) Type() string                 { return "" }
-func (MsgUpdateOperator) ValidateBasic() sdk.Error     { return nil }
-func (MsgUpdateOperator) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgDeposit - structure for depositing on a product
 type MsgDeposit struct {

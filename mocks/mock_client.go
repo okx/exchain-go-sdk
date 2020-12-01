@@ -8,10 +8,11 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
+	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
 	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	farm "github.com/okex/okexchain-go-sdk/module/farm/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	slashing "github.com/okex/okexchain-go-sdk/module/slashing/types"
@@ -82,7 +83,7 @@ func (mc *MockClient) GetCodec() gosdktypes.SDKCodec {
 
 // nolint
 func (mc *MockClient) Auth() exposed.Auth {
-	return mc.modules[types.ModuleName].(exposed.Auth)
+	return mc.modules[auth.ModuleName].(exposed.Auth)
 }
 func (mc *MockClient) Backend() exposed.Backend {
 	return mc.modules[backend.ModuleName].(exposed.Backend)
@@ -93,23 +94,26 @@ func (mc *MockClient) Dex() exposed.Dex {
 func (mc *MockClient) Distribution() exposed.Distribution {
 	return mc.modules[distribution.ModuleName].(exposed.Distribution)
 }
+func (mc *MockClient) Farm() exposed.Farm {
+	return mc.modules[farm.ModuleName].(exposed.Farm)
+}
 func (mc *MockClient) Governance() exposed.Governance {
 	return mc.modules[governance.ModuleName].(exposed.Governance)
 }
 func (mc *MockClient) Order() exposed.Order {
 	return mc.modules[order.ModuleName].(exposed.Order)
 }
-func (mc *MockClient) Staking() exposed.Staking {
-	return mc.modules[staking.ModuleName].(exposed.Staking)
-}
 func (mc *MockClient) Slashing() exposed.Slashing {
 	return mc.modules[slashing.ModuleName].(exposed.Slashing)
 }
-func (mc *MockClient) Token() exposed.Token {
-	return mc.modules[token.ModuleName].(exposed.Token)
+func (mc *MockClient) Staking() exposed.Staking {
+	return mc.modules[staking.ModuleName].(exposed.Staking)
 }
 func (mc *MockClient) Tendermint() exposed.Tendermint {
 	return mc.modules[tendermint.ModuleName].(exposed.Tendermint)
+}
+func (mc *MockClient) Token() exposed.Token {
+	return mc.modules[token.ModuleName].(exposed.Token)
 }
 
 // BuildAccountBytes generates the account bytes for test

@@ -13,6 +13,7 @@ import (
 	dextypes "github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
 	distrtypes "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
 	ordertypes "github.com/okex/okexchain-go-sdk/module/order/types"
@@ -24,6 +25,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/token"
 	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	farmtypes "github.com/okex/okexchain/x/farm/types"
 )
 
 // Client - structure of the main client of OKExChain GoSDK
@@ -55,6 +57,7 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
 		ammswap.NewAmmSwapClient(pBaseClient),
+		farm.NewFarmClient(pBaseClient),
 	)
 
 	return *pClient
@@ -80,6 +83,9 @@ func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 }
 
 // nolint
+func (cli *Client) AmmSwap() exposed.AmmSwap {
+	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
+}
 func (cli *Client) Auth() exposed.Auth {
 	return cli.modules[authtypes.ModuleName].(exposed.Auth)
 }
@@ -92,24 +98,24 @@ func (cli *Client) Dex() exposed.Dex {
 func (cli *Client) Distribution() exposed.Distribution {
 	return cli.modules[distrtypes.ModuleName].(exposed.Distribution)
 }
+func (cli *Client) Farm() exposed.Farm {
+	return cli.modules[farmtypes.ModuleName].(exposed.Farm)
+}
 func (cli *Client) Governance() exposed.Governance {
 	return cli.modules[governance.ModuleName].(exposed.Governance)
 }
 func (cli *Client) Order() exposed.Order {
 	return cli.modules[ordertypes.ModuleName].(exposed.Order)
 }
-func (cli *Client) Staking() exposed.Staking {
-	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)
-}
 func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashingtypes.ModuleName].(exposed.Slashing)
 }
-func (cli *Client) Token() exposed.Token {
-	return cli.modules[tokentypes.ModuleName].(exposed.Token)
+func (cli *Client) Staking() exposed.Staking {
+	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
 	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
-func (cli *Client) AmmSwap() exposed.AmmSwap {
-	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
+func (cli *Client) Token() exposed.Token {
+	return cli.modules[tokentypes.ModuleName].(exposed.Token)
 }

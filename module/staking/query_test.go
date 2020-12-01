@@ -10,7 +10,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/libs/kv"
 	"testing"
 	"time"
 )
@@ -50,16 +49,16 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.NoError(t, err)
 
 	// build expected return of the slice of cmn.KVPair
-	expectedRet := []kv.Pair{
-		{
-			Key:   append(types.ValidatorsKey, valOperAddr.Bytes()...),
-			Value: rawValBytes,
-		},
-	}
+	//expectedRet := []kv.Pair{
+	//	{
+	//		Key:   append(types.ValidatorsKey, valOperAddr.Bytes()...),
+	//		Value: rawValBytes,
+	//	},
+	//}
 	expectedCdc := mockCli.GetCodec()
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, nil)
+	//mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, nil)
 
 	vals, err := mockCli.Staking().QueryValidators()
 	require.NoError(t, err)
@@ -74,7 +73,7 @@ func TestStakingClient_QueryValidators(t *testing.T) {
 	require.Equal(t, minSelfDelegation, vals[0].MinSelfDelegation)
 	require.True(t, time.Unix(0, 0).UTC().Equal(vals[0].UnbondingCompletionTime))
 
-	mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, errors.New("default error"))
+	//mockCli.EXPECT().QuerySubspace(types.ValidatorsKey, types.ModuleName).Return(expectedRet, errors.New("default error"))
 	_, err = mockCli.Staking().QueryValidators()
 	require.Error(t, err)
 }

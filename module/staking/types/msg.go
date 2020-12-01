@@ -6,31 +6,6 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 )
 
-// MsgDeposit - structure for depositing to the delegator account
-type MsgDeposit struct {
-	DelegatorAddress sdk.AccAddress `json:"delegator_address"`
-	Amount           sdk.DecCoin    `json:"quantity"`
-}
-
-// NewMsgDeposit creates a msg of delegating
-func NewMsgDeposit(delAddr sdk.AccAddress, amount sdk.DecCoin) MsgDeposit {
-	return MsgDeposit{
-		DelegatorAddress: delAddr,
-		Amount:           amount,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgDeposit) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// nolint
-func (MsgDeposit) Route() string                { return "" }
-func (MsgDeposit) Type() string                 { return "" }
-func (MsgDeposit) ValidateBasic() sdk.Error     { return nil }
-func (MsgDeposit) GetSigners() []sdk.AccAddress { return nil }
-
 // MsgWithdraw - structure for withdrawing okt and the corresponding shares from all validators
 type MsgWithdraw struct {
 	DelegatorAddress sdk.AccAddress `json:"delegator_address" `

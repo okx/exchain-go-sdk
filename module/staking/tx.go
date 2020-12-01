@@ -7,6 +7,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/okex/okexchain/x/staking"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
@@ -22,8 +23,7 @@ func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo strin
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), coin)
-
+	msg := staking.NewMsgDeposit(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 

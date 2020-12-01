@@ -271,7 +271,7 @@ func (mc *MockClient) BuildValidatorsBytes(valAddr sdk.ValAddress, consPubKey, m
 // BuildDelegatorBytes generates the delegator bytes for test
 func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, valAddrs []sdk.ValAddress, shares, tokens,
 	totalDelegatedTokens sdk.Dec, isProxy bool) []byte {
-	delegator := staking.Delegator{
+	delegator := stakingtypes.Delegator{
 		DelegatorAddress:     delAddr,
 		ValidatorAddresses:   valAddrs,
 		Shares:               shares,
@@ -286,7 +286,7 @@ func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, val
 
 // BuildUndelegationBytes generates the undelegation bytes for test
 func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sdk.Dec, completionTime time.Time) []byte {
-	undelegation := staking.Undelegation{
+	undelegation := stakingtypes.UndelegationInfo{
 		DelegatorAddress: delAddr,
 		Quantity:         quantity,
 		CompletionTime:   completionTime,

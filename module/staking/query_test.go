@@ -6,9 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
@@ -152,8 +150,7 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
-	// TODO
-	//mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
+	mockCli.RegisterModule(NewStakingClient(mockCli.MockBaseClient))
 
 	delAddr, err := sdk.AccAddressFromBech32(addr)
 	require.NoError(t, err)
@@ -175,12 +172,14 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 		totalDelegatedTokens, false)
 	expectedRet2 := mockCli.BuildUndelegationBytes(delAddr, quantity, completionTime)
 	expectedCdc := mockCli.GetCodec()
-	queryBytes := expectedCdc.MustMarshalJSON(params.NewQueryDelegatorParams(delAddr))
+	expectedParams, err := expectedCdc.MarshalJSON(stakingtypes.NewQueryDelegatorParams(delAddr))
+	require.NoError(t, err)
+	expectedPath := fmt.Sprintf("custom/%s/%s", stakingtypes.RouterKey, stakingtypes.QueryUnbondingDelegation)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), types.ModuleName, "key").
-		Return(expectedRet1, nil).Times(2)
-	mockCli.EXPECT().Query(types.UnbondDelegationPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet2, nil)
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(stakingtypes.GetDelegatorKey(delAddr)), stakingtypes.StoreKey, "key").
+		Return(expectedRet1, int64(1024), nil).Times(2)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet2, int64(1024), nil)
 
 	delResp, err := mockCli.Staking().QueryDelegator(addr)
 	require.NoError(t, err)
@@ -197,12 +196,12 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 	_, err = mockCli.Staking().QueryDelegator(addr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.UnbondDelegationPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet2[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet2[1:], int64(1024), nil)
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), types.ModuleName, "key").
-		Return(expectedRet1, errors.New("default error"))
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(stakingtypes.GetDelegatorKey(delAddr)), stakingtypes.StoreKey, "key").
+		Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
 }

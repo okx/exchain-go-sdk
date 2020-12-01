@@ -4,7 +4,6 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
@@ -55,29 +54,29 @@ func (sc stakingClient) QueryValidator(valAddrStr string) (val types.Validator, 
 }
 
 // QueryDelegator gets the detail info of a delegator
-func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.DelegatorResp, err error) {
+func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.DelegatorResponse, err error) {
 	delAddr, err := sdk.AccAddressFromBech32(delAddrStr)
 	if err != nil {
 		return
 	}
 
-	resp, _, err := sc.QueryStore(types.GetDelegatorKey(delAddr), types.ModuleName, "key")
+	delegator, undelegation := stakingtypes.NewDelegator(delAddr), stakingtypes.DefaultUndelegation()
+	resp, _, err := sc.QueryStore(stakingtypes.GetDelegatorKey(delAddr), stakingtypes.StoreKey, "key")
 	if err != nil {
 		return delResp, utils.ErrClientQuery(err.Error())
 	}
-
-	delegator, undelegation := types.NewDelegator(delAddr), types.DefaultUndelegation()
 	if len(resp) != 0 {
 		sc.GetCodec().MustUnmarshalBinaryLengthPrefixed(resp, &delegator)
 	}
 
 	// query for the undelegation info
-	jsonBytes, err := sc.GetCodec().MarshalJSON(params.NewQueryDelegatorParams(delAddr))
+	jsonBytes, err := sc.GetCodec().MarshalJSON(stakingtypes.NewQueryDelegatorParams(delAddr))
 	if err != nil {
 		return delResp, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := sc.Query(types.UnbondDelegationPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", stakingtypes.RouterKey, stakingtypes.QueryUnbondingDelegation)
+	res, _, err := sc.Query(path, jsonBytes)
 	// if err!= nil , we treat it as there's no undelegation of the delegator
 	if err == nil {
 		if err = sc.GetCodec().UnmarshalJSON(res, &undelegation); err != nil {
@@ -85,5 +84,5 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 		}
 	}
 
-	return types.ConvertToDelegatorResp(delegator, undelegation), nil
+	return utils.ConvertToDelegatorResponse(delegator, undelegation), nil
 }

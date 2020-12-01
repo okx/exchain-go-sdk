@@ -5,6 +5,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	stakingcli "github.com/okex/okexchain/x/staking/client/cli"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"io/ioutil"
 )
 
@@ -31,4 +33,19 @@ func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 		}
 	}
 	return valAddrs, nil
+}
+
+// ConvertToDelegatorResponse builds DelegatorResponse with the info of Delegator and UndelegationInfo
+func ConvertToDelegatorResponse(delegator stakingtypes.Delegator, undelegation stakingtypes.UndelegationInfo) stakingcli.DelegatorResponse {
+	return stakingcli.DelegatorResponse{
+		DelegatorAddress:     delegator.DelegatorAddress,
+		ValidatorAddresses:   delegator.ValidatorAddresses,
+		Shares:               delegator.Shares,
+		Tokens:               delegator.Tokens,
+		UnbondedTokens:       undelegation.Quantity,
+		CompletionTime:       undelegation.CompletionTime,
+		IsProxy:              delegator.IsProxy,
+		TotalDelegatedTokens: delegator.TotalDelegatedTokens,
+		ProxyAddress:         delegator.ProxyAddress,
+	}
 }

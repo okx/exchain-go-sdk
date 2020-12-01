@@ -34,5 +34,5 @@ type StakingTx interface {
 type StakingQuery interface {
 	QueryValidators() ([]types.Validator, error)
 	QueryValidator(valAddrStr string) (types.Validator, error)
-	QueryDelegator(delAddrStr string) (types.DelegatorResp, error)
+	QueryDelegator(delAddrStr string) (types.DelegatorResponse, error)
 }

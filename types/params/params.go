@@ -175,18 +175,6 @@ func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, p
 	}
 }
 
-// QueryDelegatorParams defines query params of delegator info
-type QueryDelegatorParams struct {
-	DelegatorAddr types.AccAddress
-}
-
-// NewQueryDelegatorParams creates a new instance of QueryDelegatorParams
-func NewQueryDelegatorParams(delegatorAddr types.AccAddress) QueryDelegatorParams {
-	return QueryDelegatorParams{
-		DelegatorAddr: delegatorAddr,
-	}
-}
-
 // QueryDexInfoParams defines query params of dex info
 type QueryDexInfoParams struct {
 	Owner   string

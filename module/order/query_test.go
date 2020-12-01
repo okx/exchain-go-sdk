@@ -6,7 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	"github.com/okex/okexchain-go-sdk/module/order/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	orderkeeper "github.com/okex/okexchain/x/order/keeper"
 	ordertypes "github.com/okex/okexchain/x/order/types"
@@ -55,9 +54,9 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 		"BUY", 0, 10240000, 1024, sender, price, quantity, filledAvgPrice, remainQuantity,
 		remainLocked, feePerBlock)
 	expectedCdc := mockCli.GetCodec()
-
+	expectedPath := fmt.Sprintf("custom/%s/%s/%s", ordertypes.QuerierRoute, ordertypes.QueryOrderDetail, orderID)
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, nil).Return(expectedRet, int64(1024), nil)
 
 	orderDetail, err := mockCli.Order().QueryOrderDetail(orderID)
 	require.NoError(t, err)
@@ -80,15 +79,13 @@ func TestOrderClient_QueryOrderDetail(t *testing.T) {
 	_, err = mockCli.Order().QueryOrderDetail("")
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet,
-		errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, nil).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Order().QueryOrderDetail(orderID)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, nil).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Order().QueryOrderDetail(orderID)
 	require.Error(t, err)
-
 }
 
 func TestOrderClient_QueryDepthBook(t *testing.T) {

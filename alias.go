@@ -39,14 +39,13 @@ type (
 	// staking
 	Validator         = staking.Validator
 	DelegatorResponse = staking.DelegatorResponse
-	//DelegatorResp = staking.DelegatorResp
 	// token
 	TokenResp = token.TokenResp
 	// dex
 	TokenPair = dex.TokenPair
 	// order
-	BookRes = order.BookRes
-	//OrderDetail = order.OrderDetail
+	BookRes     = order.BookRes
+	OrderDetail = order.OrderDetail
 	// backend
 	Ticker      = backend.Ticker
 	MatchResult = backend.MatchResult

@@ -36,7 +36,8 @@ func (oc orderClient) QueryOrderDetail(orderID string) (orderDetail types.OrderD
 		return
 	}
 
-	res, _, err := oc.Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil)
+	path := fmt.Sprintf("custom/%s/%s/%s", ordertypes.QuerierRoute, ordertypes.QueryOrderDetail, orderID)
+	res, _, err := oc.Query(path, nil)
 	if err != nil {
 		return orderDetail, utils.ErrClientQuery(err.Error())
 	}

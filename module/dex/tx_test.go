@@ -2,14 +2,15 @@ package dex
 
 import (
 	"errors"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"io/ioutil"
 	"os"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/okex/okexchain-go-sdk/module/auth"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
 )
@@ -17,8 +18,8 @@ import (
 func TestDexClient_EditDexOperator(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -26,7 +27,7 @@ func TestDexClient_EditDexOperator(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -61,8 +62,8 @@ func TestDexClient_EditDexOperator(t *testing.T) {
 func TestDexClient_RegisterDexOperator(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -70,7 +71,7 @@ func TestDexClient_RegisterDexOperator(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -105,8 +106,8 @@ func TestDexClient_RegisterDexOperator(t *testing.T) {
 func TestDexClient_List(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -114,10 +115,10 @@ func TestDexClient_List(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -151,8 +152,8 @@ func TestDexClient_List(t *testing.T) {
 func TestDexClient_Deposit(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -160,7 +161,7 @@ func TestDexClient_Deposit(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -192,8 +193,8 @@ func TestDexClient_Deposit(t *testing.T) {
 func TestDexClient_Withdraw(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -201,7 +202,7 @@ func TestDexClient_Withdraw(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
@@ -237,8 +238,8 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewDexClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
@@ -246,7 +247,7 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 11, 22)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 11, 22)
 	expectedCdc := mockCli.GetCodec()
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
 	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)

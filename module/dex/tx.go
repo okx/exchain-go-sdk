@@ -2,10 +2,11 @@ package dex
 
 import (
 	"errors"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
@@ -18,10 +19,8 @@ func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, init
 	}
 
 	initPrice := sdk.MustNewDecFromStr(initPriceStr)
-	msg := types.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
-
+	msg := dextypes.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Deposit deposits some tokens to a specific product

@@ -1,8 +1,11 @@
 package utils
 
 import (
+	"encoding/json"
+	"errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ordertypes "github.com/okex/okexchain/x/order/types"
+	"log"
 )
 
 // BuildOrderItems returns the set of OrderItem
@@ -33,24 +36,28 @@ func BuildOrderItems(products, sides, prices, quantities []string) ([]ordertypes
 
 // GetOrderIDsFromResponse filters the orderID from the tx response
 // a useful tool
-func GetOrderIDsFromResponse(txResp *sdk.TxResponse) (orderIDs []string) {
-	//for _, event := range txResp.Events {
-	//	if event.Type == "message" {
-	//		for _, attribute := range event.Attributes {
-	//			if attribute.Key == "orders" {
-	//				var orderRes []types.OrderResult
-	//				if err := json.Unmarshal([]byte(attribute.Value), &orderRes); err != nil {
-	//					log.Println(ErrUnmarshalJSON(err.Error()).Error())
-	//					continue
-	//				}
-	//
-	//				for _, res := range orderRes {
-	//					orderIDs = append(orderIDs, res.OrderID)
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+func GetOrderIDsFromResponse(txResp *sdk.TxResponse) (orderIDs []string, err error) {
+	if len(txResp.Logs) != 1 {
+		return orderIDs, errors.New("failed. only ONE msg could be in an order StdTx")
+	}
+
+	for _, event := range txResp.Logs[0].Events {
+		if event.Type == "message" {
+			for _, attribute := range event.Attributes {
+				if attribute.Key == "orders" {
+					var orderRes []ordertypes.OrderResult
+					if err := json.Unmarshal([]byte(attribute.Value), &orderRes); err != nil {
+						log.Println(ErrUnmarshalJSON(err.Error()).Error())
+						continue
+					}
+
+					for _, res := range orderRes {
+						orderIDs = append(orderIDs, res.OrderID)
+					}
+				}
+			}
+		}
+	}
 
 	return
 }

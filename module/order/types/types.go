@@ -29,15 +29,6 @@ func RegisterCodec(cdc *codec.Codec) {
 	order.RegisterCodec(cdc)
 }
 
-
-
-// OrderResult - structure for the filter of orderID
-type OrderResult struct {
-	Code    uint32 `json:"code"`
-	Message string `json:"msg"`
-	OrderID string `json:"orderid"`
-}
-
 // BookRes - structure of depthbook
 type BookRes struct {
 	Asks []BookResItem `json:"asks"`

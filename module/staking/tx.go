@@ -39,10 +39,8 @@ func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo stri
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), coin)
-
+	msg := staking.NewMsgWithdraw(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Vote votes to the some specific validators

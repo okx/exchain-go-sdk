@@ -6,7 +6,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/governance"
-	"github.com/okex/okexchain-go-sdk/module/order"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
@@ -45,8 +44,8 @@ type (
 	// dex
 	TokenPair = dex.TokenPair
 	// order
-	BookRes     = order.BookRes
-	OrderDetail = order.OrderDetail
+	//BookRes     = order.BookRes
+	//OrderDetail = order.OrderDetail
 	// backend
 	Ticker      = backend.Ticker
 	MatchResult = backend.MatchResult

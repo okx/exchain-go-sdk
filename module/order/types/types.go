@@ -5,11 +5,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/order"
+	ordertypes "github.com/okex/okexchain/x/order/types"
 )
 
 // const
 const (
-	ModuleName = "order"
+	ModuleName = ordertypes.ModuleName
 
 	DepthbookPath   = "custom/order/depthbook"
 	OrderDetailPath = "custom/order/detail"
@@ -28,35 +29,7 @@ func RegisterCodec(cdc *codec.Codec) {
 	order.RegisterCodec(cdc)
 }
 
-// OrderItem - structure for a item in MsgNewOrders
-type OrderItem struct {
-	Product  string  `json:"product"`
-	Side     string  `json:"side"`
-	Price    sdk.Dec `json:"price"`
-	Quantity sdk.Dec `json:"quantity"`
-}
 
-// NewOrderItem creates a new instance of OrderItem
-func NewOrderItem(product string, side string, price string, quantity string) OrderItem {
-	return OrderItem{
-		Product:  product,
-		Side:     side,
-		Price:    sdk.MustNewDecFromStr(price),
-		Quantity: sdk.MustNewDecFromStr(quantity),
-	}
-}
-
-// BuildOrderItems returns the set of OrderItem
-// params must be checked by function CheckNewOrderParams
-func BuildOrderItems(products, sides, prices, quantities []string) []OrderItem {
-	productsLen := len(products)
-	orderItems := make([]OrderItem, productsLen)
-	for i := 0; i < productsLen; i++ {
-		orderItems[i] = NewOrderItem(products[i], sides[i], prices[i], quantities[i])
-	}
-
-	return orderItems
-}
 
 // OrderResult - structure for the filter of orderID
 type OrderResult struct {

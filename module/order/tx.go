@@ -2,11 +2,13 @@ package order
 
 import (
 	"errors"
+	"github.com/okex/okexchain-go-sdk/utils"
+	ordertypes "github.com/okex/okexchain/x/order/types"
 	"strings"
 
-	"github.com/okex/okexchain-go-sdk/module/order/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
@@ -25,11 +27,13 @@ func (oc orderClient) NewOrders(fromInfo keys.Info, passWd, products, sides, pri
 		return
 	}
 
-	orderItems := types.BuildOrderItems(productStrs, sideStrs, priceStrs, quantityStrs)
-	msg := types.NewMsgNewOrders(fromInfo.GetAddress(), orderItems)
+	orderItems, err := utils.BuildOrderItems(productStrs, sideStrs, priceStrs, quantityStrs)
+	if err != nil {
+		return
+	}
 
+	msg := ordertypes.NewMsgNewOrders(fromInfo.GetAddress(), orderItems)
 	return oc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // CancelOrders cancels orders by orderIDs

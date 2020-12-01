@@ -13,6 +13,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/distribution"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
+	ordertypes "github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/module/slashing"
 	slashingtypes "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	"github.com/okex/okexchain-go-sdk/module/staking"
@@ -93,7 +94,7 @@ func (cli *Client) Governance() exposed.Governance {
 	return cli.modules[governance.ModuleName].(exposed.Governance)
 }
 func (cli *Client) Order() exposed.Order {
-	return cli.modules[order.ModuleName].(exposed.Order)
+	return cli.modules[ordertypes.ModuleName].(exposed.Order)
 }
 func (cli *Client) Staking() exposed.Staking {
 	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)

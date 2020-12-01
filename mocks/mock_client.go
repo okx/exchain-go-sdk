@@ -245,26 +245,27 @@ func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, w
 func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
 	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
 	jailed bool) []byte {
-	consPK, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, consPubKey)
-	require.NoError(mc.t, err)
-	val := staking.ValidatorInner{
-		OperatorAddress: valAddr,
-		ConsPubKey:      consPK,
-		Jailed:          jailed,
-		Status:          status,
-		DelegatorShares: delegatorShares,
-		Description: staking.Description{
-			Moniker:  moniker,
-			Identity: identity,
-			Website:  website,
-			Details:  details,
-		},
-		UnbondingHeight:         unbondingHeight,
-		UnbondingCompletionTime: unbondingCompletionTime,
-		MinSelfDelegation:       minSelfDelegation,
-	}
-
-	return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
+	//consPK, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, consPubKey)
+	//require.NoError(mc.t, err)
+	//val := staking.ValidatorInner{
+	//	OperatorAddress: valAddr,
+	//	ConsPubKey:      consPK,
+	//	Jailed:          jailed,
+	//	Status:          status,
+	//	DelegatorShares: delegatorShares,
+	//	Description: staking.Description{
+	//		Moniker:  moniker,
+	//		Identity: identity,
+	//		Website:  website,
+	//		Details:  details,
+	//	},
+	//	UnbondingHeight:         unbondingHeight,
+	//	UnbondingCompletionTime: unbondingCompletionTime,
+	//	MinSelfDelegation:       minSelfDelegation,
+	//}
+	//
+	//return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
+	return nil
 
 }
 

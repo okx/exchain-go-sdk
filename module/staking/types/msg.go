@@ -1,79 +1,21 @@
 package types
 
 import (
-	"encoding/json"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto"
 )
 
-// MsgCreateValidator - structure for creating a validator
-type MsgCreateValidator struct {
-	Description       Description    `json:"description"`
-	MinSelfDelegation sdk.DecCoin    `json:"min_self_delegation"`
-	DelegatorAddress  sdk.AccAddress `json:"delegator_address"`
-	ValidatorAddress  sdk.ValAddress `json:"validator_address"`
-	PubKey            crypto.PubKey  `json:"pubkey"`
-}
 
-type msgCreateValidatorJSON struct {
-	Description       Description    `json:"description"`
-	MinSelfDelegation sdk.DecCoin    `json:"min_self_delegation"`
-	DelegatorAddress  sdk.AccAddress `json:"delegator_address"`
-	ValidatorAddress  sdk.ValAddress `json:"validator_address"`
-	PubKey            string         `json:"pubkey"`
-}
-
-// NewMsgCreateValidator creates a msg of create-validator
-// Delegator address and validator address are the same
-func NewMsgCreateValidator(valAddr sdk.ValAddress, pubKey crypto.PubKey, description Description,
-) MsgCreateValidator {
-	minSelfDelegationCoin, err := sdk.ParseDecCoin(defaultMinSelfDelegation)
-	if err != nil {
-		panic(err)
-	}
-	return MsgCreateValidator{
-		Description:       description,
-		DelegatorAddress:  sdk.AccAddress(valAddr),
-		ValidatorAddress:  valAddr,
-		PubKey:            pubKey,
-		MinSelfDelegation: minSelfDelegationCoin,
-	}
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgCreateValidator) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// MarshalJSON is useful for the signing of msg MsgCreateValidator
-func (msg MsgCreateValidator) MarshalJSON() ([]byte, error) {
-	return json.Marshal(msgCreateValidatorJSON{
-		Description:      msg.Description,
-		DelegatorAddress: msg.DelegatorAddress,
-		ValidatorAddress: msg.ValidatorAddress,
-		// TODO
-		//PubKey:            sdk.MustBech32ifyConsPub(msg.PubKey),
-		PubKey:            sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, msg.PubKey),
-		MinSelfDelegation: msg.MinSelfDelegation,
-	})
-}
-
-// nolint
-func (MsgCreateValidator) Route() string                { return "" }
-func (MsgCreateValidator) Type() string                 { return "" }
-func (MsgCreateValidator) ValidateBasic() sdk.Error     { return nil }
-func (MsgCreateValidator) GetSigners() []sdk.AccAddress { return nil }
 
 // MsgEditValidator - structure for editing the info of a validator
 type MsgEditValidator struct {
-	Description
+	//Description
 	ValidatorAddress sdk.ValAddress `json:"address"`
 }
 
 // NewMsgEditValidator creates a msg of edit-validator
-func NewMsgEditValidator(valAddr sdk.ValAddress, description Description) MsgEditValidator {
+func NewMsgEditValidator(valAddr sdk.ValAddress) MsgEditValidator {
 	return MsgEditValidator{
-		Description:      description,
+		//Description:      description,
 		ValidatorAddress: valAddr,
 	}
 }

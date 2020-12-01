@@ -7,7 +7,6 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto"
 )
 
 // const
@@ -36,40 +35,6 @@ func RegisterCodec(cdc *codec.Codec) {
 	staking.RegisterCodec(cdc)
 }
 
-// ValidatorInner is the struct of validator's detail info(inner)
-type ValidatorInner struct {
-	OperatorAddress         sdk.ValAddress `json:"operator_address"`
-	ConsPubKey              crypto.PubKey  `json:"consensus_pubkey"`
-	Jailed                  bool           `json:"jailed"`
-	Status                  byte           `json:"status"`
-	Tokens                  sdk.Int        `json:"tokens"`
-	DelegatorShares         sdk.Dec        `json:"delegator_shares"`
-	Description             Description    `json:"description"`
-	UnbondingHeight         int64          `json:"unbonding_height"`
-	UnbondingCompletionTime time.Time      `json:"unbonding_time"`
-	Commission              Commission     `json:"commission"`
-	MinSelfDelegation       sdk.Dec        `json:"min_self_delegation"`
-}
-
-// Standardize converts the inner validator to the standard one
-func (vi ValidatorInner) Standardize() (val Validator, err error) {
-	bechConsPubKey, err := sdk.Bech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, vi.ConsPubKey)
-	if err != nil {
-		return
-	}
-	return Validator{
-		OperatorAddress:         vi.OperatorAddress,
-		ConsPubKey:              bechConsPubKey,
-		Jailed:                  vi.Jailed,
-		Status:                  vi.Status,
-		DelegatorShares:         vi.DelegatorShares,
-		Description:             vi.Description,
-		UnbondingHeight:         vi.UnbondingHeight,
-		UnbondingCompletionTime: vi.UnbondingCompletionTime,
-		MinSelfDelegation:       vi.MinSelfDelegation,
-	}, err
-}
-
 // CommissionRates is a part of Commission
 type CommissionRates struct {
 	Rate          sdk.Dec `json:"rate"`
@@ -81,16 +46,6 @@ type CommissionRates struct {
 type Commission struct {
 	CommissionRates `json:"commission_rates"`
 	UpdateTime      time.Time `json:"update_time"`
-}
-
-// NewDescription creates a new instance of Description
-func NewDescription(moniker, identity, website, details string) Description {
-	return Description{
-		Moniker:  moniker,
-		Identity: identity,
-		Website:  website,
-		Details:  details,
-	}
 }
 
 // Delegator is the struct of the info of a delegator
@@ -154,27 +109,6 @@ func ConvertToDelegatorResp(delegator Delegator, undelegation Undelegation) Dele
 		TotalDelegatedTokens: delegator.TotalDelegatedTokens,
 		ProxyAddress:         delegator.ProxyAddress,
 	}
-}
-
-// Validator is the struct of standard validator's detail info
-type Validator struct {
-	OperatorAddress         sdk.ValAddress `json:"operator_address"`
-	ConsPubKey              string         `json:"consensus_pubkey"`
-	Jailed                  bool           `json:"jailed"`
-	Status                  byte           `json:"status"`
-	DelegatorShares         sdk.Dec        `json:"delegator_shares"`
-	Description             Description    `json:"description"`
-	UnbondingHeight         int64          `json:"unbonding_height"`
-	UnbondingCompletionTime time.Time      `json:"unbonding_time"`
-	MinSelfDelegation       sdk.Dec        `json:"min_self_delegation"`
-}
-
-// Description shows the detail info of a validator
-type Description struct {
-	Moniker  string `json:"moniker"`
-	Identity string `json:"identity"`
-	Website  string `json:"website"`
-	Details  string `json:"details"`
 }
 
 // DelegatorResp is designed only for delegator query

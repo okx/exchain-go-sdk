@@ -7,6 +7,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/okex/okexchain/x/common"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
@@ -81,24 +82,24 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 		return
 	}
 
-	description := types.NewDescription(moniker, identity, website, details)
-	msg := types.NewMsgCreateValidator(sdk.ValAddress(fromInfo.GetAddress()), pubkey, description)
-
+	description := stakingtypes.NewDescription(moniker, identity, website, details)
+	minSelfDelegation := sdk.NewDecCoinFromDec(common.NativeToken, stakingtypes.DefaultMinSelfDelegation)
+	msg := stakingtypes.NewMsgCreateValidator(sdk.ValAddress(fromInfo.GetAddress()), pubkey, description, minSelfDelegation)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // EditValidator edits the description on a validator by the owner
 func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return
-	}
-
-	description := types.NewDescription(moniker, identity, website, details)
-	msg := types.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
-
-	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	return
+	//if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+	//	return
+	//}
+	//
+	//description := types.NewDescription(moniker, identity, website, details)
+	//msg := types.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
+	//
+	//return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 
 }
 

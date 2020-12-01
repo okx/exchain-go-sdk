@@ -37,7 +37,7 @@ type (
 	// auth
 	Account = auth.Account
 	// staking
-	Validator     = staking.Validator
+	//Validator     = staking.Validator
 	DelegatorResp = staking.DelegatorResp
 	// token
 	TokenResp = token.TokenResp

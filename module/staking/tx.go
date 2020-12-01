@@ -134,10 +134,8 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", proxyAddrStr, err)
 	}
 
-	msg := types.NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
-
+	msg := stakingtypes.NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // UnbindProxy unbinds the staking tokens from a proxy

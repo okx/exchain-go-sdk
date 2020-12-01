@@ -50,10 +50,9 @@ func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, mem
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), product, amount)
 
+	msg := dextypes.NewMsgWithdraw(product, amount, fromInfo.GetAddress())
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // TransferOwnership signs the multi-signed tx from a json file and broadcast

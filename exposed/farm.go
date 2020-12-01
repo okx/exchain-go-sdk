@@ -18,8 +18,8 @@ type FarmTx interface {
 	CreatePool(fromInfo keys.Info, passWd, poolName, minLockAmountStr, yieldToken, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, error)
 	DestroyPool(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
-	//Provide(fromInfo keys.Info, passWd, poolName, amountStr, yieldPerBlockStr string, startHeightToYield int64, memo string, accNum,
-	//	seqNum uint64) (sdk.TxResponse, error)
+	Provide(fromInfo keys.Info, passWd, poolName, amountStr, yieldPerBlockStr string, startHeightToYield int64, memo string,
+		accNum, seqNum uint64) (sdk.TxResponse, error)
 	//Lock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	//Unlock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	//Claim(fromInfo keys.Info, passWd, poolName, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)

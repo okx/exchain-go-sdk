@@ -54,3 +54,19 @@ func (fc farmClient) Provide(fromInfo keys.Info, passWd, poolName, amountStr, yi
 	msg := farmtypes.NewMsgProvide(poolName, fromInfo.GetAddress(), amount, amountYieldPerBlock, startHeightToYield)
 	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
+
+// Lock locks a number of tokens for yield farming
+func (fc farmClient) Lock(fromInfo keys.Info, passWd, poolName, amountStr, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return
+	}
+
+	amount, err := sdk.ParseDecCoin(amountStr)
+	if err != nil {
+		return
+	}
+
+	msg := farmtypes.NewMsgLock(poolName, fromInfo.GetAddress(), amount)
+	return fc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

@@ -7,7 +7,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
-	"github.com/okex/okexchain-go-sdk/module/staking"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types"
@@ -38,7 +37,7 @@ type (
 	Account = auth.Account
 	// staking
 	//Validator     = staking.Validator
-	DelegatorResp = staking.DelegatorResp
+	//DelegatorResp = staking.DelegatorResp
 	// token
 	TokenResp = token.TokenResp
 	// dex

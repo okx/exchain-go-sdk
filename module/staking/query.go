@@ -58,7 +58,7 @@ func (sc stakingClient) QueryDelegator(delAddrStr string) (delResp types.Delegat
 		return
 	}
 
-	resp, _, err := sc.QueryStore(types.GetDelegatorKey(delAddr), ModuleName, "key")
+	resp, _, err := sc.QueryStore(types.GetDelegatorKey(delAddr), types.ModuleName, "key")
 	if err != nil {
 		return delResp, utils.ErrClientQuery(err.Error())
 	}

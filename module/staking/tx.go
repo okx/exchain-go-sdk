@@ -91,16 +91,13 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 // EditValidator edits the description on a validator by the owner
 func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, identity, website, details, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
-	return
-	//if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-	//	return
-	//}
-	//
-	//description := types.NewDescription(moniker, identity, website, details)
-	//msg := types.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
-	//
-	//return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
 
+	description := stakingtypes.NewDescription(moniker, identity, website, details)
+	msg := stakingtypes.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
+	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 // RegisterProxy registers the identity of proxy

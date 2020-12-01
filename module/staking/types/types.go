@@ -2,16 +2,16 @@ package types
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/staking"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"time"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // const
 const (
-	ModuleName = "staking"
+	ModuleName = stakingtypes.ModuleName
 
 	UnbondDelegationPath = "custom/staking/unbondingDelegation"
 

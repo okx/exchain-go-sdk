@@ -102,7 +102,7 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 	expectedCdc := mockCli.GetCodec()
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").
 		Return(expectedRet, nil)
 
 	//val, err := mockCli.Staking().QueryValidator(valAddr)
@@ -124,12 +124,12 @@ func TestStakingClient_QueryValidator(t *testing.T) {
 	//_, err = mockCli.Staking().QueryValidator(valAddr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").
 		Return([]byte{1}, errors.New("default error"))
 	//_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), ModuleName, "key").Return(nil, nil)
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetValidatorKey(valOperAddr)), types.ModuleName, "key").Return(nil, nil)
 	//_, err = mockCli.Staking().QueryValidator(valAddr)
 	require.Error(t, err)
 }
@@ -167,7 +167,7 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 	queryBytes := expectedCdc.MustMarshalJSON(params.NewQueryDelegatorParams(delAddr))
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), types.ModuleName, "key").
 		Return(expectedRet1, nil).Times(2)
 	mockCli.EXPECT().Query(types.UnbondDelegationPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet2, nil)
 
@@ -190,7 +190,7 @@ func TestStakingClient_QueryDelegator(t *testing.T) {
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), ModuleName, "key").
+	mockCli.EXPECT().QueryStore(tmbytes.HexBytes(types.GetDelegatorKey(delAddr)), types.ModuleName, "key").
 		Return(expectedRet1, errors.New("default error"))
 	_, err = mockCli.Staking().QueryDelegator(addr)
 	require.Error(t, err)

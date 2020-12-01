@@ -16,6 +16,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/slashing"
 	slashingtypes "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	"github.com/okex/okexchain-go-sdk/module/staking"
+	stakingtypes "github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
 	"github.com/okex/okexchain-go-sdk/module/token"
 	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
@@ -95,7 +96,7 @@ func (cli *Client) Order() exposed.Order {
 	return cli.modules[order.ModuleName].(exposed.Order)
 }
 func (cli *Client) Staking() exposed.Staking {
-	return cli.modules[staking.ModuleName].(exposed.Staking)
+	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)
 }
 func (cli *Client) Slashing() exposed.Slashing {
 	return cli.modules[slashingtypes.ModuleName].(exposed.Slashing)

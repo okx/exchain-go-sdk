@@ -8,7 +8,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 )
 
@@ -41,7 +40,6 @@ func (oc orderClient) CancelOrders(fromInfo keys.Info, passWd, orderIDs, memo st
 	resp sdk.TxResponse, err error) {
 	if len(orderIDs) == 0 {
 		return resp, errors.New("failed. empty orderIDs input")
-
 	}
 
 	orderIDStrs := strings.Split(orderIDs, ",")
@@ -49,8 +47,6 @@ func (oc orderClient) CancelOrders(fromInfo keys.Info, passWd, orderIDs, memo st
 		return
 	}
 
-	msg := types.NewMsgCancelOrders(fromInfo.GetAddress(), orderIDStrs)
-
+	msg := ordertypes.NewMsgCancelOrders(fromInfo.GetAddress(), orderIDStrs)
 	return oc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

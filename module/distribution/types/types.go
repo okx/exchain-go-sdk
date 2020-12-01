@@ -1,25 +1,10 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/distribution"
+	distrtypes "github.com/okex/okexchain/x/distribution/types"
 )
 
 // const
 const (
-	ModuleName = "distribution"
+	ModuleName = distrtypes.ModuleName
 )
-
-var (
-	msgCdc = gosdktypes.NewCodec()
-)
-
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for distribution module
-func RegisterCodec(cdc *codec.Codec) {
-	distribution.RegisterCodec(cdc)
-}

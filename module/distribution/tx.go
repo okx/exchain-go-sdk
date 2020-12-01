@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/distribution/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	distrtypes "github.com/okex/okexchain/x/distribution/types"
 )
@@ -37,8 +36,6 @@ func (dc distrClient) WithdrawRewards(fromInfo keys.Info, passWd, valAddrStr, me
 		return resp, fmt.Errorf("failed. invalid validator address: %s", valAddrStr)
 	}
 
-	msg := types.NewMsgWithdrawValCommission(valAddr)
-
+	msg := distrtypes.NewMsgWithdrawValidatorCommission(valAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

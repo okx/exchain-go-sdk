@@ -11,6 +11,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
+	distrtypes "github.com/okex/okexchain-go-sdk/module/distribution/types"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	"github.com/okex/okexchain-go-sdk/module/order"
 	ordertypes "github.com/okex/okexchain-go-sdk/module/order/types"
@@ -88,7 +89,7 @@ func (cli *Client) Dex() exposed.Dex {
 	return cli.modules[dex.ModuleName].(exposed.Dex)
 }
 func (cli *Client) Distribution() exposed.Distribution {
-	return cli.modules[distribution.ModuleName].(exposed.Distribution)
+	return cli.modules[distrtypes.ModuleName].(exposed.Distribution)
 }
 func (cli *Client) Governance() exposed.Governance {
 	return cli.modules[governance.ModuleName].(exposed.Governance)

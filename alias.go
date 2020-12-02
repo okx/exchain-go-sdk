@@ -47,8 +47,8 @@ type (
 	BookRes     = order.BookRes
 	OrderDetail = order.OrderDetail
 	// backend
-	Ticker = backend.Ticker
-	//MatchResult = backend.MatchResult
+	Ticker      = backend.Ticker
+	MatchResult = backend.MatchResult
 	//Order       = backend.Order
 	//Deal        = backend.Deal
 	// tendermint

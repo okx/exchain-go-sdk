@@ -8,25 +8,16 @@ import (
 const (
 	ModuleName = backendtypes.ModuleName
 
-	RecentTxRecordPath = "custom/backend/matches"
-	OpenOrdersPath     = "custom/backend/orders/open"
-	ClosedOrdersPath   = "custom/backend/orders/closed"
-	DealsPath          = "custom/backend/deals"
-	TransactionsPath   = "custom/backend/txs"
+	OpenOrdersPath   = "custom/backend/orders/open"
+	ClosedOrdersPath = "custom/backend/orders/closed"
+	DealsPath        = "custom/backend/deals"
+	TransactionsPath = "custom/backend/txs"
 )
 
 type (
-	Ticker = backendtypes.Ticker
+	Ticker      = backendtypes.Ticker
+	MatchResult = backendtypes.MatchResult
 )
-
-// MatchResult - structure for recent tx record
-type MatchResult struct {
-	Timestamp   int64   `json:"timestamp"`
-	BlockHeight int64   `json:"block_height"`
-	Product     string  `json:"product"`
-	Price       float64 `json:"price"`
-	Quantity    float64 `json:"volume"`
-}
 
 // BaseResponse - structure for base response of data
 type BaseResponse struct {

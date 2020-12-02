@@ -68,13 +68,13 @@ func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, pe
 		return
 	}
 
-	matchParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(matchParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(backendtypes.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum))
 	if err != nil {
 		return record, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.RecentTxRecordPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryMatchResults)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return record, utils.ErrClientQuery(err.Error())
 	}

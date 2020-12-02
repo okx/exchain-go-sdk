@@ -383,12 +383,11 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 
 	expectedRet := mockCli.BuildBackendMatchResultBytes(timestamp, blockHeight, product, price, quantity)
 	expectedCdc := mockCli.GetCodec()
-
-	queryParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPage)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+	expectedParams := expectedCdc.MustMarshalJSON(backendtypes.NewQueryMatchParams(product, int64(start), int64(end), page, perPage))
+	expectedPath := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryMatchResults)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	txRecord, err := mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.NoError(t, err)
@@ -416,11 +415,11 @@ func TestBackendClient_QueryRecentTxRecord(t *testing.T) {
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.RecentTxRecordPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Backend().QueryRecentTxRecord(product, start, end, page, perPage)
 	require.Error(t, err)
 }

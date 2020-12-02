@@ -9,30 +9,6 @@ const (
 	defaultPerPage = 50
 )
 
-// QueryMatchParams - structure of params to query tx record
-type QueryMatchParams struct {
-	Product string
-	Start   int64
-	End     int64
-	Page    int
-	PerPage int
-}
-
-// NewQueryMatchParams creates a new instance of QueryMatchParams
-func NewQueryMatchParams(product string, start, end int64, page, perPage int) QueryMatchParams {
-	if page == 0 && perPage == 0 {
-		page = defaultPage
-		perPage = defaultPerPage
-	}
-	return QueryMatchParams{
-		Product: product,
-		Start:   start,
-		End:     end,
-		Page:    page,
-		PerPage: perPage,
-	}
-}
-
 // QueryOrderListParams - structure of params to query record list
 type QueryOrderListParams struct {
 	Address    string

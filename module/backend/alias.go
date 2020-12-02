@@ -8,8 +8,6 @@ const (
 )
 
 type (
-	// nolint
-	MatchResult = types.MatchResult
 	Order       = types.Order
 	Deal        = types.Deal
 )

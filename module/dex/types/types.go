@@ -1,10 +1,7 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/common"
-	"github.com/okex/okexchain/x/dex"
 	dextypes "github.com/okex/okexchain/x/dex/types"
 )
 
@@ -12,20 +9,6 @@ import (
 const (
 	ModuleName = dextypes.ModuleName
 )
-
-var (
-	msgCdc = gosdktypes.NewCodec()
-)
-
-func init() {
-	gosdktypes.RegisterBasicCodec(msgCdc)
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for dex module
-func RegisterCodec(cdc *codec.Codec) {
-	dex.RegisterCodec(cdc)
-}
 
 type (
 	TokenPair = dextypes.TokenPair

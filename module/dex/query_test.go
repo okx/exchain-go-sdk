@@ -22,9 +22,7 @@ const (
 	memo      = "my memo"
 
 	product = "btc-000_okt"
-
-	recMnemonic = "plunge silk glide glass curve cycle snack garbage obscure express decade dirt"
-	recAddr     = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
+	recAddr = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
 )
 
 func TestDexClient_QueryProducts(t *testing.T) {

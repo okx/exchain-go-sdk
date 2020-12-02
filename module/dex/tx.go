@@ -68,6 +68,16 @@ func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, product, toAdd
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
+// ConfirmOwnership confirms the transfer-ownership of a product
+func (dc dexClient) ConfirmOwnership(fromInfo keys.Info, passWd, product, memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
+		return
+	}
+
+	msg := dextypes.NewMsgConfirmOwnership(fromInfo.GetAddress(), product)
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
 func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {

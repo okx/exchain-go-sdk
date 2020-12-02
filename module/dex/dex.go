@@ -5,6 +5,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/dex"
 )
 
 var _ gosdktypes.Module = (*dexClient)(nil)
@@ -15,7 +16,7 @@ type dexClient struct {
 
 // RegisterCodec registers the msg type in dex module
 func (dexClient) RegisterCodec(cdc *codec.Codec) {
-	types.RegisterCodec(cdc)
+	dex.RegisterCodec(cdc)
 }
 
 // Name returns the module name

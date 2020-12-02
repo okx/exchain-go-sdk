@@ -146,24 +146,22 @@ func (gc govClient) SubmitManageWhiteListProposal(fromInfo keys.Info, passWd, pr
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-//// Deposit increases the deposit amount on a specific proposal
-//func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo string, proposalID, accNum,
-//	seqNum uint64) (resp sdk.TxResponse, err error) {
-//	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
-//		return
-//	}
-//
-//	deposit, err := sdk.ParseDecCoins(depositCoinsStr)
-//	if err != nil {
-//		return
-//	}
-//
-//	msg := types.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
-//
-//	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-//
-//}
-//
+// Deposit increases the deposit amount on a specific proposal
+func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo string, proposalID, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
+		return
+	}
+
+	deposit, err := sdk.ParseDecCoins(depositCoinsStr)
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
 //// Vote votes for an active proposal
 //// options: yes/no/no_with_veto/abstain
 //func (gc govClient) Vote(fromInfo keys.Info, passWd, voteOption, memo string, proposalID, accNum, seqNum uint64) (

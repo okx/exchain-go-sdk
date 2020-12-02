@@ -93,3 +93,28 @@ func (fc farmClient) QueryAccountsLockedTo(poolName string) (accAddrs []sdk.AccA
 
 	return
 }
+
+// QueryLockInfo gets the locked info of an account in a specific pool
+func (fc farmClient) QueryLockInfo(poolName, accAddrStr string) (lockInfo types.LockInfo, err error) {
+	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
+	if err != nil {
+		return
+	}
+
+	jsonBytes, err := fc.GetCodec().MarshalJSON(farmtypes.NewQueryPoolAccountParams(poolName, accAddr))
+	if err != nil {
+		return lockInfo, utils.ErrMarshalJSON(err.Error())
+	}
+
+	path := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryLockInfo)
+	res, _, err := fc.Query(path, jsonBytes)
+	if err != nil {
+		return lockInfo, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = fc.GetCodec().UnmarshalJSON(res, &lockInfo); err != nil {
+		return lockInfo, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}

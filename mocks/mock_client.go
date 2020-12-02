@@ -664,3 +664,16 @@ func (mc *MockClient) BuildFarmPoolNameListBytes(poolName ...string) []byte {
 func (mc *MockClient) BuildAccAddrListBytes(accAddr ...sdk.AccAddress) []byte {
 	return mc.cdc.MustMarshalJSON(accAddr)
 }
+
+// BuildLockInfoBytes generates the lock info bytes for test
+func (mc *MockClient) BuildLockInfoBytes(accAddr sdk.AccAddress, poolName, tokenSymbol string, amountDec sdk.Dec, height int64,
+	referencePeriod uint64) []byte {
+	info := farm.LockInfo{
+		Owner:            accAddr,
+		PoolName:         poolName,
+		Amount:           sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+		StartBlockHeight: height,
+		ReferencePeriod:  referencePeriod,
+	}
+	return mc.cdc.MustMarshalJSON(info)
+}

@@ -9,6 +9,7 @@ const (
 )
 
 type (
-	FarmPool         = farmtypes.FarmPool
+	FarmPool          = farmtypes.FarmPool
 	YieldedTokenInfos = farmtypes.YieldedTokenInfos
+	LockInfo          = farmtypes.LockInfo
 )

@@ -227,3 +227,47 @@ func TestFarmClient_QueryAccountsLockedTo(t *testing.T) {
 	_, err = mockCli.Farm().QueryAccountsLockedTo(expectedPoolName)
 	require.Error(t, err)
 }
+
+func TestFarmClient_QueryLockInfo(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewFarmClient(mockCli.MockBaseClient))
+
+	accAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+
+	expectedRet := mockCli.BuildLockInfoBytes(accAddr, expectedPoolName, expectedTokenSymbol, sdk.NewDec(expectedTokenAmount),
+		expectedHeight, expectedReferencePeriod)
+	expectedCdc := mockCli.GetCodec()
+
+	expectedParams := expectedCdc.MustMarshalJSON(farmtypes.NewQueryPoolAccountParams(expectedPoolName, accAddr))
+	expectedPath := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryLockInfo)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
+
+	lockInfo, err := mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
+	require.NoError(t, err)
+
+	require.True(t, lockInfo.Owner.Equals(accAddr))
+	require.Equal(t, expectedPoolName, lockInfo.PoolName)
+	require.Equal(t, expectedTokenSymbol, lockInfo.Amount.Denom)
+	require.True(t, lockInfo.Amount.Amount.Equal(sdk.NewDec(expectedTokenAmount)))
+	require.Equal(t, expectedHeight, lockInfo.StartBlockHeight)
+	require.Equal(t, expectedReferencePeriod, lockInfo.ReferencePeriod)
+
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
+	_, err = mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
+	_, err = mockCli.Farm().QueryLockInfo(expectedPoolName, addr)
+	require.Error(t, err)
+
+	_, err = mockCli.Farm().QueryLockInfo(expectedPoolName, addr[1:])
+	require.Error(t, err)
+}

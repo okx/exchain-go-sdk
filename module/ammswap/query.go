@@ -2,11 +2,11 @@ package ammswap
 
 import (
 	"fmt"
-	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
-	"math/big"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
+	"github.com/okex/okexchain-go-sdk/utils"
+	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
+	"math/big"
 )
 
 var (
@@ -35,21 +35,18 @@ func (ac ammswapClient) QuerySwapTokenPair(token string) (exchange types.SwapTok
 }
 
 // QuerySwapTokenPairs used for querying the all the swap token pairs
-func (pc ammswapClient) QuerySwapTokenPairs() ([]types.SwapTokenPair, error) {
-	//TODO
-	//var exchanges []types.SwapTokenPair
-	//
-	//resKVs, err := pc.QuerySubspace(types.TokenPairPrefixKey, ModuleName)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//for _, kv := range resKVs {
-	//	var exchange types.SwapTokenPair
-	//	pc.GetCodec().MustUnmarshalBinaryLengthPrefixed(kv.Value, &exchange)
-	//	exchanges = append(exchanges, exchange)
-	//}
-	//return exchanges, nil
-	return nil, nil
+func (ac ammswapClient) QuerySwapTokenPairs() (exchanges []types.SwapTokenPair, err error) {
+	path := fmt.Sprintf("custom/%s/%s", ammswaptypes.QuerierRoute, ammswaptypes.QuerySwapTokenPairs)
+	res, _, err := ac.Query(path, nil)
+	if err != nil {
+		return exchanges, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = ac.GetCodec().UnmarshalJSON(res, &exchanges); err != nil {
+		return exchanges, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
 }
 
 // QueryBuyAmount used for querying how much token would get from a pool

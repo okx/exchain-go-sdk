@@ -14,7 +14,7 @@ type ammswapClient struct {
 }
 
 // RegisterCodec registers the msg type in ammswap module
-func (pc ammswapClient) RegisterCodec(cdc *codec.Codec) {
+func (ac ammswapClient) RegisterCodec(cdc *codec.Codec) {
 	types.RegisterCodec(cdc)
 }
 

@@ -27,3 +27,23 @@ func (fc farmClient) QueryPools() (farmPools []types.FarmPool, err error) {
 
 	return
 }
+
+// QueryPool gets the farm pool info by its pool name
+func (fc farmClient) QueryPool(poolName string) (farmPool types.FarmPool, err error) {
+	jsonBytes, err := fc.GetCodec().MarshalJSON(farmtypes.NewQueryPoolParams(poolName))
+	if err != nil {
+		return farmPool, utils.ErrMarshalJSON(err.Error())
+	}
+
+	path := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryPool)
+	res, _, err := fc.Query(path, jsonBytes)
+	if err != nil {
+		return farmPool, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = fc.GetCodec().UnmarshalJSON(res, &farmPool); err != nil {
+		return farmPool, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}

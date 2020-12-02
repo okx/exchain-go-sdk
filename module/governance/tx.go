@@ -8,12 +8,14 @@ import (
 	dextypes "github.com/okex/okexchain/x/dex/types"
 	distrcli "github.com/okex/okexchain/x/distribution/client/cli"
 	distrtypes "github.com/okex/okexchain/x/distribution/types"
+	farmutils "github.com/okex/okexchain/x/farm/client/utils"
+	farmtypes "github.com/okex/okexchain/x/farm/types"
 	govtypes "github.com/okex/okexchain/x/gov/types"
 	paramsutils "github.com/okex/okexchain/x/params/client/utils"
 	paramstypes "github.com/okex/okexchain/x/params/types"
 )
 
-// SubmitTextProposal submits the text proposal on OKChain
+// SubmitTextProposal submits the text proposal on OKExChain
 func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -39,7 +41,7 @@ func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath,
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// SubmitParamChangeProposal submits the proposal to change the params on OKChain
+// SubmitParamChangeProposal submits the proposal to change the params on OKExChain
 func (gc govClient) SubmitParamsChangeProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -92,7 +94,7 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
+// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKExChain
 func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -110,6 +112,32 @@ func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd,
 			proposal.Description,
 			proposal.Recipient,
 			proposal.Amount,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
+// SubmitManageWhiteList submits the proposal to manage the white list member of farm module
+func (gc govClient) SubmitManageWhiteListProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := farmutils.ParseManageWhiteListProposalJSON(gc.GetCodec(), proposalPath)
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgSubmitProposal(
+		farmtypes.NewManageWhiteListProposal(
+			proposal.Title,
+			proposal.Description,
+			proposal.PoolName,
+			proposal.IsAdded,
 		),
 		proposal.Deposit,
 		fromInfo.GetAddress(),

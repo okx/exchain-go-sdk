@@ -7,3 +7,8 @@ import (
 const (
 	ModuleName = farmtypes.ModuleName
 )
+
+type (
+	FarmPool         = farmtypes.FarmPool
+	YieldedTokenInfos = farmtypes.YieldedTokenInfos
+)

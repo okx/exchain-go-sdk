@@ -3,6 +3,7 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/farm/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
@@ -27,7 +28,7 @@ type FarmTx interface {
 
 // FarmQuery shows the expected query behavior for inner farm client
 type FarmQuery interface {
-	//QueryPools() ([]types.FarmPool, error)
+	QueryPools() ([]types.FarmPool, error)
 	//QueryPool(poolName string) (types.FarmPool, error)
 	//QueryAccount(accAddrStr string) ([]string, error)
 	//QueryAccountsLockedTo(poolName string) ([]sdk.AccAddress, error)

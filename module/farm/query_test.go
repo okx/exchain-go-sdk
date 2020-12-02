@@ -1,5 +1,18 @@
 package farm
 
+import (
+	"errors"
+	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/golang/mock/gomock"
+	"github.com/okex/okexchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	farmtypes "github.com/okex/okexchain/x/farm/types"
+	"github.com/stretchr/testify/require"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"testing"
+)
+
 const (
 	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	name      = "alice"
@@ -16,3 +29,66 @@ const (
 	expectedHeight                  int64  = 1024
 	expectedReferencePeriod         uint64 = 1
 )
+
+func TestFarmClient_QueryPools(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewFarmClient(mockCli.MockBaseClient))
+
+	expectedPoolName0, expectedPoolName1 := fmt.Sprintf("%s%d", expectedPoolName, 0), fmt.Sprintf("%s%d", expectedPoolName, 1)
+	expectedDec := sdk.NewDec(expectedTokenAmount)
+	expectedRet := mockCli.BuildFarmPoolsBytes(
+		expectedPoolName0,
+		expectedPoolName1,
+		addr,
+		expectedTokenSymbol,
+		expectedStartBlockHeightToYield,
+		expectedDec,
+	)
+
+	expectedOwnerAddr, err := sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+
+	expectedCdc := mockCli.GetCodec()
+	// fixed to all pools query
+	expectedParams := expectedCdc.MustMarshalJSON(farmtypes.NewQueryPoolsParams(1, 0))
+	expectedPath := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryPools)
+
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(5)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
+
+	pools, err := mockCli.Farm().QueryPools()
+	require.NoError(t, err)
+
+	require.Equal(t, 2, len(pools))
+	for i, pool := range pools {
+		require.Equal(t, fmt.Sprintf("%s%d", expectedPoolName, i), pool.Name)
+		require.Equal(t, expectedOwnerAddr, pool.Owner)
+		require.Equal(t, expectedTokenSymbol, pool.MinLockAmount.Denom)
+		require.True(t, pool.MinLockAmount.Amount.Equal(expectedDec))
+		require.Equal(t, 1, len(pool.YieldedTokenInfos))
+		require.Equal(t, expectedTokenSymbol, pool.YieldedTokenInfos[0].RemainingAmount.Denom)
+		require.True(t, pool.YieldedTokenInfos[0].RemainingAmount.Amount.Equal(expectedDec))
+		require.Equal(t, expectedStartBlockHeightToYield, pool.YieldedTokenInfos[0].StartBlockHeightToYield)
+		require.True(t, pool.YieldedTokenInfos[0].AmountYieldedPerBlock.Equal(expectedDec))
+		require.Equal(t, expectedTokenSymbol, pool.DepositAmount.Denom)
+		require.True(t, pool.DepositAmount.Amount.Equal(expectedDec))
+		require.Equal(t, expectedTokenSymbol, pool.TotalValueLocked.Denom)
+		require.True(t, pool.TotalValueLocked.Amount.Equal(expectedDec))
+		require.Equal(t, 1, len(pool.TotalAccumulatedRewards))
+		require.Equal(t, expectedTokenSymbol, pool.TotalAccumulatedRewards[0].Denom)
+		require.True(t, pool.TotalAccumulatedRewards[0].Amount.Equal(expectedDec))
+	}
+
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
+	_, err = mockCli.Farm().QueryPools()
+	require.Error(t, err)
+
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
+	_, err = mockCli.Farm().QueryPools()
+	require.Error(t, err)
+}

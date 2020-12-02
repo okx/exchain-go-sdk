@@ -1,10 +1,13 @@
 package types
 
+import (
+	backendtypes "github.com/okex/okexchain/x/backend/types"
+)
+
 // const
 const (
-	ModuleName = "backend"
+	ModuleName = backendtypes.ModuleName
 
-	CandlesPath        = "custom/backend/candles"
 	TickersPath        = "custom/backend/tickers"
 	RecentTxRecordPath = "custom/backend/matches"
 	OpenOrdersPath     = "custom/backend/orders/open"

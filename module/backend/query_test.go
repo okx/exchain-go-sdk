@@ -2,7 +2,9 @@ package backend
 
 import (
 	"errors"
+	"fmt"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	backendtypes "github.com/okex/okexchain/x/backend/types"
 	"testing"
 	"time"
 
@@ -16,7 +18,7 @@ import (
 )
 
 const (
-	addr    = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	addr    = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	product = "btc-000_okt"
 )
 
@@ -38,11 +40,11 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 	expectedRet := mockCli.BuildBackendCandlesBytes(mockCandles)
 	expectedCdc := mockCli.GetCodec()
 
-	queryParams := params.NewQueryKlinesParams(product, granularity, size)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+	expectedParams := expectedCdc.MustMarshalJSON(backendtypes.NewQueryKlinesParams(product, granularity, size))
+	expectedPath := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryCandleList)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	candles, err := mockCli.Backend().QueryCandles(product, granularity, size)
 	require.NoError(t, err)
@@ -55,11 +57,11 @@ func TestBackendClient_QueryCandles(t *testing.T) {
 	require.Equal(t, "40.96", candles[1][2])
 	require.Equal(t, "81.92", candles[1][3])
 
-	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.CandlesPath, tmbytes.HexBytes(queryBytes)).Return(append(expectedRet, '}'), nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(append(expectedRet, '}'), int64(1024), nil)
 	_, err = mockCli.Backend().QueryCandles(product, granularity, size)
 	require.Error(t, err)
 }

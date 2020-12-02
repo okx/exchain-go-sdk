@@ -9,22 +9,6 @@ const (
 	defaultPerPage = 50
 )
 
-// QueryKlinesParams - structure of params to query the klines of a specific product
-type QueryKlinesParams struct {
-	Product     string
-	Granularity int
-	Size        int
-}
-
-// NewQueryKlinesParams creates a new instance of QueryKlinesParams
-func NewQueryKlinesParams(product string, granularity, size int) QueryKlinesParams {
-	return QueryKlinesParams{
-		product,
-		granularity,
-		size,
-	}
-}
-
 // QueryTickerParams - structure of params to query tickers
 type QueryTickerParams struct {
 	Product string `json:"product"`

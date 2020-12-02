@@ -1,20 +1,22 @@
 package backend
 
 import (
+	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/backend/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	backendtypes "github.com/okex/okexchain/x/backend/types"
 )
 
 // QueryCandles gets the candles data of a specific product
 func (bc backendClient) QueryCandles(product string, granularity, size int) (candles [][]string, err error) {
-	klinesParams := params.NewQueryKlinesParams(product, granularity, size)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(klinesParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(backendtypes.NewQueryKlinesParams(product, granularity, size))
 	if err != nil {
 		return candles, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.CandlesPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryCandleList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return candles, utils.ErrClientQuery(err.Error())
 	}

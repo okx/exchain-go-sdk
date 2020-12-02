@@ -31,6 +31,6 @@ type FarmQuery interface {
 	QueryPools() ([]types.FarmPool, error)
 	QueryPool(poolName string) (types.FarmPool, error)
 	QueryAccount(accAddrStr string) ([]string, error)
-	//QueryAccountsLockedTo(poolName string) ([]sdk.AccAddress, error)
+	QueryAccountsLockedTo(poolName string) ([]sdk.AccAddress, error)
 	//QueryLockInfo(poolName, accAddrStr string) (types.LockInfo, error)
 }

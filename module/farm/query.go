@@ -73,3 +73,23 @@ func (fc farmClient) QueryAccount(accAddrStr string) (poolNames []string, err er
 
 	return
 }
+
+// QueryAccountsLockedTo gets all addresses of accounts that have locked coins in a pool
+func (fc farmClient) QueryAccountsLockedTo(poolName string) (accAddrs []sdk.AccAddress, err error) {
+	jsonBytes, err := fc.GetCodec().MarshalJSON(farmtypes.NewQueryPoolParams(poolName))
+	if err != nil {
+		return accAddrs, utils.ErrMarshalJSON(err.Error())
+	}
+
+	path := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryAccountsLockedTo)
+	res, _, err := fc.Query(path, jsonBytes)
+	if err != nil {
+		return accAddrs, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = fc.GetCodec().UnmarshalJSON(res, &accAddrs); err != nil {
+		return accAddrs, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}

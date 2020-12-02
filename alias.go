@@ -2,6 +2,7 @@ package gosdk
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	ammswap "github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
@@ -34,6 +35,8 @@ var (
 // nolint
 type (
 	TxResponse = sdk.TxResponse
+	// ammswap
+	SwapTokenPair = ammswap.SwapTokenPair
 	// auth
 	Account = auth.Account
 	// staking

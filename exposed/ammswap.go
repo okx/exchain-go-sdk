@@ -29,5 +29,5 @@ type AmmSwapTx interface {
 type AmmSwapQuery interface {
 	QuerySwapTokenPair(token string) (types.SwapTokenPair, error)
 	QuerySwapTokenPairs() ([]types.SwapTokenPair, error)
-	QueryBuyAmount(soldToken sdk.DecCoin, tokenToBuy string) (sdk.Dec, error)
+	QueryBuyAmount(tokenToSellStr, tokenDenomToBuy string) (sdk.Dec, error)
 }

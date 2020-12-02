@@ -4,6 +4,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	dexutils "github.com/okex/okexchain/x/dex/client/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 	govtypes "github.com/okex/okexchain/x/gov/types"
 	paramsutils "github.com/okex/okexchain/x/params/client/utils"
 	paramstypes "github.com/okex/okexchain/x/params/types"
@@ -61,34 +63,33 @@ func (gc govClient) SubmitParamsChangeProposal(fromInfo keys.Info, passWd, propo
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-//// SubmitDelistProposal submits the proposal to delist a token pair from dex
-//func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
-//	resp sdk.TxResponse, err error) {
-//	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-//		return
-//	}
-//
-//	proposal, err := dexutils.ParseDelistProposalJSON(gc.GetCodec(), proposalPath)
-//	if err != nil {
-//		return
-//	}
-//
-//	msg := gov.NewMsgSubmitProposal(
-//		dextypes.NewDelistProposal(
-//			proposal.Title,
-//			proposal.Description,
-//			fromInfo.GetAddress(),
-//			proposal.BaseAsset,
-//			proposal.QuoteAsset,
-//		),
-//		proposal.Deposit,
-//		fromInfo.GetAddress(),
-//	)
-//
-//	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-//
-//}
-//
+// SubmitDelistProposal submits the proposal to delist a token pair from dex
+func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := dexutils.ParseDelistProposalJSON(gc.GetCodec(), proposalPath)
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgSubmitProposal(
+		dextypes.NewDelistProposal(
+			proposal.Title,
+			proposal.Description,
+			fromInfo.GetAddress(),
+			proposal.BaseAsset,
+			proposal.QuoteAsset,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
 //// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
 //func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
 //	seqNum uint64) (resp sdk.TxResponse, err error) {

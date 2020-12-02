@@ -3,7 +3,7 @@ package gosdk
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
-	"github.com/okex/okexchain-go-sdk/module/backend"
+	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
@@ -47,10 +47,10 @@ type (
 	BookRes     = order.BookRes
 	OrderDetail = order.OrderDetail
 	// backend
-	Ticker      = backend.Ticker
-	MatchResult = backend.MatchResult
-	Order       = backend.Order
-	Deal        = backend.Deal
+	Ticker = backend.Ticker
+	//MatchResult = backend.MatchResult
+	//Order       = backend.Order
+	//Deal        = backend.Deal
 	// tendermint
 	Block            = tendermint.Block
 	BlockResults     = tendermint.BlockResults

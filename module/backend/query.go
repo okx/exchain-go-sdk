@@ -36,13 +36,19 @@ func (bc backendClient) QueryTickers(product string, count ...int) (tickers []ty
 		return
 	}
 
-	tickersParams := params.NewQueryTickerParams(product, countNum, true)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(tickersParams)
+	queryParams := backendtypes.QueryTickerParams{
+		Product: product,
+		Count:   countNum,
+		Sort:    true,
+	}
+
+	jsonBytes, err := bc.GetCodec().MarshalJSON(queryParams)
 	if err != nil {
 		return tickers, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.TickersPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryTickerList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return tickers, utils.ErrClientQuery(err.Error())
 	}

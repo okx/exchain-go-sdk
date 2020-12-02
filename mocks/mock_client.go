@@ -538,8 +538,8 @@ func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
 }
 
 // BuildBackendTickersBytes generates the backend tickers bytes for test
-func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open, close, high, low, price, volumn,
-	change string) []byte {
+func (mc *MockClient) BuildBackendTickersBytes(symbol, product string, timestamp int64, open, close, high, low, price, volumn,
+	change float64) []byte {
 	baseResp := backend.BaseResponse{
 		Data: []backend.Ticker{
 			{

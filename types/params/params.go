@@ -2,9 +2,6 @@ package params
 
 import (
 	"time"
-
-	"github.com/cosmos/cosmos-sdk/types"
-	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
 )
 
 const (
@@ -153,23 +150,5 @@ func NewQueryTxListParams(addr string, txType, startTime, endTime int64, page, p
 		EndTime:   endTime,
 		Page:      page,
 		PerPage:   perPage,
-	}
-}
-
-// QueryProposalsParams defines query params of proposals in gov
-type QueryProposalsParams struct {
-	Voter          types.AccAddress
-	Depositor      types.AccAddress
-	ProposalStatus govtypes.ProposalStatus
-	Limit          uint64
-}
-
-// NewQueryProposalsParams creates a new instance of QueryProposalsParams
-func NewQueryProposalsParams(status govtypes.ProposalStatus, limit uint64, voter, depositor types.AccAddress) QueryProposalsParams {
-	return QueryProposalsParams{
-		Voter:          voter,
-		Depositor:      depositor,
-		ProposalStatus: status,
-		Limit:          limit,
 	}
 }

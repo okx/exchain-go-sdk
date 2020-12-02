@@ -3,6 +3,7 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
@@ -26,5 +27,5 @@ type GovTx interface {
 
 // GovQuery shows the expected query behavior for inner governance client
 type GovQuery interface {
-	//QueryProposals(depositorAddrStr, voterAddrStr, status string, numLimit uint64) ([]types.Proposal, error)
+	QueryProposals(depositorAddrStr, voterAddrStr, status string, numLimit uint64) ([]types.Proposal, error)
 }

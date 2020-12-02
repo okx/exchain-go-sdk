@@ -15,6 +15,7 @@ import (
 	distrtypes "github.com/okex/okexchain-go-sdk/module/distribution/types"
 	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
+	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/okex/okexchain-go-sdk/module/order"
 	ordertypes "github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/module/slashing"
@@ -102,7 +103,7 @@ func (cli *Client) Farm() exposed.Farm {
 	return cli.modules[farmtypes.ModuleName].(exposed.Farm)
 }
 func (cli *Client) Governance() exposed.Governance {
-	return cli.modules[governance.ModuleName].(exposed.Governance)
+	return cli.modules[govtypes.ModuleName].(exposed.Governance)
 }
 func (cli *Client) Order() exposed.Order {
 	return cli.modules[ordertypes.ModuleName].(exposed.Order)

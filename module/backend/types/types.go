@@ -8,7 +8,6 @@ import (
 const (
 	ModuleName = backendtypes.ModuleName
 
-	DealsPath        = "custom/backend/deals"
 	TransactionsPath = "custom/backend/txs"
 )
 
@@ -16,20 +15,8 @@ type (
 	Ticker      = backendtypes.Ticker
 	MatchResult = backendtypes.MatchResult
 	Order       = backendtypes.Order
+	Deal        = backendtypes.Deal
 )
-
-// Deal - structure of deal query result
-type Deal struct {
-	Timestamp   int64   `json:"timestamp"`
-	BlockHeight int64   `json:"block_height"`
-	OrderID     string  `json:"order_id"`
-	Sender      string  `json:"sender"`
-	Product     string  `json:"product"`
-	Side        string  `json:"side"`
-	Price       float64 `json:"price"`
-	Quantity    float64 `json:"volume"`
-	Fee         string  `json:"fee"`
-}
 
 // Transaction - structure of transaction query result
 type Transaction struct {

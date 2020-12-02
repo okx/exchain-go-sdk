@@ -151,13 +151,15 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 		return
 	}
 
-	dealsParams := params.NewQueryDealsParams(addrStr, product, int64(start), int64(end), page, perPageNum, side)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(dealsParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryDealsParams(addrStr, product, int64(start), int64(end), page, perPageNum, side),
+	)
 	if err != nil {
 		return deals, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.DealsPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryDealList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return deals, utils.ErrClientQuery(err.Error())
 	}

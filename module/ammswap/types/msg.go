@@ -8,48 +8,6 @@ const (
 	TypeMsgTokenSwap    = "token_swap"
 )
 
-// MsgAddLiquidity deposits quote_amount and base_amount at current ratio to mint pool tokens.
-type MsgAddLiquidity struct {
-	MinLiquidity  sdk.Dec        `json:"min_liquidity"`   // Minimum number of sender will mint if total pool token supply is greater than 0.
-	MaxBaseAmount sdk.DecCoin    `json:"max_base_amount"` // Maximum number of tokens deposited. Deposits max amount if total pool token supply is 0.
-	QuoteAmount   sdk.DecCoin    `json:"quote_amount"`    // Quote token amount
-	Deadline      int64          `json:"deadline"`        // Time after which this transaction can no longer be executed.
-	Sender        sdk.AccAddress `json:"sender"`          // Sender
-}
-
-// NewMsgAddLiquidity is a constructor function for MsgAddLiquidity
-func NewMsgAddLiquidity(minLiquidity sdk.Dec, maxBaseAmount, quoteAmount sdk.DecCoin, deadline int64, sender sdk.AccAddress) MsgAddLiquidity {
-	return MsgAddLiquidity{
-		MinLiquidity:  minLiquidity,
-		MaxBaseAmount: maxBaseAmount,
-		QuoteAmount:   quoteAmount,
-		Deadline:      deadline,
-		Sender:        sender,
-	}
-}
-
-// Route returns the name of the module
-func (msg MsgAddLiquidity) Route() string { return "" }
-
-// Type returns the action
-func (msg MsgAddLiquidity) Type() string { return "" }
-
-// ValidateBasic runs stateless checks on the message
-func (msg MsgAddLiquidity) ValidateBasic() sdk.Error { return nil }
-
-// GetSignBytes encodes the message for signing
-func (msg MsgAddLiquidity) GetSignBytes() []byte {
-	return sdk.MustSortJSON(msgCdc.MustMarshalJSON(msg))
-}
-
-// GetSigners defines whose signature is required
-func (msg MsgAddLiquidity) GetSigners() []sdk.AccAddress { return nil }
-
-// GetSwapTokenPair defines token pair
-func (msg MsgAddLiquidity) GetSwapTokenPair() string {
-	return msg.MaxBaseAmount.Denom + "_" + msg.QuoteAmount.Denom
-}
-
 // MsgRemoveLiquidity burns pool tokens to withdraw okt and Tokens at current ratio.
 type MsgRemoveLiquidity struct {
 	Liquidity      sdk.Dec        `json:"liquidity"`        // Amount of pool token burned.

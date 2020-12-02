@@ -1,71 +1,75 @@
 package ammswap
 
 import (
-	"time"
-
-	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
+	"time"
 )
 
 // AddLiquidity adds the number of liquidity of a token pair
-func (pc ammswapClient) AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration, memo string,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+func (pc ammswapClient) AddLiquidity(fromInfo keys.Info, passWd, minLiquidity, maxBaseAmount, quoteAmount, deadlineDuration,
+	memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	var minLiquidityDec sdk.Dec
-	if minLiquidityDec, err = sdk.NewDecFromStr(minLiquidity); err != nil {
+	minLiquidityDec, err := sdk.NewDecFromStr(minLiquidity)
+	if err != nil {
 		return
 	}
 
-	var maxBaseAmountDecCoin, quoteAmountDecCoin sdk.DecCoin
-	if maxBaseAmountDecCoin, err = sdk.ParseDecCoin(maxBaseAmount); err != nil {
-		return
-	}
-	if quoteAmountDecCoin, err = sdk.ParseDecCoin(quoteAmount); err != nil {
+	maxBaseAmountDecCoin, err := sdk.ParseDecCoin(maxBaseAmount)
+	if err != nil {
 		return
 	}
 
-	var duration time.Duration
-	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	quoteAmountDecCoin, err := sdk.ParseDecCoin(quoteAmount)
+	if err != nil {
+		return
+	}
+
+	duration, err := time.ParseDuration(deadlineDuration)
+	if err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
 
-	msg := types.NewMsgAddLiquidity(minLiquidityDec, maxBaseAmountDecCoin, quoteAmountDecCoin, deadline, fromInfo.GetAddress())
+	msg := ammswaptypes.NewMsgAddLiquidity(minLiquidityDec, maxBaseAmountDecCoin, quoteAmountDecCoin, deadline, fromInfo.GetAddress())
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 // RemoveLiquidity removes the number of liquidity of a token pair
-func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+func (pc ammswapClient) RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration,
+	memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	var liquidityDec sdk.Dec
-	if liquidityDec, err = sdk.NewDecFromStr(liquidity); err != nil {
+	liquidityDec, err := sdk.NewDecFromStr(liquidity)
+	if err != nil {
 		return
 	}
 
-	var minBaseAmountDecCoin, minQuoteAmountDecCoin sdk.DecCoin
-	if minBaseAmountDecCoin, err = sdk.ParseDecCoin(minBaseAmount); err != nil {
-		return
-	}
-	if minQuoteAmountDecCoin, err = sdk.ParseDecCoin(minQuoteAmount); err != nil {
+	minBaseAmountDecCoin, err := sdk.ParseDecCoin(minBaseAmount)
+	if err != nil {
 		return
 	}
 
-	var duration time.Duration
-	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	minQuoteAmountDecCoin, err := sdk.ParseDecCoin(minQuoteAmount)
+	if err != nil {
+		return
+	}
+
+	duration, err := time.ParseDuration(deadlineDuration)
+	if err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
 
-	msg := types.NewMsgRemoveLiquidity(liquidityDec, minBaseAmountDecCoin, minQuoteAmountDecCoin, deadline, fromInfo.GetAddress())
+	msg := ammswaptypes.NewMsgRemoveLiquidity(liquidityDec, minBaseAmountDecCoin, minQuoteAmountDecCoin, deadline, fromInfo.GetAddress())
 	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 

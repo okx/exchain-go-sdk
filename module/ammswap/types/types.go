@@ -9,7 +9,7 @@ import (
 
 // const
 const (
-	ModuleName = "ammswap"
+	ModuleName = ammswap.ModuleName
 )
 
 var (

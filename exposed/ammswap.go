@@ -20,8 +20,7 @@ type AmmSwapTx interface {
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 	RemoveLiquidity(fromInfo keys.Info, passWd, liquidity, minBaseAmount, minQuoteAmount, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
-	CreateExchange(fromInfo keys.Info, passWd, baseToken, quoteToken, memo string,
-		accNum, seqNum uint64) (sdk.TxResponse, error)
+	CreateExchange(fromInfo keys.Info, passWd, baseToken, quoteToken, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
 		accNum, seqNum uint64) (sdk.TxResponse, error)
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
+	ammswaptypes "github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	authtypes "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
@@ -86,7 +87,7 @@ func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 
 // nolint
 func (cli *Client) AmmSwap() exposed.AmmSwap {
-	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
+	return cli.modules[ammswaptypes.ModuleName].(exposed.AmmSwap)
 }
 func (cli *Client) Auth() exposed.Auth {
 	return cli.modules[authtypes.ModuleName].(exposed.Auth)

@@ -2,7 +2,6 @@ package governance
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
@@ -20,23 +19,4 @@ func parseProposalFromFile(path string) (proposal types.ProposalJSON, err error)
 	}
 
 	return
-}
-
-func voteOptionFromString(str string) (types.VoteOption, error) {
-	switch str {
-	case "Yes", "yes":
-		return types.OptionYes, nil
-
-	case "Abstain", "abstain":
-		return types.OptionAbstain, nil
-
-	case "No", "no":
-		return types.OptionNo, nil
-
-	case "NoWithVeto", "no_with_veto":
-		return types.OptionNoWithVeto, nil
-
-	default:
-		return types.VoteOption(0xff), fmt.Errorf("failed. '%s' is not a valid vote option", str)
-	}
 }

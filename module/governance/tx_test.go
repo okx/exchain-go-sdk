@@ -397,64 +397,64 @@ func TestGovClient_Deposit(t *testing.T) {
 	require.Error(t, err)
 }
 
-//func TestGovClient_Vote(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	defer ctrl.Finish()
-//	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-//		1.1, "0.00000001okt")
-//	require.NoError(t, err)
-//	mockCli := mocks.NewMockClient(t, ctrl, config)
-//	mockCli.RegisterModule(NewGovClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
-//
-//	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
-//	require.NoError(t, err)
-//
-//	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "1024okt", 1, 2)
-//	expectedCdc := mockCli.GetCodec()
-//	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-//	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
-//
-//	accInfo, err := mockCli.Auth().QueryAccount(addr)
-//	require.NoError(t, err)
-//
-//	mockCli.EXPECT().BuildAndBroadcast(
-//		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-//		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(4)
-//
-//	res, err := mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//	require.Equal(t, uint32(0), res.Code)
-//
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "Abstain", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no_with_veto", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.NoError(t, err)
-//
-//	// error
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 0, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.Error(t, err)
-//
-//	_, err = mockCli.Governance().Vote(fromInfo, "", "yes", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.Error(t, err)
-//
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.Error(t, err)
-//
-//	mockCli.EXPECT().BuildAndBroadcast(
-//		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-//		Return(sdk.TxResponse{}, errors.New("default error"))
-//	_, err = mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 1, accInfo.GetAccountNumber(),
-//		accInfo.GetSequence())
-//	require.Error(t, err)
-//}
+func TestGovClient_Vote(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewGovClient(mockCli.MockBaseClient), auth.NewAuthClient(mockCli.MockBaseClient))
+
+	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
+	require.NoError(t, err)
+
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
+	expectedCdc := mockCli.GetCodec()
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
+
+	accInfo, err := mockCli.Auth().QueryAccount(addr)
+	require.NoError(t, err)
+
+	mockCli.EXPECT().BuildAndBroadcast(
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
+		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(4)
+
+	res, err := mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "Abstain", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "no_with_veto", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+
+	// error
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 0, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, "", "yes", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+
+	mockCli.EXPECT().BuildAndBroadcast(
+		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
+		Return(sdk.TxResponse{}, errors.New("default error"))
+	_, err = mockCli.Governance().Vote(fromInfo, passWd, "yes", memo, 1, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.Error(t, err)
+}

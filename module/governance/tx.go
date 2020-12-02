@@ -10,6 +10,7 @@ import (
 	distrtypes "github.com/okex/okexchain/x/distribution/types"
 	farmutils "github.com/okex/okexchain/x/farm/client/utils"
 	farmtypes "github.com/okex/okexchain/x/farm/types"
+	govutils "github.com/okex/okexchain/x/gov/client/utils"
 	govtypes "github.com/okex/okexchain/x/gov/types"
 	paramsutils "github.com/okex/okexchain/x/params/client/utils"
 	paramstypes "github.com/okex/okexchain/x/params/types"
@@ -162,21 +163,19 @@ func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo st
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-//// Vote votes for an active proposal
-//// options: yes/no/no_with_veto/abstain
-//func (gc govClient) Vote(fromInfo keys.Info, passWd, voteOption, memo string, proposalID, accNum, seqNum uint64) (
-//	resp sdk.TxResponse, err error) {
-//	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
-//		return
-//	}
-//
-//	voteOptionBytes, err := voteOptionFromString(voteOption)
-//	if err != nil {
-//		return
-//	}
-//
-//	msg := types.NewMsgVote(fromInfo.GetAddress(), proposalID, voteOptionBytes)
-//
-//	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-//
-//}
+// Vote votes for an active proposal
+// options: yes/no/no_with_veto/abstain
+func (gc govClient) Vote(fromInfo keys.Info, passWd, voteOption, memo string, proposalID, accNum, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	if err = params.CheckProposalOperation(fromInfo, passWd, proposalID); err != nil {
+		return
+	}
+
+	byteVoteOption, err := govtypes.VoteOptionFromString(govutils.NormalizeVoteOption(voteOption))
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgVote(fromInfo.GetAddress(), proposalID, byteVoteOption)
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}

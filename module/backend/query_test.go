@@ -243,12 +243,13 @@ func TestBackendClient_QueryOpenOrders(t *testing.T) {
 	expectedRet := mockCli.BuildBackendOrdersResultBytes(txHash, orderID, addr, product, side, price, quantity, filledAvgQuantity,
 		remainQuantity, status, timestamp)
 	expectedCdc := mockCli.GetCodec()
-
-	queryParams := params.NewQueryOrderListParams(addr, product, side, page, perPage, int64(start), int64(end), false)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+	expectedParams := expectedCdc.MustMarshalJSON(
+		backendtypes.NewQueryOrderListParams(addr, product, side, page, perPage, int64(start), int64(end), false),
+	)
+	expectedPath := fmt.Sprintf("custom/%s/%s/open", backendtypes.QuerierRoute, backendtypes.QueryOrderList)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	openOrders, err := mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.NoError(t, err)
@@ -288,11 +289,11 @@ func TestBackendClient_QueryOpenOrders(t *testing.T) {
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.OpenOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Backend().QueryOpenOrders(addr, product, side, start, end, page, perPage)
 	require.Error(t, err)
 }
@@ -315,8 +316,8 @@ func TestBackendClient_QueryClosedOrders(t *testing.T) {
 		remainQuantity, status, timestamp)
 	expectedCdc := mockCli.GetCodec()
 
-	queryParams := params.NewQueryOrderListParams(addr, product, side, page, perPage, int64(start), int64(end), false)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+	//queryParams := params.NewQueryOrderListParams(addr, product, side, page, perPage, int64(start), int64(end), false)
+	queryBytes := expectedCdc.MustMarshalJSON("queryParams")
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
 	mockCli.EXPECT().Query(types.ClosedOrdersPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)

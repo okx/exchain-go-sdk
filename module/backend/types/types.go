@@ -8,7 +8,6 @@ import (
 const (
 	ModuleName = backendtypes.ModuleName
 
-	OpenOrdersPath   = "custom/backend/orders/open"
 	ClosedOrdersPath = "custom/backend/orders/closed"
 	DealsPath        = "custom/backend/deals"
 	TransactionsPath = "custom/backend/txs"
@@ -17,51 +16,8 @@ const (
 type (
 	Ticker      = backendtypes.Ticker
 	MatchResult = backendtypes.MatchResult
+	Order       = backendtypes.Order
 )
-
-// BaseResponse - structure for base response of data
-type BaseResponse struct {
-	Code      int         `json:"code"`
-	Msg       string      `json:"msg"`
-	DetailMsg string      `json:"detail_msg"`
-	Data      interface{} `json:"data"`
-}
-
-// ParamPage - structure of page params
-type ParamPage struct {
-	Page    int `json:"page"`
-	PerPage int `json:"per_page"`
-	Total   int `json:"total"`
-}
-
-// ListDataRes - structure of list data in the list response
-type ListDataRes struct {
-	Data      interface{} `json:"data"`
-	ParamPage ParamPage   `json:"param_page"`
-}
-
-// ListResponse - structure for list response of data
-type ListResponse struct {
-	Code      int         `json:"code"`
-	Msg       string      `json:"msg"`
-	DetailMsg string      `json:"detail_msg"`
-	Data      ListDataRes `json:"data"`
-}
-
-// Order - structure of order query result
-type Order struct {
-	TxHash         string `json:"txhash"`
-	OrderID        string `json:"order_id"`
-	Sender         string `json:"sender"`
-	Product        string `json:"product"`
-	Side           string `json:"side"`
-	Price          string `json:"price"`
-	Quantity       string `json:"quantity"`
-	Status         int64  `json:"status"`
-	FilledAvgPrice string `json:"filled_avg_price"`
-	RemainQuantity string `json:"remain_quantity"`
-	Timestamp      int64  `json:"timestamp"`
-}
 
 // Deal - structure of deal query result
 type Deal struct {

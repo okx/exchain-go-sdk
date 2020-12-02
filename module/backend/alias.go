@@ -8,6 +8,5 @@ const (
 )
 
 type (
-	Order       = types.Order
-	Deal        = types.Deal
+	Deal = types.Deal
 )

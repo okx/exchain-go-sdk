@@ -2,24 +2,10 @@ package utils
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	stakingcli "github.com/okex/okexchain/x/staking/client/cli"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
-	"io/ioutil"
 )
-
-// GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(cdc *codec.Codec, filePath string) (stdTx authtypes.StdTx, err error) {
-	bytes, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		return
-	}
-
-	cdc.MustUnmarshalJSON(bytes, &stdTx)
-	return
-}
 
 // ParseValAddresses parses validator address string to types.ValAddress
 func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {

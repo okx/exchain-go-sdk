@@ -21,6 +21,7 @@ import (
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	evmtypes "github.com/okex/okexchain/app/types"
+	"github.com/okex/okexchain/x/common"
 	govtypes "github.com/okex/okexchain/x/gov/types"
 	orderkeeper "github.com/okex/okexchain/x/order/keeper"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
@@ -429,8 +430,8 @@ func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.H
 
 // BuildBackendDealsResultBytes generates the backend deals result bytes for test
 func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Deal{
 				{
 					Timestamp:   timestamp,
@@ -455,8 +456,8 @@ func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orde
 // BuildBackendOrdersResultBytes generates the backend orders result bytes for test
 func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, product, side, price, quantity, filledAvgPrice,
 	remainQuantity string, status, timestamp int64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Order{
 				{
 					TxHash:         txHash,
@@ -482,8 +483,8 @@ func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, pro
 
 // BuildBackendMatchResultBytes generates the backend match result bytes for test
 func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, product string, price, quantity float64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.MatchResult{
 				{
 					Timestamp:   timestamp,
@@ -504,8 +505,8 @@ func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, prod
 // BuildBackendMatchResultBytes generates the backend transactions result bytes for test
 func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbol, quantity, fee string, txType, side,
 	timestamp int64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Transaction{
 				{
 					TxHash:    txHash,
@@ -528,7 +529,7 @@ func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbo
 
 // BuildBackendCandlesBytes generates the backend candles bytes for test
 func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
-	baseResp := backend.BaseResponse{
+	baseResp := common.BaseResponse{
 		Data: candles,
 	}
 
@@ -540,7 +541,7 @@ func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
 // BuildBackendTickersBytes generates the backend tickers bytes for test
 func (mc *MockClient) BuildBackendTickersBytes(symbol, product string, timestamp int64, open, close, high, low, price, volumn,
 	change float64) []byte {
-	baseResp := backend.BaseResponse{
+	baseResp := common.BaseResponse{
 		Data: []backend.Ticker{
 			{
 				Symbol:    symbol,

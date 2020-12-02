@@ -49,7 +49,7 @@ type (
 	// backend
 	Ticker      = backend.Ticker
 	MatchResult = backend.MatchResult
-	//Order       = backend.Order
+	Order       = backend.Order
 	//Deal        = backend.Deal
 	// tendermint
 	Block            = tendermint.Block

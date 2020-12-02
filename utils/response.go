@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-
-	bkdtypes "github.com/okex/okexchain-go-sdk/module/backend/types"
+	"github.com/okex/okexchain/x/common"
 )
 
 // UnmarshalListResponse unmarshals the list response from data bytes
 func UnmarshalListResponse(bz []byte, ptr interface{}) error {
-	var lr bkdtypes.ListResponse
+	var lr common.ListResponse
 	if err := json.Unmarshal(bz, &lr); err != nil {
 		return err
 	}

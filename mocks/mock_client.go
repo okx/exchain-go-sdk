@@ -78,7 +78,7 @@ func (mc *MockClient) GetConfig() gosdktypes.ClientConfig {
 }
 
 // GetCodec returns the client codec
-func (mc *MockClient) GetCodec() gosdktypes.SDKCodec {
+func (mc *MockClient) GetCodec() *codec.Codec {
 	return mc.cdc
 }
 

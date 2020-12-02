@@ -3,8 +3,6 @@ package dex
 import (
 	"errors"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"io/ioutil"
-	"os"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -232,10 +230,6 @@ func TestDexClient_Withdraw(t *testing.T) {
 }
 
 func TestDexClient_TransferOwnership(t *testing.T) {
-	// set up signedTx.json
-	err := ioutil.WriteFile(signedPath, []byte(expectedSignedTxJSON), 0644)
-	require.NoError(t, err)
-
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
@@ -247,10 +241,10 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
 	require.NoError(t, err)
 
-	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 11, 22)
+	accBytes := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024okt", 1, 2)
 	expectedCdc := mockCli.GetCodec()
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, nil)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
+	mockCli.EXPECT().Query(gomock.Any(), gomock.Any()).Return(accBytes, int64(1024), nil)
 
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -258,17 +252,20 @@ func TestDexClient_TransferOwnership(t *testing.T) {
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
 		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
-	res, err := mockCli.Dex().TransferOwnership(fromInfo, passWd, signedPath, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, err := mockCli.Dex().TransferOwnership(fromInfo, passWd, product, recAddr, memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
-	_, err = mockCli.Dex().TransferOwnership(fromInfo, passWd, signedPath[1:], accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Dex().TransferOwnership(fromInfo, passWd, "", recAddr, memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
 	require.Error(t, err)
 
-	_, err = mockCli.Dex().TransferOwnership(fromInfo, "", signedPath, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	_, err = mockCli.Dex().Withdraw(fromInfo, "", product, recAddr, memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
 	require.Error(t, err)
 
-	// remove the temporary file: signedTx.json
-	err = os.Remove(signedPath)
-	require.NoError(t, err)
+	_, err = mockCli.Dex().Withdraw(fromInfo, passWd, product, recAddr[1:], memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }

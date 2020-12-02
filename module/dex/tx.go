@@ -1,14 +1,11 @@
 package dex
 
 import (
-	"errors"
-	dextypes "github.com/okex/okexchain/x/dex/types"
-
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain-go-sdk/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 )
 
 // List lists a trading pair on dex
@@ -55,29 +52,20 @@ func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, mem
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// TransferOwnership signs the multi-signed tx from a json file and broadcast
-func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (
+// TransferOwnership changes the owner of a product
+func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, product, toAddrStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
 		return
 	}
 
-	stdTx, err := utils.GetStdTxFromFile(dc.GetCodec(), inputPath)
+	toAddr, err := sdk.AccAddressFromBech32(toAddrStr)
 	if err != nil {
-		return
+		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", toAddrStr, err)
 	}
 
-	if len(stdTx.Msgs) == 0 {
-		return resp, errors.New("failed. invalid msg type")
-	}
-
-	msg, ok := stdTx.Msgs[0].(types.MsgTransferOwnership)
-	if !ok {
-		return resp, errors.New("failed. invalid msg type")
-	}
-
-	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, stdTx.Memo, []sdk.Msg{msg}, accNum, seqNum)
-
+	msg := dextypes.NewMsgTransferOwnership(fromInfo.GetAddress(), toAddr, product)
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (

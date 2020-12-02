@@ -2,22 +2,22 @@ package utils
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	stakingcli "github.com/okex/okexchain/x/staking/client/cli"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"io/ioutil"
 )
 
 // GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(codec gosdktypes.SDKCodec, filePath string) (stdTx authtypes.StdTx, err error) {
+func GetStdTxFromFile(cdc *codec.Codec, filePath string) (stdTx authtypes.StdTx, err error) {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return
 	}
 
-	codec.MustUnmarshalJSON(bytes, &stdTx)
+	cdc.MustUnmarshalJSON(bytes, &stdTx)
 	return
 }
 

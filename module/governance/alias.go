@@ -9,7 +9,7 @@ const (
 
 type (
 	// Proposal is the type alias of the one under governance/types
-	Proposal = types.Proposal
+	//Proposal = types.Proposal
 	// ProposalStatus is the type alias of the one under governance/types
 	ProposalStatus = types.ProposalStatus
 	// TallyResult is the type alias of the one under governance/types

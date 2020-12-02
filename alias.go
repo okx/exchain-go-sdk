@@ -5,7 +5,6 @@ import (
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
-	"github.com/okex/okexchain-go-sdk/module/governance"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
@@ -59,5 +58,5 @@ type (
 	ResultTx         = tendermint.ResultTx
 	ResultTxs        = tendermint.ResultTxs
 	// governance
-	Proposal = governance.Proposal
+	//Proposal = governance.Proposal
 )

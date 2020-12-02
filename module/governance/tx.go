@@ -6,6 +6,8 @@ import (
 	"github.com/okex/okexchain-go-sdk/types/params"
 	dexutils "github.com/okex/okexchain/x/dex/client/utils"
 	dextypes "github.com/okex/okexchain/x/dex/types"
+	distrcli "github.com/okex/okexchain/x/distribution/client/cli"
+	distrtypes "github.com/okex/okexchain/x/distribution/types"
 	govtypes "github.com/okex/okexchain/x/gov/types"
 	paramsutils "github.com/okex/okexchain/x/params/client/utils"
 	paramstypes "github.com/okex/okexchain/x/params/types"
@@ -90,33 +92,32 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-//// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
-//func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
-//	seqNum uint64) (resp sdk.TxResponse, err error) {
-//	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-//		return
-//	}
-//
-//	proposal, err := parseCommunityPoolSpendProposalFromFile(proposalPath)
-//	if err != nil {
-//		return
-//	}
-//
-//	msg := types.NewMsgSubmitProposal(
-//		types.NewCommunityPoolSpendProposal(
-//			proposal.Title,
-//			proposal.Description,
-//			proposal.Recipient,
-//			proposal.Amount,
-//		),
-//		proposal.Deposit,
-//		fromInfo.GetAddress(),
-//	)
-//
-//	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-//
-//}
-//
+// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
+func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := distrcli.ParseCommunityPoolSpendProposalJSON(gc.GetCodec(), proposalPath)
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgSubmitProposal(
+		distrtypes.NewCommunityPoolSpendProposal(
+			proposal.Title,
+			proposal.Description,
+			proposal.Recipient,
+			proposal.Amount,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
 //// Deposit increases the deposit amount on a specific proposal
 //func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo string, proposalID, accNum,
 //	seqNum uint64) (resp sdk.TxResponse, err error) {

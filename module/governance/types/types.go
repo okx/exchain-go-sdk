@@ -8,7 +8,6 @@ import (
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/gov"
 	govtypes "github.com/okex/okexchain/x/gov/types"
-	"time"
 )
 
 // const
@@ -40,68 +39,13 @@ func RegisterCodec(cdc *codec.Codec) {
 	gov.RegisterCodec(cdc)
 }
 
-type (
-	// ProposalJSON - structure for a standard proposal from the JSON file
-	ProposalJSON struct {
-		Title        string
-		Description  string
-		ProposalType string
-		Deposit      string
-	}
-
-	// CommunityPoolSpendProposalJSON - structure for a CommunityPoolSpendProposal used to parse community pool spend proposals
-	// from the JSON file
-	CommunityPoolSpendProposalJSON struct {
-		Title       string         `json:"title"`
-		Description string         `json:"description"`
-		Recipient   sdk.AccAddress `json:"recipient"`
-		Amount      sdk.DecCoins   `json:"amount"`
-		Deposit     sdk.DecCoins   `json:"deposit"`
-	}
-)
-
-// Content defines an interface that a proposal must implement
-// It contains information such as the title and description along with the type and routing information for the appropriate
-// handler to process the proposal
-type Content interface {
-	GetTitle() string
-	GetDescription() string
-	ProposalRoute() string
-	ProposalType() string
-	ValidateBasic() sdk.Error
-	String() string
+// ProposalJSON - structure for a standard proposal from the JSON file
+type ProposalJSON struct {
+	Title        string
+	Description  string
+	ProposalType string
+	Deposit      string
 }
-
-var (
-	_ Content = (*CommunityPoolSpendProposal)(nil)
-)
-
-// CommunityPoolSpendProposal - structure of a community pool spend proposal that implements interface Content
-type CommunityPoolSpendProposal struct {
-	Title       string         `json:"title"`
-	Description string         `json:"description"`
-	Recipient   sdk.AccAddress `json:"recipient"`
-	Amount      sdk.DecCoins   `json:"amount"`
-}
-
-// NewCommunityPoolSpendProposal is a constructor function for CommunityPoolSpendProposal
-func NewCommunityPoolSpendProposal(title, description string, recipient sdk.AccAddress, amount sdk.DecCoins,
-) CommunityPoolSpendProposal {
-	return CommunityPoolSpendProposal{
-		title,
-		description,
-		recipient,
-		amount,
-	}
-}
-
-// nolint
-func (CommunityPoolSpendProposal) GetTitle() string         { return "" }
-func (CommunityPoolSpendProposal) GetDescription() string   { return "" }
-func (CommunityPoolSpendProposal) ProposalRoute() string    { return "" }
-func (CommunityPoolSpendProposal) ProposalType() string     { return "" }
-func (CommunityPoolSpendProposal) String() string           { return "" }
-func (CommunityPoolSpendProposal) ValidateBasic() sdk.Error { return nil }
 
 // VoteOption defines a vote option
 type VoteOption byte
@@ -125,37 +69,6 @@ func (vo VoteOption) String() string {
 	default:
 		return ""
 	}
-}
-
-// Proposal - structure used by the governance module to allow for voting on network changes
-type Proposal struct {
-	Content          `json:"content"`
-	ProposalID       uint64         `json:"id"`
-	Status           ProposalStatus `json:"proposal_status"`
-	FinalTallyResult TallyResult    `json:"final_tally_result"`
-	SubmitTime       time.Time      `json:"submit_time"`
-	DepositEndTime   time.Time      `json:"deposit_end_time"`
-	TotalDeposit     sdk.DecCoins   `json:"total_deposit"`
-	VotingStartTime  time.Time      `json:"voting_start_time"`
-	VotingEndTime    time.Time      `json:"voting_end_time"`
-}
-
-// String returns a human readable string representation of Proposal
-func (p Proposal) String() string {
-	return fmt.Sprintf(`Proposal %d:
-  Title:              %s
-  Type:               %s
-  Status:             %s
-  Submit Time:        %s
-  Deposit End Time:   %s
-  Total Deposit:      %s
-  Voting Start Time:  %s
-  Voting End Time:    %s
-  Description:        %s`,
-		p.ProposalID, p.GetTitle(), p.ProposalType(),
-		p.Status, p.SubmitTime, p.DepositEndTime,
-		p.TotalDeposit, p.VotingStartTime, p.VotingEndTime, p.GetDescription(),
-	)
 }
 
 // TallyResult - structure of the tally results statistics

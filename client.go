@@ -9,6 +9,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/auth"
 	authtypes "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
+	backendtypes "github.com/okex/okexchain-go-sdk/module/backend/types"
 	"github.com/okex/okexchain-go-sdk/module/dex"
 	dextypes "github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
@@ -91,7 +92,7 @@ func (cli *Client) Auth() exposed.Auth {
 	return cli.modules[authtypes.ModuleName].(exposed.Auth)
 }
 func (cli *Client) Backend() exposed.Backend {
-	return cli.modules[backend.ModuleName].(exposed.Backend)
+	return cli.modules[backendtypes.ModuleName].(exposed.Backend)
 }
 func (cli *Client) Dex() exposed.Dex {
 	return cli.modules[dextypes.ModuleName].(exposed.Dex)

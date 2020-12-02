@@ -8,9 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/okex/okexchain-go-sdk/module/backend/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	"github.com/stretchr/testify/require"
@@ -444,11 +441,13 @@ func TestBackendClient_QueryTransactions(t *testing.T) {
 	expectedRet := mockCli.BuildBackendTransactionsResultBytes(txHash, addr, product, quantity, fee, int64(txType), side, timestamp)
 	expectedCdc := mockCli.GetCodec()
 
-	queryParams := params.NewQueryTxListParams(addr, int64(txType), int64(start), int64(end), page, perPage)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
+	expectedParams := expectedCdc.MustMarshalJSON(
+		backendtypes.NewQueryTxListParams(addr, int64(txType), int64(start), int64(end), page, perPage),
+	)
+	expectedPath := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryTxList)
 
 	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(3)
-	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	txs, err := mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.NoError(t, err)
@@ -482,11 +481,11 @@ func TestBackendClient_QueryTransactions(t *testing.T) {
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, -1)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(0), errors.New("default error"))
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.TransactionsPath, tmbytes.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Backend().QueryTransactions(addr, txType, start, end, page, perPage)
 	require.Error(t, err)
 }

@@ -51,6 +51,7 @@ type (
 	MatchResult = backend.MatchResult
 	Order       = backend.Order
 	Deal        = backend.Deal
+	Transaction = backend.Transaction
 	// tendermint
 	Block            = tendermint.Block
 	BlockResults     = tendermint.BlockResults

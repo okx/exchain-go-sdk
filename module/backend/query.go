@@ -172,19 +172,22 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 }
 
 // QueryTransactions gets the transactions of a specific account
-func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) (transactions []types.Transaction, err error) {
+func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) (transactions []types.Transaction,
+	err error) {
 	perPageNum, err := params.CheckQueryTransactionsParams(addrStr, typeCode, start, end, page, perPage)
 	if err != nil {
 		return
 	}
 
-	transactionsParams := params.NewQueryTxListParams(addrStr, int64(typeCode), int64(start), int64(end), page, perPageNum)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(transactionsParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryTxListParams(addrStr, int64(typeCode), int64(start), int64(end), page, perPageNum),
+	)
 	if err != nil {
 		return transactions, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.TransactionsPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryTxList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return transactions, utils.ErrClientQuery(err.Error())
 	}

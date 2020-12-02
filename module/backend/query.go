@@ -124,13 +124,15 @@ func (bc backendClient) QueryClosedOrders(addrStr, product, side string, start, 
 	}
 
 	// field hideNoFill fixed by false
-	ordersParams := backendtypes.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(ordersParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false),
+	)
 	if err != nil {
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, _, err := bc.Query(types.ClosedOrdersPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s/closed", backendtypes.QuerierRoute, backendtypes.QueryOrderList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return orders, utils.ErrClientQuery(err.Error())
 	}

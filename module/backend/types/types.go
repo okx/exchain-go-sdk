@@ -8,7 +8,6 @@ import (
 const (
 	ModuleName = backendtypes.ModuleName
 
-	ClosedOrdersPath = "custom/backend/orders/closed"
 	DealsPath        = "custom/backend/deals"
 	TransactionsPath = "custom/backend/txs"
 )

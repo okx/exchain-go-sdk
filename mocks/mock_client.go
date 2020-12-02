@@ -561,32 +561,33 @@ func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open,
 	return bytes
 }
 
-// BuildProposalsBytes generates the proposals bytes for test
-func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.ProposalStatus,
-	mockTime time.Time, totalDeposit sdk.DecCoins, mockPower sdk.Dec) []byte {
-	proposals := []governance.Proposal{
-		{
-			Content:         governance.TextProposal{},
-			ProposalID:      proposalID,
-			Status:          status,
-			SubmitTime:      mockTime,
-			DepositEndTime:  mockTime,
-			VotingStartTime: mockTime,
-			VotingEndTime:   mockTime,
-			TotalDeposit:    totalDeposit,
-			FinalTallyResult: governance.TallyResult{
-				TotalPower:      mockPower,
-				TotalVotedPower: mockPower,
-				Yes:             mockPower,
-				Abstain:         mockPower,
-				No:              mockPower,
-				NoWithVeto:      mockPower,
-			},
-		},
-	}
-
-	return mc.cdc.MustMarshalJSON(proposals)
-}
+//
+//// BuildProposalsBytes generates the proposals bytes for test
+//func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.ProposalStatus,
+//	mockTime time.Time, totalDeposit sdk.DecCoins, mockPower sdk.Dec) []byte {
+//	proposals := []governance.Proposal{
+//		{
+//			Content:         governance.TextProposal{},
+//			ProposalID:      proposalID,
+//			Status:          status,
+//			SubmitTime:      mockTime,
+//			DepositEndTime:  mockTime,
+//			VotingStartTime: mockTime,
+//			VotingEndTime:   mockTime,
+//			TotalDeposit:    totalDeposit,
+//			FinalTallyResult: governance.TallyResult{
+//				TotalPower:      mockPower,
+//				TotalVotedPower: mockPower,
+//				Yes:             mockPower,
+//				Abstain:         mockPower,
+//				No:              mockPower,
+//				NoWithVeto:      mockPower,
+//			},
+//		},
+//	}
+//
+//	return mc.cdc.MustMarshalJSON(proposals)
+//}
 
 // BuildFarmPoolsBytes generates the farm pools bytes for test
 func (mc *MockClient) BuildFarmPoolsBytes(poolName1, poolName2, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {

@@ -23,7 +23,6 @@ const (
 
 	expectedTokenSymbol                    = "abc-d53"
 	expectedTokenAmount             int64  = 1024
-	expectedAmountYieldPerBlock     int64  = 50
 	expectedStartBlockHeightToYield int64  = 1000
 	expectedPoolName                       = "default-pool-name"
 	expectedHeight                  int64  = 1024

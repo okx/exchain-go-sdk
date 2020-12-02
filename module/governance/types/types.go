@@ -7,12 +7,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/gov"
+	govtypes "github.com/okex/okexchain/x/gov/types"
 	"time"
 )
 
 // const
 const (
-	ModuleName                         = "governance"
+	ModuleName                         = govtypes.ModuleName
 	ProposalsPath                      = "custom/gov/proposals"
 	OptionYes           VoteOption     = 0x01
 	OptionAbstain       VoteOption     = 0x02
@@ -113,29 +114,9 @@ type Content interface {
 }
 
 var (
-	_ Content = (*TextProposal)(nil)
 	_ Content = (*ParameterChangeProposal)(nil)
 	_ Content = (*CommunityPoolSpendProposal)(nil)
 )
-
-// TextProposal - structure for a text proposal that implements interface Content
-type TextProposal struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-}
-
-// NewTextProposal is a constructor function for TextProposal
-func NewTextProposal(title, description string) Content {
-	return TextProposal{title, description}
-}
-
-// nolint
-func (TextProposal) GetTitle() string         { return "" }
-func (TextProposal) GetDescription() string   { return "" }
-func (TextProposal) ProposalRoute() string    { return "" }
-func (TextProposal) ProposalType() string     { return "" }
-func (TextProposal) String() string           { return "" }
-func (TextProposal) ValidateBasic() sdk.Error { return nil }
 
 // ParameterChangeProposal - structure of a param change proposal that implements interface Content
 type ParameterChangeProposal struct {

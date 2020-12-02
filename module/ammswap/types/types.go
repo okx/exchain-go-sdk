@@ -2,9 +2,9 @@ package types
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/ammswap"
+	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
 )
 
 // const
@@ -14,8 +14,6 @@ const (
 
 var (
 	msgCdc = gosdktypes.NewCodec()
-	// TokenPairPrefixKey to be used for KVStore
-	TokenPairPrefixKey = []byte{0x01}
 )
 
 func init() {
@@ -27,17 +25,9 @@ func RegisterCodec(cdc *codec.Codec) {
 	ammswap.RegisterCodec(cdc)
 }
 
-// SwapTokenPair defines token pair exchange
-type SwapTokenPair struct {
-	QuotePooledCoin sdk.DecCoin `json:"quote_pooled_coin"` // The volume of quote token in the token pair exchange pool
-	BasePooledCoin  sdk.DecCoin `json:"base_pooled_coin"`  // The volume of base token in the token pair exchange pool
-	PoolTokenName   string      `json:"pool_token_name"`   // The name of pool token
-}
-
-// nolint
-func GetTokenPairKey(key string) []byte {
-	return append(TokenPairPrefixKey, []byte(key)...)
-}
+type (
+	SwapTokenPair = ammswaptypes.SwapTokenPair
+)
 
 // nolint
 func GetSwapTokenPairName(token1, token2 string) string {

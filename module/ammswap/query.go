@@ -2,6 +2,7 @@ package ammswap
 
 import (
 	"fmt"
+	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -15,22 +16,22 @@ var (
 )
 
 // QuerySwapTokenPair used for querying one swap token pair
-func (pc ammswapClient) QuerySwapTokenPair(token string) (types.SwapTokenPair, error) {
-	var exchange types.SwapTokenPair
-
-	res, _, err := pc.QueryStore(types.GetTokenPairKey(token), ModuleName, "key")
+func (ac ammswapClient) QuerySwapTokenPair(token string) (exchange types.SwapTokenPair, err error) {
+	res, _, err := ac.QueryStore(ammswaptypes.GetTokenPairKey(token), ammswaptypes.StoreKey, "key")
 	if err != nil {
-		return exchange, err
+		return
 	}
+
 	if len(res) == 0 {
 		return exchange, fmt.Errorf("failed. no swapTokenPair found based on token %s", token)
 	}
 
-	err = pc.GetCodec().UnmarshalBinaryLengthPrefixed(res, &exchange)
+	err = ac.GetCodec().UnmarshalBinaryLengthPrefixed(res, &exchange)
 	if err != nil {
 		return exchange, err
 	}
-	return exchange, nil
+
+	return
 }
 
 // QuerySwapTokenPairs used for querying the all the swap token pairs

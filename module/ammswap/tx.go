@@ -3,7 +3,6 @@ package ammswap
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
 	"time"
@@ -85,22 +84,24 @@ func (ac ammswapClient) CreateExchange(fromInfo keys.Info, passWd, baseToken, qu
 }
 
 // TokenSwap swaps the number of specific token with another type token
-func (pc ammswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration, memo string,
-	accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+func (ac ammswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, minBoughtTokenAmount, recipient, deadlineDuration,
+	memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	var soldTokenDecCoin, minBoughtTokenDecCoin sdk.DecCoin
-	if soldTokenDecCoin, err = sdk.ParseDecCoin(soldTokenAmount); err != nil {
-		return
-	}
-	if minBoughtTokenDecCoin, err = sdk.ParseDecCoin(minBoughtTokenAmount); err != nil {
+	soldTokenDecCoin, err := sdk.ParseDecCoin(soldTokenAmount)
+	if err != nil {
 		return
 	}
 
-	var duration time.Duration
-	if duration, err = time.ParseDuration(deadlineDuration); err != nil {
+	minBoughtTokenDecCoin, err := sdk.ParseDecCoin(minBoughtTokenAmount)
+	if err != nil {
+		return
+	}
+
+	duration, err := time.ParseDuration(deadlineDuration)
+	if err != nil {
 		return
 	}
 	deadline := time.Now().Add(duration).Unix()
@@ -114,6 +115,6 @@ func (pc ammswapClient) TokenSwap(fromInfo keys.Info, passWd, soldTokenAmount, m
 		}
 	}
 
-	msg := types.NewMsgTokenToNativeToken(soldTokenDecCoin, minBoughtTokenDecCoin, deadline, recip, fromInfo.GetAddress())
-	return pc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	msg := ammswaptypes.NewMsgTokenToToken(soldTokenDecCoin, minBoughtTokenDecCoin, deadline, recip, fromInfo.GetAddress())
+	return ac.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }

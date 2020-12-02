@@ -5,6 +5,8 @@ import (
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/gov"
+	paramstypes "github.com/okex/okexchain/x/params/types"
 )
 
 var _ gosdktypes.Module = (*govClient)(nil)
@@ -15,7 +17,8 @@ type govClient struct {
 
 // RegisterCodec registers the msg type in governance module
 func (gc govClient) RegisterCodec(cdc *codec.Codec) {
-	types.RegisterCodec(cdc)
+	gov.RegisterCodec(cdc)
+	cdc.RegisterConcrete(paramstypes.ParameterChangeProposal{}, "okexchain/params/ParameterChangeProposal", nil)
 }
 
 // Name returns the module name

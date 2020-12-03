@@ -4,6 +4,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -14,23 +15,10 @@ const (
 	EventFormat = "{eventType}.{eventAttribute}={value}"
 )
 
-// Block - structure for the result of block query
-type Block struct {
-	tmtypes.Header `json:"header"`
-	Data           `json:"data"`
-	Evidence       tmtypes.EvidenceData `json:"evidence"`
-	LastCommit     tmtypes.Commit       `json:"last_commit"`
-}
-
-// NewBlock creates a new instance of Block
-func NewBlock(header tmtypes.Header, data Data, evidence tmtypes.EvidenceData, lastCommit tmtypes.Commit) Block {
-	return Block{
-		Header:     header,
-		Data:       data,
-		Evidence:   evidence,
-		LastCommit: lastCommit,
-	}
-}
+type (
+	Block              = tmtypes.Block
+	ResultBlockResults = ctypes.ResultBlockResults
+)
 
 // Data - structure of the stdTxs in a block
 type Data struct {
@@ -42,12 +30,6 @@ func NewData(stdTxs []authtypes.StdTx) Data {
 	return Data{
 		Txs: stdTxs,
 	}
-}
-
-// BlockResults - structure for ABCI results from a block
-type BlockResults struct {
-	Height  int64         `json:"height"`
-	Results ABCIResponses `json:"results"`
 }
 
 // ABCIResponses - structure for the responses of the various ABCI calls during block processing

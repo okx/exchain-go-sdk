@@ -1,9 +1,6 @@
 package utils
 
 import (
-	"fmt"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/tendermint/tendermint/libs/kv"
 
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
@@ -12,40 +9,6 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
-
-// ParseBlock converts raw tendermint block type to the one gosdk requires
-func ParseBlock(cdc gosdktypes.SDKCodec, pTmBlock *tmtypes.Block) (block types.Block, err error) {
-	var stdTxs []authtypes.StdTx
-	for _, txBytes := range pTmBlock.Txs {
-		var stdTx authtypes.StdTx
-		if err = cdc.UnmarshalBinaryLengthPrefixed(txBytes, &stdTx); err != nil {
-			return block, fmt.Errorf("failed. unmarshal tx info from tendermint block query error: %s", err)
-		}
-		stdTxs = append(stdTxs, stdTx)
-	}
-
-	return types.NewBlock(pTmBlock.Header, types.NewData(stdTxs), pTmBlock.Evidence, *pTmBlock.LastCommit), err
-}
-
-// ParseBlockResults converts raw tendermint block result type to the one gosdk requires
-func ParseBlockResults(pTmBlockResults *ctypes.ResultBlockResults) types.BlockResults {
-	// build ResponseDeliverTx
-	//respDeliverTxsLen := len(pTmBlockResults.Results.DeliverTx)
-	//respDeliverTxs := make([]types.ResponseDeliverTx, respDeliverTxsLen)
-	//for i := 0; i < respDeliverTxsLen; i++ {
-	//	respDeliverTxs[i] = parseResponseDeliverTx(pTmBlockResults.Results.DeliverTx[i])
-	//}
-	//
-	//return types.BlockResults{
-	//	Height: pTmBlockResults.Height,
-	//	Results: types.ABCIResponses{
-	//		DeliverTx:  respDeliverTxs,
-	//		BeginBlock: parseResponseBeginBlock(pTmBlockResults.Results.BeginBlock),
-	//		EndBlock:   parseResponseEndBlock(pTmBlockResults.Results.EndBlock),
-	//	},
-	//}
-	return types.BlockResults{}
-}
 
 // ParseCommitResult converts raw tendermint commit result type to the one gosdk requires
 func ParseCommitResult(pTmCommitResult *ctypes.ResultCommit) types.ResultCommit {

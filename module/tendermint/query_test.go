@@ -30,12 +30,9 @@ func TestTendermintClient_QueryBlock(t *testing.T) {
 	appHash, blockIDHash := tmbytes.HexBytes("default app hash"), tmbytes.HexBytes("default block ID hash")
 
 	expectedRet := mockCli.GetRawResultBlockPointer("default chainID", height, blockTime, appHash, blockIDHash)
-	expectedCdc := mockCli.GetCodec()
-
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
 	mockCli.EXPECT().Block(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
 
-	block, err := mockCli.Tendermint().QueryBlock(1024)
+	block, err := mockCli.Tendermint().QueryBlock(height)
 	require.NoError(t, err)
 	require.Equal(t, "default chainID", block.ChainID)
 	require.Equal(t, appHash, block.AppHash)
@@ -43,42 +40,55 @@ func TestTendermintClient_QueryBlock(t *testing.T) {
 	require.Equal(t, blockIDHash, block.LastCommit.BlockID.Hash)
 	require.True(t, blockTime.Equal(block.Time))
 
-	mockCli.EXPECT().Block(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
-	_, err = mockCli.Tendermint().QueryBlock(1024)
+	mockCli.EXPECT().Block(gomock.AssignableToTypeOf(&height)).Return(nil, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryBlock(height)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryBlock(-1)
 	require.Error(t, err)
 }
 
-//
-//func TestTendermintClient_QueryBlockResults(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	defer ctrl.Finish()
-//	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-//		1.1, "0.00000001okt")
-//	require.NoError(t, err)
-//	mockCli := mocks.NewMockClient(t, ctrl, config)
-//	// TODO
-//	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
-//
-//	power, height := int64(1000), int64(1024)
-//	pubkeyType, eventType := "default pubkey type", "default event type"
-//	kvPairKey := []byte("default kv pair key")
-//	expectedRet := mockCli.GetRawResultBlockResultsPointer(power, height, pubkeyType, eventType, kvPairKey)
-//
-//	mockCli.EXPECT().BlockResults(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
-//
-//	block, err := mockCli.Tendermint().QueryBlockResults(1024)
-//	require.NoError(t, err)
-//	require.Equal(t, height, block.Height)
-//	require.Equal(t, eventType, block.Results.BeginBlock.Events[0].Type)
-//	require.Equal(t, kvPairKey, block.Results.BeginBlock.Events[0].Attributes[0].Key)
-//	require.Equal(t, pubkeyType, block.Results.EndBlock.ValidatorUpdates[0].PubKey.Type)
-//	require.Equal(t, power, block.Results.EndBlock.ValidatorUpdates[0].Power)
-//
-//	mockCli.EXPECT().BlockResults(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
-//	_, err = mockCli.Tendermint().QueryBlockResults(1024)
-//	require.Error(t, err)
-//}
-//
+func TestTendermintClient_QueryBlockResults(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+
+	power, height := int64(1000), int64(1024)
+	pubkeyType, eventType := "default pubkey type", "default event type"
+	kvPairKey := []byte("default kv pair key")
+	expectedRet := mockCli.GetRawResultBlockResultsPointer(power, height, pubkeyType, eventType, kvPairKey)
+
+	mockCli.EXPECT().BlockResults(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
+
+	blockResults, err := mockCli.Tendermint().QueryBlockResults(height)
+	require.NoError(t, err)
+	require.Equal(t, height, blockResults.Height)
+	require.Equal(t, 1, len(blockResults.TxsResults))
+	require.Equal(t, 1, len(blockResults.TxsResults[0].Events))
+	require.Equal(t, eventType, blockResults.TxsResults[0].Events[0].Type)
+	require.Equal(t, 1, len(blockResults.TxsResults[0].Events[0].Attributes))
+	require.Equal(t, kvPairKey, blockResults.TxsResults[0].Events[0].Attributes[0].Key)
+	require.Equal(t, 1, len(blockResults.BeginBlockEvents))
+	require.Equal(t, eventType, blockResults.BeginBlockEvents[0].Type)
+	require.Equal(t, 1, len(blockResults.BeginBlockEvents[0].Attributes))
+	require.Equal(t, kvPairKey, blockResults.BeginBlockEvents[0].Attributes[0].Key)
+	require.Equal(t, 1, len(blockResults.EndBlockEvents))
+	require.Equal(t, eventType, blockResults.EndBlockEvents[0].Type)
+	require.Equal(t, 1, len(blockResults.EndBlockEvents[0].Attributes))
+	require.Equal(t, kvPairKey, blockResults.EndBlockEvents[0].Attributes[0].Key)
+	require.Equal(t, 1, len(blockResults.ValidatorUpdates))
+	require.Equal(t, power, blockResults.ValidatorUpdates[0].Power)
+	require.Equal(t, pubkeyType, blockResults.ValidatorUpdates[0].PubKey.Type)
+
+	mockCli.EXPECT().BlockResults(gomock.AssignableToTypeOf(&height)).Return(nil, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryBlockResults(height)
+	require.Error(t, err)
+}
+
 //func TestTendermintClient_QueryCommitResult(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	defer ctrl.Finish()

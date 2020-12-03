@@ -25,6 +25,7 @@ import (
 	"github.com/okex/okexchain-go-sdk/module/staking"
 	stakingtypes "github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
+	tmtypes "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/module/token"
 	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -117,7 +118,7 @@ func (cli *Client) Staking() exposed.Staking {
 	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
-	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
+	return cli.modules[tmtypes.ModuleName].(exposed.Tendermint)
 }
 func (cli *Client) Token() exposed.Token {
 	return cli.modules[tokentypes.ModuleName].(exposed.Token)

@@ -9,7 +9,7 @@ import (
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
-	"github.com/okex/okexchain-go-sdk/module/tendermint"
+	tmtypes "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types"
 )
@@ -56,12 +56,12 @@ type (
 	Deal        = backend.Deal
 	Transaction = backend.Transaction
 	// tendermint
-	Block            = tendermint.Block
-	BlockResults     = tendermint.BlockResults
-	ResultCommit     = tendermint.ResultCommit
-	ResultValidators = tendermint.ResultValidators
-	ResultTx         = tendermint.ResultTx
-	ResultTxs        = tendermint.ResultTxs
+	Block            = tmtypes.Block
+	BlockResults     = tmtypes.ResultBlockResults
+	ResultCommit     = tmtypes.ResultCommit
+	ResultValidators = tmtypes.ResultValidators
+	ResultTx         = tmtypes.ResultTx
+	ResultTxs        = tmtypes.ResultTxs
 	// governance
 	Proposal = governance.Proposal
 )

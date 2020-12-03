@@ -29,6 +29,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"github.com/tendermint/tendermint/libs/kv"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
@@ -332,33 +333,33 @@ func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, tim
 // GetRawResultBlockResultsPointer generates the raw tendermint result block results pointer for test
 func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkType, eventType string,
 	kvPairKey []byte) *ctypes.ResultBlockResults {
+	mockEvents := []abci.Event{
+		{
+			Type: eventType,
+			Attributes: []kv.Pair{
+				{
+					Key: kvPairKey,
+				},
+			},
+		},
+	}
 	return &ctypes.ResultBlockResults{
 		Height: height,
-		// TODO
-		//Results: &tmstate.ABCIResponses{
-		//	BeginBlock: &abci.ResponseBeginBlock{
-		//		Events: []abci.Event{
-		//			{
-		//				Type: eventType,
-		//				Attributes: []common.KVPair{
-		//					{
-		//						Key: kvPairKey,
-		//					},
-		//				},
-		//			},
-		//		},
-		//	},
-		//	EndBlock: &abci.ResponseEndBlock{
-		//		ValidatorUpdates: []abci.ValidatorUpdate{
-		//			{
-		//				PubKey: abci.PubKey{
-		//					Type: pkType,
-		//				},
-		//				Power: power,
-		//			},
-		//		},
-		//	},
-		//},
+		TxsResults: []*abci.ResponseDeliverTx{
+			{
+				Events: mockEvents,
+			},
+		},
+		BeginBlockEvents: mockEvents,
+		EndBlockEvents:   mockEvents,
+		ValidatorUpdates: []abci.ValidatorUpdate{
+			{
+				PubKey: abci.PubKey{
+					Type: pkType,
+				},
+				Power: power,
+			},
+		},
 	}
 }
 

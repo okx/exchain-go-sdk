@@ -1,6 +1,7 @@
 package tendermint
 
 import (
+	"errors"
 	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
@@ -10,9 +11,14 @@ import (
 )
 
 // QueryBlock gets the block info of a specific height
-func (tc tendermintClient) QueryBlock(height int64) (block types.Block, err error) {
+// query the latest block with height 0 input
+func (tc tendermintClient) QueryBlock(height int64) (pBlock *types.Block, err error) {
+	if height < 0 {
+		return pBlock, errors.New("failed. negative height is not available")
+	}
+
 	var pHeight *int64
-	if height >= 0 {
+	if height > 0 {
 		pHeight = &height
 	}
 
@@ -21,17 +27,22 @@ func (tc tendermintClient) QueryBlock(height int64) (block types.Block, err erro
 		return
 	}
 
-	return utils.ParseBlock(tc.GetCodec(), pTmBlockResult.Block)
+	return pTmBlockResult.Block, err
 }
 
 // QueryBlockResults gets the abci result of the block on a specific height
-func (tc tendermintClient) QueryBlockResults(height int64) (blockResults types.BlockResults, err error) {
-	pTmBlockResults, err := tc.BlockResults(&height)
-	if err != nil {
-		return
+// query the latest block with height 0 input
+func (tc tendermintClient) QueryBlockResults(height int64) (blockResults *types.ResultBlockResults, err error) {
+	if height < 0 {
+		return blockResults, errors.New("failed. negative height is not available")
 	}
 
-	return utils.ParseBlockResults(pTmBlockResults), err
+	var pHeight *int64
+	if height > 0 {
+		pHeight = &height
+	}
+
+	return tc.BlockResults(pHeight)
 }
 
 // QueryCommitResult gets the commit info of the block on a specific height

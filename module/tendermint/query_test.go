@@ -2,6 +2,7 @@ package tendermint
 
 import (
 	"errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
 	"time"
@@ -124,35 +125,39 @@ func TestTendermintClient_QueryCommitResult(t *testing.T) {
 	require.Error(t, err)
 }
 
-//func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	defer ctrl.Finish()
-//	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-//		1.1, "0.00000001okt")
-//	require.NoError(t, err)
-//	mockCli := mocks.NewMockClient(t, ctrl, config)
-//	// TODO
-//	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
-//
-//	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
-//	consPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, valConsPK)
-//	require.NoError(t, err)
-//
-//	expectedRet := mockCli.GetRawValidatorsResultPointer(height, votingPower, proposerPriority, consPubkey)
-//	mockCli.EXPECT().Validators(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
-//
-//	valsResult, err := mockCli.Tendermint().QueryValidatorsResult(1024)
-//	require.NoError(t, err)
-//	require.Equal(t, height, valsResult.BlockHeight)
-//	require.Equal(t, proposerPriority, valsResult.Validators[0].ProposerPriority)
-//	require.Equal(t, votingPower, valsResult.Validators[0].VotingPower)
-//	require.Equal(t, consPubkey, valsResult.Validators[0].PubKey)
-//
-//	mockCli.EXPECT().Validators(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
-//	_, err = mockCli.Tendermint().QueryValidatorsResult(1024)
-//	require.Error(t, err)
-//}
-//
+func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+
+	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
+	consPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, valConsPK)
+	require.NoError(t, err)
+
+	expectedRet := mockCli.GetRawValidatorsResultPointer(height, votingPower, proposerPriority, consPubkey)
+	mockCli.EXPECT().Validators(gomock.AssignableToTypeOf(&height), gomock.AssignableToTypeOf(0), gomock.AssignableToTypeOf(0)).
+		Return(expectedRet, nil)
+
+	valsResult, err := mockCli.Tendermint().QueryValidatorsResult(height)
+	require.NoError(t, err)
+	require.Equal(t, height, valsResult.BlockHeight)
+	require.Equal(t, proposerPriority, valsResult.Validators[0].ProposerPriority)
+	require.Equal(t, votingPower, valsResult.Validators[0].VotingPower)
+	require.Equal(t, consPubkey, valsResult.Validators[0].PubKey)
+
+	mockCli.EXPECT().Validators(gomock.AssignableToTypeOf(&height), gomock.AssignableToTypeOf(0), gomock.AssignableToTypeOf(0)).
+		Return(nil, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryValidatorsResult(height)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryValidatorsResult(-1)
+	require.Error(t, err)
+}
+
 //func TestTendermintClient_QueryTxResult(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	defer ctrl.Finish()

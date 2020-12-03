@@ -7,16 +7,8 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	//"github.com/tendermint/tendermint/libs/common"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
-// ParseValidatorsResult converts raw tendermint validators result type to the one gosdk requires
-func ParseValidatorsResult(pTmValsResult *ctypes.ResultValidators) types.ResultValidators {
-	return types.ResultValidators{
-		BlockHeight: pTmValsResult.BlockHeight,
-		Validators:  parseValidators(pTmValsResult.Validators),
-	}
-}
 
 // ParseTxResult converts raw tendermint tx result type to the one gosdk requires
 func ParseTxResult(pTmTxResult *ctypes.ResultTx) types.ResultTx {
@@ -122,19 +114,4 @@ func parseConsensusParams(tmConsParams *abci.ConsensusParams) types.ConsensusPar
 	//	},
 	//}
 	return types.ConsensusParams{}
-}
-
-func parseValidators(tmValsP []*tmtypes.Validator) []types.Validator {
-	valsLen := len(tmValsP)
-	vals := make([]types.Validator, valsLen)
-	for i := 0; i < valsLen; i++ {
-		vals[i] = types.Validator{
-			Address:          tmValsP[i].Address,
-			PubKey:           tmValsP[i].PubKey,
-			VotingPower:      tmValsP[i].VotingPower,
-			ProposerPriority: tmValsP[i].ProposerPriority,
-		}
-	}
-
-	return vals
 }

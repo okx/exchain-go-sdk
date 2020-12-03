@@ -60,15 +60,18 @@ func (tc tendermintClient) QueryCommitResult(height int64) (pCommitResult *types
 }
 
 // QueryValidatorsResult gets the validators info on a specific height
-func (tc tendermintClient) QueryValidatorsResult(height int64) (valsResult types.ResultValidators, err error) {
-	//pTmValsResult, err := tc.Validators(&height)
-	// TODO
-	pTmValsResult, err := tc.Validators(&height, 1, 0)
-	if err != nil {
-		return
+// query the latest block with height 0 input
+func (tc tendermintClient) QueryValidatorsResult(height int64) (pValsResult *types.ResultValidators, err error) {
+	if err = params.CheckQueryHeightParams(height); err != nil {
+		return pValsResult, err
 	}
 
-	return utils.ParseValidatorsResult(pTmValsResult), err
+	var pHeight *int64
+	if height > 0 {
+		pHeight = &height
+	}
+
+	return tc.Validators(pHeight, 1, 0)
 }
 
 // QueryTxResult gets the detail info of a tx with its tx hash

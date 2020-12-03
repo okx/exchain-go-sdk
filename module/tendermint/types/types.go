@@ -2,7 +2,6 @@ package types
 
 import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
@@ -19,6 +18,7 @@ type (
 	Block              = tmtypes.Block
 	ResultBlockResults = ctypes.ResultBlockResults
 	ResultCommit       = ctypes.ResultCommit
+	ResultValidators   = ctypes.ResultValidators
 )
 
 // Data - structure of the stdTxs in a block
@@ -112,20 +112,6 @@ type EvidenceParams struct {
 // ValidatorParams - structure for limits on validators
 type ValidatorParams struct {
 	PubKeyTypes []string
-}
-
-// ResultValidators - structure for the validators info on a specific height
-type ResultValidators struct {
-	BlockHeight int64
-	Validators  []Validator
-}
-
-// Validator - structure of the volatile state for each Validator
-type Validator struct {
-	Address          tmtypes.Address
-	PubKey           crypto.PubKey
-	VotingPower      int64
-	ProposerPriority int64
 }
 
 // ResultTx - structure of querying result for a tx

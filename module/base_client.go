@@ -180,7 +180,7 @@ func (bc *baseClient) CalculateGas(txBytes []byte) (stdFee authtypes.StdFee, err
 
 	// get simulation response
 	var simRes sdk.SimulationResponse
-	if err = bc.GetCodec().UnmarshalBinaryLengthPrefixed(rawRes, &simRes); err != nil {
+	if err = bc.GetCodec().UnmarshalBinaryBare(rawRes, &simRes); err != nil {
 		return
 	}
 

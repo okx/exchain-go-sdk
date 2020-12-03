@@ -9,9 +9,10 @@ import (
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
-	tmtypes "github.com/okex/okexchain-go-sdk/module/tendermint/types"
+	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types"
+	farm "github.com/okex/okexchain/x/farm/types"
 )
 
 // const
@@ -56,12 +57,15 @@ type (
 	Deal        = backend.Deal
 	Transaction = backend.Transaction
 	// tendermint
-	Block            = tmtypes.Block
-	BlockResults     = tmtypes.ResultBlockResults
-	ResultCommit     = tmtypes.ResultCommit
-	ResultValidators = tmtypes.ResultValidators
-	ResultTx         = tmtypes.ResultTx
-	ResultTxSearch   = tmtypes.ResultTxSearch
+	Block            = tendermint.Block
+	BlockResults     = tendermint.ResultBlockResults
+	ResultCommit     = tendermint.ResultCommit
+	ResultValidators = tendermint.ResultValidators
+	ResultTx         = tendermint.ResultTx
+	ResultTxSearch   = tendermint.ResultTxSearch
 	// governance
 	Proposal = governance.Proposal
+	// farm
+	FarmPool = farm.FarmPool
+	LockInfo = farm.LockInfo
 )

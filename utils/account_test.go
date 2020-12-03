@@ -10,8 +10,6 @@ const (
 	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	defaultAddr       = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	defaultPrivateKey = "EA6D97F31E4B70663594DD6AFC3E3550AAB5FDD9C44305E8F8F2003023B27FDA"
-	defaultMemo       = "my memo"
-	valConsPK         = "okexchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqttvmqv"
 )
 
 func TestCreateAccount(t *testing.T) {
@@ -39,6 +37,11 @@ func TestCreateAccountWithMnemo(t *testing.T) {
 
 	_, _, err = CreateAccountWithMnemo(defaultPassWd, defaultName, defaultPassWd)
 	require.Error(t, err)
+
+	invalidMnemo := fmt.Sprintf("%s abandon", defaultMnemonic)
+	_, _, err = CreateAccountWithMnemo(invalidMnemo, defaultName, defaultPassWd)
+	require.Error(t, err)
+	fmt.Println(err)
 }
 
 func TestCreateAccountWithPrivateKey(t *testing.T) {
@@ -52,6 +55,12 @@ func TestCreateAccountWithPrivateKey(t *testing.T) {
 	require.Equal(t, infoByMnemo.GetAlgo(), infoByPriv.GetAlgo())
 	require.Equal(t, infoByMnemo.GetPubKey(), infoByPriv.GetPubKey())
 	require.Equal(t, infoByMnemo.GetType(), infoByPriv.GetType())
+
+	_, err = CreateAccountWithPrivateKey("", defaultName, defaultPassWd)
+	require.Error(t, err)
+
+	_, err = CreateAccountWithPrivateKey(defaultPrivateKey, "", "")
+	require.NoError(t, err)
 }
 
 func TestGenerateMnemonic(t *testing.T) {
@@ -65,8 +74,12 @@ func TestGeneratePrivateKeyFromMnemo(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, defaultPrivateKey, priKey)
 
+	_, err = GeneratePrivateKeyFromMnemo("")
+	require.Error(t, err)
+
 	// bad mnemonic, add one word in it
 	// https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt
-	_, err = GeneratePrivateKeyFromMnemo(fmt.Sprintf("%s %s", defaultMnemonic, "abandon"))
+	invalidMnemo := fmt.Sprintf("%s abandon", defaultMnemonic)
+	_, err = GeneratePrivateKeyFromMnemo(invalidMnemo)
 	require.Error(t, err)
 }

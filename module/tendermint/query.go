@@ -1,6 +1,7 @@
 package tendermint
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
@@ -75,13 +76,13 @@ func (tc tendermintClient) QueryValidatorsResult(height int64) (pValsResult *typ
 }
 
 // QueryTxResult gets the detail info of a tx with its tx hash
-func (tc tendermintClient) QueryTxResult(txHash []byte, prove bool) (txResult types.ResultTx, err error) {
-	pTmTxResult, err := tc.Tx(txHash, prove)
+func (tc tendermintClient) QueryTxResult(hashHexStr string, prove bool) (pResultTx *types.ResultTx, err error) {
+	hash, err := hex.DecodeString(hashHexStr)
 	if err != nil {
 		return
 	}
 
-	return utils.ParseTxResult(pTmTxResult), err
+	return tc.Tx(hash, prove)
 }
 
 // QueryTxsResult gets txs result by a specific searching string

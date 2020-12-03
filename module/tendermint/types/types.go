@@ -1,8 +1,6 @@
 package types
 
 import (
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
@@ -19,19 +17,8 @@ type (
 	ResultBlockResults = ctypes.ResultBlockResults
 	ResultCommit       = ctypes.ResultCommit
 	ResultValidators   = ctypes.ResultValidators
+	ResultTx           = ctypes.ResultTx
 )
-
-// Data - structure of the stdTxs in a block
-type Data struct {
-	Txs []authtypes.StdTx `json:"txs"`
-}
-
-// NewData creates a new instance of Data
-func NewData(stdTxs []authtypes.StdTx) Data {
-	return Data{
-		Txs: stdTxs,
-	}
-}
 
 // ABCIResponses - structure for the responses of the various ABCI calls during block processing
 type ABCIResponses struct {
@@ -112,16 +99,6 @@ type EvidenceParams struct {
 // ValidatorParams - structure for limits on validators
 type ValidatorParams struct {
 	PubKeyTypes []string
-}
-
-// ResultTx - structure of querying result for a tx
-type ResultTx struct {
-	Hash     tmbytes.HexBytes
-	Height   int64
-	Index    uint32
-	TxResult ResponseDeliverTx
-	Tx       tmtypes.Tx
-	Proof    tmtypes.TxProof
 }
 
 // ResultTxs - structure of txs result by a specific searching string

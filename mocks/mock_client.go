@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -400,8 +401,10 @@ func (mc *MockClient) GetRawValidatorsResultPointer(height, votingPower, propose
 }
 
 // GetRawTxResultPointer generates the raw tendermint tx result pointer for test
-func (mc *MockClient) GetRawTxResultPointer(hash tmbytes.HexBytes, height int64, code uint32, log, eventType string,
-	tx []byte) *ctypes.ResultTx {
+func (mc *MockClient) GetRawTxResultPointer(height int64, code uint32, log, hashHexStr, eventType string, tx []byte) *ctypes.ResultTx {
+	hash, err := hex.DecodeString(hashHexStr)
+	require.NoError(mc.t, err)
+
 	return &ctypes.ResultTx{
 		Hash:   hash,
 		Height: height,
@@ -418,16 +421,16 @@ func (mc *MockClient) GetRawTxResultPointer(hash tmbytes.HexBytes, height int64,
 	}
 }
 
-// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
-func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.HexBytes, height int64, code uint32, log,
-	eventType string, tx []byte) *ctypes.ResultTxSearch {
-	return &ctypes.ResultTxSearch{
-		TotalCount: totalCount,
-		Txs: []*ctypes.ResultTx{
-			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
-		},
-	}
-}
+//// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
+//func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.HexBytes, height int64, code uint32, log,
+//	eventType string, tx []byte) *ctypes.ResultTxSearch {
+//	return &ctypes.ResultTxSearch{
+//		TotalCount: totalCount,
+//		Txs: []*ctypes.ResultTx{
+//			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
+//		},
+//	}
+//}
 
 // BuildBackendDealsResultBytes generates the backend deals result bytes for test
 func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {

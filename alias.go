@@ -61,7 +61,7 @@ type (
 	ResultCommit     = tmtypes.ResultCommit
 	ResultValidators = tmtypes.ResultValidators
 	ResultTx         = tmtypes.ResultTx
-	ResultTxs        = tmtypes.ResultTxs
+	ResultTxSearch   = tmtypes.ResultTxSearch
 	// governance
 	Proposal = governance.Proposal
 )

@@ -3,8 +3,11 @@ package tendermint
 import (
 	"encoding/hex"
 	"errors"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	okexchain "github.com/okex/okexchain/app/types"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"testing"
 	"time"
@@ -16,8 +19,8 @@ import (
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
-	valConsPK = "okexchainvalconspub1zcjduepqpjq9n8g6fnjrys5t07cqcdcptu5d06tpxvhdu04mdrc4uc5swmmqttvmqv"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	valConsPK = "okexchainvalconspub1zcjduepq24jtmdyzapg50mevhfnhjl09q876xe5dj4ajsda9q6at2dtrpvmse0tav6"
 )
 
 func TestTendermintClient_QueryBlock(t *testing.T) {
@@ -137,7 +140,8 @@ func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
-	consPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, valConsPK)
+	okexchain.SetBech32Prefixes(sdk.GetConfig())
+	consPubkey, err := stakingtypes.GetConsPubKeyBech32(valConsPK)
 	require.NoError(t, err)
 
 	expectedRet := mockCli.GetRawValidatorsResultPointer(height, votingPower, proposerPriority, consPubkey)
@@ -169,7 +173,7 @@ func TestTendermintClient_QueryTxResult(t *testing.T) {
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
-	hashHexStr := "404316331B9C4E73EE06C2E9C5EDD8D404E4FDE2A46C717C0BE9F00A4B9DACD7"
+	hashHexStr := "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 	expectedHashBytes, err := hex.DecodeString(hashHexStr)
 	require.NoError(t, err)
 	tx := []byte("default tx")
@@ -193,54 +197,55 @@ func TestTendermintClient_QueryTxResult(t *testing.T) {
 	require.Error(t, err)
 }
 
-//func TestTendermintClient_QueryTxsResult(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	defer ctrl.Finish()
-//	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-//		1.1, "0.00000001okt")
-//	require.NoError(t, err)
-//	mockCli := mocks.NewMockClient(t, ctrl, config)
-//	//TODO
-//	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
-//
-//	txHash, tx := []byte("default tx hash"), []byte("default tx")
-//	height, code := int64(1024), uint32(0)
-//	log, eventType := "default log", "default event type"
-//
-//	expectedRet := mockCli.GetRawResultTxSearchPointer(1, txHash, height, code, log, eventType, tx)
-//	mockCli.EXPECT().TxSearch(gomock.AssignableToTypeOf(""), false, gomock.AssignableToTypeOf(0),
-//		gomock.AssignableToTypeOf(0)).Return(expectedRet, nil)
-//
-//	queryStr := fmt.Sprintf("message.sender=%s", addr)
-//	txSearchResult, err := mockCli.Tendermint().QueryTxsResult(queryStr, 1, 30)
-//	require.NoError(t, err)
-//	require.Equal(t, 1, txSearchResult.TotalCount)
-//	require.Equal(t, height, txSearchResult.Txs[0].Height)
-//	require.Equal(t, tmbytes.HexBytes(txHash), txSearchResult.Txs[0].Hash)
-//	require.Equal(t, tmtypes.Tx(tx), txSearchResult.Txs[0].Tx)
-//	require.Equal(t, log, txSearchResult.Txs[0].TxResult.Log)
-//	require.Equal(t, code, txSearchResult.Txs[0].TxResult.Code)
-//	require.Equal(t, eventType, txSearchResult.Txs[0].TxResult.Events[0].Type)
-//
-//	mockCli.EXPECT().TxSearch(gomock.AssignableToTypeOf(""), false, gomock.AssignableToTypeOf(0),
-//		gomock.AssignableToTypeOf(0)).Return(expectedRet, errors.New("default error"))
-//	_, err = mockCli.Tendermint().QueryTxsResult(queryStr, 1, 30)
-//	require.Error(t, err)
-//
-//	badQueryStr := fmt.Sprintf("message.sender%s", addr)
-//	_, err = mockCli.Tendermint().QueryTxsResult(badQueryStr, 1, 30)
-//	require.Error(t, err)
-//
-//	badQueryStr = fmt.Sprintf("message.sender==%s", addr)
-//	_, err = mockCli.Tendermint().QueryTxsResult(badQueryStr, 1, 30)
-//	require.Error(t, err)
-//
-//	_, err = mockCli.Tendermint().QueryTxsResult(queryStr, -1, 30)
-//	require.Error(t, err)
-//
-//	_, err = mockCli.Tendermint().QueryTxsResult(queryStr, 1, -30)
-//	require.Error(t, err)
-//
-//	_, err = mockCli.Tendermint().QueryTxsResult("", 1, 30)
-//	require.Error(t, err)
-//}
+func TestTendermintClient_QueryTxsByEvents(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+
+	hashHexStr := "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+	expectedHashBytes, err := hex.DecodeString(hashHexStr)
+	tx := []byte("default tx")
+	height, code := int64(1024), uint32(0)
+	log, eventType := "default log", "default event type"
+
+	expectedRet := mockCli.GetRawResultTxSearchPointer(1, height, code, log, hashHexStr, eventType, tx)
+	mockCli.EXPECT().TxSearch(gomock.AssignableToTypeOf(""), false, gomock.AssignableToTypeOf(0),
+		gomock.AssignableToTypeOf(0), gomock.AssignableToTypeOf("")).Return(expectedRet, nil)
+
+	queryStr := fmt.Sprintf("message.sender=%s", addr)
+	txSearchResult, err := mockCli.Tendermint().QueryTxsByEvents(queryStr, 1, 30)
+	require.NoError(t, err)
+	require.Equal(t, 1, txSearchResult.TotalCount)
+	require.Equal(t, height, txSearchResult.Txs[0].Height)
+	require.Equal(t, tmbytes.HexBytes(expectedHashBytes), txSearchResult.Txs[0].Hash)
+	require.Equal(t, tmtypes.Tx(tx), txSearchResult.Txs[0].Tx)
+	require.Equal(t, log, txSearchResult.Txs[0].TxResult.Log)
+	require.Equal(t, code, txSearchResult.Txs[0].TxResult.Code)
+	require.Equal(t, eventType, txSearchResult.Txs[0].TxResult.Events[0].Type)
+
+	mockCli.EXPECT().TxSearch(gomock.AssignableToTypeOf(""), false, gomock.AssignableToTypeOf(0),
+		gomock.AssignableToTypeOf(0), gomock.AssignableToTypeOf("")).Return(nil, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryTxsByEvents(queryStr, 1, 30)
+	require.Error(t, err)
+
+	badQueryStr := fmt.Sprintf("message.sender%s", addr)
+	_, err = mockCli.Tendermint().QueryTxsByEvents(badQueryStr, 1, 30)
+	require.Error(t, err)
+
+	badQueryStr = fmt.Sprintf("message.sender==%s", addr)
+	_, err = mockCli.Tendermint().QueryTxsByEvents(badQueryStr, 1, 30)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryTxsByEvents(queryStr, -1, 30)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryTxsByEvents(queryStr, 1, -30)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryTxsByEvents("", 1, 30)
+	require.Error(t, err)
+}

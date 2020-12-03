@@ -3,6 +3,7 @@ package exposed
 import (
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 
 // Tendermint shows the expected behavior for inner tendermint client
@@ -18,6 +19,6 @@ type TendermintQuery interface {
 	QueryCommitResult(height int64) (*types.ResultCommit, error)
 	QueryValidatorsResult(height int64) (*types.ResultValidators, error)
 	QueryTxResult(hashHexStr string, prove bool) (*types.ResultTx, error)
-	// QueryTxsResult assumes the node to query a truth teller
-	QueryTxsResult(queryStr string, page, perPage int) (types.ResultTxs, error)
+	// QueryTxsByEvents assumes the node to query a truth teller
+	QueryTxsByEvents(eventsStr string, page, limit int) (*ctypes.ResultTxSearch, error)
 }

@@ -2,10 +2,10 @@ package tendermint
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain-go-sdk/utils"
 	tmtypes "github.com/tendermint/tendermint/types"
 	"strings"
 )
@@ -85,42 +85,24 @@ func (tc tendermintClient) QueryTxResult(hashHexStr string, prove bool) (pResult
 	return tc.Tx(hash, prove)
 }
 
-// QueryTxsResult gets txs result by a specific searching string
-// NOTE: QueryTxsResult assumes the node telling truth
-func (tc tendermintClient) QueryTxsResult(searchStr string, page, perPage int) (txsResult types.ResultTxs,
-	err error) {
-
-	tmEventStrs, err := parseSearchingStr(searchStr)
-	if err != nil {
-		return
-	}
-
-	if err = params.CheckQueryTxResultParams(tmEventStrs, page, perPage); err != nil {
-		return
-	}
-
-	queryStr := strings.Join(tmEventStrs, " AND ")
-	// TODO
-	pTmTxsResult, err := tc.TxSearch(queryStr, false, page, perPage, "")
-	if err != nil {
-		return
-	}
-
-	return utils.ParseTxsResult(pTmTxsResult), err
-}
-
-func parseSearchingStr(searchStr string) (tmEventStrs []string, err error) {
+// QueryTxsByEvents gets txs result by a group of specific searching string
+// NOTE: it assumes the node to query a truth teller
+func (tc tendermintClient) QueryTxsByEvents(eventsStr string, page, limit int) (pResultTxSearch *types.ResultTxSearch, err error) {
+	// parse the eventsStr
 	var events []string
-	searchStr = strings.TrimSpace(searchStr)
-	if strings.Contains(searchStr, "&") {
-		events = strings.Split(searchStr, "&")
+	if strings.Contains(eventsStr, "&") {
+		events = strings.Split(eventsStr, "&")
 	} else {
-		events = append(events, searchStr)
+		events = append(events, eventsStr)
 	}
 
+	// build tm events
+	var tmEvents []string
 	for _, event := range events {
-		if !strings.Contains(event, "=") || strings.Count(event, "=") > 1 {
-			return tmEventStrs, fmt.Errorf("failed. event %s should be of the format: %s", event, types.EventFormat)
+		if !strings.Contains(event, "=") {
+			return pResultTxSearch, fmt.Errorf("invalid event; event %s should be of the format: %s", event, types.EventFormat)
+		} else if strings.Count(event, "=") > 1 {
+			return pResultTxSearch, fmt.Errorf("invalid event; event %s should be of the format: %s", event, types.EventFormat)
 		}
 
 		tokens := strings.Split(event, "=")
@@ -130,8 +112,23 @@ func parseSearchingStr(searchStr string) (tmEventStrs []string, err error) {
 			event = fmt.Sprintf("%s='%s'", tokens[0], tokens[1])
 		}
 
-		tmEventStrs = append(tmEventStrs, event)
+		tmEvents = append(tmEvents, event)
 	}
 
-	return
+	if len(tmEvents) == 0 {
+		return pResultTxSearch, errors.New("must declare at least one event to search")
+	}
+
+	if page <= 0 {
+		return pResultTxSearch, errors.New("page must greater than 0")
+	}
+
+	if limit <= 0 {
+		return pResultTxSearch, errors.New("limit must greater than 0")
+	}
+
+	// XXX: implement ANY
+	query := strings.Join(tmEvents, " AND ")
+	// assumes the node to query a truth teller
+	return tc.TxSearch(query, false, page, limit, "")
 }

@@ -421,16 +421,16 @@ func (mc *MockClient) GetRawTxResultPointer(height int64, code uint32, log, hash
 	}
 }
 
-//// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
-//func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.HexBytes, height int64, code uint32, log,
-//	eventType string, tx []byte) *ctypes.ResultTxSearch {
-//	return &ctypes.ResultTxSearch{
-//		TotalCount: totalCount,
-//		Txs: []*ctypes.ResultTx{
-//			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
-//		},
-//	}
-//}
+// GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
+func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, height int64, code uint32, log, hashHexStr, eventType string,
+	tx []byte) *ctypes.ResultTxSearch {
+	return &ctypes.ResultTxSearch{
+		TotalCount: totalCount,
+		Txs: []*ctypes.ResultTx{
+			mc.GetRawTxResultPointer(height, code, log, hashHexStr, eventType, tx),
+		},
+	}
+}
 
 // BuildBackendDealsResultBytes generates the backend deals result bytes for test
 func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {

@@ -1,7 +1,6 @@
 package tendermint
 
 import (
-	"errors"
 	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
@@ -13,8 +12,8 @@ import (
 // QueryBlock gets the block info of a specific height
 // query the latest block with height 0 input
 func (tc tendermintClient) QueryBlock(height int64) (pBlock *types.Block, err error) {
-	if height < 0 {
-		return pBlock, errors.New("failed. negative height is not available")
+	if err = params.CheckQueryHeightParams(height); err != nil {
+		return pBlock, err
 	}
 
 	var pHeight *int64
@@ -32,9 +31,9 @@ func (tc tendermintClient) QueryBlock(height int64) (pBlock *types.Block, err er
 
 // QueryBlockResults gets the abci result of the block on a specific height
 // query the latest block with height 0 input
-func (tc tendermintClient) QueryBlockResults(height int64) (blockResults *types.ResultBlockResults, err error) {
-	if height < 0 {
-		return blockResults, errors.New("failed. negative height is not available")
+func (tc tendermintClient) QueryBlockResults(height int64) (pBlockResults *types.ResultBlockResults, err error) {
+	if err = params.CheckQueryHeightParams(height); err != nil {
+		return pBlockResults, err
 	}
 
 	var pHeight *int64
@@ -46,13 +45,18 @@ func (tc tendermintClient) QueryBlockResults(height int64) (blockResults *types.
 }
 
 // QueryCommitResult gets the commit info of the block on a specific height
-func (tc tendermintClient) QueryCommitResult(height int64) (commitResult types.ResultCommit, err error) {
-	pTmCommitResult, err := tc.Commit(&height)
-	if err != nil {
-		return
+// query the latest block with height 0 input
+func (tc tendermintClient) QueryCommitResult(height int64) (pCommitResult *types.ResultCommit, err error) {
+	if err = params.CheckQueryHeightParams(height); err != nil {
+		return pCommitResult, err
 	}
 
-	return utils.ParseCommitResult(pTmCommitResult), err
+	var pHeight *int64
+	if height > 0 {
+		pHeight = &height
+	}
+
+	return tc.Commit(pHeight)
 }
 
 // QueryValidatorsResult gets the validators info on a specific height

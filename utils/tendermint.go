@@ -10,17 +10,6 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
-// ParseCommitResult converts raw tendermint commit result type to the one gosdk requires
-func ParseCommitResult(pTmCommitResult *ctypes.ResultCommit) types.ResultCommit {
-	return types.ResultCommit{
-		SignedHeader: types.SignedHeader{
-			Header: *pTmCommitResult.Header,
-			Commit: *pTmCommitResult.Commit,
-		},
-		CanonicalCommit: pTmCommitResult.CanonicalCommit,
-	}
-}
-
 // ParseValidatorsResult converts raw tendermint validators result type to the one gosdk requires
 func ParseValidatorsResult(pTmValsResult *ctypes.ResultValidators) types.ResultValidators {
 	return types.ResultValidators{
@@ -68,19 +57,9 @@ func parseResponseDeliverTx(pTmRespDeliverTx *abci.ResponseDeliverTx) types.Resp
 	}
 }
 
-func parseResponseBeginBlock(pTmRespBeginBlock *abci.ResponseBeginBlock) types.ResponseBeginBlock {
-	return types.ResponseBeginBlock{
-		Events: parseEvents(pTmRespBeginBlock.Events),
-	}
-}
 
-func parseResponseEndBlock(pTmRespEndBlock *abci.ResponseEndBlock) types.ResponseEndBlock {
-	return types.ResponseEndBlock{
-		ValidatorUpdates:      parseValidatorUpdates(pTmRespEndBlock.ValidatorUpdates),
-		ConsensusParamUpdates: parseConsensusParams(pTmRespEndBlock.ConsensusParamUpdates),
-		Events:                parseEvents(pTmRespEndBlock.Events),
-	}
-}
+
+
 
 func parseEvents(tmEvents []abci.Event) []types.Event {
 	eventsLens := len(tmEvents)

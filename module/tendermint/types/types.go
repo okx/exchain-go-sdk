@@ -18,6 +18,7 @@ const (
 type (
 	Block              = tmtypes.Block
 	ResultBlockResults = ctypes.ResultBlockResults
+	ResultCommit       = ctypes.ResultCommit
 )
 
 // Data - structure of the stdTxs in a block
@@ -111,19 +112,6 @@ type EvidenceParams struct {
 // ValidatorParams - structure for limits on validators
 type ValidatorParams struct {
 	PubKeyTypes []string
-}
-
-// ResultCommit - structure for the commit info
-type ResultCommit struct {
-	SignedHeader
-	CanonicalCommit bool
-}
-
-// SignedHeader is a header along with the commits that prove it
-// It is the basis of the lite client
-type SignedHeader struct {
-	tmtypes.Header
-	Commit tmtypes.Commit
 }
 
 // ResultValidators - structure for the validators info on a specific height

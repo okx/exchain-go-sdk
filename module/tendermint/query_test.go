@@ -87,38 +87,43 @@ func TestTendermintClient_QueryBlockResults(t *testing.T) {
 	mockCli.EXPECT().BlockResults(gomock.AssignableToTypeOf(&height)).Return(nil, errors.New("default error"))
 	_, err = mockCli.Tendermint().QueryBlockResults(height)
 	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryBlock(-1)
+	require.Error(t, err)
 }
 
-//func TestTendermintClient_QueryCommitResult(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	defer ctrl.Finish()
-//	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
-//		1.1, "0.00000001okt")
-//	require.NoError(t, err)
-//	mockCli := mocks.NewMockClient(t, ctrl, config)
-//	// TODO
-//	//mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
-//
-//	height, blockTime := int64(1024), time.Now()
-//	appHash, blockIDHash := tmbytes.HexBytes("default app hash"), tmbytes.HexBytes("default block ID hash")
-//
-//	expectedRet := mockCli.GetRawCommitResultPointer(true, "default chainID", height, blockTime, appHash, blockIDHash)
-//	mockCli.EXPECT().Commit(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
-//
-//	commitResult, err := mockCli.Tendermint().QueryCommitResult(1024)
-//	require.NoError(t, err)
-//	require.Equal(t, true, commitResult.CanonicalCommit)
-//	require.Equal(t, "default chainID", commitResult.ChainID)
-//	require.Equal(t, appHash, commitResult.AppHash)
-//	require.Equal(t, height, commitResult.Header.Height)
-//	require.Equal(t, blockIDHash, commitResult.Commit.BlockID.Hash)
-//	require.True(t, blockTime.Equal(commitResult.Time))
-//
-//	mockCli.EXPECT().Commit(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
-//	_, err = mockCli.Tendermint().QueryCommitResult(1024)
-//	require.Error(t, err)
-//}
-//
+func TestTendermintClient_QueryCommitResult(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
+	require.NoError(t, err)
+	mockCli := mocks.NewMockClient(t, ctrl, config)
+	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
+
+	height, blockTime := int64(1024), time.Now()
+	appHash, blockIDHash := tmbytes.HexBytes("default app hash"), tmbytes.HexBytes("default block ID hash")
+
+	expectedRet := mockCli.GetRawCommitResultPointer(true, "default chainID", height, blockTime, appHash, blockIDHash)
+	mockCli.EXPECT().Commit(gomock.AssignableToTypeOf(&height)).Return(expectedRet, nil)
+
+	commitResult, err := mockCli.Tendermint().QueryCommitResult(height)
+	require.NoError(t, err)
+	require.Equal(t, true, commitResult.CanonicalCommit)
+	require.Equal(t, "default chainID", commitResult.ChainID)
+	require.Equal(t, appHash, commitResult.AppHash)
+	require.Equal(t, height, commitResult.Header.Height)
+	require.Equal(t, blockIDHash, commitResult.Commit.BlockID.Hash)
+	require.True(t, blockTime.Equal(commitResult.Time))
+
+	mockCli.EXPECT().Commit(gomock.AssignableToTypeOf(&height)).Return(expectedRet, errors.New("default error"))
+	_, err = mockCli.Tendermint().QueryCommitResult(height)
+	require.Error(t, err)
+
+	_, err = mockCli.Tendermint().QueryCommitResult(-1)
+	require.Error(t, err)
+}
+
 //func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	defer ctrl.Finish()

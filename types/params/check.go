@@ -326,6 +326,15 @@ func CheckQueryTransactionsParams(addrStr string, typeCode, start, end, page, pe
 	return checkParamsPaging(start, end, page, perPage)
 }
 
+// CheckQueryHeightParams gives a quick validity check for the input params of query tendermint data with height
+func CheckQueryHeightParams(height int64) error {
+	if height < 0 {
+		return errors.New("failed. negative height is not available")
+	}
+
+	return nil
+}
+
 // IsValidAccAddr gives a quick validity check for an address string
 func IsValidAccAddr(addrStr string) error {
 	if len(addrStr) != 48 || !strings.HasPrefix(addrStr, "okexchain") {

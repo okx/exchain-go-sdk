@@ -1,20 +1,22 @@
 package ammswap
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/ammswap"
 )
 
-var _ sdk.Module = (*ammswapClient)(nil)
+var _ gosdktypes.Module = (*ammswapClient)(nil)
 
 type ammswapClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in ammswap module
-func (pc ammswapClient) RegisterCodec(cdc sdk.SDKCodec) {
-	types.RegisterCodec(cdc)
+func (ac ammswapClient) RegisterCodec(cdc *codec.Codec) {
+	ammswap.RegisterCodec(cdc)
 }
 
 // Name returns the module name
@@ -23,6 +25,6 @@ func (ammswapClient) Name() string {
 }
 
 // NewAmmSwapClient creates a new instance of ammswap client as implement
-func NewAmmSwapClient(baseClient sdk.BaseClient) exposed.AmmSwap {
+func NewAmmSwapClient(baseClient gosdktypes.BaseClient) exposed.AmmSwap {
 	return ammswapClient{baseClient}
 }

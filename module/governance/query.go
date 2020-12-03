@@ -1,10 +1,12 @@
 package governance
 
 import (
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/okex/okexchain-go-sdk/utils"
+	govutils "github.com/okex/okexchain/x/gov/client/utils"
+	govtypes "github.com/okex/okexchain/x/gov/types"
 )
 
 // QueryProposals gets all proposals
@@ -17,9 +19,9 @@ import (
 func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string, numLimit uint64) (
 	proposals []types.Proposal, err error) {
 	var depositorAddr, voterAddr sdk.AccAddress
-	var proposalStatus types.ProposalStatus
-	proposalParams := params.NewQueryProposalsParams(proposalStatus, numLimit, depositorAddr, voterAddr)
+	var proposalStatus govtypes.ProposalStatus
 
+	proposalParams := govtypes.NewQueryProposalsParams(proposalStatus, numLimit, depositorAddr, voterAddr)
 	if len(depositorAddrStr) != 0 {
 		depositorAddr, err = sdk.AccAddressFromBech32(depositorAddrStr)
 		if err != nil {
@@ -27,6 +29,7 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 		}
 		proposalParams.Depositor = depositorAddr
 	}
+
 	if len(voterAddrStr) != 0 {
 		voterAddr, err = sdk.AccAddressFromBech32(voterAddrStr)
 		if err != nil {
@@ -34,8 +37,9 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 		}
 		proposalParams.Voter = voterAddr
 	}
+
 	if len(status) != 0 {
-		proposalStatus, err = types.ProposalStatusFromString(status)
+		proposalStatus, err = govtypes.ProposalStatusFromString(govutils.NormalizeProposalStatus(status))
 		if err != nil {
 			return
 		}
@@ -47,7 +51,8 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 		return proposals, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := gc.Query(types.ProposalsPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/proposals", govtypes.QuerierRoute)
+	res, _, err := gc.Query(path, jsonBytes)
 	if err != nil {
 		return proposals, utils.ErrClientQuery(err.Error())
 	}
@@ -55,6 +60,6 @@ func (gc govClient) QueryProposals(depositorAddrStr, voterAddrStr, status string
 	if err = gc.GetCodec().UnmarshalJSON(res, &proposals); err != nil {
 		return proposals, utils.ErrUnmarshalJSON(err.Error())
 	}
-	return
 
+	return
 }

@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/auth/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
@@ -12,10 +14,9 @@ type authClient struct {
 	gosdktypes.BaseClient
 }
 
-// RegisterCodec registers the account type in auth module
-func (authClient) RegisterCodec(cdc gosdktypes.SDKCodec) {
-	cdc.RegisterInterface((*types.Account)(nil))
-	cdc.RegisterConcrete(&types.BaseAccount{}, "cosmos-sdk/Account")
+// RegisterCodec registers the struct type for auth module
+func (authClient) RegisterCodec(cdc *codec.Codec) {
+	auth.RegisterCodec(cdc)
 }
 
 // Name returns the module name

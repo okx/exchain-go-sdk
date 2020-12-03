@@ -1,20 +1,22 @@
 package slashing
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/slashing/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/slashing"
 )
 
-var _ sdk.Module = (*slashingClient)(nil)
+var _ gosdktypes.Module = (*slashingClient)(nil)
 
 type slashingClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in slashing module
-func (sc slashingClient) RegisterCodec(cdc sdk.SDKCodec) {
-	types.RegisterCodec(cdc)
+func (sc slashingClient) RegisterCodec(cdc *codec.Codec) {
+	slashing.RegisterCodec(cdc)
 }
 
 // Name returns the module name
@@ -23,6 +25,6 @@ func (slashingClient) Name() string {
 }
 
 // NewSlashingClient creates a new instance of slashing client as implement
-func NewSlashingClient(baseClient sdk.BaseClient) exposed.Slashing {
+func NewSlashingClient(baseClient gosdktypes.BaseClient) exposed.Slashing {
 	return slashingClient{baseClient}
 }

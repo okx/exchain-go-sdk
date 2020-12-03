@@ -2,10 +2,10 @@ package utils
 
 import (
 	"errors"
-	"strings"
-
-	"github.com/okex/okexchain-go-sdk/module/token/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/token/types"
+	tokentypes "github.com/okex/okexchain/x/token/types"
+	"strings"
 )
 
 // ParseTransfersStr parses the whole multi-send info string into TransferUnit
@@ -34,7 +34,10 @@ func ParseTransfersStr(str string) ([]types.TransferUnit, error) {
 			return nil, err
 		}
 
-		transfers[i] = types.NewTransferUnit(to, coins)
+		transfers[i] = tokentypes.TransferUnit{
+			To:    to,
+			Coins: coins,
+		}
 	}
 
 	return transfers, nil

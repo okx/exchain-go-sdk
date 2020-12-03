@@ -19,6 +19,5 @@ func DefaultMockSuccessTxResponse() sdk.TxResponse {
 		Codespace: "default code space",
 		Tx:        nil,
 		Timestamp: "default time stamp",
-		Events:    nil,
 	}
 }

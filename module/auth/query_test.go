@@ -2,27 +2,26 @@ package auth
 
 import (
 	"errors"
-	gosdk "github.com/okex/okexchain-go-sdk"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"testing"
-
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"testing"
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
-	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
 )
 
 func TestAuthClient_QueryAccount(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := gosdk.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
@@ -32,9 +31,12 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedCdc := mockCli.GetCodec()
-	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "1024btc,2048.1024okt", 1, 2)
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.AccountInfoPath, tmbytes.HexBytes(types.GetAddressStoreKey(accAddr))).Return(expectedRet, nil)
+	expectedRet := mockCli.BuildAccountBytes(addr, accPubkey, "", "1024btc,2048.1024okt", 1, 2)
+	expectedPath := fmt.Sprintf("custom/%s/%s", auth.QuerierRoute, auth.QueryAccount)
+	expectedParams, err := expectedCdc.MarshalJSON(auth.NewQueryAccountParams(accAddr))
+	require.NoError(t, err)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(6)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	acc, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
@@ -42,7 +44,7 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	require.Equal(t, addr, acc.GetAddress().String())
 	require.Equal(t, uint64(1), acc.GetAccountNumber())
 	require.Equal(t, uint64(2), acc.GetSequence())
-	accPkBech32, err := sdk.Bech32ifyAccPub(acc.GetPubKey())
+	accPkBech32, err := sdk.Bech32ifyPubKey(sdk.Bech32PubKeyTypeAccPub, acc.GetPubKey())
 	require.NoError(t, err)
 	require.Equal(t, accPubkey, accPkBech32)
 
@@ -57,18 +59,15 @@ func TestAuthClient_QueryAccount(t *testing.T) {
 	_, err = mockCli.Auth().QueryAccount(addr[1:])
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).Return(nil, nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), nil)
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
-		Return(nil, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
 
-	mockCli.EXPECT().Query(types.AccountInfoPath, cmn.HexBytes(types.GetAddressStoreKey(accAddr))).
-		Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Auth().QueryAccount(addr)
 	require.Error(t, err)
-
 }

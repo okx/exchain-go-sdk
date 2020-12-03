@@ -2,15 +2,14 @@ package utils
 
 import (
 	"fmt"
-	"testing"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 const (
-	accAddr1  = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
-	accAddr2  = "okexchain16zgvph7qc3n4jvamq0lkv3y37k0hc5pw9hhhrs"
+	accAddr1  = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	accAddr2  = "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u"
 	coinsStr1 = "1.024okt"
 	coinsStr2 = "2.048btc,2.048okt"
 )

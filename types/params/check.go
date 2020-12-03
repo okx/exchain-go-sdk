@@ -22,6 +22,32 @@ var (
 	reWhole = regexp.MustCompile(fmt.Sprintf(`^%s$`, reWholeName))
 )
 
+// CheckCreatePoolParams gives a quick validity check for the input params of creating pool in farm
+func CheckCreatePoolParams(fromInfo keys.Info, passWd, poolName, minLockAmountStr, yieldToken string) error {
+	if err := CheckPoolNameParams(fromInfo, passWd, poolName); err != nil {
+		return err
+	}
+
+	if len(minLockAmountStr) == 0 || len(yieldToken) == 0 {
+		return errors.New("failed. empty min lock token or empty yield token")
+	}
+
+	return nil
+}
+
+// CheckPoolNameParams gives a quick validity check for the input params of the pool name in farm
+func CheckPoolNameParams(fromInfo keys.Info, passWd, poolName string) error {
+	if err := CheckKeyParams(fromInfo, passWd); err != nil {
+		return err
+	}
+
+	if len(poolName) == 0 {
+		return errors.New("failed. empty pool name")
+	}
+
+	return nil
+}
+
 // CheckProposalOperation gives a quick validity check for the input params of the proposal operation with proposal ID
 func CheckProposalOperation(fromInfo keys.Info, passWd string, proposalID uint64) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
@@ -298,6 +324,15 @@ func CheckQueryTransactionsParams(addrStr string, typeCode, start, end, page, pe
 	}
 
 	return checkParamsPaging(start, end, page, perPage)
+}
+
+// CheckQueryHeightParams gives a quick validity check for the input params of query tendermint data with height
+func CheckQueryHeightParams(height int64) error {
+	if height < 0 {
+		return errors.New("failed. negative height is not available")
+	}
+
+	return nil
 }
 
 // IsValidAccAddr gives a quick validity check for an address string

@@ -1,24 +1,10 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	distrtypes "github.com/okex/okexchain/x/distribution/types"
 )
 
 // const
 const (
-	ModuleName = "distribution"
+	ModuleName = distrtypes.ModuleName
 )
-
-var (
-	msgCdc = sdk.NewCodec()
-)
-
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for distribution module
-func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgSetWithdrawAddr{}, "okexchain/distribution/MsgModifyWithdrawAddress")
-	cdc.RegisterConcrete(MsgWithdrawValCommission{}, "okexchain/distribution/MsgWithdrawReward")
-}

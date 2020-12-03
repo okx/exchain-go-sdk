@@ -3,21 +3,21 @@ package main
 import (
 	"log"
 
-	sdk "github.com/okex/okexchain-go-sdk"
+	"github.com/okex/okexchain-go-sdk"
 	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 const (
-	// TODO: link to mainnet of OKChain later
+	// TODO: link to mainnet of OKExChain later
 	rpcURL = "tcp://127.0.0.1:26657"
 	// user's name
 	name = "alice"
 	// user's mnemonic
-	mnemonic = "view acid farm come spike since hour width casino cause mom sheriff"
+	mnemonic = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	// user's password
 	passWd = "12345678"
 	// target address
-	addr     = "okexchain10q0rk5qnyag7wfvvt7rtphlw589m7frsku8qc9"
+	addr     = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	baseCoin = "okt"
 )
 
@@ -26,20 +26,20 @@ func main() {
 	// NOTE: either of the both ways below to pay fees is available
 
 	// WAY 1: create a client config with fixed fees
-	config, err := sdk.NewClientConfig(rpcURL, "okexchain", sdk.BroadcastBlock, "0.01okt", 200000,
+	config, err := gosdk.NewClientConfig(rpcURL, "okexchain", gosdk.BroadcastBlock, "0.01okt", 200000,
 		0, "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// WAY 2: alternative client config with the fees by auto gas calculation
-	config, err = sdk.NewClientConfig(rpcURL, "okexchain", sdk.BroadcastBlock, "", 200000,
+	config, err = gosdk.NewClientConfig(rpcURL, "okexchain", gosdk.BroadcastBlock, "", 200000,
 		1.1, "0.00000001okt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cli := sdk.NewClient(config)
+	cli := gosdk.NewClient(config)
 
 	// create an account with your own mnemonic，name and password
 	fromInfo, _, err := utils.CreateAccountWithMnemo(mnemonic, name, passWd)
@@ -77,5 +77,4 @@ func main() {
 	}
 
 	log.Println(res)
-
 }

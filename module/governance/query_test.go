@@ -2,52 +2,51 @@ package governance
 
 import (
 	"errors"
-	"testing"
-	"time"
-
+	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	govtypes "github.com/okex/okexchain/x/gov/types"
 	"github.com/stretchr/testify/require"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"testing"
+	"time"
 )
 
 const (
-	addr      = "okexchain1kfs5q53jzgzkepqa6ual0z7f97wvxnkamr5vys"
+	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub1addwnpepq2vs59k5r76j4eazstu2e9dpttkr9enafdvnlhe27l2a88wpc0rsk0xy9zf"
-	mnemonic  = "view acid farm come spike since hour width casino cause mom sheriff"
+	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
 )
 
 func TestGovClient_QueryProposals(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	config, err := sdk.NewClientConfig("testURL", "testChain", sdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err := gosdktypes.NewClientConfig("testURL", "testChain", gosdktypes.BroadcastBlock, "",
+		200000, 1.1, "0.00000001okt")
 	require.NoError(t, err)
 	mockCli := mocks.NewMockClient(t, ctrl, config)
 	mockCli.RegisterModule(NewGovClient(mockCli.MockBaseClient))
 
-	proposalID, status, mockTime := uint64(1024), ProposalStatus(0x01), time.Now()
+	proposalID, status, mockTime := uint64(1024), govtypes.ProposalStatus(0x01), time.Now()
 	mockPower, err := sdk.NewDecFromStr("0.25")
 	require.NoError(t, err)
 	totalDeposit, err := sdk.ParseDecCoins("1.024okt,2.048btc")
 	require.NoError(t, err)
 
+	var depositorAddr, voterAddr sdk.AccAddress
+	var proposalStatus govtypes.ProposalStatus
+
 	expectedRet := mockCli.BuildProposalsBytes(proposalID, status, mockTime, totalDeposit, mockPower)
 	expectedCdc := mockCli.GetCodec()
-
-	var depositorAddr, voterAddr sdk.AccAddress
-	var proposalStatus types.ProposalStatus
-	queryParams := params.NewQueryProposalsParams(proposalStatus, 0, voterAddr, depositorAddr)
-	queryBytes := expectedCdc.MustMarshalJSON(queryParams)
-
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	expectedParams := expectedCdc.MustMarshalJSON(govtypes.NewQueryProposalsParams(proposalStatus, 0, voterAddr, depositorAddr))
+	expectedPath := fmt.Sprintf("custom/%s/proposals", govtypes.QuerierRoute)
+	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(9)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	proposals, err := mockCli.Governance().QueryProposals("", "", "", 0)
 	require.NoError(t, err)
@@ -69,15 +68,18 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	require.True(t, mockTime.Equal(proposals[0].VotingStartTime))
 	require.True(t, mockTime.Equal(proposals[0].VotingEndTime))
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, errors.New("default error"))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(nil, int64(0), errors.New("default error"))
 	_, err = mockCli.Governance().QueryProposals("", "", "", 0)
 	require.Error(t, err)
 
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet[1:], nil)
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet[1:], int64(1024), nil)
 	_, err = mockCli.Governance().QueryProposals("", "", "", 0)
 	require.Error(t, err)
+
+	depositorAddr, err = sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
+	voterAddr, err = sdk.AccAddressFromBech32(addr)
+	require.NoError(t, err)
 
 	_, err = mockCli.Governance().QueryProposals(addr[1:], addr, "deposit_period", 1)
 	require.Error(t, err)
@@ -85,20 +87,15 @@ func TestGovClient_QueryProposals(t *testing.T) {
 	_, err = mockCli.Governance().QueryProposals(addr, addr[1:], "deposit_period", 1)
 	require.Error(t, err)
 
-	_, err = mockCli.Governance().QueryProposals(addr, addr, "unknown status", 1)
-	require.Error(t, err)
-
-	depositorAddr, err = sdk.AccAddressFromBech32(addr)
-	require.NoError(t, err)
-	voterAddr, err = sdk.AccAddressFromBech32(addr)
-	require.NoError(t, err)
-	queryParams = params.NewQueryProposalsParams(types.StatusDepositPeriod, 1, voterAddr, depositorAddr)
-	queryBytes = expectedCdc.MustMarshalJSON(queryParams)
-
-	mockCli.EXPECT().GetCodec().Return(expectedCdc).Times(2)
-	mockCli.EXPECT().Query(types.ProposalsPath, cmn.HexBytes(queryBytes)).Return(expectedRet, nil)
+	expectedParams = expectedCdc.MustMarshalJSON(govtypes.NewQueryProposalsParams(govtypes.StatusDepositPeriod, 1, voterAddr, depositorAddr))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
 
 	proposals, err = mockCli.Governance().QueryProposals(addr, addr, "deposit_period", 1)
 	require.NoError(t, err)
 
+	expectedParams = expectedCdc.MustMarshalJSON(govtypes.NewQueryProposalsParams(govtypes.StatusNil, 1, voterAddr, depositorAddr))
+	mockCli.EXPECT().Query(expectedPath, tmbytes.HexBytes(expectedParams)).Return(expectedRet, int64(1024), nil)
+
+	_, err = mockCli.Governance().QueryProposals(addr, addr, "unknown status", 1)
+	require.NoError(t, err)
 }

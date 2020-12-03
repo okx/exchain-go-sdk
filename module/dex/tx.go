@@ -1,13 +1,11 @@
 package dex
 
 import (
-	"errors"
-
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain-go-sdk/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
 )
 
 // List lists a trading pair on dex
@@ -18,10 +16,8 @@ func (dc dexClient) List(fromInfo keys.Info, passWd, baseAsset, quoteAsset, init
 	}
 
 	initPrice := sdk.MustNewDecFromStr(initPriceStr)
-	msg := types.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
-
+	msg := dextypes.NewMsgList(fromInfo.GetAddress(), baseAsset, quoteAsset, initPrice)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Deposit deposits some tokens to a specific product
@@ -35,10 +31,9 @@ func (dc dexClient) Deposit(fromInfo keys.Info, passWd, product, amountStr, memo
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), product, amount)
 
+	msg := dextypes.NewMsgDeposit(product, amount, fromInfo.GetAddress())
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Withdraw withdraws some tokens from a specific product
@@ -52,35 +47,35 @@ func (dc dexClient) Withdraw(fromInfo keys.Info, passWd, product, amountStr, mem
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), product, amount)
 
+	msg := dextypes.NewMsgWithdraw(product, amount, fromInfo.GetAddress())
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
-// TransferOwnership signs the multi-signed tx from a json file and broadcast
-func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (
+// TransferOwnership changes the owner of a product
+func (dc dexClient) TransferOwnership(fromInfo keys.Info, passWd, product, toAddrStr, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
 		return
 	}
 
-	stdTx, err := utils.GetStdTxFromFile(dc.GetCodec(), inputPath)
+	toAddr, err := sdk.AccAddressFromBech32(toAddrStr)
 	if err != nil {
+		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", toAddrStr, err)
+	}
+
+	msg := dextypes.NewMsgTransferOwnership(fromInfo.GetAddress(), toAddr, product)
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
+
+// ConfirmOwnership confirms the transfer-ownership of a product
+func (dc dexClient) ConfirmOwnership(fromInfo keys.Info, passWd, product, memo string, accNum, seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckProductParams(fromInfo, passWd, product); err != nil {
 		return
 	}
 
-	if len(stdTx.Msgs) == 0 {
-		return resp, errors.New("failed. invalid msg type")
-	}
-
-	msg, ok := stdTx.Msgs[0].(types.MsgTransferOwnership)
-	if !ok {
-		return resp, errors.New("failed. invalid msg type")
-	}
-
-	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, stdTx.Memo, []sdk.Msg{msg}, accNum, seqNum)
-
+	msg := dextypes.NewMsgConfirmOwnership(fromInfo.GetAddress(), product)
+	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
@@ -93,10 +88,9 @@ func (dc dexClient) RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAdd
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgCreateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
+	msg := dextypes.NewMsgCreateOperator(website, fromInfo.GetAddress(), handleFeeAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (
@@ -109,8 +103,7 @@ func (dc dexClient) EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr
 	if err != nil {
 		return
 	}
-	msg := types.NewMsgUpdateOperator(fromInfo.GetAddress(), handleFeeAddr, website)
 
+	msg := dextypes.NewMsgUpdateOperator(website, fromInfo.GetAddress(), handleFeeAddr)
 	return dc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

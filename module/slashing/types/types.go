@@ -1,21 +1,10 @@
 package types
 
-import sdk "github.com/cosmos/cosmos-sdk/types"
+import (
+	"github.com/okex/okexchain/x/slashing"
+)
 
 // const
 const (
-	ModuleName = "slashing"
+	ModuleName = slashing.ModuleName
 )
-
-var (
-	msgCdc = sdk.NewCodec()
-)
-
-func init() {
-	RegisterCodec(msgCdc)
-}
-
-// RegisterCodec registers the msg type for slashing module
-func RegisterCodec(cdc sdk.SDKCodec) {
-	cdc.RegisterConcrete(MsgUnjail{}, "cosmos-sdk/MsgUnjail")
-}

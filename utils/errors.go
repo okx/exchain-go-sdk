@@ -14,7 +14,7 @@ func ErrUnmarshalJSON(errMsg string) error {
 
 // ErrClientQuery returns an error when client failed in query
 func ErrClientQuery(errMsg string) error {
-	return fmt.Errorf("failed. ok client query error: %s", errMsg)
+	return fmt.Errorf("failed. client query error: %s", errMsg)
 }
 
 // ErrFilterDataFromBaseResponse returns an error when it failed to filter data from backend base response

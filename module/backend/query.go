@@ -1,20 +1,22 @@
 package backend
 
 import (
+	"fmt"
 	"github.com/okex/okexchain-go-sdk/module/backend/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	backendtypes "github.com/okex/okexchain/x/backend/types"
 )
 
 // QueryCandles gets the candles data of a specific product
 func (bc backendClient) QueryCandles(product string, granularity, size int) (candles [][]string, err error) {
-	klinesParams := params.NewQueryKlinesParams(product, granularity, size)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(klinesParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(backendtypes.NewQueryKlinesParams(product, granularity, size))
 	if err != nil {
 		return candles, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.CandlesPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryCandleList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return candles, utils.ErrClientQuery(err.Error())
 	}
@@ -34,13 +36,19 @@ func (bc backendClient) QueryTickers(product string, count ...int) (tickers []ty
 		return
 	}
 
-	tickersParams := params.NewQueryTickerParams(product, countNum, true)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(tickersParams)
+	queryParams := backendtypes.QueryTickerParams{
+		Product: product,
+		Count:   countNum,
+		Sort:    true,
+	}
+
+	jsonBytes, err := bc.GetCodec().MarshalJSON(queryParams)
 	if err != nil {
 		return tickers, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.TickersPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryTickerList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return tickers, utils.ErrClientQuery(err.Error())
 	}
@@ -60,13 +68,13 @@ func (bc backendClient) QueryRecentTxRecord(product string, start, end, page, pe
 		return
 	}
 
-	matchParams := params.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(matchParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(backendtypes.NewQueryMatchParams(product, int64(start), int64(end), page, perPageNum))
 	if err != nil {
 		return record, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.RecentTxRecordPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryMatchResults)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return record, utils.ErrClientQuery(err.Error())
 	}
@@ -87,13 +95,15 @@ func (bc backendClient) QueryOpenOrders(addrStr, product, side string, start, en
 	}
 
 	// field hideNoFill fixed by false
-	ordersParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(ordersParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false),
+	)
 	if err != nil {
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.OpenOrdersPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s/open", backendtypes.QuerierRoute, backendtypes.QueryOrderList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return orders, utils.ErrClientQuery(err.Error())
 	}
@@ -114,13 +124,15 @@ func (bc backendClient) QueryClosedOrders(addrStr, product, side string, start, 
 	}
 
 	// field hideNoFill fixed by false
-	ordersParams := params.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(ordersParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryOrderListParams(addrStr, product, side, page, perPageNum, int64(start), int64(end), false),
+	)
 	if err != nil {
 		return orders, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.ClosedOrdersPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s/closed", backendtypes.QuerierRoute, backendtypes.QueryOrderList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return orders, utils.ErrClientQuery(err.Error())
 	}
@@ -139,13 +151,15 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 		return
 	}
 
-	dealsParams := params.NewQueryDealsParams(addrStr, product, int64(start), int64(end), page, perPageNum, side)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(dealsParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryDealsParams(addrStr, product, int64(start), int64(end), page, perPageNum, side),
+	)
 	if err != nil {
 		return deals, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.DealsPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryDealList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return deals, utils.ErrClientQuery(err.Error())
 	}
@@ -158,19 +172,22 @@ func (bc backendClient) QueryDeals(addrStr, product, side string, start, end, pa
 }
 
 // QueryTransactions gets the transactions of a specific account
-func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) (transactions []types.Transaction, err error) {
+func (bc backendClient) QueryTransactions(addrStr string, typeCode, start, end, page, perPage int) (transactions []types.Transaction,
+	err error) {
 	perPageNum, err := params.CheckQueryTransactionsParams(addrStr, typeCode, start, end, page, perPage)
 	if err != nil {
 		return
 	}
 
-	transactionsParams := params.NewQueryTxListParams(addrStr, int64(typeCode), int64(start), int64(end), page, perPageNum)
-	jsonBytes, err := bc.GetCodec().MarshalJSON(transactionsParams)
+	jsonBytes, err := bc.GetCodec().MarshalJSON(
+		backendtypes.NewQueryTxListParams(addrStr, int64(typeCode), int64(start), int64(end), page, perPageNum),
+	)
 	if err != nil {
 		return transactions, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := bc.Query(types.TransactionsPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", backendtypes.QuerierRoute, backendtypes.QueryTxList)
+	res, _, err := bc.Query(path, jsonBytes)
 	if err != nil {
 		return transactions, utils.ErrClientQuery(err.Error())
 	}

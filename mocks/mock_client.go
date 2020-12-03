@@ -1,34 +1,40 @@
 package mocks
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-	"testing"
-	"time"
-
-	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
-	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
-
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	farm "github.com/okex/okexchain-go-sdk/module/farm/types"
+	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	slashing "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
 	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/okexchain-go-sdk/module/token/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	evmtypes "github.com/okex/okexchain/app/types"
+	"github.com/okex/okexchain/x/common"
+	govtypes "github.com/okex/okexchain/x/gov/types"
+	orderkeeper "github.com/okex/okexchain/x/order/keeper"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/libs/common"
+	"github.com/tendermint/tendermint/libs/kv"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	tmstate "github.com/tendermint/tendermint/state"
+	tmtypes "github.com/tendermint/tendermint/types"
+	"testing"
+	"time"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -36,7 +42,7 @@ type MockClient struct {
 	t *testing.T
 	*gosdktypes.MockBaseClient
 	config  gosdktypes.ClientConfig
-	cdc     gosdktypes.SDKCodec
+	cdc     *codec.Codec
 	modules map[string]gosdktypes.Module
 }
 
@@ -75,7 +81,7 @@ func (mc *MockClient) GetConfig() gosdktypes.ClientConfig {
 }
 
 // GetCodec returns the client codec
-func (mc *MockClient) GetCodec() gosdktypes.SDKCodec {
+func (mc *MockClient) GetCodec() *codec.Codec {
 	return mc.cdc
 }
 
@@ -92,83 +98,96 @@ func (mc *MockClient) Dex() exposed.Dex {
 func (mc *MockClient) Distribution() exposed.Distribution {
 	return mc.modules[distribution.ModuleName].(exposed.Distribution)
 }
+func (mc *MockClient) Farm() exposed.Farm {
+	return mc.modules[farm.ModuleName].(exposed.Farm)
+}
 func (mc *MockClient) Governance() exposed.Governance {
 	return mc.modules[governance.ModuleName].(exposed.Governance)
 }
 func (mc *MockClient) Order() exposed.Order {
 	return mc.modules[order.ModuleName].(exposed.Order)
 }
-func (mc *MockClient) Staking() exposed.Staking {
-	return mc.modules[staking.ModuleName].(exposed.Staking)
-}
 func (mc *MockClient) Slashing() exposed.Slashing {
 	return mc.modules[slashing.ModuleName].(exposed.Slashing)
 }
-func (mc *MockClient) Token() exposed.Token {
-	return mc.modules[token.ModuleName].(exposed.Token)
+func (mc *MockClient) Staking() exposed.Staking {
+	return mc.modules[staking.ModuleName].(exposed.Staking)
 }
 func (mc *MockClient) Tendermint() exposed.Tendermint {
 	return mc.modules[tendermint.ModuleName].(exposed.Tendermint)
 }
+func (mc *MockClient) Token() exposed.Token {
+	return mc.modules[token.ModuleName].(exposed.Token)
+}
 
 // BuildAccountBytes generates the account bytes for test
-func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, coinsStr string, accNum, seqNum uint64) []byte {
+func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, codeHash, coinsStr string, accNum, seqNum uint64) []byte {
 	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
 	require.NoError(mc.t, err)
 	accPubkey, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeAccPub, accPubkeyStr)
 	require.NoError(mc.t, err)
 	coins, err := sdk.ParseDecCoins(coinsStr)
 	require.NoError(mc.t, err)
-	account := auth.BaseAccount{
-		Address:       accAddr,
-		Coins:         coins,
-		PubKey:        accPubkey,
-		AccountNumber: accNum,
-		Sequence:      seqNum,
+
+	account := evmtypes.EthAccount{
+		BaseAccount: &authtypes.BaseAccount{
+			Address:       accAddr,
+			Coins:         coins,
+			PubKey:        accPubkey,
+			AccountNumber: accNum,
+			Sequence:      seqNum,
+		},
+		CodeHash: []byte(codeHash),
 	}
 
-	bytes, err := mc.cdc.MarshalBinaryBare(account)
+	bytes, err := mc.cdc.MarshalJSON(account)
 	require.NoError(mc.t, err)
 
 	return bytes
 }
 
-// BuildTokenPairsBytes generates the token pairs bytes for test
-func (mc *MockClient) BuildTokenPairsBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
+// BuildTokenPairsResponseBytes generates the response of token pairs bytes for test
+func (mc *MockClient) BuildTokenPairsResponseBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
 	minQuantity sdk.Dec, maxPriceDigit, maxQuantityDigit, blockHeight1, blockHeight2 int64, ID1, ID2 uint64, delisting bool,
 	owner sdk.AccAddress, deposits sdk.DecCoin) []byte {
+	tokenPairs := []dex.TokenPair{
+		{
+			BaseAssetSymbol:  baseAssetSymbol1,
+			QuoteAssetSymbol: quoteAssetSymbol,
+			InitPrice:        initPrice,
+			MaxPriceDigit:    maxPriceDigit,
+			MaxQuantityDigit: maxQuantityDigit,
+			MinQuantity:      minQuantity,
+			ID:               ID1,
+			Delisting:        delisting,
+			Owner:            owner,
+			Deposits:         deposits,
+			BlockHeight:      blockHeight1,
+		},
+		{
+			BaseAssetSymbol:  baseAssetSymbol2,
+			QuoteAssetSymbol: quoteAssetSymbol,
+			InitPrice:        initPrice,
+			MaxPriceDigit:    maxPriceDigit,
+			MaxQuantityDigit: maxQuantityDigit,
+			MinQuantity:      minQuantity,
+			ID:               ID2,
+			Delisting:        delisting,
+			Owner:            owner,
+			Deposits:         deposits,
+			BlockHeight:      blockHeight2,
+		},
+	}
 
-	var tokenPairs []dex.TokenPair
+	response := dex.ListResponse{
+		Data: dex.ListDataRes{
+			Data: tokenPairs,
+		},
+	}
 
-	tokenPairs = append(tokenPairs, dex.TokenPair{
-		BaseAssetSymbol:  baseAssetSymbol1,
-		QuoteAssetSymbol: quoteAssetSymbol,
-		InitPrice:        initPrice,
-		MaxPriceDigit:    maxPriceDigit,
-		MaxQuantityDigit: maxQuantityDigit,
-		MinQuantity:      minQuantity,
-		ID:               ID1,
-		Delisting:        delisting,
-		Owner:            owner,
-		Deposits:         deposits,
-		BlockHeight:      blockHeight1,
-	})
-
-	tokenPairs = append(tokenPairs, dex.TokenPair{
-		BaseAssetSymbol:  baseAssetSymbol2,
-		QuoteAssetSymbol: quoteAssetSymbol,
-		InitPrice:        initPrice,
-		MaxPriceDigit:    maxPriceDigit,
-		MaxQuantityDigit: maxQuantityDigit,
-		MinQuantity:      minQuantity,
-		ID:               ID2,
-		Delisting:        delisting,
-		Owner:            owner,
-		Deposits:         deposits,
-		BlockHeight:      blockHeight2,
-	})
-
-	return mc.cdc.MustMarshalJSON(tokenPairs)
+	res, err := json.Marshal(response)
+	require.NoError(mc.t, err)
+	return res
 }
 
 // BuildOrderDetailBytes generates the order detail bytes for test
@@ -198,13 +217,13 @@ func (mc *MockClient) BuildOrderDetailBytes(txHash, orderID, extraInfo, product,
 
 // BuildBookResBytes generates the book result bytes for test
 func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuantity string) []byte {
-	var bookRes order.BookRes
-	bookRes.Asks = append(bookRes.Asks, order.BookResItem{
+	var bookRes orderkeeper.BookRes
+	bookRes.Asks = append(bookRes.Asks, orderkeeper.BookResItem{
 		Price:    askPrice,
 		Quantity: askQuantity,
 	})
 
-	bookRes.Bids = append(bookRes.Bids, order.BookResItem{
+	bookRes.Bids = append(bookRes.Bids, orderkeeper.BookResItem{
 		Price:    bidPrice,
 		Quantity: bidQuantity,
 	})
@@ -212,56 +231,41 @@ func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuan
 	return mc.cdc.MustMarshalJSON(bookRes)
 }
 
-// BuildAccountTokensInfoBytes generates the account tokens info bytes for test
-func (mc *MockClient) BuildAccountTokensInfoBytes(addrStr, symbol, available, freeze, locked string) []byte {
-	accTokensInfo := token.AccountTokensInfo{
-		Address: addrStr,
-	}
-
-	accTokensInfo.Currencies = append(accTokensInfo.Currencies, token.CoinInfo{
-		Symbol:    symbol,
-		Available: available,
-		Freeze:    freeze,
-		Locked:    locked,
-	})
-
-	return mc.cdc.MustMarshalJSON(accTokensInfo)
-}
-
 // BuildTokenInfoBytes generates the token info bytes for test
 func (mc *MockClient) BuildTokenInfoBytes(description, symbol, originalSymbol, wholeName string, originalTotalSupply,
-	totalSupply sdk.Dec, owner sdk.AccAddress, mintable, isSlice bool) []byte {
-	tokenInfo := token.Token{
+	totalSupply sdk.Dec, owner sdk.AccAddress, mintable, isSlice bool, tokenType int) []byte {
+	tokenInfo := token.TokenResp{
 		Description:         description,
 		Symbol:              symbol,
 		OriginalSymbol:      originalSymbol,
 		WholeName:           wholeName,
 		OriginalTotalSupply: originalTotalSupply,
-		TotalSupply:         totalSupply,
+		Type:                tokenType,
 		Owner:               owner,
 		Mintable:            mintable,
+		TotalSupply:         totalSupply,
 	}
 
 	if isSlice {
-		return mc.cdc.MustMarshalJSON([]token.Token{tokenInfo})
+		return mc.cdc.MustMarshalJSON([]token.TokenResp{tokenInfo})
 	}
 
 	return mc.cdc.MustMarshalJSON(tokenInfo)
 }
 
 // BuildValidatorsBytes generates the validator bytes for test
-func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
+func (mc *MockClient) BuildValidatorsBytes(valAddr sdk.ValAddress, consPubKey, moniker, identity, website, details string,
 	status byte, delegatorShares, minSelfDelegation sdk.Dec, unbondingHeight int64, unbondingCompletionTime time.Time,
-	jailed bool) []byte {
-	consPK, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, consPubKey)
+	jailed, isSlice bool) []byte {
+	consPK, err := stakingtypes.GetConsPubKeyBech32(consPubKey)
 	require.NoError(mc.t, err)
-	val := staking.ValidatorInner{
+	val := stakingtypes.Validator{
 		OperatorAddress: valAddr,
 		ConsPubKey:      consPK,
 		Jailed:          jailed,
-		Status:          status,
+		Status:          sdk.BondStatus(status),
 		DelegatorShares: delegatorShares,
-		Description: staking.Description{
+		Description: stakingtypes.Description{
 			Moniker:  moniker,
 			Identity: identity,
 			Website:  website,
@@ -272,14 +276,17 @@ func (mc *MockClient) BuildValidatorBytes(valAddr sdk.ValAddress, consPubKey, mo
 		MinSelfDelegation:       minSelfDelegation,
 	}
 
-	return mc.cdc.MustMarshalBinaryLengthPrefixed(val)
+	if isSlice {
+		return mc.cdc.MustMarshalJSON([]stakingtypes.Validator{val})
+	}
 
+	return mc.cdc.MustMarshalJSON(val)
 }
 
 // BuildDelegatorBytes generates the delegator bytes for test
 func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, valAddrs []sdk.ValAddress, shares, tokens,
 	totalDelegatedTokens sdk.Dec, isProxy bool) []byte {
-	delegator := staking.Delegator{
+	delegator := stakingtypes.Delegator{
 		DelegatorAddress:     delAddr,
 		ValidatorAddresses:   valAddrs,
 		Shares:               shares,
@@ -294,7 +301,7 @@ func (mc *MockClient) BuildDelegatorBytes(delAddr, proxyAddr sdk.AccAddress, val
 
 // BuildUndelegationBytes generates the undelegation bytes for test
 func (mc *MockClient) BuildUndelegationBytes(delAddr sdk.AccAddress, quantity sdk.Dec, completionTime time.Time) []byte {
-	undelegation := staking.Undelegation{
+	undelegation := stakingtypes.UndelegationInfo{
 		DelegatorAddress: delAddr,
 		Quantity:         quantity,
 		CompletionTime:   completionTime,
@@ -327,30 +334,31 @@ func (mc *MockClient) GetRawResultBlockPointer(chainID string, height int64, tim
 // GetRawResultBlockResultsPointer generates the raw tendermint result block results pointer for test
 func (mc *MockClient) GetRawResultBlockResultsPointer(power, height int64, pkType, eventType string,
 	kvPairKey []byte) *ctypes.ResultBlockResults {
-	return &ctypes.ResultBlockResults{
-		Height: height,
-		Results: &tmstate.ABCIResponses{
-			BeginBlock: &abci.ResponseBeginBlock{
-				Events: []abci.Event{
-					{
-						Type: eventType,
-						Attributes: []common.KVPair{
-							{
-								Key: kvPairKey,
-							},
-						},
-					},
+	mockEvents := []abci.Event{
+		{
+			Type: eventType,
+			Attributes: []kv.Pair{
+				{
+					Key: kvPairKey,
 				},
 			},
-			EndBlock: &abci.ResponseEndBlock{
-				ValidatorUpdates: []abci.ValidatorUpdate{
-					{
-						PubKey: abci.PubKey{
-							Type: pkType,
-						},
-						Power: power,
-					},
+		},
+	}
+	return &ctypes.ResultBlockResults{
+		Height: height,
+		TxsResults: []*abci.ResponseDeliverTx{
+			{
+				Events: mockEvents,
+			},
+		},
+		BeginBlockEvents: mockEvents,
+		EndBlockEvents:   mockEvents,
+		ValidatorUpdates: []abci.ValidatorUpdate{
+			{
+				PubKey: abci.PubKey{
+					Type: pkType,
 				},
+				Power: power,
 			},
 		},
 	}
@@ -393,8 +401,10 @@ func (mc *MockClient) GetRawValidatorsResultPointer(height, votingPower, propose
 }
 
 // GetRawTxResultPointer generates the raw tendermint tx result pointer for test
-func (mc *MockClient) GetRawTxResultPointer(hash tmbytes.HexBytes, height int64, code uint32, log, eventType string,
-	tx []byte) *ctypes.ResultTx {
+func (mc *MockClient) GetRawTxResultPointer(height int64, code uint32, log, hashHexStr, eventType string, tx []byte) *ctypes.ResultTx {
+	hash, err := hex.DecodeString(hashHexStr)
+	require.NoError(mc.t, err)
+
 	return &ctypes.ResultTx{
 		Hash:   hash,
 		Height: height,
@@ -412,20 +422,20 @@ func (mc *MockClient) GetRawTxResultPointer(hash tmbytes.HexBytes, height int64,
 }
 
 // GetRawTxResultPointer generates the raw tendermint tx search result pointer for test
-func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, hash tmbytes.HexBytes, height int64, code uint32, log,
-	eventType string, tx []byte) *ctypes.ResultTxSearch {
+func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, height int64, code uint32, log, hashHexStr, eventType string,
+	tx []byte) *ctypes.ResultTxSearch {
 	return &ctypes.ResultTxSearch{
 		TotalCount: totalCount,
 		Txs: []*ctypes.ResultTx{
-			mc.GetRawTxResultPointer(hash, height, code, log, eventType, tx),
+			mc.GetRawTxResultPointer(height, code, log, hashHexStr, eventType, tx),
 		},
 	}
 }
 
 // BuildBackendDealsResultBytes generates the backend deals result bytes for test
 func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Deal{
 				{
 					Timestamp:   timestamp,
@@ -450,8 +460,8 @@ func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orde
 // BuildBackendOrdersResultBytes generates the backend orders result bytes for test
 func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, product, side, price, quantity, filledAvgPrice,
 	remainQuantity string, status, timestamp int64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Order{
 				{
 					TxHash:         txHash,
@@ -477,8 +487,8 @@ func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, pro
 
 // BuildBackendMatchResultBytes generates the backend match result bytes for test
 func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, product string, price, quantity float64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.MatchResult{
 				{
 					Timestamp:   timestamp,
@@ -499,8 +509,8 @@ func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, prod
 // BuildBackendMatchResultBytes generates the backend transactions result bytes for test
 func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbol, quantity, fee string, txType, side,
 	timestamp int64) []byte {
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: []backend.Transaction{
 				{
 					TxHash:    txHash,
@@ -523,7 +533,7 @@ func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbo
 
 // BuildBackendCandlesBytes generates the backend candles bytes for test
 func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
-	baseResp := backend.BaseResponse{
+	baseResp := common.BaseResponse{
 		Data: candles,
 	}
 
@@ -533,9 +543,9 @@ func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
 }
 
 // BuildBackendTickersBytes generates the backend tickers bytes for test
-func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open, close, high, low, price, volumn,
-	change string) []byte {
-	baseResp := backend.BaseResponse{
+func (mc *MockClient) BuildBackendTickersBytes(symbol, product string, timestamp int64, open, close, high, low, price, volumn,
+	change float64) []byte {
+	baseResp := common.BaseResponse{
 		Data: []backend.Ticker{
 			{
 				Symbol:    symbol,
@@ -558,11 +568,11 @@ func (mc *MockClient) BuildBackendTickersBytes(symbol, product, timestamp, open,
 }
 
 // BuildProposalsBytes generates the proposals bytes for test
-func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.ProposalStatus,
+func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status govtypes.ProposalStatus,
 	mockTime time.Time, totalDeposit sdk.DecCoins, mockPower sdk.Dec) []byte {
 	proposals := []governance.Proposal{
 		{
-			Content:         governance.TextProposal{},
+			Content:         govtypes.TextProposal{},
 			ProposalID:      proposalID,
 			Status:          status,
 			SubmitTime:      mockTime,
@@ -570,7 +580,7 @@ func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.P
 			VotingStartTime: mockTime,
 			VotingEndTime:   mockTime,
 			TotalDeposit:    totalDeposit,
-			FinalTallyResult: governance.TallyResult{
+			FinalTallyResult: govtypes.TallyResult{
 				TotalPower:      mockPower,
 				TotalVotedPower: mockPower,
 				Yes:             mockPower,
@@ -582,4 +592,94 @@ func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status governance.P
 	}
 
 	return mc.cdc.MustMarshalJSON(proposals)
+}
+
+// BuildFarmPoolsBytes generates the farm pools bytes for test
+func (mc *MockClient) BuildFarmPoolsBytes(poolName1, poolName2, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
+	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
+	require.NoError(mc.t, err)
+
+	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
+	farmPools := []farm.FarmPool{
+		{
+			Owner:            ownerAddr,
+			Name:             poolName1,
+			MinLockAmount:    testDecCoin,
+			DepositAmount:    testDecCoin,
+			TotalValueLocked: testDecCoin,
+			YieldedTokenInfos: farm.YieldedTokenInfos{
+				{
+					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+					StartBlockHeightToYield: height,
+					AmountYieldedPerBlock:   amountDec,
+				},
+			},
+			TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
+		},
+		{
+			Owner:            ownerAddr,
+			Name:             poolName2,
+			MinLockAmount:    testDecCoin,
+			DepositAmount:    testDecCoin,
+			TotalValueLocked: testDecCoin,
+			YieldedTokenInfos: farm.YieldedTokenInfos{
+				{
+					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+					StartBlockHeightToYield: height,
+					AmountYieldedPerBlock:   amountDec,
+				},
+			},
+			TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
+		},
+	}
+
+	return mc.cdc.MustMarshalJSON(farmPools)
+}
+
+// BuildFarmPoolBytes generates the farm pool bytes for test
+func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
+	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
+	require.NoError(mc.t, err)
+
+	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
+	farmPool := farm.FarmPool{
+		Owner:            ownerAddr,
+		Name:             poolName,
+		MinLockAmount:    testDecCoin,
+		DepositAmount:    testDecCoin,
+		TotalValueLocked: testDecCoin,
+		YieldedTokenInfos: farm.YieldedTokenInfos{
+			{
+				RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+				StartBlockHeightToYield: height,
+				AmountYieldedPerBlock:   amountDec,
+			},
+		},
+		TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
+	}
+
+	return mc.cdc.MustMarshalJSON(farmPool)
+}
+
+// BuildFarmPoolNameList generates the farm pool name list bytes for test
+func (mc *MockClient) BuildFarmPoolNameListBytes(poolName ...string) []byte {
+	return mc.cdc.MustMarshalJSON(poolName)
+}
+
+// BuildAccAddrList generates the account address list bytes for test
+func (mc *MockClient) BuildAccAddrListBytes(accAddr ...sdk.AccAddress) []byte {
+	return mc.cdc.MustMarshalJSON(accAddr)
+}
+
+// BuildLockInfoBytes generates the lock info bytes for test
+func (mc *MockClient) BuildLockInfoBytes(accAddr sdk.AccAddress, poolName, tokenSymbol string, amountDec sdk.Dec, height int64,
+	referencePeriod uint64) []byte {
+	info := farm.LockInfo{
+		Owner:            accAddr,
+		PoolName:         poolName,
+		Amount:           sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
+		StartBlockHeight: height,
+		ReferencePeriod:  referencePeriod,
+	}
+	return mc.cdc.MustMarshalJSON(info)
 }

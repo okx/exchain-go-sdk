@@ -2,6 +2,8 @@ package order
 
 import (
 	"fmt"
+	orderkeeper "github.com/okex/okexchain/x/order/keeper"
+	ordertypes "github.com/okex/okexchain/x/order/types"
 
 	"github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
@@ -10,13 +12,13 @@ import (
 
 // QueryDepthBook gets the current depth book info of a specific product
 func (oc orderClient) QueryDepthBook(product string) (depthBook types.BookRes, err error) {
-	depthBookParams := params.NewQueryDepthBookParams(product, 200)
-	jsonBytes, err := oc.GetCodec().MarshalJSON(depthBookParams)
+	jsonBytes, err := oc.GetCodec().MarshalJSON(orderkeeper.NewQueryDepthBookParams(product, orderkeeper.DefaultBookSize))
 	if err != nil {
 		return depthBook, utils.ErrMarshalJSON(err.Error())
 	}
 
-	res, err := oc.Query(types.DepthbookPath, jsonBytes)
+	path := fmt.Sprintf("custom/%s/%s", ordertypes.QuerierRoute, ordertypes.QueryDepthBook)
+	res, _, err := oc.Query(path, jsonBytes)
 	if err != nil {
 		return depthBook, utils.ErrClientQuery(err.Error())
 	}
@@ -34,7 +36,8 @@ func (oc orderClient) QueryOrderDetail(orderID string) (orderDetail types.OrderD
 		return
 	}
 
-	res, err := oc.Query(fmt.Sprintf("%s/%s", types.OrderDetailPath, orderID), nil)
+	path := fmt.Sprintf("custom/%s/%s/%s", ordertypes.QuerierRoute, ordertypes.QueryOrderDetail, orderID)
+	res, _, err := oc.Query(path, nil)
 	if err != nil {
 		return orderDetail, utils.ErrClientQuery(err.Error())
 	}

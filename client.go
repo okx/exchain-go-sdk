@@ -2,37 +2,50 @@ package gosdk
 
 import (
 	"fmt"
-
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module"
 	"github.com/okex/okexchain-go-sdk/module/ammswap"
+	ammswaptypes "github.com/okex/okexchain-go-sdk/module/ammswap/types"
 	"github.com/okex/okexchain-go-sdk/module/auth"
+	authtypes "github.com/okex/okexchain-go-sdk/module/auth/types"
 	"github.com/okex/okexchain-go-sdk/module/backend"
+	backendtypes "github.com/okex/okexchain-go-sdk/module/backend/types"
 	"github.com/okex/okexchain-go-sdk/module/dex"
+	dextypes "github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
+	distrtypes "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
+	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
 	"github.com/okex/okexchain-go-sdk/module/order"
+	ordertypes "github.com/okex/okexchain-go-sdk/module/order/types"
 	"github.com/okex/okexchain-go-sdk/module/slashing"
+	slashingtypes "github.com/okex/okexchain-go-sdk/module/slashing/types"
 	"github.com/okex/okexchain-go-sdk/module/staking"
+	stakingtypes "github.com/okex/okexchain-go-sdk/module/staking/types"
 	"github.com/okex/okexchain-go-sdk/module/tendermint"
+	tmtypes "github.com/okex/okexchain-go-sdk/module/tendermint/types"
 	"github.com/okex/okexchain-go-sdk/module/token"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	farmtypes "github.com/okex/okexchain/x/farm/types"
 )
 
-// Client - structure of the main client of okexchain gosdk
+// Client - structure of the main client of OKExChain GoSDK
 type Client struct {
-	config  sdk.ClientConfig
-	cdc     sdk.SDKCodec
-	modules map[string]sdk.Module
+	config  gosdktypes.ClientConfig
+	cdc     *codec.Codec
+	modules map[string]gosdktypes.Module
 }
 
 // NewClient creates a new instance of Client
-func NewClient(config sdk.ClientConfig) Client {
-	cdc := sdk.NewCodec()
+func NewClient(config gosdktypes.ClientConfig) Client {
+	cdc := gosdktypes.NewCodec()
 	pClient := &Client{
 		config:  config,
 		cdc:     cdc,
-		modules: make(map[string]sdk.Module),
+		modules: make(map[string]gosdktypes.Module),
 	}
 	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
@@ -48,12 +61,13 @@ func NewClient(config sdk.ClientConfig) Client {
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
 		ammswap.NewAmmSwapClient(pBaseClient),
+		farm.NewFarmClient(pBaseClient),
 	)
 
 	return *pClient
 }
 
-func (cli *Client) registerModule(mods ...sdk.Module) {
+func (cli *Client) registerModule(mods ...gosdktypes.Module) {
 	for _, mod := range mods {
 		moduleName := mod.Name()
 		if _, ok := cli.modules[moduleName]; ok {
@@ -63,46 +77,49 @@ func (cli *Client) registerModule(mods ...sdk.Module) {
 		mod.RegisterCodec(cli.cdc)
 		cli.modules[moduleName] = mod
 	}
-	sdk.RegisterBasicCodec(cli.cdc)
+	gosdktypes.RegisterBasicCodec(cli.cdc)
 	cli.cdc.Seal()
 }
 
 // GetConfig returns the client config
-func (cli *Client) GetConfig() sdk.ClientConfig {
+func (cli *Client) GetConfig() gosdktypes.ClientConfig {
 	return cli.config
 }
 
 // nolint
+func (cli *Client) AmmSwap() exposed.AmmSwap {
+	return cli.modules[ammswaptypes.ModuleName].(exposed.AmmSwap)
+}
 func (cli *Client) Auth() exposed.Auth {
-	return cli.modules[auth.ModuleName].(exposed.Auth)
+	return cli.modules[authtypes.ModuleName].(exposed.Auth)
 }
 func (cli *Client) Backend() exposed.Backend {
-	return cli.modules[backend.ModuleName].(exposed.Backend)
+	return cli.modules[backendtypes.ModuleName].(exposed.Backend)
 }
 func (cli *Client) Dex() exposed.Dex {
-	return cli.modules[dex.ModuleName].(exposed.Dex)
+	return cli.modules[dextypes.ModuleName].(exposed.Dex)
 }
 func (cli *Client) Distribution() exposed.Distribution {
-	return cli.modules[distribution.ModuleName].(exposed.Distribution)
+	return cli.modules[distrtypes.ModuleName].(exposed.Distribution)
+}
+func (cli *Client) Farm() exposed.Farm {
+	return cli.modules[farmtypes.ModuleName].(exposed.Farm)
 }
 func (cli *Client) Governance() exposed.Governance {
-	return cli.modules[governance.ModuleName].(exposed.Governance)
+	return cli.modules[govtypes.ModuleName].(exposed.Governance)
 }
 func (cli *Client) Order() exposed.Order {
-	return cli.modules[order.ModuleName].(exposed.Order)
-}
-func (cli *Client) Staking() exposed.Staking {
-	return cli.modules[staking.ModuleName].(exposed.Staking)
+	return cli.modules[ordertypes.ModuleName].(exposed.Order)
 }
 func (cli *Client) Slashing() exposed.Slashing {
-	return cli.modules[slashing.ModuleName].(exposed.Slashing)
+	return cli.modules[slashingtypes.ModuleName].(exposed.Slashing)
 }
-func (cli *Client) Token() exposed.Token {
-	return cli.modules[token.ModuleName].(exposed.Token)
+func (cli *Client) Staking() exposed.Staking {
+	return cli.modules[stakingtypes.ModuleName].(exposed.Staking)
 }
 func (cli *Client) Tendermint() exposed.Tendermint {
-	return cli.modules[tendermint.ModuleName].(exposed.Tendermint)
+	return cli.modules[tmtypes.ModuleName].(exposed.Tendermint)
 }
-func (cli *Client) AmmSwap() exposed.AmmSwap {
-	return cli.modules[ammswap.ModuleName].(exposed.AmmSwap)
+func (cli *Client) Token() exposed.Token {
+	return cli.modules[tokentypes.ModuleName].(exposed.Token)
 }

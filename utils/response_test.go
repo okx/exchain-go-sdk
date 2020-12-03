@@ -2,10 +2,9 @@ package utils
 
 import (
 	"encoding/json"
-	"testing"
-
-	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
+	"github.com/okex/okexchain/x/common"
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 // custom struct for test
@@ -18,8 +17,8 @@ type TestData struct {
 
 func TestUnmarshalListResponse(t *testing.T) {
 	// data preparation
-	listResp := backend.ListResponse{
-		Data: backend.ListDataRes{
+	listResp := common.ListResponse{
+		Data: common.ListDataRes{
 			Data: TestData{
 				Int:   1,
 				Str:   "default string",
@@ -60,7 +59,7 @@ func TestUnmarshalListResponse(t *testing.T) {
 
 func TestGetDataFromBaseResponse(t *testing.T) {
 	// data preparation
-	baseResp := backend.BaseResponse{
+	baseResp := common.BaseResponse{
 		Data: TestData{
 			Int:   1,
 			Str:   "default string",

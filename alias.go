@@ -2,14 +2,15 @@ package gosdk
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/auth"
-	"github.com/okex/okexchain-go-sdk/module/backend"
-	"github.com/okex/okexchain-go-sdk/module/dex"
-	"github.com/okex/okexchain-go-sdk/module/governance"
-	"github.com/okex/okexchain-go-sdk/module/order"
-	"github.com/okex/okexchain-go-sdk/module/staking"
-	"github.com/okex/okexchain-go-sdk/module/tendermint"
-	"github.com/okex/okexchain-go-sdk/module/token"
+	ammswap "github.com/okex/okexchain-go-sdk/module/ammswap/types"
+	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
+	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
+	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
+	order "github.com/okex/okexchain-go-sdk/module/order/types"
+	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
+	tmtypes "github.com/okex/okexchain-go-sdk/module/tendermint/types"
+	token "github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types"
 )
 
@@ -34,14 +35,15 @@ var (
 // nolint
 type (
 	TxResponse = sdk.TxResponse
+	// ammswap
+	SwapTokenPair = ammswap.SwapTokenPair
 	// auth
 	Account = auth.Account
 	// staking
-	Validator     = staking.Validator
-	DelegatorResp = staking.DelegatorResp
+	Validator         = staking.Validator
+	DelegatorResponse = staking.DelegatorResponse
 	// token
-	Token             = token.Token
-	AccountTokensInfo = token.AccountTokensInfo
+	TokenResp = token.TokenResp
 	// dex
 	TokenPair = dex.TokenPair
 	// order
@@ -52,13 +54,14 @@ type (
 	MatchResult = backend.MatchResult
 	Order       = backend.Order
 	Deal        = backend.Deal
+	Transaction = backend.Transaction
 	// tendermint
-	Block            = tendermint.Block
-	BlockResults     = tendermint.BlockResults
-	ResultCommit     = tendermint.ResultCommit
-	ResultValidators = tendermint.ResultValidators
-	ResultTx         = tendermint.ResultTx
-	ResultTxs        = tendermint.ResultTxs
+	Block            = tmtypes.Block
+	BlockResults     = tmtypes.ResultBlockResults
+	ResultCommit     = tmtypes.ResultCommit
+	ResultValidators = tmtypes.ResultValidators
+	ResultTx         = tmtypes.ResultTx
+	ResultTxSearch   = tmtypes.ResultTxSearch
 	// governance
 	Proposal = governance.Proposal
 )

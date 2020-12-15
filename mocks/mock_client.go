@@ -13,6 +13,7 @@ import (
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
 	distribution "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	evm "github.com/okex/okexchain-go-sdk/module/evm/types"
 	farm "github.com/okex/okexchain-go-sdk/module/farm/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
@@ -97,6 +98,9 @@ func (mc *MockClient) Dex() exposed.Dex {
 }
 func (mc *MockClient) Distribution() exposed.Distribution {
 	return mc.modules[distribution.ModuleName].(exposed.Distribution)
+}
+func (mc *MockClient) Evm() exposed.Evm {
+	return mc.modules[evm.ModuleName].(exposed.Evm)
 }
 func (mc *MockClient) Farm() exposed.Farm {
 	return mc.modules[farm.ModuleName].(exposed.Farm)

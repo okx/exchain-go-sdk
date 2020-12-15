@@ -9,6 +9,7 @@ import (
 const (
 	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	defaultAddr       = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	defaultAddrEth    = "0x9aD84c8630E0282F78e5479B46E64E17779e3Cfb"
 	defaultPrivateKey = "EA6D97F31E4B70663594DD6AFC3E3550AAB5FDD9C44305E8F8F2003023B27FDA"
 )
 

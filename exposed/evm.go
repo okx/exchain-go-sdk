@@ -14,5 +14,8 @@ type Evm interface {
 
 // EvmTx shows the expected tx behavior for inner evm client
 type EvmTx interface {
-	SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, payloadStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
+		sdk.TxResponse, error)
+	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
+		sdk.TxResponse, string, error)
 }

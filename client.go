@@ -15,6 +15,8 @@ import (
 	dextypes "github.com/okex/okexchain-go-sdk/module/dex/types"
 	"github.com/okex/okexchain-go-sdk/module/distribution"
 	distrtypes "github.com/okex/okexchain-go-sdk/module/distribution/types"
+	"github.com/okex/okexchain-go-sdk/module/evm"
+	evmtypes "github.com/okex/okexchain-go-sdk/module/evm/types"
 	"github.com/okex/okexchain-go-sdk/module/farm"
 	"github.com/okex/okexchain-go-sdk/module/governance"
 	govtypes "github.com/okex/okexchain-go-sdk/module/governance/types"
@@ -50,18 +52,19 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
 	pClient.registerModule(
+		ammswap.NewAmmSwapClient(pBaseClient),
 		auth.NewAuthClient(pBaseClient),
 		backend.NewBackendClient(pBaseClient),
 		dex.NewDexClient(pBaseClient),
 		distribution.NewDistrClient(pBaseClient),
+		evm.NewEvmClient(pBaseClient),
+		farm.NewFarmClient(pBaseClient),
 		governance.NewGovClient(pBaseClient),
 		order.NewOrderClient(pBaseClient),
 		staking.NewStakingClient(pBaseClient),
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
-		ammswap.NewAmmSwapClient(pBaseClient),
-		farm.NewFarmClient(pBaseClient),
 	)
 
 	return *pClient
@@ -101,6 +104,9 @@ func (cli *Client) Dex() exposed.Dex {
 }
 func (cli *Client) Distribution() exposed.Distribution {
 	return cli.modules[distrtypes.ModuleName].(exposed.Distribution)
+}
+func (cli *Client) Evm() exposed.Evm {
+	return cli.modules[evmtypes.ModuleName].(exposed.Evm)
 }
 func (cli *Client) Farm() exposed.Farm {
 	return cli.modules[farmtypes.ModuleName].(exposed.Farm)

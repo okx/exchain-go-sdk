@@ -19,6 +19,8 @@ const (
 	expectedBurnPayloadStr = "0x42966c680000000000000000000000000000000000000000000000000000000000000400"
 	// params:0x9aD84c8630E0282F78e5479B46E64E17779e3Cfb, 1024
 	expectedTransferPayloadStr = "0xa9059cbb0000000000000000000000009ad84c8630e0282f78e5479b46e64e17779e3cfb0000000000000000000000000000000000000000000000000000000000000400"
+
+	badHexStr = "0x0123456789abcdefg"
 )
 
 func TestToCosmosAddress(t *testing.T) {
@@ -71,4 +73,14 @@ func TestPayloadBuilder_Build(t *testing.T) {
 	payload, err = payloadBuilder.Build("transfer", EthAddress(ethAddrStr), Uint256(1024))
 	require.NoError(t, err)
 	require.True(t, bytes.Equal(expectedTransferPayload, payload))
+
+	// error test
+	_, err = NewPayloadBuilder(erc20bin, abiJSON[1:])
+	require.Error(t, err)
+
+	_, err = NewPayloadBuilder(badHexStr, abiJSON)
+	require.Error(t, err)
+
+	_, err = payloadBuilder.Build("unknownName")
+	require.Error(t, err)
 }

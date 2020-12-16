@@ -25,6 +25,11 @@ func ToCosmosAddress(addrStr string) (toAddr sdk.AccAddress, err error) {
 	return sdk.AccAddressFromHex(addrStr)
 }
 
+// GetEthAddressStrFromCosmosAddr gets the string of eth address from a cosmos acc addr
+func GetEthAddressStrFromCosmosAddr(accAddr sdk.AccAddress) string {
+	return common.BytesToAddress(accAddr.Bytes()).Hex()
+}
+
 // Uint256 gets the available arg for payload Build
 func Uint256(n int) *big.Int {
 	return big.NewInt(int64(n))

@@ -8,3 +8,7 @@ import (
 const (
 	ModuleName = evmtypes.ModuleName
 )
+
+type (
+	QueryResCode = evmtypes.QueryResCode
+)

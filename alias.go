@@ -6,6 +6,7 @@ import (
 	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
 	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
 	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	evm "github.com/okex/okexchain-go-sdk/module/evm/types"
 	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
 	order "github.com/okex/okexchain-go-sdk/module/order/types"
 	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
@@ -68,4 +69,6 @@ type (
 	// farm
 	FarmPool = farm.FarmPool
 	LockInfo = farm.LockInfo
+	// evm
+	QueryResCode = evm.QueryResCode
 )

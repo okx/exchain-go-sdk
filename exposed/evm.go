@@ -3,6 +3,7 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/okexchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
@@ -10,6 +11,7 @@ import (
 type Evm interface {
 	gosdktypes.Module
 	EvmTx
+	EvmQuery
 }
 
 // EvmTx shows the expected tx behavior for inner evm client
@@ -18,4 +20,9 @@ type EvmTx interface {
 		sdk.TxResponse, error)
 	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, string, error)
+}
+
+// EvmQuery shows the expected query behavior for inner evm client
+type EvmQuery interface {
+	QueryCode(contractAddrStr string) (types.QueryResCode, error)
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/okex/okexchain-go-sdk/utils"
 	apptypes "github.com/okex/okexchain/app/types"
 	evmtypes "github.com/okex/okexchain/x/evm/types"
-	"strconv"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ func (ec evmClient) SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, pay
 		return
 	}
 
-	amount, err := strconv.ParseInt(amountStr, 0, 64)
+	amount, err := sdk.NewDecFromStr(amountStr)
 	if err != nil {
 		return
 	}
@@ -42,7 +41,7 @@ func (ec evmClient) SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, pay
 	msg := evmtypes.NewMsgEthermint(
 		seqNum,
 		&toAddr,
-		sdk.NewInt(amount),
+		sdk.NewIntFromBigInt(amount.Int),
 		ec.GetConfig().Gas,
 		sdk.NewInt(apptypes.DefaultGasPrice),
 		data,
@@ -63,9 +62,9 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 		return
 	}
 
-	var amount int64
+	amount := sdk.ZeroDec()
 	if len(amountStr) != 0 {
-		amount, err = strconv.ParseInt(amountStr, 0, 64)
+		amount, err = sdk.NewDecFromStr(amountStr)
 		if err != nil {
 			return
 		}
@@ -74,7 +73,7 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 	msg := evmtypes.NewMsgEthermint(
 		seqNum,
 		nil,
-		sdk.NewInt(amount),
+		sdk.NewIntFromBigInt(amount.Int),
 		ec.GetConfig().Gas,
 		sdk.NewInt(apptypes.DefaultGasPrice),
 		data,

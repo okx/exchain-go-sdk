@@ -32,10 +32,10 @@ func TestEvmClient_SendTx(t *testing.T) {
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
 
-	mockCli.EXPECT().GetConfig().Return(gosdktypes.ClientConfig{Gas: 200000}).Times(2)
+	mockCli.EXPECT().GetConfig().Return(gosdktypes.ClientConfig{Gas: 200000}).Times(3)
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(2)
+		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(3)
 
 	res, err := mockCli.Evm().SendTx(fromInfo, passWd, recAddr, "1000000000000000000", "", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
@@ -44,6 +44,11 @@ func TestEvmClient_SendTx(t *testing.T) {
 
 	res, err = mockCli.Evm().SendTx(fromInfo, passWd, recAddrEth, "1000000000000000000", "", memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+
+	res, err = mockCli.Evm().SendTx(fromInfo, passWd, recAddrEth, "1000000000000000000", defaultPayloadStr[2:],
+		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)
 
@@ -80,12 +85,18 @@ func TestEvmClient_CreateContract(t *testing.T) {
 	accInfo, err := mockCli.Auth().QueryAccount(addr)
 	require.NoError(t, err)
 
-	mockCli.EXPECT().GetConfig().Return(gosdktypes.ClientConfig{Gas: 200000}).Times(2)
+	mockCli.EXPECT().GetConfig().Return(gosdktypes.ClientConfig{Gas: 200000}).Times(3)
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
-		Return(mocks.DefaultMockSuccessTxResponse(), nil)
+		Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(2)
 
 	res, contractAddr, err := mockCli.Evm().CreateContract(fromInfo, passWd, "1000000000000000000", defaultPayloadStr,
+		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+	require.NotZero(t, len(contractAddr))
+
+	res, contractAddr, err = mockCli.Evm().CreateContract(fromInfo, passWd, "1000000000000000000", defaultPayloadStr[2:],
 		memo, accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)

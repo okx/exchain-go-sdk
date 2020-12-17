@@ -94,7 +94,7 @@ func TestTendermintClient_QueryBlockResults(t *testing.T) {
 	_, err = mockCli.Tendermint().QueryBlockResults(height)
 	require.Error(t, err)
 
-	_, err = mockCli.Tendermint().QueryBlock(-1)
+	_, err = mockCli.Tendermint().QueryBlockResults(-1)
 	require.Error(t, err)
 }
 
@@ -194,6 +194,10 @@ func TestTendermintClient_QueryTxResult(t *testing.T) {
 
 	mockCli.EXPECT().Tx(expectedHashBytes, true).Return(nil, errors.New("default error"))
 	_, err = mockCli.Tendermint().QueryTxResult(hashHexStr, true)
+	require.Error(t, err)
+
+	badHashHexStr := "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFG"
+	_, err = mockCli.Tendermint().QueryTxResult(badHashHexStr, true)
 	require.Error(t, err)
 }
 

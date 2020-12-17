@@ -687,3 +687,11 @@ func (mc *MockClient) BuildLockInfoBytes(accAddr sdk.AccAddress, poolName, token
 	}
 	return mc.cdc.MustMarshalJSON(info)
 }
+
+// BuildQueryResCode generates query res code bytes for test
+func (mc *MockClient) BuildQueryResCode(codeStr string) []byte {
+	info := evm.QueryResCode{
+		Code: []byte(codeStr),
+	}
+	return mc.cdc.MustMarshalJSON(info)
+}

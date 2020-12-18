@@ -70,5 +70,6 @@ type (
 	FarmPool = farm.FarmPool
 	LockInfo = farm.LockInfo
 	// evm
-	QueryResCode = evm.QueryResCode
+	QueryResCode    = evm.QueryResCode
+	QueryResStorage = evm.QueryResStorage
 )

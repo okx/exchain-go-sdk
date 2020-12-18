@@ -25,4 +25,5 @@ type EvmTx interface {
 // EvmQuery shows the expected query behavior for inner evm client
 type EvmQuery interface {
 	QueryCode(contractAddrStr string) (types.QueryResCode, error)
+	QueryStorageAt(contractAddrStr, keyHexStr string) (types.QueryResStorage, error)
 }

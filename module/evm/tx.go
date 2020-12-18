@@ -21,9 +21,12 @@ func (ec evmClient) SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, pay
 		return
 	}
 
-	amount, err := sdk.NewDecFromStr(amountStr)
-	if err != nil {
-		return
+	amount := sdk.ZeroDec()
+	if len(amountStr) != 0 {
+		amount, err = sdk.NewDecFromStr(amountStr)
+		if err != nil {
+			return
+		}
 	}
 
 	var data []byte

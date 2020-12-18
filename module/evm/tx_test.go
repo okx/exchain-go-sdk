@@ -63,6 +63,10 @@ func TestEvmClient_SendTx(t *testing.T) {
 	_, err = mockCli.Evm().SendTx(fromInfo, passWd, recAddr, "0.1024", badPayloadStr, memo,
 		accInfo.GetAccountNumber(), accInfo.GetSequence())
 	require.Error(t, err)
+
+	_, err = mockCli.Evm().SendTx(fromInfo, passWd, recAddr, "0.1024okt", "", memo,
+		accInfo.GetAccountNumber(), accInfo.GetSequence())
+	require.Error(t, err)
 }
 
 func TestEvmClient_CreateContract(t *testing.T) {

@@ -10,5 +10,6 @@ const (
 )
 
 type (
-	QueryResCode = evmtypes.QueryResCode
+	QueryResCode    = evmtypes.QueryResCode
+	QueryResStorage = evmtypes.QueryResStorage
 )

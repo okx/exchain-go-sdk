@@ -32,3 +32,23 @@ func (ec evmClient) QueryCode(contractAddrStr string) (resCode types.QueryResCod
 
 	return
 }
+
+// QueryStorageAt gets the encoded bytes with a specific key from the storage
+func (ec evmClient) QueryStorageAt(contractAddrStr, keyStr string) (resStorage types.QueryResStorage, err error) {
+	if !strings.HasPrefix(contractAddrStr, "0x") {
+		contractAddrStr = fmt.Sprintf("0x%s", contractAddrStr)
+	}
+
+	key := utils.FormatKeyToHash(keyStr)
+	path := fmt.Sprintf("custom/%s/storage/%s/%s", evmtypes.RouterKey, common.HexToAddress(contractAddrStr).Hex(), key)
+	res, _, err := ec.Query(path, nil)
+	if err != nil {
+		return resStorage, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = ec.GetCodec().UnmarshalJSON(res, &resStorage); err != nil {
+		return resStorage, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}

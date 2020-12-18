@@ -30,6 +30,16 @@ func GetEthAddressStrFromCosmosAddr(accAddr sdk.AccAddress) string {
 	return common.BytesToAddress(accAddr.Bytes()).Hex()
 }
 
+// FormatKeyToHash converts the key string to hash
+func FormatKeyToHash(keyStr string) string {
+	if !strings.HasPrefix(keyStr, "0x") {
+		keyStr = fmt.Sprintf("0x%s", keyStr)
+	}
+
+	ethkey := common.HexToHash(keyStr)
+	return ethkey.Hex()
+}
+
 // Uint256 gets the available arg for payload Build
 func Uint256(n int) *big.Int {
 	return big.NewInt(int64(n))

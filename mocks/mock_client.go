@@ -695,3 +695,11 @@ func (mc *MockClient) BuildQueryResCode(codeStr string) []byte {
 	}
 	return mc.cdc.MustMarshalJSON(info)
 }
+
+// BuildQueryResStorage generates query res storage bytes for test
+func (mc *MockClient) BuildQueryResStorage(storageStr string) []byte {
+	info := evm.QueryResStorage{
+		Value: []byte(storageStr),
+	}
+	return mc.cdc.MustMarshalJSON(info)
+}

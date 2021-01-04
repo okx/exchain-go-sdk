@@ -7,13 +7,13 @@ require (
 	github.com/cosmos/cosmos-sdk v0.39.2
 	github.com/ethereum/go-ethereum v1.9.25
 	github.com/golang/mock v1.4.4
-	github.com/okex/okexchain v0.11.1-0.20201231114349-94ae955082b0
+	github.com/okex/okexchain v0.11.1-0.20210104073946-0d40cd944fcb
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/go-amino v0.15.1
 	github.com/tendermint/tendermint v0.33.9
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/okex/cosmos-sdk v0.39.3-0.20201230153641-0b0f50527905
+	github.com/cosmos/cosmos-sdk => github.com/okex/cosmos-sdk v0.39.2-okexchain2
 	github.com/tendermint/tendermint => github.com/okex/tendermint v0.33.9-okexchain1
 )

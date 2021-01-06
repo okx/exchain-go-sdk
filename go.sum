@@ -505,6 +505,8 @@ github.com/nxadm/tail v1.4.4 h1:DQuhQpB1tVlglWS2hLQ5OV6B5r8aGxSrPc5Qo6uTN78=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/okex/cosmos-sdk v0.39.2-okexchain2 h1:v3ikHd4JiPOy/eqqB1vbEeXdrn2OV93HMZugfF6DpGA=
 github.com/okex/cosmos-sdk v0.39.2-okexchain2/go.mod h1:Y1C2roqCVZ6gSYG31X77x4NLcbSGS9VP1GIiAE1imcc=
+github.com/okex/iavl v0.14.1-okexchain1 h1:aP9Rpxb1QU06WgTJ/xLyEQbZOiZzKy3once7wGtNLIU=
+github.com/okex/iavl v0.14.1-okexchain1/go.mod h1:QmfViflFiXzxKLQE4tAUuWQHq+RSuQFxablW5oJZ6sE=
 github.com/okex/okexchain v0.16.0 h1:cYh3S9vMYOwLwk4glNJNVRzyBkz6Ixcul6u38whWn/I=
 github.com/okex/okexchain v0.16.0/go.mod h1:eltaYeTSSyQndNiFyedpFTdk+KzNuJ43LrAvt++J5HY=
 github.com/okex/tendermint v0.33.9-okexchain1 h1:D/ucsRdls+9fkfmvc9AdrFhSS8gtfzk3jyYt+PSzbEY=
@@ -706,8 +708,6 @@ github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15/go.mod h1:z4YtwM
 github.com/tendermint/go-amino v0.14.1/go.mod h1:i/UKE5Uocn+argJJBb12qTZsCDBcAYMbR92AaJVmKso=
 github.com/tendermint/go-amino v0.15.1 h1:D2uk35eT4iTsvJd9jWIetzthE5C0/k2QmMFkCN+4JgQ=
 github.com/tendermint/go-amino v0.15.1/go.mod h1:TQU0M1i/ImAo+tYpZi73AU3V/dKeCoMC9Sphe2ZwGME=
-github.com/tendermint/iavl v0.14.1 h1:jz7YOvGiPwmcqqVMcSMjxCu4WXtQYGhKdKrWTTJ5EKs=
-github.com/tendermint/iavl v0.14.1/go.mod h1:QmfViflFiXzxKLQE4tAUuWQHq+RSuQFxablW5oJZ6sE=
 github.com/tendermint/tm-db v0.5.1 h1:H9HDq8UEA7Eeg13kdYckkgwwkQLBnJGgX4PgLJRhieY=
 github.com/tendermint/tm-db v0.5.1/go.mod h1:g92zWjHpCYlEvQXvy9M168Su8V1IBEeawpXVVBaK4f4=
 github.com/tjfoc/gmsm v1.0.1/go.mod h1:XxO4hdhhrzAd+G4CjDqaOkd0hUzmtPR/d3EiBBMn/wc=

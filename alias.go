@@ -1,22 +1,26 @@
 package gosdk
 
 import (
-	"github.com/okex/okexchain-go-sdk/module/auth"
-	"github.com/okex/okexchain-go-sdk/module/backend"
-	"github.com/okex/okexchain-go-sdk/module/dex"
-	"github.com/okex/okexchain-go-sdk/module/governance"
-	"github.com/okex/okexchain-go-sdk/module/order"
-	"github.com/okex/okexchain-go-sdk/module/staking"
-	"github.com/okex/okexchain-go-sdk/module/tendermint"
-	"github.com/okex/okexchain-go-sdk/module/token"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	ammswap "github.com/okex/okexchain-go-sdk/module/ammswap/types"
+	auth "github.com/okex/okexchain-go-sdk/module/auth/types"
+	backend "github.com/okex/okexchain-go-sdk/module/backend/types"
+	dex "github.com/okex/okexchain-go-sdk/module/dex/types"
+	evm "github.com/okex/okexchain-go-sdk/module/evm/types"
+	governance "github.com/okex/okexchain-go-sdk/module/governance/types"
+	order "github.com/okex/okexchain-go-sdk/module/order/types"
+	staking "github.com/okex/okexchain-go-sdk/module/staking/types"
+	tendermint "github.com/okex/okexchain-go-sdk/module/tendermint/types"
+	token "github.com/okex/okexchain-go-sdk/module/token/types"
+	"github.com/okex/okexchain-go-sdk/types"
+	farm "github.com/okex/okexchain/x/farm/types"
 )
 
 // const
 const (
-	BroadcastSync  = sdk.BroadcastSync
-	BroadcastAsync = sdk.BroadcastAsync
-	BroadcastBlock = sdk.BroadcastBlock
+	BroadcastSync  = types.BroadcastSync
+	BroadcastAsync = types.BroadcastAsync
+	BroadcastBlock = types.BroadcastBlock
 
 	// vote for the proposal
 	VoteYes        = "yes"
@@ -27,20 +31,21 @@ const (
 
 var (
 	// NewClientConfig gives an easy way for the callers to set client config
-	NewClientConfig = sdk.NewClientConfig
+	NewClientConfig = types.NewClientConfig
 )
 
 // nolint
 type (
 	TxResponse = sdk.TxResponse
+	// ammswap
+	SwapTokenPair = ammswap.SwapTokenPair
 	// auth
 	Account = auth.Account
 	// staking
-	Validator     = staking.Validator
-	DelegatorResp = staking.DelegatorResp
+	Validator         = staking.Validator
+	DelegatorResponse = staking.DelegatorResponse
 	// token
-	Token             = token.Token
-	AccountTokensInfo = token.AccountTokensInfo
+	TokenResp = token.TokenResp
 	// dex
 	TokenPair = dex.TokenPair
 	// order
@@ -51,13 +56,20 @@ type (
 	MatchResult = backend.MatchResult
 	Order       = backend.Order
 	Deal        = backend.Deal
+	Transaction = backend.Transaction
 	// tendermint
 	Block            = tendermint.Block
-	BlockResults     = tendermint.BlockResults
+	BlockResults     = tendermint.ResultBlockResults
 	ResultCommit     = tendermint.ResultCommit
 	ResultValidators = tendermint.ResultValidators
 	ResultTx         = tendermint.ResultTx
-	ResultTxs        = tendermint.ResultTxs
+	ResultTxSearch   = tendermint.ResultTxSearch
 	// governance
 	Proposal = governance.Proposal
+	// farm
+	FarmPool = farm.FarmPool
+	LockInfo = farm.LockInfo
+	// evm
+	QueryResCode    = evm.QueryResCode
+	QueryResStorage = evm.QueryResStorage
 )

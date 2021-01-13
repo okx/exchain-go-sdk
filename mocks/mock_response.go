@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // DefaultMockSuccessTxResponse returns the default mock success tx response for transaction testing
@@ -19,6 +19,5 @@ func DefaultMockSuccessTxResponse() sdk.TxResponse {
 		Codespace: "default code space",
 		Tx:        nil,
 		Timestamp: "default time stamp",
-		Events:    nil,
 	}
 }

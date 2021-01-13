@@ -1,17 +1,17 @@
 package exposed
 
 import (
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Dex shows the expected behavior for inner dex client
 type Dex interface {
-	sdk.Module
+	gosdktypes.Module
 	DexTx
 	DexQuery
-	DexOffline
 }
 
 // DexTx shows the expected tx behavior for inner dex client
@@ -20,15 +20,10 @@ type DexTx interface {
 		sdk.TxResponse, error)
 	Deposit(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	Withdraw(fromInfo keys.Info, passWd, product, amountStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
-	TransferOwnership(fromInfo keys.Info, passWd, inputPath string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	TransferOwnership(fromInfo keys.Info, passWd, product, toAddrStr, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
+	ConfirmOwnership(fromInfo keys.Info, passWd, product, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	RegisterDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
 	EditDexOperator(fromInfo keys.Info, passWd, handleFeeAddrStr, website, memo string, accNum, seqNum uint64) (sdk.TxResponse, error)
-}
-
-// DexOffline shows the expected tx behavior offline for inner dex client
-type DexOffline interface {
-	GenerateUnsignedTransferOwnershipTx(product, fromAddrStr, toAddrStr, memo, outputPath string) error
-	MultiSign(fromInfo keys.Info, passWd, inputPath, outputPath string) error
 }
 
 // DexQuery shows the expected query behavior for inner dex client

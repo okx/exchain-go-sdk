@@ -2,12 +2,12 @@ package exposed
 
 import (
 	"github.com/okex/okexchain-go-sdk/module/backend/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
 
 // Backend shows the expected behavior for inner backend client
 type Backend interface {
-	sdk.Module
+	gosdktypes.Module
 	BackendQuery
 }
 

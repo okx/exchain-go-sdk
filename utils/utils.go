@@ -1,26 +1,11 @@
 package utils
 
 import (
-	"encoding/hex"
-	"errors"
 	"fmt"
-	"io/ioutil"
-
-	"github.com/cosmos/go-bip39"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys/hd"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingcli "github.com/okex/okexchain/x/staking/client/cli"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
-
-// GetStdTxFromFile gets the instance of stdTx from a json file
-func GetStdTxFromFile(codec sdk.SDKCodec, filePath string) (stdTx sdk.StdTx, err error) {
-	bytes, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		return
-	}
-
-	codec.MustUnmarshalJSON(bytes, &stdTx)
-	return
-}
 
 // ParseValAddresses parses validator address string to types.ValAddress
 func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
@@ -36,27 +21,17 @@ func ParseValAddresses(valAddrsStr []string) ([]sdk.ValAddress, error) {
 	return valAddrs, nil
 }
 
-// GeneratePrivateKeyFromMnemo converts mnemonic to private key
-func GeneratePrivateKeyFromMnemo(mnemo string) (privKey string, err error) {
-	hdPath := hd.NewFundraiserParams(0, 0)
-	seed, err := bip39.NewSeedWithErrorChecking(mnemo, "")
-	if err != nil {
-		return
+// ConvertToDelegatorResponse builds DelegatorResponse with the info of Delegator and UndelegationInfo
+func ConvertToDelegatorResponse(delegator stakingtypes.Delegator, undelegation stakingtypes.UndelegationInfo) stakingcli.DelegatorResponse {
+	return stakingcli.DelegatorResponse{
+		DelegatorAddress:     delegator.DelegatorAddress,
+		ValidatorAddresses:   delegator.ValidatorAddresses,
+		Shares:               delegator.Shares,
+		Tokens:               delegator.Tokens,
+		UnbondedTokens:       undelegation.Quantity,
+		CompletionTime:       undelegation.CompletionTime,
+		IsProxy:              delegator.IsProxy,
+		TotalDelegatedTokens: delegator.TotalDelegatedTokens,
+		ProxyAddress:         delegator.ProxyAddress,
 	}
-	masterPrivateKey, ch := hd.ComputeMastersFromSeed(seed)
-	derivedPrivateKey, err := hd.DerivePrivateKeyForPath(masterPrivateKey, ch, hdPath.String())
-	if err != nil {
-		return
-	}
-	return hex.EncodeToString(derivedPrivateKey[:]), nil
-}
-
-func sliceToArray(s []byte) (byteArray [32]byte, err error) {
-	if len(s) != 32 {
-		return byteArray, errors.New("failed. byte slice's length is not 32")
-	}
-	for i := 0; i < 32; i++ {
-		byteArray[i] = s[i]
-	}
-	return
 }

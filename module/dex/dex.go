@@ -1,20 +1,22 @@
 package dex
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/dex"
 )
 
-var _ sdk.Module = (*dexClient)(nil)
+var _ gosdktypes.Module = (*dexClient)(nil)
 
 type dexClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in dex module
-func (dexClient) RegisterCodec(cdc sdk.SDKCodec) {
-	types.RegisterCodec(cdc)
+func (dexClient) RegisterCodec(cdc *codec.Codec) {
+	dex.RegisterCodec(cdc)
 }
 
 // Name returns the module name
@@ -23,6 +25,6 @@ func (dexClient) Name() string {
 }
 
 // NewDexClient creates a new instance of dex client as implement
-func NewDexClient(baseClient sdk.BaseClient) exposed.Dex {
+func NewDexClient(baseClient gosdktypes.BaseClient) exposed.Dex {
 	return dexClient{baseClient}
 }

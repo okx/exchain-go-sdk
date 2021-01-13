@@ -2,12 +2,12 @@ package staking
 
 import (
 	"fmt"
-
-	"github.com/okex/okexchain-go-sdk/module/staking/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
 	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/okex/okexchain/x/common"
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 )
 
 // Deposit deposits an amount of okt to delegator account
@@ -22,8 +22,7 @@ func (sc stakingClient) Deposit(fromInfo keys.Info, passWd, coinsStr, memo strin
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), coin)
-
+	msg := stakingtypes.NewMsgDeposit(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -39,10 +38,8 @@ func (sc stakingClient) Withdraw(fromInfo keys.Info, passWd, coinsStr, memo stri
 		return resp, fmt.Errorf("failed : parse Coins [%s] error: %s", coinsStr, err)
 	}
 
-	msg := types.NewMsgWithdraw(fromInfo.GetAddress(), coin)
-
+	msg := stakingtypes.NewMsgWithdraw(fromInfo.GetAddress(), coin)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Vote votes to the some specific validators
@@ -57,10 +54,8 @@ func (sc stakingClient) AddShares(fromInfo keys.Info, passWd string, valAddrsStr
 		return resp, fmt.Errorf("failed. validator address parsed error: %s", err.Error())
 	}
 
-	msg := types.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
-
+	msg := stakingtypes.NewMsgAddShares(fromInfo.GetAddress(), valAddrs)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // DestroyValidator deregisters the validator and unbond the min-self-delegation
@@ -70,8 +65,7 @@ func (sc stakingClient) DestroyValidator(fromInfo keys.Info, passWd string, memo
 		return
 	}
 
-	msg := types.NewMsgDestroyValidator(fromInfo.GetAddress())
-
+	msg := stakingtypes.NewMsgDestroyValidator(fromInfo.GetAddress())
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
@@ -82,16 +76,15 @@ func (sc stakingClient) CreateValidator(fromInfo keys.Info, passWd, pubkeyStr, m
 		return
 	}
 
-	pubkey, err := sdk.GetConsPubKeyBech32(pubkeyStr)
+	pubkey, err := stakingtypes.GetConsPubKeyBech32(pubkeyStr)
 	if err != nil {
 		return
 	}
 
-	description := types.NewDescription(moniker, identity, website, details)
-	msg := types.NewMsgCreateValidator(sdk.ValAddress(fromInfo.GetAddress()), pubkey, description)
-
+	description := stakingtypes.NewDescription(moniker, identity, website, details)
+	minSelfDelegation := sdk.NewDecCoinFromDec(common.NativeToken, stakingtypes.DefaultMinSelfDelegation)
+	msg := stakingtypes.NewMsgCreateValidator(sdk.ValAddress(fromInfo.GetAddress()), pubkey, description, minSelfDelegation)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // EditValidator edits the description on a validator by the owner
@@ -101,11 +94,9 @@ func (sc stakingClient) EditValidator(fromInfo keys.Info, passWd, moniker, ident
 		return
 	}
 
-	description := types.NewDescription(moniker, identity, website, details)
-	msg := types.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
-
+	description := stakingtypes.NewDescription(moniker, identity, website, details)
+	msg := stakingtypes.NewMsgEditValidator(sdk.ValAddress(fromInfo.GetAddress()), description)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // RegisterProxy registers the identity of proxy
@@ -115,10 +106,8 @@ func (sc stakingClient) RegisterProxy(fromInfo keys.Info, passWd, memo string, a
 		return
 	}
 
-	msg := types.NewMsgRegProxy(fromInfo.GetAddress(), true)
-
+	msg := stakingtypes.NewMsgRegProxy(fromInfo.GetAddress(), true)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // UnregisterProxy registers the identity of proxy
@@ -128,10 +117,8 @@ func (sc stakingClient) UnregisterProxy(fromInfo keys.Info, passWd, memo string,
 		return
 	}
 
-	msg := types.NewMsgRegProxy(fromInfo.GetAddress(), false)
-
+	msg := stakingtypes.NewMsgRegProxy(fromInfo.GetAddress(), false)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // BindProxy binds the staking tokens to a proxy
@@ -146,10 +133,8 @@ func (sc stakingClient) BindProxy(fromInfo keys.Info, passWd, proxyAddrStr, memo
 		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", proxyAddrStr, err)
 	}
 
-	msg := types.NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
-
+	msg := stakingtypes.NewMsgBindProxy(fromInfo.GetAddress(), proxyAddr)
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // UnbindProxy unbinds the staking tokens from a proxy
@@ -159,8 +144,6 @@ func (sc stakingClient) UnbindProxy(fromInfo keys.Info, passWd, memo string, acc
 		return
 	}
 
-	msg := types.NewMsgUnbindProxy(fromInfo.GetAddress())
-
+	msg := stakingtypes.NewMsgUnbindProxy(fromInfo.GetAddress())
 	return sc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

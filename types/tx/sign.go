@@ -1,8 +1,9 @@
 package tx
 
 import (
-	"github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/okexchain/app/crypto/hd"
 )
 
 var (
@@ -11,16 +12,16 @@ var (
 )
 
 func init() {
-	Kb = keys.NewInMemory()
+	Kb = keys.NewInMemory(hd.EthSecp256k1Options()...)
 }
 
 // MakeSignature completes the signature
-func MakeSignature(name, passphrase string, msg types.StdSignMsg) (sig types.StdSignature, err error) {
+func MakeSignature(name, passphrase string, msg authtypes.StdSignMsg) (sig authtypes.StdSignature, err error) {
 	sigBytes, pubkey, err := Kb.Sign(name, passphrase, msg.Bytes())
 	if err != nil {
 		return
 	}
-	return types.StdSignature{
+	return authtypes.StdSignature{
 		PubKey:    pubkey,
 		Signature: sigBytes,
 	}, nil

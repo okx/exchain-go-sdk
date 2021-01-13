@@ -1,20 +1,24 @@
 package governance
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/okex/okexchain-go-sdk/exposed"
 	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/okexchain/x/gov"
+	paramstypes "github.com/okex/okexchain/x/params/types"
 )
 
-var _ sdk.Module = (*govClient)(nil)
+var _ gosdktypes.Module = (*govClient)(nil)
 
 type govClient struct {
-	sdk.BaseClient
+	gosdktypes.BaseClient
 }
 
 // RegisterCodec registers the msg type in governance module
-func (gc govClient) RegisterCodec(cdc sdk.SDKCodec) {
-	types.RegisterCodec(cdc)
+func (gc govClient) RegisterCodec(cdc *codec.Codec) {
+	gov.RegisterCodec(cdc)
+	cdc.RegisterConcrete(paramstypes.ParameterChangeProposal{}, "okexchain/params/ParameterChangeProposal", nil)
 }
 
 // Name returns the module name
@@ -23,6 +27,6 @@ func (gc govClient) Name() string {
 }
 
 // NewGovClient creates a new instance of governance client as implement
-func NewGovClient(baseClient sdk.BaseClient) exposed.Governance {
+func NewGovClient(baseClient gosdktypes.BaseClient) exposed.Governance {
 	return govClient{baseClient}
 }

@@ -1,13 +1,22 @@
 package governance
 
 import (
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	sdk "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/crypto/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	dexutils "github.com/okex/okexchain/x/dex/client/utils"
+	dextypes "github.com/okex/okexchain/x/dex/types"
+	distrcli "github.com/okex/okexchain/x/distribution/client/cli"
+	distrtypes "github.com/okex/okexchain/x/distribution/types"
+	farmutils "github.com/okex/okexchain/x/farm/client/utils"
+	farmtypes "github.com/okex/okexchain/x/farm/types"
+	govutils "github.com/okex/okexchain/x/gov/client/utils"
+	govtypes "github.com/okex/okexchain/x/gov/types"
+	paramsutils "github.com/okex/okexchain/x/params/client/utils"
+	paramstypes "github.com/okex/okexchain/x/params/types"
 )
 
-// SubmitTextProposal submits the text proposal on OKChain
+// SubmitTextProposal submits the text proposal on OKExChain
 func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -24,30 +33,29 @@ func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath,
 		return
 	}
 
-	msg := types.NewMsgSubmitProposal(
-		types.NewTextProposal(proposal.Title, proposal.Description),
+	msg := govtypes.NewMsgSubmitProposal(
+		govtypes.ContentFromProposalType(proposal.Title, proposal.Description, proposal.ProposalType),
 		deposit,
 		fromInfo.GetAddress(),
 	)
 
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
-// SubmitParamChangeProposal submits the proposal to change the params on OKChain
-func (gc govClient) SubmitParamChangeProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
+// SubmitParamChangeProposal submits the proposal to change the params on OKExChain
+func (gc govClient) SubmitParamsChangeProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	proposal, err := parseParamChangeProposalFromFile(proposalPath)
+	proposal, err := paramsutils.ParseParamChangeProposalJSON(gc.GetCodec(), proposalPath)
 	if err != nil {
 		return
 	}
 
-	msg := types.NewMsgSubmitProposal(
-		types.NewParameterChangeProposal(
+	msg := govtypes.NewMsgSubmitProposal(
+		paramstypes.NewParameterChangeProposal(
 			proposal.Title,
 			proposal.Description,
 			proposal.Changes.ToParamChanges(),
@@ -58,7 +66,6 @@ func (gc govClient) SubmitParamChangeProposal(fromInfo keys.Info, passWd, propos
 	)
 
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // SubmitDelistProposal submits the proposal to delist a token pair from dex
@@ -68,13 +75,13 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 		return
 	}
 
-	proposal, err := parseDelistProposalFromFile(proposalPath)
+	proposal, err := dexutils.ParseDelistProposalJSON(gc.GetCodec(), proposalPath)
 	if err != nil {
 		return
 	}
 
-	msg := types.NewMsgSubmitProposal(
-		types.NewDelistProposal(
+	msg := govtypes.NewMsgSubmitProposal(
+		dextypes.NewDelistProposal(
 			proposal.Title,
 			proposal.Description,
 			fromInfo.GetAddress(),
@@ -86,23 +93,22 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 	)
 
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
-// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKChain
+// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKExChain
 func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
 		return
 	}
 
-	proposal, err := parseCommunityPoolSpendProposalFromFile(proposalPath)
+	proposal, err := distrcli.ParseCommunityPoolSpendProposalJSON(gc.GetCodec(), proposalPath)
 	if err != nil {
 		return
 	}
 
-	msg := types.NewMsgSubmitProposal(
-		types.NewCommunityPoolSpendProposal(
+	msg := govtypes.NewMsgSubmitProposal(
+		distrtypes.NewCommunityPoolSpendProposal(
 			proposal.Title,
 			proposal.Description,
 			proposal.Recipient,
@@ -113,7 +119,32 @@ func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd,
 	)
 
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+}
 
+// SubmitManageWhiteList submits the proposal to manage the white list member of farm module
+func (gc govClient) SubmitManageWhiteListProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
+	seqNum uint64) (resp sdk.TxResponse, err error) {
+	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
+		return
+	}
+
+	proposal, err := farmutils.ParseManageWhiteListProposalJSON(gc.GetCodec(), proposalPath)
+	if err != nil {
+		return
+	}
+
+	msg := govtypes.NewMsgSubmitProposal(
+		farmtypes.NewManageWhiteListProposal(
+			proposal.Title,
+			proposal.Description,
+			proposal.PoolName,
+			proposal.IsAdded,
+		),
+		proposal.Deposit,
+		fromInfo.GetAddress(),
+	)
+
+	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 // Deposit increases the deposit amount on a specific proposal
@@ -128,10 +159,8 @@ func (gc govClient) Deposit(fromInfo keys.Info, passWd, depositCoinsStr, memo st
 		return
 	}
 
-	msg := types.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
-
+	msg := govtypes.NewMsgDeposit(fromInfo.GetAddress(), proposalID, deposit)
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }
 
 // Vote votes for an active proposal
@@ -142,13 +171,11 @@ func (gc govClient) Vote(fromInfo keys.Info, passWd, voteOption, memo string, pr
 		return
 	}
 
-	voteOptionBytes, err := voteOptionFromString(voteOption)
+	byteVoteOption, err := govtypes.VoteOptionFromString(govutils.NormalizeVoteOption(voteOption))
 	if err != nil {
 		return
 	}
 
-	msg := types.NewMsgVote(fromInfo.GetAddress(), proposalID, voteOptionBytes)
-
+	msg := govtypes.NewMsgVote(fromInfo.GetAddress(), proposalID, byteVoteOption)
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-
 }

@@ -125,6 +125,8 @@ func GenerateMnemonic() (mnemo string, err error) {
 		return mnemo, fmt.Errorf("failed. bip39.NewMnemonic err : %s", err.Error())
 	}
 
+	log.Printf("New mnemonic: \"%s\". Be sure to remember that!\n", mnemo)
+
 	return
 }
 

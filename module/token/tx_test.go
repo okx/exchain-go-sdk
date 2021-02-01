@@ -37,8 +37,14 @@ func TestTokenClient_Send(t *testing.T) {
 
 	mockCli.EXPECT().BuildAndBroadcast(
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(),
-		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil)
+		accInfo.GetSequence()).Return(mocks.DefaultMockSuccessTxResponse(), nil).Times(2)
 	res, err := mockCli.Token().Send(fromInfo, passWd, recAddr, "10.24okt", memo, accInfo.GetAccountNumber(),
+		accInfo.GetSequence())
+	require.NoError(t, err)
+	require.Equal(t, uint32(0), res.Code)
+
+	// eth addr supporting
+	res, err = mockCli.Token().Send(fromInfo, passWd, ethAddr, "10.24okt", memo, accInfo.GetAccountNumber(),
 		accInfo.GetSequence())
 	require.NoError(t, err)
 	require.Equal(t, uint32(0), res.Code)

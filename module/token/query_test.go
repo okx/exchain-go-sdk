@@ -20,6 +20,7 @@ const (
 	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
 	recAddr   = "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u"
+	ethAddr   = "0x9aD84c8630E0282F78e5479B46E64E17779e3Cfb"
 
 	tokenSymbol           = "btc-000"
 	defaultDesc           = "default description"

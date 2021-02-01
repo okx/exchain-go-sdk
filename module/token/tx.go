@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/okex/okexchain-go-sdk/module/token/types"
 	"github.com/okex/okexchain-go-sdk/types/params"
+	"github.com/okex/okexchain-go-sdk/utils"
 	tokentypes "github.com/okex/okexchain/x/token/types"
 )
 
@@ -16,7 +17,7 @@ func (tc tokenClient) Send(fromInfo keys.Info, passWd, toAddrStr, coinsStr, memo
 		return
 	}
 
-	toAddr, err := sdk.AccAddressFromBech32(toAddrStr)
+	toAddr, err := utils.ToCosmosAddress(toAddrStr)
 	if err != nil {
 		return resp, fmt.Errorf("failed. parse Address [%s] error: %s", toAddrStr, err)
 	}

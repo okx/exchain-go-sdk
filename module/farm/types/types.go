@@ -12,4 +12,5 @@ type (
 	FarmPool          = farmtypes.FarmPool
 	YieldedTokenInfos = farmtypes.YieldedTokenInfos
 	LockInfo          = farmtypes.LockInfo
+	Earnings          = farmtypes.Earnings
 )

@@ -118,3 +118,28 @@ func (fc farmClient) QueryLockInfo(poolName, accAddrStr string) (lockInfo types.
 
 	return
 }
+
+// QueryEarnings gets the current rewards of an account
+func (fc farmClient) QueryEarnings(poolName, accAddrStr string) (earnings types.Earnings, err error) {
+	accAddr, err := sdk.AccAddressFromBech32(accAddrStr)
+	if err != nil {
+		return
+	}
+
+	jsonBytes, err := fc.GetCodec().MarshalJSON(farmtypes.NewQueryPoolAccountParams(poolName, accAddr))
+	if err != nil {
+		return earnings, utils.ErrMarshalJSON(err.Error())
+	}
+
+	route := fmt.Sprintf("custom/%s/%s", farmtypes.QuerierRoute, farmtypes.QueryEarnings)
+	bz, _, err := fc.Query(route, jsonBytes)
+	if err != nil {
+		return earnings, utils.ErrClientQuery(err.Error())
+	}
+
+	if err = fc.GetCodec().UnmarshalJSON(bz, &earnings); err != nil {
+		return earnings, utils.ErrUnmarshalJSON(err.Error())
+	}
+
+	return
+}

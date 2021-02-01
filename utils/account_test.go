@@ -8,9 +8,9 @@ import (
 
 const (
 	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
-	defaultAddr       = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
-	defaultAddrEth    = "0x9aD84c8630E0282F78e5479B46E64E17779e3Cfb"
-	defaultPrivateKey = "EA6D97F31E4B70663594DD6AFC3E3550AAB5FDD9C44305E8F8F2003023B27FDA"
+	defaultAddr       = "okexchain1qj5c07sm6jetjz8f509qtrxgh4psxkv32x0qas"
+	defaultAddrEth    = "0x04A987fa1Bd4b2B908e9A3Ca058cc8BD43035991"
+	defaultPrivateKey = "89C81C304704E9890025A5A91898802294658D6E4034A11C6116F4B129EA12D3"
 )
 
 func TestCreateAccount(t *testing.T) {

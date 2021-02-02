@@ -11,11 +11,14 @@ import (
 )
 
 const (
-	tokenDescLenLimit = 256
-	countDefault      = 10
-	perPageDefault    = 50
-	perPageMax        = 200
-	reWholeName       = `[a-zA-Z0-9[:space:]]{1,30}`
+	tokenDescLenLimit       = 256
+	countDefault            = 10
+	perPageDefault          = 50
+	perPageMax              = 200
+	reWholeName             = `[a-zA-Z0-9[:space:]]{1,30}`
+	bech32AddrLen           = 48
+	ethAddrWithPrefixLen    = 42
+	ethAddrWithoutPrefixLen = 40
 )
 
 var (
@@ -201,8 +204,10 @@ func CheckSendParams(fromInfo keys.Info, passWd, toAddr string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
-	if len(toAddr) != 48 || !strings.HasPrefix(toAddr, "okexchain") {
-		return errors.New("failed. invalid receiver address")
+
+	addrLen := len(toAddr)
+	if !(addrLen == bech32AddrLen || addrLen == ethAddrWithoutPrefixLen || addrLen == ethAddrWithPrefixLen) {
+		return errors.New("failed. invalid receiver address with incorrect length")
 	}
 
 	return nil

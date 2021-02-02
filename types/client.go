@@ -63,8 +63,7 @@ type ClientConfig struct {
 
 // NewClientConfig creates a new instance of ClientConfig
 func NewClientConfig(nodeURI, chainID string, broadcastMode string, feesStr string, gas uint64, gasAdjustment float64,
-	gasPricesStr string) (
-	cliConfig ClientConfig, err error) {
+	gasPricesStr string) (cliConfig ClientConfig, err error) {
 	var fees, gasPrices sdk.DecCoins
 	if len(feesStr) != 0 {
 		fees, err = sdk.ParseDecCoins(feesStr)

@@ -21,6 +21,7 @@ const (
 	defaultName         = "alice"
 	defaultPassWd       = "12345678"
 	mnemonicEntropySize = 128
+	defaultCointype     = 60
 )
 
 func init() {
@@ -29,7 +30,7 @@ func init() {
 	// set the address prefixes
 	config := sdk.GetConfig()
 	okexchain.SetBech32Prefixes(config)
-	okexchain.SetBip44CoinType(config)
+	config.SetCoinType(defaultCointype)
 	config.Seal()
 }
 

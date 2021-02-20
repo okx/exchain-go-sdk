@@ -41,8 +41,8 @@ func FormatKeyToHash(keyStr string) string {
 }
 
 // Uint256 gets the available arg for payload Build
-func Uint256(n int) *big.Int {
-	return big.NewInt(int64(n))
+func Uint256(i *big.Int) *big.Int {
+	return i
 }
 
 // EthAddress gets the available arg for payload Build

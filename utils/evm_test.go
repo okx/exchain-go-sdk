@@ -59,7 +59,7 @@ func TestPayloadBuilder_Build(t *testing.T) {
 	require.NoError(t, err)
 
 	// constructor payload
-	// 100000000 (10^8) -> big.Int
+	// 100000000 (1*10^8) -> big.Int
 	i := sdk.NewDecWithPrec(1, sdk.Precision-8).Int
 
 	expectedContructorPayload, err := hexutil.Decode(expectedContructorPayloadStr)

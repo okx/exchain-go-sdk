@@ -92,7 +92,7 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 }
 
 // SendTxEthereum sends an ethereum tx
-func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, seqNum uint64) (
+func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	priv, err := ethcrypto.HexToECDSA(privHex)
 	if err != nil {
@@ -128,7 +128,56 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		seqNum,
 		&toAddr,
 		amount.Int,
-		ec.GetConfig().Gas,
+		gasLimit,
+		types.DefaultGasPrice,
+		data,
+	)
+
+	config := ec.GetConfig()
+	if err = ethMsg.Sign(config.ChainIDBigInt, priv); err != nil {
+		return
+	}
+
+	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	if err != nil {
+		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
+	}
+
+	return ec.Broadcast(bytes, ec.GetConfig().BroadcastMode)
+}
+
+// CreateContractEthereum generates an ethereum tx to deploy a smart contract
+func (ec evmClient) CreateContractEthereum(privHex, amountStr, payloadStr string, gasLimit, seqNum uint64) (
+	resp sdk.TxResponse, err error) {
+	priv, err := ethcrypto.HexToECDSA(privHex)
+	if err != nil {
+		return
+	}
+
+	amount := sdk.ZeroDec()
+	if len(amountStr) != 0 {
+		amount, err = sdk.NewDecFromStr(amountStr)
+		if err != nil {
+			return
+		}
+	}
+
+	var data []byte
+	if len(payloadStr) != 0 {
+		if !strings.HasPrefix(payloadStr, "0x") {
+			payloadStr = fmt.Sprintf("0x%s", payloadStr)
+		}
+
+		data, err = hexutil.Decode(payloadStr)
+		if err != nil {
+			return
+		}
+	}
+
+	ethMsg := evmtypes.NewMsgEthereumTxContract(
+		seqNum,
+		amount.Int,
+		gasLimit,
 		types.DefaultGasPrice,
 		data,
 	)

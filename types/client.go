@@ -5,8 +5,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	apptypes "github.com/okex/okexchain/app/types"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
+	"math/big"
 )
 
 // BaseClient shows the expected behavior for a base client
@@ -54,6 +56,7 @@ type RPCClient interface {
 type ClientConfig struct {
 	NodeURI       string
 	ChainID       string
+	ChainIDBigInt *big.Int
 	BroadcastMode string
 	Gas           uint64
 	GasAdjustment float64
@@ -83,9 +86,15 @@ func NewClientConfig(nodeURI, chainID string, broadcastMode string, feesStr stri
 		}
 	}
 
+	chainIDBigInt, err := apptypes.ParseChainID(chainID)
+	if err != nil {
+		return
+	}
+
 	return ClientConfig{
 		NodeURI:       nodeURI,
 		ChainID:       chainID,
+		ChainIDBigInt: chainIDBigInt,
 		BroadcastMode: broadcastMode,
 		Gas:           gas,
 		GasAdjustment: gasAdjustment,

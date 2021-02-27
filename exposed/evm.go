@@ -20,6 +20,7 @@ type EvmTx interface {
 		sdk.TxResponse, error)
 	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, string, error)
+	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, seqNum uint64) (sdk.TxResponse, error)
 }
 
 // EvmQuery shows the expected query behavior for inner evm client

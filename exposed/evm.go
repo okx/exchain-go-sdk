@@ -20,7 +20,7 @@ type EvmTx interface {
 		sdk.TxResponse, error)
 	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, string, error)
-	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, seqNum uint64) (sdk.TxResponse, error)
+	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
 	CreateContractEthereum(privHex, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
 }
 

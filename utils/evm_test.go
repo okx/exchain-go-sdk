@@ -3,10 +3,10 @@ package utils
 import (
 	"bytes"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/stretchr/testify/require"
 	"math/big"
-	"strings"
 	"testing"
 )
 
@@ -47,11 +47,23 @@ func TestToCosmosAddress(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestGetEthAddressStrFromCosmosAddr(t *testing.T) {
-	accAddr, err := sdk.AccAddressFromBech32(defaultAddr)
+func TestToHexAddress(t *testing.T) {
+	expectedEthAddr := ethcmn.HexToAddress(defaultAddrEth)
+
+	ethAddr, err := ToHexAddress(defaultAddr)
 	require.NoError(t, err)
-	ethAddrStr := GetEthAddressStrFromCosmosAddr(accAddr)
-	require.True(t, strings.EqualFold(ethAddrStr, defaultAddrEth))
+	require.True(t, ethAddr == expectedEthAddr)
+
+	ethAddr, err = ToHexAddress(defaultAddrEth)
+	require.NoError(t, err)
+	require.True(t, ethAddr == expectedEthAddr)
+
+	// error check
+	_, err = ToHexAddress(defaultAddr[1:])
+	require.Error(t, err)
+
+	_, err = ToHexAddress(defaultAddrEth + "g")
+	require.Error(t, err)
 }
 
 func TestPayloadBuilder_Build(t *testing.T) {

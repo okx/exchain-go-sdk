@@ -4,30 +4,43 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
+	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"math/big"
 	"strings"
 )
 
 // ToCosmosAddress converts string address of cosmos and ethereum style to cosmos address
-func ToCosmosAddress(addrStr string) (toAddr sdk.AccAddress, err error) {
+func ToCosmosAddress(addrStr string) (accAddr sdk.AccAddress, err error) {
 	if strings.HasPrefix(addrStr, sdk.GetConfig().GetBech32AccountAddrPrefix()) {
-		toAddr, err = sdk.AccAddressFromBech32(addrStr)
+		accAddr, err = sdk.AccAddressFromBech32(addrStr)
 		if err != nil {
-			return toAddr, fmt.Errorf("failed. invalid bech32 formatted address: %s", err)
+			return accAddr, fmt.Errorf("failed. invalid bech32 formatted address: %s", err)
 		}
 		return
 	}
 
-	// strip 0x prefix if exists
 	addrStr = strings.TrimPrefix(addrStr, "0x")
 	return sdk.AccAddressFromHex(addrStr)
 }
 
-// GetEthAddressStrFromCosmosAddr gets the string of eth address from a cosmos acc addr
-func GetEthAddressStrFromCosmosAddr(accAddr sdk.AccAddress) string {
-	return common.BytesToAddress(accAddr.Bytes()).Hex()
+// ToHexAddress converts string address of cosmos and ethereum style to ethereum address
+func ToHexAddress(addrStr string) (ethAddr ethcmn.Address, err error) {
+	if strings.HasPrefix(addrStr, sdk.GetConfig().GetBech32AccountAddrPrefix()) {
+		accAddr, err := sdk.AccAddressFromBech32(addrStr)
+		if err != nil {
+			return ethAddr, fmt.Errorf("failed. invalid bech32 formatted address: %s", err)
+		}
+
+		return ethcmn.BytesToAddress(accAddr.Bytes()), err
+	}
+
+	// hex string
+	if !ethcmn.IsHexAddress(addrStr) {
+		return ethAddr, fmt.Errorf("failed. invalid hex address: %s", addrStr)
+	}
+
+	return ethcmn.HexToAddress(addrStr), err
 }
 
 // FormatKeyToHash converts the key string to hash
@@ -36,7 +49,7 @@ func FormatKeyToHash(keyStr string) string {
 		keyStr = fmt.Sprintf("0x%s", keyStr)
 	}
 
-	ethkey := common.HexToHash(keyStr)
+	ethkey := ethcmn.HexToHash(keyStr)
 	return ethkey.Hex()
 }
 
@@ -46,8 +59,8 @@ func Uint256(i *big.Int) *big.Int {
 }
 
 // EthAddress gets the available arg for payload Build
-func EthAddress(ethAddrStr string) common.Address {
-	return common.HexToAddress(ethAddrStr)
+func EthAddress(ethAddrStr string) ethcmn.Address {
+	return ethcmn.HexToAddress(ethAddrStr)
 }
 
 // PayloadBuilder - structure of a useful tool to build payload

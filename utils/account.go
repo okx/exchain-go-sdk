@@ -21,7 +21,7 @@ const (
 	defaultName         = "alice"
 	defaultPassWd       = "12345678"
 	mnemonicEntropySize = 128
-	defaultCointype     = 996
+	defaultCointype     = 60
 )
 
 func init() {

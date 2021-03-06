@@ -108,3 +108,8 @@ func TestPayloadBuilder_Build(t *testing.T) {
 	_, err = payloadBuilder.Build("unknownName")
 	require.Error(t, err)
 }
+
+func TestEthAddresses(t *testing.T) {
+	ethAddrs := EthAddresses([]string{defaultAddrEth})
+	require.Equal(t, 1, len(ethAddrs))
+}

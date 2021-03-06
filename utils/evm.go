@@ -63,6 +63,16 @@ func EthAddress(ethAddrStr string) ethcmn.Address {
 	return ethcmn.HexToAddress(ethAddrStr)
 }
 
+// EthAddresses gets the available arg for payload Build
+func EthAddresses(ethAddrsStr []string) []ethcmn.Address {
+	var ethAddrs []ethcmn.Address
+	for _, ethAddrStr := range ethAddrsStr {
+		ethAddrs = append(ethAddrs, ethcmn.HexToAddress(ethAddrStr))
+	}
+
+	return ethAddrs
+}
+
 // PayloadBuilder - structure of a useful tool to build payload
 type PayloadBuilder struct {
 	innerABI abi.ABI

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
+	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"math/big"
 	"strings"
@@ -27,7 +27,7 @@ func ToCosmosAddress(addrStr string) (toAddr sdk.AccAddress, err error) {
 
 // GetEthAddressStrFromCosmosAddr gets the string of eth address from a cosmos acc addr
 func GetEthAddressStrFromCosmosAddr(accAddr sdk.AccAddress) string {
-	return common.BytesToAddress(accAddr.Bytes()).Hex()
+	return ethcmn.BytesToAddress(accAddr.Bytes()).Hex()
 }
 
 // FormatKeyToHash converts the key string to hash
@@ -36,7 +36,7 @@ func FormatKeyToHash(keyStr string) string {
 		keyStr = fmt.Sprintf("0x%s", keyStr)
 	}
 
-	ethkey := common.HexToHash(keyStr)
+	ethkey := ethcmn.HexToHash(keyStr)
 	return ethkey.Hex()
 }
 
@@ -46,8 +46,18 @@ func Uint256(i *big.Int) *big.Int {
 }
 
 // EthAddress gets the available arg for payload Build
-func EthAddress(ethAddrStr string) common.Address {
-	return common.HexToAddress(ethAddrStr)
+func EthAddress(ethAddrStr string) ethcmn.Address {
+	return ethcmn.HexToAddress(ethAddrStr)
+}
+
+// EthAddresses gets the available arg for payload Build
+func EthAddresses(ethAddrsStr []string) []ethcmn.Address {
+	var ethAddrs []ethcmn.Address
+	for _, ethAddrStr := range ethAddrsStr {
+		ethAddrs = append(ethAddrs, ethcmn.HexToAddress(ethAddrStr))
+	}
+
+	return ethAddrs
 }
 
 // PayloadBuilder - structure of a useful tool to build payload

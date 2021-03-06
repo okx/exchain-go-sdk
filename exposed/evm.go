@@ -3,6 +3,7 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/okex/okexchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 )
@@ -12,6 +13,7 @@ type Evm interface {
 	gosdktypes.Module
 	EvmTx
 	EvmQuery
+	web3Getter
 }
 
 // EvmTx shows the expected tx behavior for inner evm client
@@ -28,4 +30,18 @@ type EvmTx interface {
 type EvmQuery interface {
 	QueryCode(contractAddrStr string) (types.QueryResCode, error)
 	QueryStorageAt(contractAddrStr, keyHexStr string) (types.QueryResStorage, error)
+}
+
+type web3Getter interface {
+	Web3Proxy() Web3Proxy
+}
+
+// Web3Proxy shows the expected behavior as Web3 without rest server routing
+type Web3Proxy interface {
+	Web3Query
+}
+
+// Web3Query shows the expected behavior as web3 query request
+type Web3Query interface {
+	BlockNumber() (hexutil.Uint64, error)
 }

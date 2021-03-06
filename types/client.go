@@ -37,6 +37,7 @@ type SimulationHandler interface {
 // ClientQuery shows the expected query behavior
 type ClientQuery interface {
 	rpcclient.SignClient
+	rpcclient.HistoryClient
 	Query(path string, key tmbytes.HexBytes) ([]byte, int64, error)
 	QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, int64, error)
 }
@@ -44,12 +45,6 @@ type ClientQuery interface {
 // ClientTx shows the expected tx behavior
 type ClientTx interface {
 	Broadcast(txBytes []byte, broadcastMode string) (res sdk.TxResponse, err error)
-}
-
-// RPCClient shows the expected behavior for a inner exposed client
-type RPCClient interface {
-	rpcclient.ABCIClient
-	rpcclient.SignClient
 }
 
 // ClientConfig records the base config of gosdk client

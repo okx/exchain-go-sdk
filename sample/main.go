@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-
 	"github.com/okex/okexchain-go-sdk"
 	"github.com/okex/okexchain-go-sdk/utils"
+	"log"
 )
 
 const (

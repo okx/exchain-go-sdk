@@ -6,6 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/okex/okexchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	rpctypes "github.com/okex/okexchain/app/rpc/types"
 )
 
 // Evm shows the expected behavior for inner farm client
@@ -38,10 +39,11 @@ type web3Getter interface {
 
 // Web3Proxy shows the expected behavior as Web3 without rest server routing
 type Web3Proxy interface {
-	Web3Query
+	Web3ProxyQuery
 }
 
 // Web3Query shows the expected behavior as web3 query request
-type Web3Query interface {
-	BlockNumber() (hexutil.Uint64, error)
+type Web3ProxyQuery interface {
+	BlockNumberProxy() (hexutil.Uint64, error)
+	EstimateGasProxy(args rpctypes.CallArgs) (hexutil.Uint64, error)
 }

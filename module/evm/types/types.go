@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	apptypes "github.com/okex/okexchain/app/types"
 	evmtypes "github.com/okex/okexchain/x/evm/types"
 	"math/big"
 )
@@ -18,9 +19,6 @@ type (
 )
 
 var (
-	DefaultGasPrice *big.Int
+	DefaultGasPrice    = sdk.MustNewDecFromStr(defaultGasPrice).BigInt()
+	DefaultRPCGasLimit = big.NewInt(apptypes.DefaultRPCGasLimit)
 )
-
-func init() {
-	DefaultGasPrice = sdk.MustNewDecFromStr(defaultGasPrice).BigInt()
-}

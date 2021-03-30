@@ -126,7 +126,7 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		}
 	}
 
-	k := float64(rand.Intn(10)+1)/100000000.0
+	k := float64(rand.Intn(100)+1)/1000000000.0
 	i := strconv.FormatFloat(k, 'f',-1, 64)
 	fmt.Println(i)
 	gasPrice := sdk.MustNewDecFromStr(i).BigInt()

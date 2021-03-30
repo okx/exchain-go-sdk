@@ -11,6 +11,8 @@ import (
 	"github.com/okex/okexchain-go-sdk/utils"
 	apptypes "github.com/okex/okexchain/app/types"
 	evmtypes "github.com/okex/okexchain/x/evm/types"
+	"math/rand"
+	"strconv"
 	"strings"
 )
 
@@ -124,12 +126,16 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		}
 	}
 
+	k := float64(rand.Intn(10)+1)/100000000.0
+	i := strconv.FormatFloat(k, 'f',-1, 64)
+	fmt.Println(i)
+	gasPrice := sdk.MustNewDecFromStr(i).BigInt()
 	ethMsg := evmtypes.NewMsgEthereumTx(
 		seqNum,
 		&toAddr,
 		amount.Int,
 		gasLimit,
-		types.DefaultGasPrice,
+		gasPrice,
 		data,
 	)
 

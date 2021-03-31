@@ -2,13 +2,14 @@ package utils
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 const (
 	defaultMnemonic   = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
-	defaultAddr       = "okexchain1qj5c07sm6jetjz8f509qtrxgh4psxkv32x0qas"
+	defaultAddr       = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	defaultAddrEth    = "0x04A987fa1Bd4b2B908e9A3Ca058cc8BD43035991"
 	defaultPrivateKey = "89C81C304704E9890025A5A91898802294658D6E4034A11C6116F4B129EA12D3"
 )

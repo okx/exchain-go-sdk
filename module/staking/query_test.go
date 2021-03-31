@@ -3,6 +3,9 @@ package staking
 import (
 	"errors"
 	"fmt"
+	"testing"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
@@ -10,20 +13,18 @@ import (
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"testing"
-	"time"
 )
 
 const (
-	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr      = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	accPubkey = "expub17weu6qepqtfc6zq8dukwc3lhlhx7th2csfjw0g3cqnqvanh7z9c2nhkr8mn5z9uq4q6"
 	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
-	valAddr   = "okexchainvaloper1ntvyep3suq5z7789g7d5dejwzameu08mmv8pca"
-	valConsPK = "okexchainvalconspub1zcjduepq24jtmdyzapg50mevhfnhjl09q876xe5dj4ajsda9q6at2dtrpvmse0tav6"
-	proxyAddr = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
+	valAddr   = "exvaloper1qwuag8gx408m9ej038vzx50ntt0x4yrq8qwdtq"
+	valConsPK = "exvalconspub1zcjduepqs2c6xnrfjwxzfclrpq4rh5mxrwlxmncvq6l48ah3ccdew2j6nnfsh3tc5f"
+	proxyAddr = "ex1alrwch5sd3wm3np4njz7l754xtnng6cf4z9s5v"
 
 	defaultMoniker  = "default moniker"
 	defaultIdentity = "default identity"

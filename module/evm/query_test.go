@@ -3,6 +3,9 @@ package evm
 import (
 	"errors"
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
@@ -10,18 +13,16 @@ import (
 	"github.com/okex/okexchain-go-sdk/utils"
 	evmtypes "github.com/okex/okexchain/x/evm/types"
 	"github.com/stretchr/testify/require"
-	"strings"
-	"testing"
 )
 
 const (
-	addr              = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr              = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	name              = "alice"
 	passWd            = "12345678"
-	accPubkey         = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	accPubkey         = "expub17weu6qepqtfc6zq8dukwc3lhlhx7th2csfjw0g3cqnqvanh7z9c2nhkr8mn5z9uq4q6"
 	mnemonic          = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo              = "my memo"
-	recAddr           = "okexchain193xnjknz3e52mqv2nyufnzjugu3mh65rpxdasn"
+	recAddr           = "ex1alrwch5sd3wm3np4njz7l754xtnng6cf4z9s5v"
 	recAddrEth        = "0x2c4d395A628e68aD818a9938998a5C4723BBEa83"
 	defaultPayloadStr = "0x0123456789abcdef"
 	badPayloadStr     = "0x0123456789abcdefg"

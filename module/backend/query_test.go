@@ -3,10 +3,11 @@ package backend
 import (
 	"errors"
 	"fmt"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	backendtypes "github.com/okex/okexchain/x/backend/types"
 	"testing"
 	"time"
+
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	backendtypes "github.com/okex/okexchain/x/backend/types"
 
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
@@ -15,7 +16,7 @@ import (
 )
 
 const (
-	addr    = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr    = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	product = "btc-000_okt"
 )
 

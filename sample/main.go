@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/okex/okexchain-go-sdk"
-	"github.com/okex/okexchain-go-sdk/utils"
 	"log"
+
+	gosdk "github.com/okex/okexchain-go-sdk"
+	"github.com/okex/okexchain-go-sdk/utils"
 )
 
 const (
@@ -16,7 +17,7 @@ const (
 	// user's password
 	passWd = "12345678"
 	// target address
-	addr     = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr     = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	baseCoin = "okt"
 )
 

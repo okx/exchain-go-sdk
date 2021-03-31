@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
@@ -12,7 +14,6 @@ import (
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain-go-sdk/utils"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestTokenClient_Send(t *testing.T) {
@@ -91,7 +92,7 @@ func TestTokenClient_MultiSend(t *testing.T) {
 		fromInfo.GetName(), passWd, memo, gomock.AssignableToTypeOf([]sdk.Msg{}), accInfo.GetAccountNumber(), accInfo.GetSequence()).
 		Return(mocks.DefaultMockSuccessTxResponse(), nil)
 
-	transfersStr := "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u 1024okt,2048btc\nokexchain1zfy46z8tqlu0cjmuj5t9dple276der4rtq5tu3 20.48okt"
+	transfersStr := "ex1qwuag8gx408m9ej038vzx50ntt0x4yrq38yf06 1024okt,2048btc\nex1dz6gfjsd577g000p8k9fqsn7lecw2p5sjvc08h 20.48okt"
 	transfers, err := utils.ParseTransfersStr(transfersStr)
 	require.NoError(t, err)
 	res, err := mockCli.Token().MultiSend(fromInfo, passWd, transfers, memo, accInfo.GetAccountNumber(), accInfo.GetSequence())

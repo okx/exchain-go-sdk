@@ -1,16 +1,17 @@
 package utils
 
 import (
-	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	"testing"
 	"time"
+
+	stakingtypes "github.com/okex/okexchain/x/staking/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 const (
-	valAddrStr = "okexchainvaloper1ntvyep3suq5z7789g7d5dejwzameu08mmv8pca"
+	valAddrStr = "exvaloper1qwuag8gx408m9ej038vzx50ntt0x4yrq8qwdtq"
 )
 
 func TestParseValAddresses(t *testing.T) {

@@ -1,8 +1,9 @@
 package slashing
 
 import (
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"testing"
+
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
@@ -13,10 +14,10 @@ import (
 )
 
 const (
-	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr      = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	accPubkey = "expub17weu6qepqtfc6zq8dukwc3lhlhx7th2csfjw0g3cqnqvanh7z9c2nhkr8mn5z9uq4q6"
 	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
 )

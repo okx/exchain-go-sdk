@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
 )
@@ -16,7 +18,7 @@ const (
 	perPageDefault          = 50
 	perPageMax              = 200
 	reWholeName             = `[a-zA-Z0-9[:space:]]{1,30}`
-	bech32AddrLen           = 48
+	bech32AddrLen           = 41
 	ethAddrWithPrefixLen    = 42
 	ethAddrWithoutPrefixLen = 40
 )
@@ -342,7 +344,7 @@ func CheckQueryHeightParams(height int64) error {
 
 // IsValidAccAddr gives a quick validity check for an address string
 func IsValidAccAddr(addrStr string) error {
-	if len(addrStr) != 48 || !strings.HasPrefix(addrStr, "okexchain") {
+	if len(addrStr) != bech32AddrLen || !strings.HasPrefix(addrStr, sdk.GetConfig().GetBech32AccountAddrPrefix()) {
 		return fmt.Errorf("failed. invalid account address: %s", addrStr)
 	}
 	return nil

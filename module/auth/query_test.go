@@ -3,6 +3,8 @@ package auth
 import (
 	"errors"
 	"fmt"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/golang/mock/gomock"
@@ -10,12 +12,11 @@ import (
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"testing"
 )
 
 const (
-	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
-	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	addr      = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
+	accPubkey = "expub17weu6qepqtfc6zq8dukwc3lhlhx7th2csfjw0g3cqnqvanh7z9c2nhkr8mn5z9uq4q6"
 )
 
 func TestAuthClient_QueryAccount(t *testing.T) {

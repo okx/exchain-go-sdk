@@ -3,23 +3,24 @@ package token
 import (
 	"errors"
 	"fmt"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"github.com/okex/okexchain/x/token"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 const (
-	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
+	addr      = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	name      = "alice"
 	passWd    = "12345678"
-	accPubkey = "okexchainpub17weu6qepq0ph2t3u697qar7rmdtdtqp4744jcprjd2h356zr0yh5vmw38a3my4vqjx5"
+	accPubkey = "expub17weu6qepqtfc6zq8dukwc3lhlhx7th2csfjw0g3cqnqvanh7z9c2nhkr8mn5z9uq4q6"
 	mnemonic  = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	memo      = "my memo"
-	recAddr   = "okexchain1qeh2fz0a4t78ylesd4cyd2mwt5wcfnfj98ev0u"
+	recAddr   = "ex1qwuag8gx408m9ej038vzx50ntt0x4yrq38yf06"
 	ethAddr   = "0x9aD84c8630E0282F78e5479B46E64E17779e3Cfb"
 
 	tokenSymbol           = "btc-000"

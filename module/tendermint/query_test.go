@@ -4,13 +4,14 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"testing"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	okexchain "github.com/okex/okexchain/app/types"
 	stakingtypes "github.com/okex/okexchain/x/staking/types"
 	tmtypes "github.com/tendermint/tendermint/types"
-	"testing"
-	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/okex/okexchain-go-sdk/mocks"
@@ -19,8 +20,8 @@ import (
 )
 
 const (
-	addr      = "okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl"
-	valConsPK = "okexchainvalconspub1zcjduepq24jtmdyzapg50mevhfnhjl09q876xe5dj4ajsda9q6at2dtrpvmse0tav6"
+	addr      = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
+	valConsPK = "exvalconspub1zcjduepqs2c6xnrfjwxzfclrpq4rh5mxrwlxmncvq6l48ah3ccdew2j6nnfsh3tc5f"
 )
 
 func TestTendermintClient_QueryBlock(t *testing.T) {

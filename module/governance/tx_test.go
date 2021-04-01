@@ -2,10 +2,11 @@ package governance
 
 import (
 	"errors"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	gosdktypes "github.com/okex/okexchain-go-sdk/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
@@ -26,7 +27,7 @@ const (
 	textProposalJSON               = `{"title":"Text Proposal","description":"text proposal description","proposal_type":"Text","deposit":"100okt"}`
 	paramsChangeProposalJSON       = `{"title":"Param Change Proposal","description":"param change proposal description","changes":[{"subspace":"staking","key":"MaxValidators","value":105}],"deposit":[{"denom":"okt","amount":"100"}],"height":"1024"}`
 	delistProposalJSON             = `{"title":"Delist Proposal","description":"delist proposal description","base_asset":"btc-000","quote_asset":"okt","deposit":[{"denom":"okt","amount":"100"}]}`
-	communityPoolSpendProposalJSON = `{"title":"Community Pool Spend Proposal","description":"community pool spend description","recipient":"okexchain1ntvyep3suq5z7789g7d5dejwzameu08m6gh7yl","amount":[{"denom":"okt","amount":"10.24"}],"deposit":[{"denom":"okt","amount":"100"}]}`
+	communityPoolSpendProposalJSON = `{"title":"Community Pool Spend Proposal","description":"community pool spend description","recipient":"ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u","amount":[{"denom":"okt","amount":"10.24"}],"deposit":[{"denom":"okt","amount":"100"}]}`
 	manageWhiteListProposalJSON    = `{"title":"Manage White List Proposal","description":"manage white list description","pool_name":"pool1","is_added":true,"deposit":[{"denom":"tokt","amount":"100"}]}`
 )
 

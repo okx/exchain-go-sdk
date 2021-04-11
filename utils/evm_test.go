@@ -25,6 +25,8 @@ const (
 )
 
 func TestToCosmosAddress(t *testing.T) {
+	// init prefix with ex
+	sdk.GetConfig().SetBech32PrefixForAccount("ex","expub")
 	expectedAccAddr, err := sdk.AccAddressFromBech32(defaultAddr)
 	require.NoError(t, err)
 

@@ -3,6 +3,9 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"log"
+	"strings"
+
 	"github.com/bartekn/go-bip39"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,8 +16,6 @@ import (
 	"github.com/okex/okexchain/app/crypto/hd"
 	okexchain "github.com/okex/okexchain/app/types"
 	tmamino "github.com/tendermint/tendermint/crypto/encoding/amino"
-	"log"
-	"strings"
 )
 
 const (
@@ -31,7 +32,6 @@ func init() {
 	config := sdk.GetConfig()
 	okexchain.SetBech32Prefixes(config)
 	config.SetCoinType(defaultCointype)
-	config.Seal()
 }
 
 // CreateAccount creates a random key info with the given name and password

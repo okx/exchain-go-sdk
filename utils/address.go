@@ -2,7 +2,7 @@ package utils
 
 import sdk "github.com/cosmos/cosmos-sdk/types"
 
-// AccAddrPrefixConvert converts the account address between two different prefix
+// AccAddrPrefixConvert converts the account address between two different prefixes
 func AccAddrPrefixConvert(srcPrefx, srcAccAddrStr, dstPrefix string) (dstAccAddrStr string, err error) {
 	config := sdk.GetConfig()
 	// set source prefix

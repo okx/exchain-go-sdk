@@ -2,12 +2,13 @@ package utils
 
 import (
 	"bytes"
+	"math/big"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/stretchr/testify/require"
-	"math/big"
-	"testing"
 )
 
 const (
@@ -26,7 +27,7 @@ const (
 
 func TestToCosmosAddress(t *testing.T) {
 	// init prefix with ex
-	sdk.GetConfig().SetBech32PrefixForAccount("ex","expub")
+	sdk.GetConfig().SetBech32PrefixForAccount("ex", "expub")
 	expectedAccAddr, err := sdk.AccAddressFromBech32(defaultAddr)
 	require.NoError(t, err)
 

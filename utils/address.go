@@ -12,6 +12,7 @@ func AccAddrPrefixConvert(srcPrefx, srcAccAddrStr, dstPrefix string) (dstAccAddr
 		return
 	}
 
+	// set destination prefix
 	config.SetBech32PrefixForAccount(dstPrefix, dstPrefix+"pub")
 	return accAddr.String(), err
 }

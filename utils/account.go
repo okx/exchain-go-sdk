@@ -32,7 +32,6 @@ func init() {
 	config := sdk.GetConfig()
 	exchain.SetBech32Prefixes(config)
 	config.SetCoinType(defaultCointype)
-	config.Seal()
 }
 
 // CreateAccount creates a random key info with the given name and password

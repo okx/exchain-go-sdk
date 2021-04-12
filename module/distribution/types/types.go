@@ -1,7 +1,7 @@
 package types
 
 import (
-	distrtypes "github.com/okex/okexchain/x/distribution/types"
+	distrtypes "github.com/okex/exchain/x/distribution/types"
 )
 
 // const

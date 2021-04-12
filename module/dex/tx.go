@@ -2,10 +2,11 @@ package dex
 
 import (
 	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	dextypes "github.com/okex/okexchain/x/dex/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	dextypes "github.com/okex/exchain/x/dex/types"
 )
 
 // List lists a trading pair on dex

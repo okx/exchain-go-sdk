@@ -6,10 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	tokentypes "github.com/okex/okexchain-go-sdk/module/token/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	tokentypes "github.com/okex/exchain-go-sdk/module/token/types"
 )
 
 const (

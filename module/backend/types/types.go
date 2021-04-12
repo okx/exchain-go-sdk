@@ -1,7 +1,7 @@
 package types
 
 import (
-	backendtypes "github.com/okex/okexchain/x/backend/types"
+	backendtypes "github.com/okex/exchain/x/backend/types"
 )
 
 // const

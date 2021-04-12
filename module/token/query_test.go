@@ -7,9 +7,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okexchain-go-sdk/mocks"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/token"
+	"github.com/okex/exchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain/x/token"
 	"github.com/stretchr/testify/require"
 )
 

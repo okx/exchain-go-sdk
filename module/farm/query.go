@@ -2,10 +2,11 @@ package farm
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/farm/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	farmtypes "github.com/okex/okexchain/x/farm/types"
+	"github.com/okex/exchain-go-sdk/module/farm/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	farmtypes "github.com/okex/exchain/x/farm/types"
 )
 
 // QueryPools gets all farm pools info

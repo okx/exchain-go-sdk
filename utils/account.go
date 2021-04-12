@@ -3,18 +3,19 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"log"
+	"strings"
+
 	"github.com/bartekn/go-bip39"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
-	"github.com/okex/okexchain-go-sdk/types/tx"
-	"github.com/okex/okexchain/app/crypto/ethsecp256k1"
-	"github.com/okex/okexchain/app/crypto/hd"
-	okexchain "github.com/okex/okexchain/app/types"
+	"github.com/okex/exchain-go-sdk/types/tx"
+	"github.com/okex/exchain/app/crypto/ethsecp256k1"
+	"github.com/okex/exchain/app/crypto/hd"
+	exchain "github.com/okex/exchain/app/types"
 	tmamino "github.com/tendermint/tendermint/crypto/encoding/amino"
-	"log"
-	"strings"
 )
 
 const (
@@ -29,7 +30,7 @@ func init() {
 	tmamino.RegisterKeyType(ethsecp256k1.PrivKey{}, ethsecp256k1.PrivKeyName)
 	// set the address prefixes
 	config := sdk.GetConfig()
-	okexchain.SetBech32Prefixes(config)
+	exchain.SetBech32Prefixes(config)
 	config.SetCoinType(defaultCointype)
 	config.Seal()
 }

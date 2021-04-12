@@ -3,11 +3,12 @@ package auth
 import (
 	"errors"
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/okex/exchain-go-sdk/module/auth/types"
+	"github.com/okex/exchain-go-sdk/utils"
 )
 
 // QueryAccount gets the account info

@@ -2,11 +2,11 @@ package governance
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/gov"
-	paramstypes "github.com/okex/okexchain/x/params/types"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/governance/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain/x/gov"
+	paramstypes "github.com/okex/exchain/x/params/types"
 )
 
 var _ gosdktypes.Module = (*govClient)(nil)

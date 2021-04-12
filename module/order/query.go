@@ -2,12 +2,12 @@ package order
 
 import (
 	"fmt"
-	orderkeeper "github.com/okex/okexchain/x/order/keeper"
-	ordertypes "github.com/okex/okexchain/x/order/types"
 
-	"github.com/okex/okexchain-go-sdk/module/order/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain-go-sdk/utils"
+	"github.com/okex/exchain-go-sdk/module/order/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	"github.com/okex/exchain-go-sdk/utils"
+	orderkeeper "github.com/okex/exchain/x/order/keeper"
+	ordertypes "github.com/okex/exchain/x/order/types"
 )
 
 // QueryDepthBook gets the current depth book info of a specific product

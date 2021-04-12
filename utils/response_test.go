@@ -2,9 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/okex/okexchain/x/common"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/okex/exchain/x/common"
+	"github.com/stretchr/testify/require"
 )
 
 // custom struct for test

@@ -1,7 +1,7 @@
 package types
 
 import (
-	farmtypes "github.com/okex/okexchain/x/farm/types"
+	farmtypes "github.com/okex/exchain/x/farm/types"
 )
 
 const (

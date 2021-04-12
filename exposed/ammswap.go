@@ -3,8 +3,8 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/module/ammswap/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
 )
 
 // AmmSwap shows the expected behavior for inner ammswap client

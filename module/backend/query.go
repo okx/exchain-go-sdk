@@ -2,10 +2,11 @@ package backend
 
 import (
 	"fmt"
-	"github.com/okex/okexchain-go-sdk/module/backend/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain-go-sdk/utils"
-	backendtypes "github.com/okex/okexchain/x/backend/types"
+
+	"github.com/okex/exchain-go-sdk/module/backend/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	"github.com/okex/exchain-go-sdk/utils"
+	backendtypes "github.com/okex/exchain/x/backend/types"
 )
 
 // QueryCandles gets the candles data of a specific product

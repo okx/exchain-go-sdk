@@ -1,8 +1,8 @@
 package exposed
 
 import (
-	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/module/tendermint/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 

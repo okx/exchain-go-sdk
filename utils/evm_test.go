@@ -2,12 +2,13 @@ package utils
 
 import (
 	"bytes"
+	"math/big"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/stretchr/testify/require"
-	"math/big"
-	"testing"
 )
 
 const (

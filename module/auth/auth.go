@@ -3,9 +3,9 @@ package auth
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/auth/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/auth/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
 )
 
 var _ gosdktypes.Module = (*authClient)(nil)

@@ -2,10 +2,10 @@ package token
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/token/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/token"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/token/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain/x/token"
 )
 
 var _ gosdktypes.Module = (*tokenClient)(nil)

@@ -6,11 +6,10 @@ import (
 	"testing"
 	"time"
 
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	backendtypes "github.com/okex/okexchain/x/backend/types"
-
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/exchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	backendtypes "github.com/okex/exchain/x/backend/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )

@@ -8,10 +8,10 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okexchain-go-sdk/mocks"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	evmtypes "github.com/okex/okexchain/x/evm/types"
+	"github.com/okex/exchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	evmtypes "github.com/okex/exchain/x/evm/types"
 	"github.com/stretchr/testify/require"
 )
 

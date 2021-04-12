@@ -3,20 +3,20 @@ package governance
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	dexutils "github.com/okex/okexchain/x/dex/client/utils"
-	dextypes "github.com/okex/okexchain/x/dex/types"
-	distrcli "github.com/okex/okexchain/x/distribution/client/cli"
-	distrtypes "github.com/okex/okexchain/x/distribution/types"
-	farmutils "github.com/okex/okexchain/x/farm/client/utils"
-	farmtypes "github.com/okex/okexchain/x/farm/types"
-	govutils "github.com/okex/okexchain/x/gov/client/utils"
-	govtypes "github.com/okex/okexchain/x/gov/types"
-	paramsutils "github.com/okex/okexchain/x/params/client/utils"
-	paramstypes "github.com/okex/okexchain/x/params/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	dexutils "github.com/okex/exchain/x/dex/client/utils"
+	dextypes "github.com/okex/exchain/x/dex/types"
+	distrcli "github.com/okex/exchain/x/distribution/client/cli"
+	distrtypes "github.com/okex/exchain/x/distribution/types"
+	farmutils "github.com/okex/exchain/x/farm/client/utils"
+	farmtypes "github.com/okex/exchain/x/farm/types"
+	govutils "github.com/okex/exchain/x/gov/client/utils"
+	govtypes "github.com/okex/exchain/x/gov/types"
+	paramsutils "github.com/okex/exchain/x/params/client/utils"
+	paramstypes "github.com/okex/exchain/x/params/types"
 )
 
-// SubmitTextProposal submits the text proposal on OKExChain
+// SubmitTextProposal submits the text proposal on ExChain
 func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -42,7 +42,7 @@ func (gc govClient) SubmitTextProposal(fromInfo keys.Info, passWd, proposalPath,
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// SubmitParamChangeProposal submits the proposal to change the params on OKExChain
+// SubmitParamChangeProposal submits the proposal to change the params on ExChain
 func (gc govClient) SubmitParamsChangeProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
@@ -95,7 +95,7 @@ func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPat
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on OKExChain
+// SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on ExChain
 func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
 	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {

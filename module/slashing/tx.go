@@ -3,8 +3,8 @@ package slashing
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain/x/slashing"
+	"github.com/okex/exchain-go-sdk/types/params"
+	"github.com/okex/exchain/x/slashing"
 )
 
 // Unjail unjails the own validator which was jailed by slashing module

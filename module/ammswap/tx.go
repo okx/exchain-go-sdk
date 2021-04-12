@@ -1,11 +1,12 @@
 package ammswap
 
 import (
+	"time"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
-	"time"
+	"github.com/okex/exchain-go-sdk/types/params"
+	ammswaptypes "github.com/okex/exchain/x/ammswap/types"
 )
 
 // AddLiquidity adds the number of liquidity of a token pair

@@ -3,8 +3,8 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	cryptocodec "github.com/okex/okexchain/app/crypto/ethsecp256k1"
-	evmtypes "github.com/okex/okexchain/app/types"
+	cryptocodec "github.com/okex/exchain/app/crypto/ethsecp256k1"
+	evmtypes "github.com/okex/exchain/app/types"
 )
 
 // NewCodec creates a new instance of codec only for gosdk

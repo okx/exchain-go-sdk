@@ -2,10 +2,11 @@ package distribution
 
 import (
 	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	distrtypes "github.com/okex/okexchain/x/distribution/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	distrtypes "github.com/okex/exchain/x/distribution/types"
 )
 
 // SetWithdrawAddr changes the withdraw address of validator to receive rewards

@@ -2,9 +2,10 @@ package token
 
 import (
 	"fmt"
-	"github.com/okex/okexchain-go-sdk/module/token/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	"github.com/okex/okexchain/x/token"
+
+	"github.com/okex/exchain-go-sdk/module/token/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	"github.com/okex/exchain/x/token"
 )
 
 // QueryTokenInfo gets token info with a specific symbol or the owner address

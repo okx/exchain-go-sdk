@@ -2,9 +2,9 @@ package tendermint
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/tendermint/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
 )
 
 var _ gosdktypes.Module = (*tendermintClient)(nil)

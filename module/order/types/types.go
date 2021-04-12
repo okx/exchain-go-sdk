@@ -1,8 +1,8 @@
 package types
 
 import (
-	orderkeeper "github.com/okex/okexchain/x/order/keeper"
-	ordertypes "github.com/okex/okexchain/x/order/types"
+	orderkeeper "github.com/okex/exchain/x/order/keeper"
+	ordertypes "github.com/okex/exchain/x/order/types"
 )
 
 // const

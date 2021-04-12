@@ -3,9 +3,10 @@ package dex
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/okex/okexchain-go-sdk/module/dex/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	dextypes "github.com/okex/okexchain/x/dex/types"
+
+	"github.com/okex/exchain-go-sdk/module/dex/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	dextypes "github.com/okex/exchain/x/dex/types"
 )
 
 // QueryProducts gets token pair info

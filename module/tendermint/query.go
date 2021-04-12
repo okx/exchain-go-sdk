@@ -4,10 +4,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/okex/okexchain-go-sdk/module/tendermint/types"
-	"github.com/okex/okexchain-go-sdk/types/params"
-	tmtypes "github.com/tendermint/tendermint/types"
 	"strings"
+
+	"github.com/okex/exchain-go-sdk/module/tendermint/types"
+	"github.com/okex/exchain-go-sdk/types/params"
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // QueryBlock gets the block info of a specific height

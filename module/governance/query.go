@@ -2,11 +2,12 @@ package governance
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/governance/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	govutils "github.com/okex/okexchain/x/gov/client/utils"
-	govtypes "github.com/okex/okexchain/x/gov/types"
+	"github.com/okex/exchain-go-sdk/module/governance/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	govutils "github.com/okex/exchain/x/gov/client/utils"
+	govtypes "github.com/okex/exchain/x/gov/types"
 )
 
 // QueryProposals gets all proposals

@@ -4,9 +4,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/okex/okexchain-go-sdk/module/evm/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	rpctypes "github.com/okex/okexchain/app/rpc/types"
+	"github.com/okex/exchain-go-sdk/module/evm/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	rpctypes "github.com/okex/exchain/app/rpc/types"
 )
 
 // Evm shows the expected behavior for inner farm client

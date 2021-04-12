@@ -2,9 +2,10 @@ package utils
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingcli "github.com/okex/okexchain/x/staking/client/cli"
-	stakingtypes "github.com/okex/okexchain/x/staking/types"
+	stakingcli "github.com/okex/exchain/x/staking/client/cli"
+	stakingtypes "github.com/okex/exchain/x/staking/types"
 )
 
 // ParseValAddresses parses validator address string to types.ValAddress

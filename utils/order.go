@@ -3,9 +3,10 @@ package utils
 import (
 	"encoding/json"
 	"errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	ordertypes "github.com/okex/okexchain/x/order/types"
 	"log"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	ordertypes "github.com/okex/exchain/x/order/types"
 )
 
 // BuildOrderItems returns the set of OrderItem

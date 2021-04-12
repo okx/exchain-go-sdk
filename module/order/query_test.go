@@ -7,10 +7,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okexchain-go-sdk/mocks"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	orderkeeper "github.com/okex/okexchain/x/order/keeper"
-	ordertypes "github.com/okex/okexchain/x/order/types"
+	"github.com/okex/exchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	orderkeeper "github.com/okex/exchain/x/order/keeper"
+	ordertypes "github.com/okex/exchain/x/order/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )

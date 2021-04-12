@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	gosdk "github.com/okex/okexchain-go-sdk"
-	"github.com/okex/okexchain-go-sdk/utils"
+	gosdk "github.com/okex/exchain-go-sdk"
+	"github.com/okex/exchain-go-sdk/utils"
 )
 
 const (
-	// TODO: link to mainnet of OKExChain later
+	// TODO: link to mainnet of ExChain later
 	rpcURL = "tcp://127.0.0.1:26657"
 	// user's name
 	name = "alice"
@@ -26,15 +26,15 @@ func main() {
 	// NOTE: either of the both ways below to pay fees is available
 
 	// WAY 1: create a client config with fixed fees
-	config, err := gosdk.NewClientConfig(rpcURL, "okexchain", gosdk.BroadcastBlock, "0.01okt", 200000,
+	config, err := gosdk.NewClientConfig(rpcURL, "exchain", gosdk.BroadcastBlock, "0.01okt", 200000,
 		0, "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// WAY 2: alternative client config with the fees by auto gas calculation
-	config, err = gosdk.NewClientConfig(rpcURL, "okexchain", gosdk.BroadcastBlock, "", 200000,
-		1.1, "0.00000001okt")
+	config, err = gosdk.NewClientConfig(rpcURL, "exchain", gosdk.BroadcastBlock, "", 200000,
+		1.1, "0.000000001okt")
 	if err != nil {
 		log.Fatal(err)
 	}

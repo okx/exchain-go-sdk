@@ -2,10 +2,11 @@ package ammswap
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/ammswap/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	ammswaptypes "github.com/okex/okexchain/x/ammswap/types"
+	"github.com/okex/exchain-go-sdk/module/ammswap/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	ammswaptypes "github.com/okex/exchain/x/ammswap/types"
 )
 
 // QuerySwapTokenPair used for querying one swap token pair

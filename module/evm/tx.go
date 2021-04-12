@@ -2,16 +2,17 @@ package evm
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
-	"github.com/okex/okexchain-go-sdk/module/evm/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	apptypes "github.com/okex/okexchain/app/types"
-	evmtypes "github.com/okex/okexchain/x/evm/types"
-	"strings"
+	"github.com/okex/exchain-go-sdk/module/evm/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	apptypes "github.com/okex/exchain/app/types"
+	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
 // SendTx sends tx to transfer or call contract function

@@ -2,12 +2,13 @@ package utils
 
 import (
 	"fmt"
+	"math/big"
+	"strings"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"math/big"
-	"strings"
 )
 
 // ToCosmosAddress converts string address of cosmos and ethereum style to cosmos address

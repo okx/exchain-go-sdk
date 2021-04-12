@@ -2,10 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	ordertypes "github.com/okex/okexchain/x/order/types"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	ordertypes "github.com/okex/exchain/x/order/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -8,15 +8,14 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	okexchain "github.com/okex/okexchain/app/types"
-	stakingtypes "github.com/okex/okexchain/x/staking/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-
 	"github.com/golang/mock/gomock"
-	"github.com/okex/okexchain-go-sdk/mocks"
+	"github.com/okex/exchain-go-sdk/mocks"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	exchain "github.com/okex/exchain/app/types"
+	stakingtypes "github.com/okex/exchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 const (
@@ -141,7 +140,7 @@ func TestTendermintClient_QueryValidatorsResult(t *testing.T) {
 	mockCli.RegisterModule(NewTendermintClient(mockCli.MockBaseClient))
 
 	height, votingPower, proposerPriority := int64(1024), int64(2048), int64(-1024)
-	okexchain.SetBech32Prefixes(sdk.GetConfig())
+	exchain.SetBech32Prefixes(sdk.GetConfig())
 	consPubkey, err := stakingtypes.GetConsPubKeyBech32(valConsPK)
 	require.NoError(t, err)
 

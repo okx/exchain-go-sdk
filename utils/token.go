@@ -2,10 +2,11 @@ package utils
 
 import (
 	"errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/okex/okexchain-go-sdk/module/token/types"
-	tokentypes "github.com/okex/okexchain/x/token/types"
 	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/exchain-go-sdk/module/token/types"
+	tokentypes "github.com/okex/exchain/x/token/types"
 )
 
 // ParseTransfersStr parses the whole multi-send info string into TransferUnit

@@ -3,14 +3,15 @@ package evm
 import (
 	"errors"
 	"fmt"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/okex/okexchain-go-sdk/module/evm/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	evmtypes "github.com/okex/okexchain/x/evm/types"
 	"strings"
+
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/okex/exchain-go-sdk/module/evm/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
-// QueryCode gets the contract code from OKExChain
+// QueryCode gets the contract code from ExChain
 func (ec evmClient) QueryCode(contractAddrStr string) (resCode types.QueryResCode, err error) {
 	if !strings.HasPrefix(contractAddrStr, "0x") {
 		contractAddrStr = fmt.Sprintf("0x%s", contractAddrStr)

@@ -3,7 +3,7 @@ package tx
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/okex/okexchain/app/crypto/hd"
+	"github.com/okex/exchain/app/crypto/hd"
 )
 
 var (

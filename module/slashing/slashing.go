@@ -2,10 +2,10 @@ package slashing
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/slashing/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain/x/slashing"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/slashing/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain/x/slashing"
 )
 
 var _ gosdktypes.Module = (*slashingClient)(nil)

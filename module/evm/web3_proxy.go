@@ -11,13 +11,13 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/okex/okexchain-go-sdk/exposed"
-	"github.com/okex/okexchain-go-sdk/module/evm/types"
-	gosdktypes "github.com/okex/okexchain-go-sdk/types"
-	"github.com/okex/okexchain-go-sdk/utils"
-	rpctypes "github.com/okex/okexchain/app/rpc/types"
-	apptypes "github.com/okex/okexchain/app/types"
-	evmtypes "github.com/okex/okexchain/x/evm/types"
+	"github.com/okex/exchain-go-sdk/exposed"
+	"github.com/okex/exchain-go-sdk/module/evm/types"
+	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain-go-sdk/utils"
+	rpctypes "github.com/okex/exchain/app/rpc/types"
+	apptypes "github.com/okex/exchain/app/types"
+	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
 // Web3Proxy returns the client with exposed.Web3Proxy's behaviour

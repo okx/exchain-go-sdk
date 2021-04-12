@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/okex/okexchain/x/common"
-	dextypes "github.com/okex/okexchain/x/dex/types"
+	"github.com/okex/exchain/x/common"
+	dextypes "github.com/okex/exchain/x/dex/types"
 )
 
 // const

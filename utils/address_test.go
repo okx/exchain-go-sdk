@@ -1,9 +1,9 @@
 package utils
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -33,7 +33,7 @@ func TestAccAddrPrefixConvert(t *testing.T) {
 	require.NotEqual(t, accAddrWithOKExChainPrefix, dstAccAddrStr)
 
 	// recover the account prefix
-	sdk.GetConfig().SetBech32PrefixForAccount("ex","expub")
+	sdk.GetConfig().SetBech32PrefixForAccount("ex", "expub")
 }
 
 func TestValAddrPrefixConvert(t *testing.T) {
@@ -43,18 +43,18 @@ func TestValAddrPrefixConvert(t *testing.T) {
 
 	// error check
 	// wrong source prefix
-	_, err = AccAddrPrefixConvert("exxvaloper", defaultValAddr, "okexchainvaloper")
+	_, err = ValAddrPrefixConvert("exxvaloper", defaultValAddr, "okexchainvaloper")
 	require.Error(t, err)
 
 	// wrong source validator address
-	_, err = AccAddrPrefixConvert("exvaloper", defaultValAddr+"a", "okexchainvaloper")
+	_, err = ValAddrPrefixConvert("exvaloper", defaultValAddr+"a", "okexchainvaloper")
 	require.Error(t, err)
 
 	// wrong destination validator address
-	dstValAddrStr, err = AccAddrPrefixConvert("exvaloper", defaultValAddr, "okexchainxvaloper")
+	dstValAddrStr, err = ValAddrPrefixConvert("exvaloper", defaultValAddr, "okexchainxvaloper")
 	require.NoError(t, err)
 	require.NotEqual(t, valAddrWithOKExChainPrefix, dstValAddrStr)
 
 	// recover the validator prefix
-	sdk.GetConfig().SetBech32PrefixForValidator("exvaloper","exvaloperpub")
+	sdk.GetConfig().SetBech32PrefixForValidator("exvaloper", "exvaloperpub")
 }

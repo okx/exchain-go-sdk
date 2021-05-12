@@ -2,6 +2,7 @@ package evm
 
 import (
 	"fmt"
+	"math/big"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
@@ -93,7 +94,7 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 }
 
 // SendTxEthereum sends an ethereum tx
-func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (
+func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64, gasprices ...*big.Int) (
 	resp sdk.TxResponse, err error) {
 	priv, err := ethcrypto.HexToECDSA(privHex)
 	if err != nil {
@@ -125,12 +126,17 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		}
 	}
 
+	gasprice := types.DefaultGasPrice
+	if len(gasprices) != 0 {
+		gasprice = gasprices[0]
+	}
+
 	ethMsg := evmtypes.NewMsgEthereumTx(
 		seqNum,
 		&toAddr,
 		amount.Int,
 		gasLimit,
-		types.DefaultGasPrice,
+		gasprice,
 		data,
 	)
 

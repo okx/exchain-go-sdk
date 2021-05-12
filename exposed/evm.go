@@ -1,6 +1,8 @@
 package exposed
 
 import (
+	"math/big"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -23,7 +25,7 @@ type EvmTx interface {
 		sdk.TxResponse, error)
 	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, string, error)
-	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
+	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64, gasprices ...*big.Int) (sdk.TxResponse, error)
 	CreateContractEthereum(privHex, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
 }
 

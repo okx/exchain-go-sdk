@@ -41,14 +41,14 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 
 ```go
 	// rpcURL should be modified according to the actual situation
-	rpcURL   = "3.13.150.20:26657"
+	rpcURL   = "https://exchaintesttmrpc.okex.org"
 	name     = "alice"
 	passWd   = "12345678"
 	mnemonic = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
 	addr     = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	
 	// build the client with own config
-	config, _ := sdk.NewClientConfig(rpcURL, "exchain", sdk.BroadcastBlock, "0.01okt", 20000, 0, "")
+	config, _ := sdk.NewClientConfig(rpcURL, "exchain-65", sdk.BroadcastBlock, "0.0002okt", 200000, 0, "")
 	client := sdk.NewClient(config)
 
 	// create your account key info by 'name','passWd' and 'mnemonic'
@@ -58,7 +58,7 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 	accInfo, _ := client.Auth().QueryAccount(keyInfo.GetAddress().String())
 
 	// transfer some okt to addr
-	res, _ := client.Token().Send(keyInfo, passWd, addr, "0.1024okt", "my memno", accInfo.GetAccountNumber(), accInfo.GetSequence())
+	res, _ := client.Token().Send(keyInfo, passWd, addr, "0.1024okt", "my memo", accInfo.GetAccountNumber(), accInfo.GetSequence())
 
 ```
 

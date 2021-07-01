@@ -47,12 +47,12 @@ func (ec evmClient) SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, pay
 		seqNum,
 		&toAddr,
 		sdk.NewIntFromBigInt(amount.Int),
-		ec.GetConfig().Gas,
+		ec.bc.GetConfig().Gas,
 		sdk.NewInt(apptypes.DefaultGasPrice),
 		data,
 		fromInfo.GetAddress(),
 	)
-	return ec.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	return ec.bc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
 // CreateContract generates a transaction to deploy a smart contract
@@ -79,12 +79,12 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 		seqNum,
 		nil,
 		sdk.NewIntFromBigInt(amount.Int),
-		ec.GetConfig().Gas,
+		ec.bc.GetConfig().Gas,
 		sdk.NewInt(apptypes.DefaultGasPrice),
 		data,
 		fromInfo.GetAddress(),
 	)
-	if resp, err = ec.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum); err != nil {
+	if resp, err = ec.bc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum); err != nil {
 		return
 	}
 
@@ -134,17 +134,17 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		data,
 	)
 
-	config := ec.GetConfig()
+	config := ec.bc.GetConfig()
 	if err = ethMsg.Sign(config.ChainIDBigInt, priv); err != nil {
 		return
 	}
 
-	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	bytes, err := ec.bc.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}
 
-	return ec.Broadcast(bytes, ec.GetConfig().BroadcastMode)
+	return ec.bc.Broadcast(bytes, ec.bc.GetConfig().BroadcastMode)
 }
 
 // CreateContractEthereum generates an ethereum tx to deploy a smart contract
@@ -183,15 +183,15 @@ func (ec evmClient) CreateContractEthereum(privHex, amountStr, payloadStr string
 		data,
 	)
 
-	config := ec.GetConfig()
+	config := ec.bc.GetConfig()
 	if err = ethMsg.Sign(config.ChainIDBigInt, priv); err != nil {
 		return
 	}
 
-	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	bytes, err := ec.bc.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}
 
-	return ec.Broadcast(bytes, ec.GetConfig().BroadcastMode)
+	return ec.bc.Broadcast(bytes, ec.bc.GetConfig().BroadcastMode)
 }

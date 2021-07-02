@@ -112,3 +112,37 @@ func (ec ethClient) FilterLogs(ctx context.Context, q ethereum.FilterQuery) ([]t
 func (ec ethClient) SubscribeFilterLogs(ctx context.Context, q ethereum.FilterQuery, ch chan<- types.Log) (ethereum.Subscription, error) {
 	return ec.ec.SubscribeFilterLogs(ctx, q, ch)
 }
+
+// SubscribeNewHead subscribes to notifications about the current blockchain head
+// on the given channel.
+// client.EthSubscribe(ctx, ch, "newHeads")
+func (ec ethClient) SubscribeNewHead(ctx context.Context, ch chan<- *types.Header) (ethereum.Subscription, error) {
+	return ec.ec.SubscribeNewHead(ctx, ch)
+}
+
+// EthSubscribe registers a subscripion under the "eth" namespace.
+func (ec ethClient) EthSubscribe(ctx context.Context, channel interface{}, args ...interface{}) (*rpc.ClientSubscription, error) {
+	return ec.rc.EthSubscribe(ctx, channel, args)
+}
+
+// CallContext performs a JSON-RPC call with the given arguments. If the context is
+// canceled before the call has successfully returned, CallContext returns immediately.
+//
+// The result must be a pointer so that package json can unmarshal into it. You
+// can also pass nil, in which case the result is ignored.
+func (ec ethClient) CallContext(ctx context.Context, result interface{}, method string, args ...interface{}) error {
+	return ec.rc.CallContext(ctx, result, method, args)
+}
+
+// BatchCall sends all given requests as a single batch and waits for the server
+// to return a response for all of them. The wait duration is bounded by the
+// context's deadline.
+//
+// In contrast to CallContext, BatchCallContext only returns errors that have occurred
+// while sending the request. Any error specific to a request is reported through the
+// Error field of the corresponding BatchElem.
+//
+// Note that batch calls may not be executed atomically on the server side.
+func (ec ethClient) BatchCallContext(ctx context.Context, b []rpc.BatchElem) error {
+	return ec.rc.BatchCallContext(ctx, b)
+}

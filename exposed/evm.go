@@ -3,7 +3,9 @@ package exposed
 import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	ethcore "github.com/ethereum/go-ethereum/core/types"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	rpctypes "github.com/okex/exchain/app/rpc/types"
@@ -14,6 +16,7 @@ type Evm interface {
 	gosdktypes.Module
 	EvmTx
 	EvmQuery
+	EvmUtils
 	web3Getter
 }
 
@@ -31,6 +34,10 @@ type EvmTx interface {
 type EvmQuery interface {
 	QueryCode(contractAddrStr string) (types.QueryResCode, error)
 	QueryStorageAt(contractAddrStr, keyHexStr string) (types.QueryResStorage, error)
+}
+
+type EvmUtils interface {
+	GetTxHash(signedTx *ethcore.Transaction) (ethcmn.Hash, error)
 }
 
 type web3Getter interface {

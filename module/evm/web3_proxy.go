@@ -27,7 +27,7 @@ func (ec evmClient) Web3Proxy() exposed.Web3Proxy {
 
 // BlockNumberProxy returns the current block number as method "eth_blockNumber" without rest server routing
 func (ec evmClient) BlockNumberProxy() (hexutil.Uint64, error) {
-	resBlockchainInfo, err := ec.bc.BlockchainInfo(0, 0)
+	resBlockchainInfo, err := ec.BlockchainInfo(0, 0)
 	if err != nil {
 		return hexutil.Uint64(0), err
 	}
@@ -55,18 +55,18 @@ func (ec evmClient) EstimateGasProxy(args rpctypes.CallArgs) (estimatedGas hexut
 func (ec evmClient) accountNonce(addr ethcmn.Address) (nonce uint64, err error) {
 	// get account info from chain
 	path := fmt.Sprintf("custom/%s/%s", auth.QuerierRoute, auth.QueryAccount)
-	bytes, err := ec.bc.GetCodec().MarshalJSON(authtypes.NewQueryAccountParams(addr.Bytes()))
+	bytes, err := ec.GetCodec().MarshalJSON(authtypes.NewQueryAccountParams(addr.Bytes()))
 	if err != nil {
 		return nonce, utils.ErrClientQuery(err.Error())
 	}
 
-	res, _, err := ec.bc.Query(path, bytes)
+	res, _, err := ec.Query(path, bytes)
 	if res == nil {
 		return nonce, errors.New("failed. your account has no record on the chain")
 	}
 
 	var account exported.Account
-	if err = ec.bc.GetCodec().UnmarshalJSON(res, &account); err != nil {
+	if err = ec.GetCodec().UnmarshalJSON(res, &account); err != nil {
 		return nonce, utils.ErrUnmarshalJSON(err.Error())
 	}
 
@@ -125,14 +125,14 @@ func (ec evmClient) doCallProxy(args rpctypes.CallArgs, globalGasCap *big.Int) (
 		return
 	}
 
-	cdc := ec.bc.GetCodec()
+	cdc := ec.GetCodec()
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(tx)
 	if err != nil {
 		return
 	}
 
 	// Transaction simulation through query
-	res, _, err := ec.bc.Query("app/simulate", txBytes)
+	res, _, err := ec.Query("app/simulate", txBytes)
 	if err != nil {
 		return
 	}

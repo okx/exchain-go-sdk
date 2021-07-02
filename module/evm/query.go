@@ -22,12 +22,12 @@ func (ec evmClient) QueryCode(contractAddrStr string) (resCode types.QueryResCod
 	}
 
 	path := fmt.Sprintf("custom/%s/code/%s", evmtypes.RouterKey, common.HexToAddress(contractAddrStr).Hex())
-	res, _, err := ec.bc.Query(path, nil)
+	res, _, err := ec.Query(path, nil)
 	if err != nil {
 		return resCode, utils.ErrClientQuery(err.Error())
 	}
 
-	if err = ec.bc.GetCodec().UnmarshalJSON(res, &resCode); err != nil {
+	if err = ec.GetCodec().UnmarshalJSON(res, &resCode); err != nil {
 		return resCode, utils.ErrUnmarshalJSON(err.Error())
 	}
 
@@ -42,12 +42,12 @@ func (ec evmClient) QueryStorageAt(contractAddrStr, keyStr string) (resStorage t
 
 	key := utils.FormatKeyToHash(keyStr)
 	path := fmt.Sprintf("custom/%s/storage/%s/%s", evmtypes.RouterKey, common.HexToAddress(contractAddrStr).Hex(), key)
-	res, _, err := ec.bc.Query(path, nil)
+	res, _, err := ec.Query(path, nil)
 	if err != nil {
 		return resStorage, utils.ErrClientQuery(err.Error())
 	}
 
-	if err = ec.bc.GetCodec().UnmarshalJSON(res, &resStorage); err != nil {
+	if err = ec.GetCodec().UnmarshalJSON(res, &resStorage); err != nil {
 		return resStorage, utils.ErrUnmarshalJSON(err.Error())
 	}
 

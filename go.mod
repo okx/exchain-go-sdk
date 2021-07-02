@@ -7,7 +7,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.39.2
 	github.com/ethereum/go-ethereum v1.9.25
 	github.com/golang/mock v1.5.0
-	github.com/okex/exchain v0.18.2
+	github.com/okex/exchain v0.18.4
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/tendermint v0.33.9
 )

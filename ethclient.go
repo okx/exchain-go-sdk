@@ -131,6 +131,9 @@ func (ec ethClient) EthSubscribe(ctx context.Context, channel interface{}, args 
 // The result must be a pointer so that package json can unmarshal into it. You
 // can also pass nil, in which case the result is ignored.
 func (ec ethClient) CallContext(ctx context.Context, result interface{}, method string, args ...interface{}) error {
+	if args == nil {
+		return ec.rc.CallContext(ctx, result, method)
+	}
 	return ec.rc.CallContext(ctx, result, method, args)
 }
 

@@ -11,8 +11,13 @@ import (
 
 // GetTxHash calculates the tx hash
 func (ec evmClient) GetTxHash(signedTx *ethcore.Transaction) (txHash ethcmn.Hash, err error) {
+	ethTxBytes, err := rlp.EncodeToBytes(signedTx)
+	if err != nil {
+		return
+	}
+
 	var tx evmtypes.MsgEthereumTx
-	if err = rlp.DecodeBytes(ethcore.Transactions{signedTx}.GetRlp(0), &tx); err != nil {
+	if err = rlp.DecodeBytes(ethTxBytes, &tx); err != nil {
 		return
 	}
 

@@ -22,7 +22,7 @@ func main1() {
 
 	privateKey, err := crypto.HexToECDSA(aliceKey)
 	if err != nil {
-		fmt.Println("failed to switch unencrypted private key -> secp256k1 private key: %+v", err)
+		fmt.Println("failed to switch unencrypted private key -> secp256k1 private key:", err)
 	}
 
 	pubkey := privateKey.Public()

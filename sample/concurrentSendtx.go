@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func main() {
+func main1() {
 	client, _ := ethclient.Dial(host)
 
 	chainID, _ := client.NetworkID(context.Background())

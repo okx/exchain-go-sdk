@@ -24,7 +24,7 @@ const (
 	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
 )
 
-func main() {
+func main2() {
 
 	client, err := gosdk.NewEthClient(context.Background(), host)
 	if err != nil {

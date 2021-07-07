@@ -13,7 +13,12 @@ import (
 	"time"
 )
 
-func main1() {
+const (
+	host string = "http://localhost:8545"
+	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
+)
+
+func main() {
 	client, _ := ethclient.Dial(host)
 
 	chainID, _ := client.NetworkID(context.Background())

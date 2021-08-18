@@ -38,6 +38,7 @@ type EvmQuery interface {
 
 type EvmUtils interface {
 	GetTxHash(signedTx *ethcore.Transaction) (ethcmn.Hash, error)
+	GenerateUnsignedEvmTx(targetPath, fromAddrHex, toAddrHex, amountStr, payloadStr, memo string, nonce uint64) error
 }
 
 type web3Getter interface {

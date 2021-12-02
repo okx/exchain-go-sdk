@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/mocks"
 	"github.com/okex/exchain-go-sdk/module/auth"

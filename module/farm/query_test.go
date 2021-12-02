@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/mocks"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	farmtypes "github.com/okex/exchain/x/farm/types"
 	"github.com/stretchr/testify/require"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 )
 
 const (

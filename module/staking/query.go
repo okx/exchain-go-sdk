@@ -3,7 +3,7 @@ package staking
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/staking/types"
 	"github.com/okex/exchain-go-sdk/utils"
 	stakingtypes "github.com/okex/exchain/x/staking/types"

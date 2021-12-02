@@ -1,6 +1,6 @@
 package types
 
-import "github.com/cosmos/cosmos-sdk/codec"
+import "github.com/okex/exchain/libs/cosmos-sdk/codec"
 
 // Module shows the expected behaviour of each module in ExChain GoSDK
 type Module interface {

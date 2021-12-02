@@ -3,8 +3,8 @@ package token
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/token/types"
 	"github.com/okex/exchain-go-sdk/types/params"
 	"github.com/okex/exchain-go-sdk/utils"

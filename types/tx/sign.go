@@ -1,8 +1,8 @@
 package tx
 
 import (
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	"github.com/okex/exchain/app/crypto/hd"
 )
 

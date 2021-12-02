@@ -4,15 +4,15 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	"github.com/okex/exchain-go-sdk/types"
 	"github.com/okex/exchain-go-sdk/types/tx"
 	"github.com/okex/exchain-go-sdk/utils"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	rpcclient "github.com/tendermint/tendermint/rpc/client"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
+	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
+	rpcclient "github.com/okex/exchain/libs/tendermint/rpc/client"
+	rpchttp "github.com/okex/exchain/libs/tendermint/rpc/client/http"
 )
 
 const (

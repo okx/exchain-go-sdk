@@ -11,7 +11,7 @@ import (
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	backendtypes "github.com/okex/exchain/x/backend/types"
 	"github.com/stretchr/testify/require"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 )
 
 const (

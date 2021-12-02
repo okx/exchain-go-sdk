@@ -5,7 +5,7 @@ import (
 	"errors"
 	"log"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	ordertypes "github.com/okex/exchain/x/order/types"
 )
 

@@ -8,7 +8,7 @@ import (
 
 	"github.com/okex/exchain-go-sdk/module/tendermint/types"
 	"github.com/okex/exchain-go-sdk/types/params"
-	tmtypes "github.com/tendermint/tendermint/types"
+	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 )
 
 // QueryBlock gets the block info of a specific height

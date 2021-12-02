@@ -7,15 +7,15 @@ import (
 	"strings"
 
 	"github.com/bartekn/go-bip39"
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/okex/exchain-go-sdk/types/tx"
 	"github.com/okex/exchain/app/crypto/ethsecp256k1"
 	"github.com/okex/exchain/app/crypto/hd"
 	exchain "github.com/okex/exchain/app/types"
-	tmamino "github.com/tendermint/tendermint/crypto/encoding/amino"
+	tmamino "github.com/okex/exchain/libs/tendermint/crypto/encoding/amino"
 )
 
 const (

@@ -1,8 +1,8 @@
 package exposed
 
 import (
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 )

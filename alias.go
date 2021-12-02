@@ -1,7 +1,7 @@
 package gosdk
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	ammswap "github.com/okex/exchain-go-sdk/module/ammswap/types"
 	auth "github.com/okex/exchain-go-sdk/module/auth/types"
 	backend "github.com/okex/exchain-go-sdk/module/backend/types"

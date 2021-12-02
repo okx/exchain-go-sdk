@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -13,7 +13,7 @@ import (
 	gosdk "github.com/okex/exchain-go-sdk"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	evmtypes "github.com/okex/exchain/x/evm/types"
-	"github.com/tendermint/tendermint/crypto/tmhash"
+	"github.com/okex/exchain/libs/tendermint/crypto/tmhash"
 	"math/big"
 )
 

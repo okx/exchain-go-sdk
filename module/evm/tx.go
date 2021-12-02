@@ -1,17 +1,19 @@
 package evm
 
 import (
+	"crypto/ecdsa"
 	"fmt"
+	"math/big"
 	"strings"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	"github.com/okex/exchain-go-sdk/utils"
 	apptypes "github.com/okex/exchain/app/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
@@ -92,8 +94,8 @@ func (ec evmClient) CreateContract(fromInfo keys.Info, passWd, amountStr, payloa
 	return
 }
 
-// SendTxEthereum sends an ethereum tx
-func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (
+// SendTxEthereum2 sends an ethereum tx
+func (ec evmClient) SendTxEthereum2(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (
 	resp sdk.TxResponse, err error) {
 	priv, err := ethcrypto.HexToECDSA(privHex)
 	if err != nil {
@@ -131,6 +133,32 @@ func (ec evmClient) SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr str
 		amount.Int,
 		gasLimit,
 		types.DefaultGasPrice,
+		data,
+	)
+
+	config := ec.GetConfig()
+	if err = ethMsg.Sign(config.ChainIDBigInt, priv); err != nil {
+		return
+	}
+
+	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	if err != nil {
+		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
+	}
+
+	return ec.Broadcast(bytes, ec.GetConfig().BroadcastMode)
+}
+
+// SendTxEthereum sends an ethereum tx
+func (ec evmClient) SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (
+	resp sdk.TxResponse, err error) {
+
+	ethMsg := evmtypes.NewMsgEthereumTx(
+		nonce,
+		&to,
+		amount,
+		gasLimit,
+		gasPrice,
 		data,
 	)
 

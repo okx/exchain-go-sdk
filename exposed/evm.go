@@ -1,14 +1,17 @@
 package exposed
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	"crypto/ecdsa"
+	"math/big"
+
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcore "github.com/ethereum/go-ethereum/core/types"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	rpctypes "github.com/okex/exchain/app/rpc/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 )
 
 // Evm shows the expected behavior for inner farm client
@@ -26,7 +29,8 @@ type EvmTx interface {
 		sdk.TxResponse, error)
 	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
 		sdk.TxResponse, string, error)
-	SendTxEthereum(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
+	SendTxEthereum2(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
+	SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to ethcmn.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (resp sdk.TxResponse, err error)
 	CreateContractEthereum(privHex, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
 }
 

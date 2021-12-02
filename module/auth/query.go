@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/okex/exchain-go-sdk/module/auth/types"
+	"github.com/okex/exchain-go-sdk/utils"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/x/auth"
 	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	"github.com/okex/exchain-go-sdk/module/auth/types"
-	"github.com/okex/exchain-go-sdk/utils"
 )
 
 // QueryAccount gets the account info
@@ -26,7 +26,7 @@ func (ac authClient) QueryAccount(accAddrStr string) (account types.Account, err
 
 	res, _, err := ac.Query(path, bytes)
 	if res == nil {
-		return account, errors.New("failed. your account has no record on the chain")
+		return account, fmt.Errorf("failed. your account has no record on the chain. error: %s", err)
 	}
 
 	if err = ac.GetCodec().UnmarshalJSON(res, &account); err != nil {

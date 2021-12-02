@@ -7,12 +7,12 @@ package types
 import (
 	reflect "reflect"
 
-	codec "github.com/cosmos/cosmos-sdk/codec"
-	types "github.com/cosmos/cosmos-sdk/types"
-	types0 "github.com/cosmos/cosmos-sdk/x/auth/types"
+	codec "github.com/okex/exchain/libs/cosmos-sdk/codec"
+	types "github.com/okex/exchain/libs/cosmos-sdk/types"
+	types0 "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	gomock "github.com/golang/mock/gomock"
-	bytes "github.com/tendermint/tendermint/libs/bytes"
-	types1 "github.com/tendermint/tendermint/rpc/core/types"
+	bytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
+	types1 "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 )
 
 // MockBaseClient is a mock of BaseClient interface.

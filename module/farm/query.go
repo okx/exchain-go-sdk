@@ -3,7 +3,7 @@ package farm
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/farm/types"
 	"github.com/okex/exchain-go-sdk/utils"
 	farmtypes "github.com/okex/exchain/x/farm/types"

@@ -3,7 +3,7 @@ package types
 import (
 	"math/big"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	apptypes "github.com/okex/exchain/app/types"
 	evmtypes "github.com/okex/exchain/x/evm/types"
 )

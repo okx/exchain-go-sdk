@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/okex/exchain/libs/cosmos-sdk/client/flags"
 )
 
 // const

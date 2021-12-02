@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 )
 
 // AccAddrPrefixConvert converts the account address between two different prefixes

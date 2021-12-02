@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/exposed"
 	auth "github.com/okex/exchain-go-sdk/module/auth/types"
@@ -31,12 +31,12 @@ import (
 	orderkeeper "github.com/okex/exchain/x/order/keeper"
 	stakingtypes "github.com/okex/exchain/x/staking/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/libs/kv"
-	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	tmtypes "github.com/tendermint/tendermint/types"
+	abci "github.com/okex/exchain/libs/tendermint/abci/types"
+	"github.com/okex/exchain/libs/tendermint/crypto"
+	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
+	"github.com/okex/exchain/libs/tendermint/libs/kv"
+	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
+	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 )
 
 // MockClient - structure of the mock client for gosdk testing

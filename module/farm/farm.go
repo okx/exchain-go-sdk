@@ -1,7 +1,7 @@
 package farm
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module/farm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"

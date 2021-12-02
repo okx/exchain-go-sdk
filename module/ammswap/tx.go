@@ -3,8 +3,8 @@ package ammswap
 import (
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/types/params"
 	ammswaptypes "github.com/okex/exchain/x/ammswap/types"
 )

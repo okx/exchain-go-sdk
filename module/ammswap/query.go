@@ -3,7 +3,7 @@ package ammswap
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/ammswap/types"
 	"github.com/okex/exchain-go-sdk/utils"
 	ammswaptypes "github.com/okex/exchain/x/ammswap/types"

@@ -4,12 +4,12 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	apptypes "github.com/okex/exchain/app/types"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	rpcclient "github.com/tendermint/tendermint/rpc/client"
+	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
+	rpcclient "github.com/okex/exchain/libs/tendermint/rpc/client"
 )
 
 // BaseClient shows the expected behavior for a base client

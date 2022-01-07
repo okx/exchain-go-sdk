@@ -6,7 +6,7 @@ require (
 	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d
 	github.com/ethereum/go-ethereum v1.10.8
 	github.com/golang/mock v1.5.0
-	github.com/okex/exchain v0.19.17
+	github.com/okex/exchain v1.1.1-0.20220107032846-0b2a2d2b7984
 	github.com/stretchr/testify v1.7.0
 )
 

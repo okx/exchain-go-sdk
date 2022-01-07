@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	"github.com/okex/exchain-go-sdk/utils"
 	apptypes "github.com/okex/exchain/app/types"
@@ -141,7 +142,7 @@ func (ec evmClient) SendTxEthereum2(privHex, toAddrStr, amountStr, payloadStr st
 		return
 	}
 
-	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	bytes, err := rlp.EncodeToBytes(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}
@@ -167,7 +168,7 @@ func (ec evmClient) SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to comm
 		return
 	}
 
-	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
+	bytes, err := rlp.EncodeToBytes(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}

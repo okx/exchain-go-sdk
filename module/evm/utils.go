@@ -1,11 +1,11 @@
 package evm
 
 import (
-	authcli "github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	ethcore "github.com/ethereum/go-ethereum/core/types"
+	authcli "github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
+	"github.com/okex/exchain/libs/tendermint/crypto/etherhash"
 	evmtypes "github.com/okex/exchain/x/evm/types"
-	"github.com/okex/exchain/libs/tendermint/crypto/tmhash"
 )
 
 // GetTxHash calculates the tx hash
@@ -25,11 +25,11 @@ func (ec evmClient) GetTxHash(signedTx *ethcore.Transaction) (txHash ethcmn.Hash
 		},
 	}
 
-	txBytes, err := authcli.GetTxEncoder(ec.GetCodec())(tx)
+	txBytes, err := authcli.GetTxEncoder(ec.GetCodec(), authcli.WithEthereumTx())(tx)
 	if err != nil {
 		return
 	}
 
-	txHash = ethcmn.BytesToHash(tmhash.Sum(txBytes))
+	txHash = ethcmn.BytesToHash(etherhash.Sum(txBytes))
 	return
 }

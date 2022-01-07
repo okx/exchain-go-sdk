@@ -1,6 +1,6 @@
 module github.com/okex/exchain-go-sdk
 
-go 1.15
+go 1.17
 
 require (
 	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d

@@ -142,7 +142,7 @@ func (ec evmClient) SendTxEthereum2(privHex, toAddrStr, amountStr, payloadStr st
 		return
 	}
 
-	bytes, err := rlp.EncodeToBytes(ethMsg)
+	bytes, err := rlp.EncodeToBytes(&ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}
@@ -168,7 +168,7 @@ func (ec evmClient) SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to comm
 		return
 	}
 
-	bytes, err := rlp.EncodeToBytes(ethMsg)
+	bytes, err := rlp.EncodeToBytes(&ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}

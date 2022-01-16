@@ -54,7 +54,7 @@ func (ec evmClient) CreateContractEthereum(priv *ecdsa.PrivateKey, nonce uint64,
 		return
 	}
 
-	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(&ethMsg)
+	bytes, err := rlp.EncodeToBytes(&ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}

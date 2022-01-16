@@ -639,3 +639,8 @@ func (mr *MockClientTxMockRecorder) Broadcast(txBytes, broadcastMode interface{}
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Broadcast", reflect.TypeOf((*MockClientTx)(nil).Broadcast), txBytes, broadcastMode)
 }
+
+func (m *MockBaseClient) Status() (*types1.ResultStatus, error) {
+	//TODO implement me
+	panic("implement me")
+}

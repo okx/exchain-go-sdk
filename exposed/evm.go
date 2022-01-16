@@ -10,7 +10,6 @@ import (
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	rpctypes "github.com/okex/exchain/app/rpc/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 )
 
@@ -25,13 +24,8 @@ type Evm interface {
 
 // EvmTx shows the expected tx behavior for inner evm client
 type EvmTx interface {
-	SendTx(fromInfo keys.Info, passWd, toAddrStr, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
-		sdk.TxResponse, error)
-	CreateContract(fromInfo keys.Info, passWd, amountStr, payloadStr, memo string, accNum, seqNum uint64) (
-		sdk.TxResponse, string, error)
-	SendTxEthereum2(privHex, toAddrStr, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
 	SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to ethcmn.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (resp sdk.TxResponse, err error)
-	CreateContractEthereum(privHex, amountStr, payloadStr string, gasLimit, seqNum uint64) (sdk.TxResponse, error)
+	CreateContractEthereum(priv *ecdsa.PrivateKey, nonce uint64, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (resp sdk.TxResponse, err error)
 }
 
 // EvmQuery shows the expected query behavior for inner evm client

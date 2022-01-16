@@ -4,10 +4,10 @@ import (
 	"errors"
 	"math/big"
 
+	apptypes "github.com/okex/exchain/app/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	apptypes "github.com/okex/exchain/app/types"
 	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 	rpcclient "github.com/okex/exchain/libs/tendermint/rpc/client"
 )
@@ -39,6 +39,7 @@ type SimulationHandler interface {
 type ClientQuery interface {
 	rpcclient.SignClient
 	rpcclient.HistoryClient
+	rpcclient.StatusClient
 	Query(path string, key tmbytes.HexBytes) ([]byte, int64, error)
 	QueryStore(key tmbytes.HexBytes, storeName, endPath string) ([]byte, int64, error)
 }

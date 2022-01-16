@@ -8,6 +8,7 @@ import (
 
 	"github.com/okex/exchain-go-sdk/module/tendermint/types"
 	"github.com/okex/exchain-go-sdk/types/params"
+	coretypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 )
 
@@ -132,4 +133,8 @@ func (tc tendermintClient) QueryTxsByEvents(eventsStr string, page, limit int) (
 	query := strings.Join(tmEvents, " AND ")
 	// assumes the node to query a truth teller
 	return tc.TxSearch(query, false, page, limit, "")
+}
+
+func (tc tendermintClient) QueryStatus() (*coretypes.ResultStatus, error) {
+	return tc.Status()
 }

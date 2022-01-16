@@ -21,4 +21,5 @@ type TendermintQuery interface {
 	QueryTxResult(hashHexStr string, prove bool) (*types.ResultTx, error)
 	// QueryTxsByEvents assumes the node to query a truth teller
 	QueryTxsByEvents(eventsStr string, page, limit int) (*ctypes.ResultTxSearch, error)
+	QueryStatus() (*ctypes.ResultStatus, error)
 }

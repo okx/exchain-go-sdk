@@ -25,7 +25,7 @@ func (ec evmClient) GetTxHash(signedTx *ethcore.Transaction) (txHash ethcmn.Hash
 		},
 	}
 
-	txBytes, err := authcli.GetTxEncoder(ec.GetCodec(), authcli.WithEthereumTx())(tx)
+	txBytes, err := authcli.GetTxEncoder(ec.GetCodec(), authcli.WithEthereumTx())(&tx)
 	if err != nil {
 		return
 	}

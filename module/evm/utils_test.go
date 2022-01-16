@@ -4,7 +4,6 @@ import (
 	"math/big"
 	"testing"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	ethcore "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -12,14 +11,13 @@ import (
 	"github.com/okex/exchain-go-sdk/mocks"
 	"github.com/okex/exchain-go-sdk/module/auth"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 const (
-	privKeyHex = "89c81c304704e9890025a5a91898802294658d6e4034a11c6116f4b129ea12d3"
-
-	// https://www.oklink.com/okexchain-test/tx/0x8cdadf3465248ae60de749c1e96e178dd303489f2da6b4cffc0ce3f7fb5a9614
-	expectedTxHash = "0x8cdadf3465248ae60de749c1e96e178dd303489f2da6b4cffc0ce3f7fb5a9614"
+	privKeyHex     = "89c81c304704e9890025a5a91898802294658d6e4034a11c6116f4b129ea12d3"
+	expectedTxHash = "0xe03ce7281cee90953b1bee78509b80be34e116821d8a9018a26a0feda09ac41d"
 )
 
 func TestEvmClient_GetTxHash(t *testing.T) {

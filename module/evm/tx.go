@@ -6,7 +6,6 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/rlp"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	evmtypes "github.com/okex/exchain/x/evm/types"
 )
@@ -29,7 +28,7 @@ func (ec evmClient) SendTxEthereum(priv *ecdsa.PrivateKey, nonce uint64, to comm
 		return
 	}
 
-	bytes, err := rlp.EncodeToBytes(&ethMsg)
+	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}
@@ -54,7 +53,7 @@ func (ec evmClient) CreateContractEthereum(priv *ecdsa.PrivateKey, nonce uint64,
 		return
 	}
 
-	bytes, err := rlp.EncodeToBytes(&ethMsg)
+	bytes, err := ec.GetCodec().MarshalBinaryLengthPrefixed(ethMsg)
 	if err != nil {
 		return resp, fmt.Errorf("failed. encoded MsgEthereumTx error: %s", err)
 	}

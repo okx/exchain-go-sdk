@@ -3,15 +3,12 @@ package gosdk
 import (
 	"fmt"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module"
 	"github.com/okex/exchain-go-sdk/module/ammswap"
 	ammswaptypes "github.com/okex/exchain-go-sdk/module/ammswap/types"
 	"github.com/okex/exchain-go-sdk/module/auth"
 	authtypes "github.com/okex/exchain-go-sdk/module/auth/types"
-	"github.com/okex/exchain-go-sdk/module/backend"
-	backendtypes "github.com/okex/exchain-go-sdk/module/backend/types"
 	"github.com/okex/exchain-go-sdk/module/dex"
 	dextypes "github.com/okex/exchain-go-sdk/module/dex/types"
 	"github.com/okex/exchain-go-sdk/module/distribution"
@@ -32,6 +29,7 @@ import (
 	"github.com/okex/exchain-go-sdk/module/token"
 	tokentypes "github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	farmtypes "github.com/okex/exchain/x/farm/types"
 )
 
@@ -55,7 +53,6 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 	pClient.registerModule(
 		ammswap.NewAmmSwapClient(pBaseClient),
 		auth.NewAuthClient(pBaseClient),
-		backend.NewBackendClient(pBaseClient),
 		dex.NewDexClient(pBaseClient),
 		distribution.NewDistrClient(pBaseClient),
 		evm.NewEvmClient(pBaseClient),
@@ -96,9 +93,6 @@ func (cli *Client) AmmSwap() exposed.AmmSwap {
 }
 func (cli *Client) Auth() exposed.Auth {
 	return cli.modules[authtypes.ModuleName].(exposed.Auth)
-}
-func (cli *Client) Backend() exposed.Backend {
-	return cli.modules[backendtypes.ModuleName].(exposed.Backend)
 }
 func (cli *Client) Dex() exposed.Dex {
 	return cli.modules[dextypes.ModuleName].(exposed.Dex)

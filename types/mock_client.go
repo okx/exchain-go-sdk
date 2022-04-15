@@ -114,12 +114,12 @@ func (mr *MockBaseClientMockRecorder) BuildAndBroadcast(fromName, passphrase, me
 }
 
 // BuildStdTx mocks base method.
-func (m *MockBaseClient) BuildStdTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) (types0.StdTx, error) {
+func (m *MockBaseClient) BuildStdTx(fromName, passphrase, memo string, msgs []types.Msg, accNumber, seqNumber uint64) (*types0.StdTx, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildStdTx", fromName, passphrase, memo, msgs, accNumber, seqNumber)
 	ret0, _ := ret[0].(types0.StdTx)
 	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	return &ret0, ret1
 }
 
 // BuildStdTx indicates an expected call of BuildStdTx.
@@ -144,11 +144,11 @@ func (mr *MockBaseClientMockRecorder) BuildTxForSim(msgs, memo, accNumber, seqNu
 }
 
 // BuildUnsignedStdTxOffline mocks base method.
-func (m *MockBaseClient) BuildUnsignedStdTxOffline(msgs []types.Msg, memo string) types0.StdTx {
+func (m *MockBaseClient) BuildUnsignedStdTxOffline(msgs []types.Msg, memo string) *types0.StdTx {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildUnsignedStdTxOffline", msgs, memo)
 	ret0, _ := ret[0].(types0.StdTx)
-	return ret0
+	return &ret0
 }
 
 // BuildUnsignedStdTxOffline indicates an expected call of BuildUnsignedStdTxOffline.

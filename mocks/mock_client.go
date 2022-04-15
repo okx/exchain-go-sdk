@@ -7,13 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/exposed"
 	auth "github.com/okex/exchain-go-sdk/module/auth/types"
-	backend "github.com/okex/exchain-go-sdk/module/backend/types"
 	dex "github.com/okex/exchain-go-sdk/module/dex/types"
 	distribution "github.com/okex/exchain-go-sdk/module/distribution/types"
 	evm "github.com/okex/exchain-go-sdk/module/evm/types"
@@ -26,17 +22,19 @@ import (
 	token "github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	evmtypes "github.com/okex/exchain/app/types"
-	"github.com/okex/exchain/x/common"
-	govtypes "github.com/okex/exchain/x/gov/types"
-	orderkeeper "github.com/okex/exchain/x/order/keeper"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
-	"github.com/stretchr/testify/require"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	abci "github.com/okex/exchain/libs/tendermint/abci/types"
 	"github.com/okex/exchain/libs/tendermint/crypto"
 	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 	"github.com/okex/exchain/libs/tendermint/libs/kv"
 	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 	tmtypes "github.com/okex/exchain/libs/tendermint/types"
+	govtypes "github.com/okex/exchain/x/gov/types"
+	orderkeeper "github.com/okex/exchain/x/order/keeper"
+	stakingtypes "github.com/okex/exchain/x/staking/types"
+	"github.com/stretchr/testify/require"
 )
 
 // MockClient - structure of the mock client for gosdk testing
@@ -90,9 +88,6 @@ func (mc *MockClient) GetCodec() *codec.Codec {
 // nolint
 func (mc *MockClient) Auth() exposed.Auth {
 	return mc.modules[auth.ModuleName].(exposed.Auth)
-}
-func (mc *MockClient) Backend() exposed.Backend {
-	return mc.modules[backend.ModuleName].(exposed.Backend)
 }
 func (mc *MockClient) Dex() exposed.Dex {
 	return mc.modules[dex.ModuleName].(exposed.Dex)
@@ -435,141 +430,6 @@ func (mc *MockClient) GetRawResultTxSearchPointer(totalCount int, height int64, 
 			mc.GetRawTxResultPointer(height, code, log, hashHexStr, eventType, tx),
 		},
 	}
-}
-
-// BuildBackendDealsResultBytes generates the backend deals result bytes for test
-func (mc *MockClient) BuildBackendDealsResultBytes(timestamp, height int64, orderID, sender, product, side, fee string, price, quantity float64) []byte {
-	listResp := common.ListResponse{
-		Data: common.ListDataRes{
-			Data: []backend.Deal{
-				{
-					Timestamp:   timestamp,
-					BlockHeight: height,
-					OrderID:     orderID,
-					Sender:      sender,
-					Product:     product,
-					Side:        side,
-					Price:       price,
-					Quantity:    quantity,
-					Fee:         fee,
-				},
-			},
-		},
-	}
-
-	bytes, err := json.Marshal(listResp)
-	require.NoError(mc.t, err)
-	return bytes
-}
-
-// BuildBackendOrdersResultBytes generates the backend orders result bytes for test
-func (mc *MockClient) BuildBackendOrdersResultBytes(txHash, orderID, sender, product, side, price, quantity, filledAvgPrice,
-	remainQuantity string, status, timestamp int64) []byte {
-	listResp := common.ListResponse{
-		Data: common.ListDataRes{
-			Data: []backend.Order{
-				{
-					TxHash:         txHash,
-					OrderID:        orderID,
-					Sender:         sender,
-					Product:        product,
-					Side:           side,
-					Price:          price,
-					Quantity:       quantity,
-					Status:         status,
-					FilledAvgPrice: filledAvgPrice,
-					RemainQuantity: remainQuantity,
-					Timestamp:      timestamp,
-				},
-			},
-		},
-	}
-
-	bytes, err := json.Marshal(listResp)
-	require.NoError(mc.t, err)
-	return bytes
-}
-
-// BuildBackendMatchResultBytes generates the backend match result bytes for test
-func (mc *MockClient) BuildBackendMatchResultBytes(timestamp, height int64, product string, price, quantity float64) []byte {
-	listResp := common.ListResponse{
-		Data: common.ListDataRes{
-			Data: []backend.MatchResult{
-				{
-					Timestamp:   timestamp,
-					BlockHeight: height,
-					Product:     product,
-					Price:       price,
-					Quantity:    quantity,
-				},
-			},
-		},
-	}
-
-	bytes, err := json.Marshal(listResp)
-	require.NoError(mc.t, err)
-	return bytes
-}
-
-// BuildBackendMatchResultBytes generates the backend transactions result bytes for test
-func (mc *MockClient) BuildBackendTransactionsResultBytes(txHash, accAddr, symbol, quantity, fee string, txType, side,
-	timestamp int64) []byte {
-	listResp := common.ListResponse{
-		Data: common.ListDataRes{
-			Data: []backend.Transaction{
-				{
-					TxHash:    txHash,
-					Type:      txType,
-					Address:   accAddr,
-					Symbol:    symbol,
-					Side:      side,
-					Quantity:  quantity,
-					Fee:       fee,
-					Timestamp: timestamp,
-				},
-			},
-		},
-	}
-
-	bytes, err := json.Marshal(listResp)
-	require.NoError(mc.t, err)
-	return bytes
-}
-
-// BuildBackendCandlesBytes generates the backend candles bytes for test
-func (mc *MockClient) BuildBackendCandlesBytes(candles [][]string) []byte {
-	baseResp := common.BaseResponse{
-		Data: candles,
-	}
-
-	bytes, err := json.Marshal(baseResp)
-	require.NoError(mc.t, err)
-	return bytes
-}
-
-// BuildBackendTickersBytes generates the backend tickers bytes for test
-func (mc *MockClient) BuildBackendTickersBytes(symbol, product string, timestamp int64, open, close, high, low, price, volumn,
-	change float64) []byte {
-	baseResp := common.BaseResponse{
-		Data: []backend.Ticker{
-			{
-				Symbol:    symbol,
-				Product:   product,
-				Timestamp: timestamp,
-				Open:      open,
-				Close:     close,
-				High:      high,
-				Low:       low,
-				Price:     price,
-				Volume:    volumn,
-				Change:    change,
-			},
-		},
-	}
-
-	bytes, err := json.Marshal(baseResp)
-	require.NoError(mc.t, err)
-	return bytes
 }
 
 // BuildProposalsBytes generates the proposals bytes for test

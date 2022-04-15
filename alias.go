@@ -1,10 +1,8 @@
 package gosdk
 
 import (
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	ammswap "github.com/okex/exchain-go-sdk/module/ammswap/types"
 	auth "github.com/okex/exchain-go-sdk/module/auth/types"
-	backend "github.com/okex/exchain-go-sdk/module/backend/types"
 	dex "github.com/okex/exchain-go-sdk/module/dex/types"
 	evm "github.com/okex/exchain-go-sdk/module/evm/types"
 	governance "github.com/okex/exchain-go-sdk/module/governance/types"
@@ -13,6 +11,7 @@ import (
 	tendermint "github.com/okex/exchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/exchain-go-sdk/module/token/types"
 	"github.com/okex/exchain-go-sdk/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	farm "github.com/okex/exchain/x/farm/types"
 )
 
@@ -51,12 +50,6 @@ type (
 	// order
 	BookRes     = order.BookRes
 	OrderDetail = order.OrderDetail
-	// backend
-	Ticker      = backend.Ticker
-	MatchResult = backend.MatchResult
-	Order       = backend.Order
-	Deal        = backend.Deal
-	Transaction = backend.Transaction
 	// tendermint
 	Block            = tendermint.Block
 	BlockResults     = tendermint.ResultBlockResults

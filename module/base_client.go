@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	"github.com/okex/exchain-go-sdk/types"
 	"github.com/okex/exchain-go-sdk/types/tx"
 	"github.com/okex/exchain-go-sdk/utils"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 	rpcclient "github.com/okex/exchain/libs/tendermint/rpc/client"
 	rpchttp "github.com/okex/exchain/libs/tendermint/rpc/client/http"
@@ -122,7 +122,7 @@ func (bc *baseClient) BuildAndBroadcast(fromName, passphrase, memo string, msgs 
 
 // BuildAndSign builds std sign context and sign it
 func (bc *baseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (
-	stdTx authtypes.StdTx, err error) {
+	stdTx *authtypes.StdTx, err error) {
 	config := bc.GetConfig()
 	if len(config.ChainID) == 0 {
 		return stdTx, errors.New("failed. empty chain ID")
@@ -164,7 +164,7 @@ func (bc *baseClient) BuildStdTx(fromName, passphrase, memo string, msgs []sdk.M
 }
 
 // BuildUnsignedStdTxOffline builds a stdTx without signature
-func (bc *baseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) authtypes.StdTx {
+func (bc *baseClient) BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) *authtypes.StdTx {
 	config := bc.GetConfig()
 	fee := authtypes.NewStdFee(config.Gas, bc.GetConfig().Fees)
 	return authtypes.NewStdTx(msgs, fee, nil, memo)

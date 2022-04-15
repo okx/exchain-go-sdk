@@ -25,8 +25,8 @@ type BaseClient interface {
 // TxHandler shows the expected behavior to handle tx
 type TxHandler interface {
 	BuildAndBroadcast(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (sdk.TxResponse, error)
-	BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (authtypes.StdTx, error)
-	BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) authtypes.StdTx
+	BuildStdTx(fromName, passphrase, memo string, msgs []sdk.Msg, accNumber, seqNumber uint64) (*authtypes.StdTx, error)
+	BuildUnsignedStdTxOffline(msgs []sdk.Msg, memo string) *authtypes.StdTx
 }
 
 // SimulationHandler shows the expected behavior to handle simulation

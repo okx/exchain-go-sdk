@@ -5,10 +5,6 @@ import (
 	"fmt"
 	"math/big"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/exported"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/okex/exchain-go-sdk/exposed"
@@ -17,6 +13,10 @@ import (
 	"github.com/okex/exchain-go-sdk/utils"
 	rpctypes "github.com/okex/exchain/app/rpc/types"
 	apptypes "github.com/okex/exchain/app/types"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/x/auth"
+	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/exported"
+	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
 	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
@@ -110,14 +110,7 @@ func (ec evmClient) doCallProxy(args rpctypes.CallArgs, globalGasCap *big.Int) (
 		data = *args.Data
 	}
 
-	// Set destination address for call
-	var toAddr sdk.AccAddress
-	if args.To != nil {
-		toAddr = args.To.Bytes()
-	}
-
-	simMsg := evmtypes.NewMsgEthermint(nonce, &toAddr, sdk.NewIntFromBigInt(value), gas, sdk.NewIntFromBigInt(gasPrice),
-		data, args.From.Bytes())
+	simMsg := evmtypes.NewMsgEthereumTx(nonce, args.To, value, gas, gasPrice, data)
 
 	var stdSig authtypes.StdSignature
 	tx := authtypes.NewStdTx([]sdk.Msg{simMsg}, authtypes.StdFee{}, []authtypes.StdSignature{stdSig}, "")

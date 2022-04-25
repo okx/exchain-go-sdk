@@ -1,10 +1,17 @@
 package ibc
 
 import (
+	"github.com/okex/exchain/libs/cosmos-sdk/client/context"
 	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+)
+
+const (
+	// Version defines the current version the IBC tranfer
+	// module supports
+	Version = "ics20-1"
 )
 
 var (
@@ -13,6 +20,7 @@ var (
 
 type ibcClient struct {
 	gosdktypes.BaseClient
+	types.QueryClient
 }
 
 func (ibc ibcClient) RegisterCodec(cdc *codec.Codec) {
@@ -27,5 +35,7 @@ func (ibcClient) Name() string {
 
 // NewIbcClient creates a new instance of auth client as implement
 func NewIbcClient(baseClient gosdktypes.BaseClient) ibcClient {
-	return ibcClient{baseClient}
+	clientCtx := context.NewCLIContext().WithNodeURI(baseClient.GetConfig().NodeURI)
+	queryClient := types.NewQueryClient(clientCtx)
+	return ibcClient{baseClient, queryClient}
 }

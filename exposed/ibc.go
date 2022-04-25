@@ -8,19 +8,32 @@ import (
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 )
 
-// Auth shows the expected behavior for inner auth client
+// Ibc shows the expected behavior for inner ibc client
 type Ibc interface {
 	gosdktypes.Module
 	IbcTx
-	DenomTraceQuery
+	IbcQuery
 }
 
+// IbcTx send ibc tx
 type IbcTx interface {
+
+	// Transfer transfer token to destination chain
 	Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, targetRpc string) (resp sdk.TxResponse, err error)
 }
 
-// DenomTraceQuery shows the denom trace info from a given trace hash
-type DenomTraceQuery interface {
-	QueryDenomTrace(hash string) (ibcTypes.QueryDenomTraceResponse, error)
-	QeuryDenomTraces(page *query.PageRequest) (ibcTypes.QueryDenomTracesResponse, error)
+// IbcQuery shows the ibc query info
+type IbcQuery interface {
+
+	// QueryDenomTrace query a a denomination trace from a given hash.
+	QueryDenomTrace(hash string) (*ibcTypes.QueryDenomTraceResponse, error)
+
+	// QueryDenomTraces query all the denomination trace infos.
+	QueryDenomTraces(page *query.PageRequest) (*ibcTypes.QueryDenomTracesResponse, error)
+
+	// QueryIbcParams ibc-transfer parameter querying.
+	QueryIbcParams() (*ibcTypes.QueryParamsResponse, error)
+
+	// QueryEscrowAddress ibc-transfer parameter querying.
+	QueryEscrowAddress(portID, channelID string) sdk.AccAddress
 }

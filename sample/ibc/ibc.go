@@ -1,16 +1,13 @@
 package main
 
 import (
-	"github.com/ethereum/go-ethereum/crypto"
 	gosdk "github.com/okex/exchain-go-sdk"
-	"github.com/okex/exchain-go-sdk/utils"
-	secp256k12 "github.com/okex/exchain/libs/cosmos-sdk/crypto/keys/ibc-key"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	q "github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	"log"
 )
 
 const (
-	rpcURL = "tcp://127.0.0.1:36657"
+	rpcURL = "tcp://127.0.0.1:16657"
 	// user's name
 	name = "admin17"
 	// user's mnemonic
@@ -51,37 +48,66 @@ func main() {
 
 	//-------------------- 2. query for the information of your address --------------------//
 
-	accInfo, err := cli.Auth().QueryAccount("ex1hr26cyc335g7p5e948a7vkmwnx3fmxfzwdyryf")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println(accInfo)
+	//accInfo, err := cli.Auth().QueryAccount("ex1hr26cyc335g7p5e948a7vkmwnx3fmxfzwdyryf")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//log.Println(accInfo)
 
 	//-------------------- 3. ibc transfer to the address --------------------//
 
 	// sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
 	//accountNum, sequenceNum := accInfo.GetAccountNumber(), accInfo.GetSequence()
-	priStr, err := utils.GeneratePrivateKeyFromMnemo(mnemonic)
+	//priStr, err := utils.GeneratePrivateKeyFromMnemo(mnemonic)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//key, err := crypto.HexToECDSA(priStr)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//d := crypto.FromECDSA(key)
+	//
+	//fee := sdk.NewCoinAdapter("okt", sdk.NewInt(1))
+	//fees := []sdk.CoinAdapter{fee}
+	//
+	//res, err := cli.Ibc().Transfer(secp256k12.GenPrivKeyFromSecret(d), "channel-0", addr, "1000okt", fees, "memo", "http://127.0.0.1:16657")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//log.Println(res)
+
+	query, err := cli.Ibc().QueryDenomTrace("DDCD907790B8AA2BF9B2B3B614718FA66BFC7540E832CE3E3696EA717DCEFF49")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	key, err := crypto.HexToECDSA(priStr)
+	log.Println(query)
+
+	query2, err := cli.Ibc().QueryDenomTraces(&q.PageRequest{
+		Key:        nil,
+		Offset:     0,
+		Limit:      0,
+		CountTotal: false,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	d := crypto.FromECDSA(key)
+	log.Println(query2)
 
-	fee := sdk.NewCoinAdapter("okt", sdk.NewInt(1))
-	fees := []sdk.CoinAdapter{fee}
-
-	res, err := cli.Ibc().Transfer(secp256k12.GenPrivKeyFromSecret(d), "channel-0", addr, "1000okt", fees, "memo", "http://127.0.0.1:16657")
+	queryParams, err := cli.Ibc().QueryIbcParams()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
-	log.Println(res)
+	log.Println(queryParams)
+
+	queryEscrowAddress := cli.Ibc().QueryEscrowAddress("transfer", "channel-0")
+	log.Println(queryEscrowAddress)
 
 }

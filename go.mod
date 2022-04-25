@@ -14,4 +14,5 @@ replace (
 	github.com/ethereum/go-ethereum => github.com/okex/go-ethereum v1.10.8-oec3
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/tendermint/go-amino => github.com/okex/go-amino v0.15.1-exchain6
+	github.com/okex/exchain => ./third/exchain
 )

@@ -74,7 +74,7 @@ func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, rec
 	msg := &ibc_type.MsgTransfer{
 		SourcePort:       src_port,
 		SourceChannel:    srcChannel,
-		Token:            sdk.NewCoinAdapter(coin.Denom, coin.Amount.Mul(sdk.NewDec(int64(math.Pow10(18)))).RoundInt()),
+		Token:            sdk.NewCoinAdapter("wei", coin.Amount.Mul(sdk.NewDec(int64(math.Pow10(18)))).RoundInt()),
 		Sender:           priKey.PubKey().Address().String(),
 		Receiver:         receiver,
 		TimeoutHeight:    timeoutHeight,

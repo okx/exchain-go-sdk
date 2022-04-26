@@ -4,22 +4,18 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rlp"
 	gosdk "github.com/okex/exchain-go-sdk"
-	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
-	"github.com/okex/exchain/libs/tendermint/crypto/tmhash"
-	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
 const (
-	host     string = "http://localhost:8545"
+	host     string = "https://exchaintestrpc.okex.org"
 	alice    string = "0x2CF4ea7dF75b513509d95946B43062E26bD88035"
 	bob      string = "0x0073F2E28ef8F117e53d858094086Defaf1837D5"
 	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
@@ -50,17 +46,14 @@ func main() {
 	privateKey, _ := crypto.HexToECDSA(aliceKey)
 	unsignedTx := types.NewTransaction(pendingNonce, common.HexToAddress(bob), big.NewInt(1000000000000000000), 30000, gasPrice, []byte{})
 	signedTx, _ := types.SignTx(unsignedTx, types.NewEIP155Signer(chainID), privateKey)
-	ethTxBytes, err := rlp.EncodeToBytes(signedTx)
-	var tx evmtypes.MsgEthereumTx
-	_ = rlp.DecodeBytes(ethTxBytes, &tx)
-	txBytes, err := utils.GetTxEncoder(gosdktypes.NewCodec())(&tx)
-	txHash := common.BytesToHash(tmhash.Sum(txBytes))
 
 	err = client.SendTransaction(context.Background(), signedTx)
+	time.Sleep(time.Second * 4)
 	fmt.Println("sendTx err:", err)
+	fmt.Println("txHash", signedTx.Hash())
 
-	receipt, err := client.TransactionReceipt(context.Background(), txHash)
-	fmt.Println("recipt", receipt, err)
+	receipt, err := client.TransactionReceipt(context.Background(), signedTx.Hash())
+	fmt.Printf("recipt %+v\n", receipt, err)
 
 	pendingCode, err := client.PendingCodeAt(context.Background(), common.HexToAddress(alice))
 	fmt.Println("pendingCode", pendingCode, err)

@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"math/big"
 	"time"
 
@@ -29,54 +31,101 @@ func main() {
 	}
 
 	gasPrice, err := client.SuggestGasPrice(context.Background())
-	fmt.Println("gasPrice", gasPrice, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("gasPrice", gasPrice)
 
 	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("balance:", balance, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("balance:", balance)
 
 	nonce, err := client.NonceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("nonce", nonce, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("nonce", nonce)
 
 	pendingNonce, err := client.PendingNonceAt(context.Background(), common.HexToAddress(alice))
-	fmt.Println("pendingNonce", pendingNonce, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("pendingNonce", pendingNonce)
 
 	chainID, err := client.ChainID(context.Background())
-	fmt.Println("chainID", chainID, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("chainID", chainID)
 
 	privateKey, _ := crypto.HexToECDSA(aliceKey)
 	unsignedTx := types.NewTransaction(pendingNonce, common.HexToAddress(bob), big.NewInt(1000000000000000000), 30000, gasPrice, []byte{})
 	signedTx, _ := types.SignTx(unsignedTx, types.NewEIP155Signer(chainID), privateKey)
 
 	err = client.SendTransaction(context.Background(), signedTx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	time.Sleep(time.Second * 4)
-	fmt.Println("sendTx err:", err)
 	fmt.Println("txHash", signedTx.Hash())
 
 	receipt, err := client.TransactionReceipt(context.Background(), signedTx.Hash())
-	fmt.Printf("recipt %+v\n", receipt, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("recipt %+v\n", receipt)
 
 	pendingCode, err := client.PendingCodeAt(context.Background(), common.HexToAddress(alice))
-	fmt.Println("pendingCode", pendingCode, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("pendingCode", pendingCode)
 	code, err := client.CodeAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("code", code, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("code", code)
 
 	to := common.HexToAddress(bob)
 	msg := ethereum.CallMsg{From: common.HexToAddress(alice), To: &to, GasPrice: gasPrice, Value: big.NewInt(1), Data: []byte{}}
 	estimateGas, err := client.EstimateGas(context.Background(), msg)
-	fmt.Println("estimateGas", estimateGas, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("estimateGas", estimateGas)
 
 	re, err := client.CallContract(context.Background(), msg, big.NewInt(1))
-	fmt.Println("callContract", re, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("callContract", re)
 
 	block, err := client.BlockByNumber(context.Background(), nil)
-	fmt.Println("block", block, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("block", block)
 
 	ss, err := client.SubscribeNewHead(context.Background(), make(chan *types.Header))
-	fmt.Println("subscription", ss, err)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("subscription", ss)
+	}
 	es, err := client.EthSubscribe(context.Background(), make(chan *types.Header), "newHeads")
-	fmt.Println("ethSubscribe", es, err)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("ethSubscribe", es)
+	}
 
 	var hex hexutil.Big
 	err = client.CallContext(context.Background(), &hex, "eth_gasPrice")
-	fmt.Println("CallContext", hex, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("CallContext", hex)
 }

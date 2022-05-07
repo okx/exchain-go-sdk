@@ -3,9 +3,12 @@ package main
 import (
 	"github.com/ethereum/go-ethereum/crypto"
 	gosdk "github.com/okex/exchain-go-sdk"
+	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/utils"
 	secp256k12 "github.com/okex/exchain/libs/cosmos-sdk/crypto/keys/ibc-key"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	query2 "github.com/okex/exchain/libs/cosmos-sdk/types/query"
+	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
 	"log"
 )
 
@@ -58,10 +61,28 @@ func main() {
 
 	log.Println(accInfo)
 
-	//-------------------- 3. ibc transfer to the address --------------------//
+	testTransfer(cli.Ibc(), accInfo.GetAccountNumber(), accInfo.GetSequence())
+	testQueryDenomTrace(cli.Ibc())
+	testQueryDenomTraces(cli.Ibc())
+	testQueryParmas(cli.Ibc())
+	testQueryEscrowAddress(cli.Ibc())
+	testQueryChannel(cli.Ibc())
+	testQueryChannels(cli.Ibc())
+	testQueryConnectionChannels(cli.Ibc())
+	testQueryChannelClientState(cli.Ibc())
+	testQueryChannelConsensusState(cli.Ibc())
+	testQueryPackCommitment(cli.Ibc())
+	testQueryPacketCommitments(cli.Ibc())
+	testQueryPacketReceipt(cli.Ibc())
+	testQueryPacketAcknowledgement(cli.Ibc())
+	testQueryPacketAcknowledgements(cli.Ibc())
+	testQueryUnreceivedPackets(cli.Ibc())
+	testQueryUnreceivedAcks(cli.Ibc())
+	testQueryNextSequenceReceive(cli.Ibc())
+}
 
+func testTransfer(ibc exposed.Ibc, accountNum, sequenceNum uint64) {
 	// sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
-	//accountNum, sequenceNum := accInfo.GetAccountNumber(), accInfo.GetSequence()
 	priStr, err := utils.GeneratePrivateKeyFromMnemo(mnemonic)
 	if err != nil {
 		log.Fatal(err)
@@ -77,40 +98,249 @@ func main() {
 	fee := sdk.NewCoinAdapter("wei", sdk.NewInt(45000000000000))
 	fees := []sdk.CoinAdapter{fee}
 
-	res, err := cli.Ibc().Transfer(secp256k12.GenPrivKeyFromSecret(d), "channel-0", addr, "1000okt", fees, "memo", "http://127.0.0.1:16657")
+	res, err := ibc.Transfer(secp256k12.GenPrivKeyFromSecret(d), "channel-0", addr, "1000okt", fees, "memo", "http://127.0.0.1:16657")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	log.Println(res)
+}
 
-	//query, err := cli.Ibc().QueryDenomTrace("DDCD907790B8AA2BF9B2B3B614718FA66BFC7540E832CE3E3696EA717DCEFF49")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//log.Println(query)
-	//
-	//query2, err := cli.Ibc().QueryDenomTraces(&q.PageRequest{
-	//	Key:        nil,
-	//	Offset:     0,
-	//	Limit:      0,
-	//	CountTotal: false,
-	//})
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//log.Println(query2)
-	//
-	//queryParams, err := cli.Ibc().QueryIbcParams()
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-	//
-	//log.Println(queryParams)
-	//
-	//queryEscrowAddress := cli.Ibc().QueryEscrowAddress("transfer", "channel-0")
-	//log.Println(queryEscrowAddress)
+func testQueryDenomTrace(ibc exposed.Ibc) {
+	log.Println("testQueryDenomTrace ======================================== ")
+	query, err := ibc.QueryDenomTrace("CD3872E1E59BAA23BDAB04A829035D4988D6397569EC77F1DC991E4520D4092B")
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
+	log.Println(query)
+}
+
+func testQueryDenomTraces(ibc exposed.Ibc) {
+	log.Println("testQueryDenomTraces ======================================== ")
+	query, err := ibc.QueryDenomTraces(&query2.PageRequest{
+		Key:        nil,
+		Offset:     0,
+		Limit:      0,
+		CountTotal: false,
+	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(query)
+}
+
+func testQueryParmas(ibc exposed.Ibc) {
+	log.Println("testQueryParmas ======================================== ")
+	queryParams, err := ibc.QueryIbcParams()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(queryParams)
+}
+
+func testQueryEscrowAddress(ibc exposed.Ibc) {
+	log.Println("testQueryEscrowAddress ======================================== ")
+	queryEscrowAddress := ibc.QueryEscrowAddress("transfer", "channel-0")
+	log.Println(queryEscrowAddress)
+}
+
+func testQueryChannel(ibc exposed.Ibc) {
+	log.Println("testQueryChannel ======================================== ")
+	channel, err := ibc.QueryChannel(&chantypes.QueryChannelRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+	})
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	log.Println(channel)
+}
+
+func testQueryChannels(ibc exposed.Ibc) {
+	log.Println("testQueryChannels ======================================== ")
+	channels, err := ibc.QueryChannels()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println(channels)
+}
+
+func testQueryConnectionChannels(ibc exposed.Ibc) {
+	log.Println("testQueryConnectionChannels ======================================== ")
+	res, err := ibc.ConnectionChannels(&chantypes.QueryConnectionChannelsRequest{
+		Connection: "connection-0",
+		Pagination: nil,
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryChannelClientState(ibc exposed.Ibc) {
+	log.Println("testQueryChannelClientState ======================================== ")
+	res, err := ibc.ChannelClientState(&chantypes.QueryChannelClientStateRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res.IdentifiedClientState.GetClientState())
+
+}
+
+func testQueryChannelConsensusState(ibc exposed.Ibc) {
+	log.Println("testQueryChannelConsensusState ======================================== ")
+	res, err := ibc.ChannelClientState(&chantypes.QueryChannelClientStateRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res.IdentifiedClientState.GetClientState())
+}
+
+func testQueryPackCommitment(ibc exposed.Ibc) {
+	log.Println("testQueryPackCommitment ======================================== ")
+	res, err := ibc.PacketCommitment(&chantypes.QueryPacketCommitmentRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+		Sequence:  1,
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+
+}
+
+func testQueryPacketCommitments(ibc exposed.Ibc) {
+	log.Println("testQueryPacketCommitments ======================================== ")
+	res, err := ibc.PacketCommitments(&chantypes.QueryPacketCommitmentsRequest{
+		PortId:     "transfer",
+		ChannelId:  "channel-0",
+		Pagination: nil,
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryPacketReceipt(ibc exposed.Ibc) {
+	log.Println("testQueryPacketReceipt ======================================== ")
+	res, err := ibc.PacketReceipt(&chantypes.QueryPacketReceiptRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+		Sequence:  1,
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryPacketAcknowledgement(ibc exposed.Ibc) {
+	log.Println("testQueryPacketAcknowledgement ======================================== ")
+	res, err := ibc.PacketAcknowledgement(&chantypes.QueryPacketAcknowledgementRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+		Sequence:  1,
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryPacketAcknowledgements(ibc exposed.Ibc) {
+	log.Println("testQueryPacketAcknowledgements ======================================== ")
+	res, err := ibc.PacketAcknowledgements(&chantypes.QueryPacketAcknowledgementsRequest{
+		PortId:                    "transfer",
+		ChannelId:                 "channel-0",
+		Pagination:                nil,
+		PacketCommitmentSequences: []uint64{1},
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryUnreceivedPackets(ibc exposed.Ibc) {
+	log.Println("testQueryUnreceivedPackets ======================================== ")
+	res, err := ibc.UnreceivedPackets(&chantypes.QueryUnreceivedPacketsRequest{
+		PortId:                    "transfer",
+		ChannelId:                 "channel-0",
+		PacketCommitmentSequences: []uint64{1},
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryUnreceivedAcks(ibc exposed.Ibc) {
+	log.Println("testQueryUnreceivedAcks ======================================== ")
+	res, err := ibc.UnreceivedAcks(&chantypes.QueryUnreceivedAcksRequest{
+		PortId:             "transfer",
+		ChannelId:          "channel-0",
+		PacketAckSequences: []uint64{1},
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
+}
+
+func testQueryNextSequenceReceive(ibc exposed.Ibc) {
+	log.Println("testNextSequenceReceive ======================================== ")
+	res, err := ibc.NextSequenceReceive(&chantypes.QueryNextSequenceReceiveRequest{
+		PortId:    "transfer",
+		ChannelId: "channel-0",
+	})
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(res)
 }

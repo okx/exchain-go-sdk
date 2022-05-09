@@ -20,7 +20,6 @@ var (
 
 type ibcClient struct {
 	gosdktypes.BaseClient
-	types.QueryClient
 	context.CLIContext
 }
 
@@ -37,7 +36,5 @@ func (ibcClient) Name() string {
 // NewIbcClient creates a new instance of auth client as implement
 func NewIbcClient(baseClient gosdktypes.BaseClient) ibcClient {
 	clientCtx := context.NewCLIContext().WithNodeURI(baseClient.GetConfig().NodeURI)
-
-	queryClient := types.NewQueryClient(clientCtx)
-	return ibcClient{baseClient, queryClient, clientCtx}
+	return ibcClient{baseClient, clientCtx}
 }

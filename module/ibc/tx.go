@@ -49,7 +49,7 @@ func (ibc ibcClient) GetLatestHeight() uint64 {
 	return uint64(status.SyncInfo.LatestBlockHeight)
 }
 
-func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, targetRpc string) (resp sdk.TxResponse, err error) {
+func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error) {
 
 	// get account info
 	accountInfo, err := auth.NewAuthClient(ibc.BaseClient).QueryAccount(priKey.PubKey().Address().String())
@@ -59,12 +59,6 @@ func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, rec
 	}
 
 	coin, err := sdk.ParseCoinNormalized(amount)
-	if err != nil {
-
-		return sdk.TxResponse{}, err
-	}
-
-	timeoutHeight, err := getTimeoutHeight(targetRpc)
 	if err != nil {
 
 		return sdk.TxResponse{}, err

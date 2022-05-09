@@ -6,6 +6,7 @@ import (
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
+	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
 )
 
@@ -20,7 +21,7 @@ type Ibc interface {
 type IbcTx interface {
 
 	// Transfer transfer token to destination chain
-	Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, targetRpc string) (resp sdk.TxResponse, err error)
+	Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error)
 }
 
 // IbcQuery shows the ibc query info

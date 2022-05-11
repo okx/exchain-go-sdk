@@ -5,9 +5,10 @@ go 1.16
 require (
 	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d
 	github.com/ethereum/go-ethereum v1.10.8
-	github.com/golang/mock v1.5.0
-	github.com/okex/exchain v1.2.1-0.20220425224558-c1344e0c6085 // indirect
+	github.com/golang/mock v1.6.0
+	github.com/okex/exchain v1.2.1-0.20220425224558-c1344e0c6085
 	github.com/stretchr/testify v1.7.1
+	github.com/tendermint/tendermint v0.34.14
 )
 
 replace (

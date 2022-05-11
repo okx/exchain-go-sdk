@@ -8,6 +8,7 @@ import (
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
+	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 )
 
 // Ibc shows the expected behavior for inner ibc client
@@ -41,6 +42,8 @@ type IbcQuery interface {
 
 	// QueryChannels query channels
 	QueryChannels() (*chantypes.QueryChannelsResponse, error)
+
+	QueryTx(hash string) (*ctypes.ResultTx, error)
 
 	// QueryChannel
 	QueryChannel(req *chantypes.QueryChannelRequest) (*chantypes.QueryChannelResponse, error)

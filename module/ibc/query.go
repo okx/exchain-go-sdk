@@ -3,11 +3,15 @@ package ibc
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/hex"
+	"errors"
 	"fmt"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	"github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
+	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
+	"strings"
 )
 
 func (ibc ibcClient) QueryDenomTrace(hash string) (*types.QueryDenomTraceResponse, error) {
@@ -44,6 +48,35 @@ func (ibc ibcClient) QueryIbcParams() (*types.QueryParamsResponse, error) {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (ibc ibcClient) QueryTx(hash string) (*ctypes.ResultTx, error) {
+	hashBytes, err := hex.DecodeString(hash)
+	if err != nil {
+		return &ctypes.ResultTx{}, err
+	}
+
+	return ibc.Tx(hashBytes, true)
+}
+
+func (ibc ibcClient) QueryTxs(page, limit int, events []string) ([]*ctypes.ResultTx, error) {
+	if len(events) == 0 {
+		return nil, errors.New("must declare at least one event to search")
+	}
+
+	if page <= 0 {
+		return nil, errors.New("page must greater than 0")
+	}
+
+	if limit <= 0 {
+		return nil, errors.New("limit must greater than 0")
+	}
+
+	res, err := ibc.TxSearch(strings.Join(events, " AND "), true, page, limit, "")
+	if err != nil {
+		return nil, err
+	}
+	return res.Txs, nil
 }
 
 func (ibc ibcClient) QueryEscrowAddress(portID, channelID string) sdk.AccAddress {

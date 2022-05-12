@@ -8,6 +8,7 @@ import (
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
+	ibcexported "github.com/okex/exchain/libs/ibc-go/modules/core/exported"
 	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 )
 
@@ -43,7 +44,14 @@ type IbcQuery interface {
 	// QueryChannels query channels
 	QueryChannels() (*chantypes.QueryChannelsResponse, error)
 
+	// QueryTx query a tx
 	QueryTx(hash string) (*ctypes.ResultTx, error)
+
+	// QueryTxs
+	QueryTxs(page, limit int, events []string) ([]*ctypes.ResultTx, error)
+
+	// QueryHeaderAtHeight
+	QueryHeaderAtHeight(height int64) (ibcexported.Header, error)
 
 	// QueryChannel
 	QueryChannel(req *chantypes.QueryChannelRequest) (*chantypes.QueryChannelResponse, error)

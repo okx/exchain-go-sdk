@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/ethereum/go-ethereum/crypto"
 	gosdk "github.com/okex/exchain-go-sdk"
 	"github.com/okex/exchain-go-sdk/exposed"
@@ -80,6 +81,9 @@ func main() {
 	testQueryUnreceivedPackets(cli.Ibc())
 	testQueryUnreceivedAcks(cli.Ibc())
 	testQueryNextSequenceReceive(cli.Ibc())
+	testQueryTx(cli.Ibc())
+	testQueryTxs(cli.Ibc())
+	testQueryHeader(cli.Ibc())
 }
 
 func testTransfer(ibc exposed.Ibc, accountNum, sequenceNum uint64) {
@@ -344,4 +348,59 @@ func testQueryNextSequenceReceive(ibc exposed.Ibc) {
 	}
 
 	log.Println(res)
+}
+
+func testQueryTx(ibc exposed.Ibc) {
+	log.Println("testQueryTx ======================================== ")
+
+	res, err := ibc.QueryTx("D7702BCC93BC3CA3C16EB0F9B1F945D33D1860B931B78FDDB6F0517B120E5E91")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	resBytes, err := json.Marshal(res)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println(string(resBytes))
+}
+
+func testQueryTxs(ibc exposed.Ibc) {
+	log.Println("testQueryTxs ======================================== ")
+	events := []string{"message.action=transfer"}
+	res, err := ibc.QueryTxs(1, 5000, events)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	resBytes, err := json.Marshal(res)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println(string(resBytes))
+}
+
+func testQueryHeader(ibc exposed.Ibc) {
+	log.Println("testQueryHeader ======================================== ")
+
+	res, err := ibc.QueryHeaderAtHeight(1)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	resBytes, err := json.Marshal(res)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(string(resBytes))
 }

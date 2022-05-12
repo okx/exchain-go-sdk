@@ -10,7 +10,10 @@ import (
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	"github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
+	ibcexported "github.com/okex/exchain/libs/ibc-go/modules/core/exported"
+	tmclient "github.com/okex/exchain/libs/ibc-go/modules/light-clients/07-tendermint/types"
 	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
+	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 	"strings"
 )
 
@@ -77,6 +80,38 @@ func (ibc ibcClient) QueryTxs(page, limit int, events []string) ([]*ctypes.Resul
 		return nil, err
 	}
 	return res.Txs, nil
+}
+
+func (ibc ibcClient) QueryHeaderAtHeight(height int64) (ibcexported.Header, error) {
+	var (
+		page    = 1
+		perPage = 100000
+	)
+	if height <= 0 {
+		return nil, fmt.Errorf("must pass in valid height, %d not valid", height)
+	}
+
+	res, err := ibc.Commit(&height)
+	if err != nil {
+		return nil, err
+	}
+
+	val, err := ibc.Validators(&height, page, perPage)
+	if err != nil {
+		return nil, err
+	}
+
+	protoVal, err := tmtypes.NewValidatorSet(val.Validators).ToProto()
+	if err != nil {
+		return nil, err
+	}
+
+	return &tmclient.Header{
+		// NOTE: This is not a SignedHeader
+		// We are missing a light.Commit type here
+		SignedHeader: res.SignedHeader.ToProto(),
+		ValidatorSet: protoVal,
+	}, nil
 }
 
 func (ibc ibcClient) QueryEscrowAddress(portID, channelID string) sdk.AccAddress {

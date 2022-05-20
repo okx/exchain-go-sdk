@@ -2,13 +2,14 @@ package exposed
 
 import (
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	cryptotypes "github.com/okex/exchain/libs/cosmos-sdk/crypto/types"
+
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
 	ibcexported "github.com/okex/exchain/libs/ibc-go/modules/core/exported"
+	tmcrypto "github.com/okex/exchain/libs/tendermint/crypto"
 	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 )
 
@@ -23,7 +24,7 @@ type Ibc interface {
 type IbcTx interface {
 
 	// Transfer transfer token to destination chain
-	Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error)
+	Transfer(priKey tmcrypto.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error)
 }
 
 // IbcQuery shows the ibc query info

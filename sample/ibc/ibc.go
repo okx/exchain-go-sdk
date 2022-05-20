@@ -6,11 +6,12 @@ import (
 	gosdk "github.com/okex/exchain-go-sdk"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/utils"
-	secp256k12 "github.com/okex/exchain/libs/cosmos-sdk/crypto/keys/ibc-key"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	query2 "github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
+	//secp256k12 "github.com/okex/exchain/libs/cosmos-sdk/crypto/keys/ibc-key"
+	secp256k12 "github.com/okex/exchain/libs/tendermint/crypto/secp256k1"
 	"log"
 )
 
@@ -103,7 +104,7 @@ func testTransfer(ibc exposed.Ibc, accountNum, sequenceNum uint64) {
 	fee := sdk.NewCoinAdapter("wei", sdk.NewInt(45000000000000))
 	fees := []sdk.CoinAdapter{fee}
 
-	res, err := ibc.Transfer(secp256k12.GenPrivKeyFromSecret(d), "channel-0", addr, "1000okt", fees, "memo", client_types.Height{RevisionNumber: 101, RevisionHeight: 10000})
+	res, err := ibc.Transfer(secp256k12.GenPrivKeySecp256k1(d), "channel-0", addr, "1000okt", fees, "memo", client_types.Height{RevisionNumber: 101, RevisionHeight: 10000})
 	if err != nil {
 		log.Fatal(err)
 	}

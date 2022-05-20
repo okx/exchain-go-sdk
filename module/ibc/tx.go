@@ -11,13 +11,13 @@ import (
 	"github.com/okex/exchain/libs/cosmos-sdk/client"
 	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	codec_types "github.com/okex/exchain/libs/cosmos-sdk/codec/types"
-	cryptotypes "github.com/okex/exchain/libs/cosmos-sdk/crypto/types"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	signing "github.com/okex/exchain/libs/cosmos-sdk/types/tx/signing"
 	ibc_tx "github.com/okex/exchain/libs/cosmos-sdk/x/auth/ibc-tx"
 	signing2 "github.com/okex/exchain/libs/cosmos-sdk/x/auth/ibcsigning"
 	ibc_type "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
+	tmcrypto "github.com/okex/exchain/libs/tendermint/crypto"
 )
 
 const (
@@ -49,10 +49,12 @@ func (ibc ibcClient) GetLatestHeight() uint64 {
 	return uint64(status.SyncInfo.LatestBlockHeight)
 }
 
-func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error) {
+func (ibc ibcClient) Transfer(priKey tmcrypto.PrivKey, srcChannel string, receiver string, amount string, fee sdk.CoinAdapters, memo string, timeoutHeight client_types.Height) (resp sdk.TxResponse, err error) {
+
+	pubKey := ibc_tx.LagacyKey2PbKey(priKey.PubKey())
 
 	// get account info
-	accountInfo, err := auth.NewAuthClient(ibc.BaseClient).QueryAccount(priKey.PubKey().Address().String())
+	accountInfo, err := auth.NewAuthClient(ibc.BaseClient).QueryAccount(pubKey.Address().String())
 	if err != nil {
 
 		return sdk.TxResponse{}, err
@@ -69,7 +71,7 @@ func (ibc ibcClient) Transfer(priKey cryptotypes.PrivKey, srcChannel string, rec
 		SourcePort:       src_port,
 		SourceChannel:    srcChannel,
 		Token:            sdk.NewCoinAdapter("wei", coin.Amount.Mul(sdk.NewDec(int64(math.Pow10(18)))).RoundInt()),
-		Sender:           priKey.PubKey().Address().String(),
+		Sender:           pubKey.Address().String(),
 		Receiver:         receiver,
 		TimeoutHeight:    timeoutHeight,
 		TimeoutTimestamp: 0,
@@ -138,12 +140,13 @@ func (ibc ibcClient) buildUnsignedTx(msg ibcmsg.Msg, memo string, fee sdk.CoinAd
 	return txb, nil
 }
 
-func (ibc ibcClient) signedTx(txb client.TxBuilder, priKey cryptotypes.PrivKey, accNum uint64, seqNum uint64) (signing2.Tx, error) {
+func (ibc ibcClient) signedTx(txb client.TxBuilder, priKey tmcrypto.PrivKey, accNum uint64, seqNum uint64) (signing2.Tx, error) {
 	signMode := txConfig.SignModeHandler().DefaultMode()
 
+	pubKey := ibc_tx.LagacyKey2PbKey(priKey.PubKey())
 	// init signature
 	signature := signing.SignatureV2{
-		PubKey: priKey.PubKey(),
+		PubKey: pubKey,
 		Data: &signing.SingleSignatureData{
 			SignMode: signMode,
 		},
@@ -180,7 +183,7 @@ func (ibc ibcClient) signedTx(txb client.TxBuilder, priKey cryptotypes.PrivKey, 
 	}
 
 	sig := signing.SignatureV2{
-		PubKey:   priKey.PubKey(),
+		PubKey:   pubKey,
 		Data:     &sigData,
 		Sequence: seqNum,
 	}

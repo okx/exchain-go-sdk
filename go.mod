@@ -6,8 +6,8 @@ require (
 	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d
 	github.com/ethereum/go-ethereum v1.10.8
 	github.com/golang/mock v1.5.0
-	github.com/okex/exchain v1.2.1-0.20220414063812-5b9519a911d7
-	github.com/stretchr/testify v1.7.0
+	github.com/okex/exchain v1.3.2-0.20220520075550-aab7711a3a31
+	github.com/stretchr/testify v1.7.1
 )
 
 replace (

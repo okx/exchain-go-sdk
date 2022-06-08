@@ -11,7 +11,7 @@ require (
 	github.com/kisielk/godepgraph v0.0.0-20190626013829-57a7e4a651a9 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/minio/highwayhash v1.0.1 // indirect
-	github.com/okex/exchain v1.3.2-0.20220519080729-7d16e4ca6148 // indirect
+	github.com/okex/exchain v1.5.3 // indirect
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/stretchr/testify v1.7.1
 	github.com/tendermint/tendermint v0.34.14

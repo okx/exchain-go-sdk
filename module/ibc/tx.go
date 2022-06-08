@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/okex/exchain-go-sdk/module/auth"
 	ibcmsg "github.com/okex/exchain/libs/cosmos-sdk/types/ibc-adapter"
-	"math"
+	"math/big"
+	"strings"
 
 	"github.com/okex/exchain-go-sdk/module"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
@@ -59,19 +60,34 @@ func (ibc ibcClient) Transfer(priKey tmcrypto.PrivKey, srcChannel string, receiv
 
 		return sdk.TxResponse{}, err
 	}
-
-	coin, err := sdk.ParseCoinNormalized(amount)
+	coins, err := sdk.ParseDecCoins(amount)
 	if err != nil {
-
 		return sdk.TxResponse{}, err
+	}
+
+	coin := coins[0]
+
+	if coin.Denom == sdk.DefaultIbcWei {
+		coin.Amount = sdk.Dec{
+			coin.Amount.Div(coin.Amount.BigInt(), big.NewInt(sdk.DefaultDecInt)),
+		}
+	}
+	if coin.Denom == "okt" || coin.Denom == "OKT" {
+		coin.Denom = "wei"
+	}
+
+	//
+	if !strings.HasPrefix(coin.Denom, "ibc/") {
+		denomTrace := ibc_type.ParseDenomTrace(coin.Denom)
+		coin.Denom = denomTrace.IBCDenom()
 	}
 
 	// generate msg
 	msg := &ibc_type.MsgTransfer{
 		SourcePort:       src_port,
 		SourceChannel:    srcChannel,
-		Token:            sdk.NewCoinAdapter("wei", coin.Amount.Mul(sdk.NewDec(int64(math.Pow10(18)))).RoundInt()),
-		Sender:           pubKey.Address().String(),
+		Token:            sdk.NewCoinAdapter(coin.Denom, sdk.NewIntFromBigInt(coin.Amount.BigInt())),
+		Sender:           sdk.AccAddress(pubKey.Address().Bytes()).String(),
 		Receiver:         receiver,
 		TimeoutHeight:    timeoutHeight,
 		TimeoutTimestamp: 0,

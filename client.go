@@ -2,6 +2,8 @@ package gosdk
 
 import (
 	"fmt"
+	"github.com/okex/exchain-go-sdk/module/ibc"
+	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module"
@@ -63,6 +65,7 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 		slashing.NewSlashingClient(pBaseClient),
 		token.NewTokenClient(pBaseClient),
 		tendermint.NewTendermintClient(pBaseClient),
+		ibc.NewIbcClient(pBaseClient),
 	)
 
 	return *pClient
@@ -123,4 +126,8 @@ func (cli *Client) Tendermint() exposed.Tendermint {
 }
 func (cli *Client) Token() exposed.Token {
 	return cli.modules[tokentypes.ModuleName].(exposed.Token)
+}
+
+func (cli *Client) Ibc() exposed.Ibc {
+	return cli.modules[ibcTypes.ModuleName].(exposed.Ibc)
 }

@@ -18,9 +18,9 @@ import (
 
 const (
 	host     string = "https://exchaintestrpc.okex.org"
-	alice    string = "0x2CF4ea7dF75b513509d95946B43062E26bD88035"
+	alice    string = "0xaD37A476c7D3b8F382C5DfC5E789e6540ea246bb"
 	bob      string = "0x0073F2E28ef8F117e53d858094086Defaf1837D5"
-	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
+	aliceKey string = "5a72d444804664c3cf38fffc6117e6142146ddac25abaa35b72eb86dfe6ae56c"
 )
 
 func main() {
@@ -36,13 +36,20 @@ func main() {
 	}
 	fmt.Println("gasPrice", gasPrice)
 
-	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
+	blockNumber, err := client.BlockNumber(context.Background())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("blockNumber:", blockNumber)
+
+	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("balance:", balance)
 
-	nonce, err := client.NonceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
+	nonce, err := client.NonceAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,7 +90,7 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("pendingCode", pendingCode)
-	code, err := client.CodeAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
+	code, err := client.CodeAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,7 +104,7 @@ func main() {
 	}
 	fmt.Println("estimateGas", estimateGas)
 
-	re, err := client.CallContract(context.Background(), msg, big.NewInt(1))
+	re, err := client.CallContract(context.Background(), msg, big.NewInt(int64(blockNumber)))
 	if err != nil {
 		log.Fatal(err)
 	}

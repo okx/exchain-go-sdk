@@ -3,26 +3,24 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rlp"
 	gosdk "github.com/okex/exchain-go-sdk"
-	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
-	"github.com/okex/exchain/libs/tendermint/crypto/tmhash"
-	evmtypes "github.com/okex/exchain/x/evm/types"
 )
 
 const (
-	host     string = "http://localhost:8545"
-	alice    string = "0x2CF4ea7dF75b513509d95946B43062E26bD88035"
+	host     string = "https://exchaintestrpc.okex.org"
+	alice    string = "0xaD37A476c7D3b8F382C5DfC5E789e6540ea246bb"
 	bob      string = "0x0073F2E28ef8F117e53d858094086Defaf1837D5"
-	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
+	aliceKey string = "5a72d444804664c3cf38fffc6117e6142146ddac25abaa35b72eb86dfe6ae56c"
 )
 
 func main() {
@@ -33,57 +31,108 @@ func main() {
 	}
 
 	gasPrice, err := client.SuggestGasPrice(context.Background())
-	fmt.Println("gasPrice", gasPrice, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("gasPrice", gasPrice)
 
-	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("balance:", balance, err)
+	blockNumber, err := client.BlockNumber(context.Background())
 
-	nonce, err := client.NonceAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("nonce", nonce, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("blockNumber:", blockNumber)
+
+	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("balance:", balance)
+
+	nonce, err := client.NonceAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("nonce", nonce)
 
 	pendingNonce, err := client.PendingNonceAt(context.Background(), common.HexToAddress(alice))
-	fmt.Println("pendingNonce", pendingNonce, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("pendingNonce", pendingNonce)
 
 	chainID, err := client.ChainID(context.Background())
-	fmt.Println("chainID", chainID, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("chainID", chainID)
 
 	privateKey, _ := crypto.HexToECDSA(aliceKey)
 	unsignedTx := types.NewTransaction(pendingNonce, common.HexToAddress(bob), big.NewInt(1000000000000000000), 30000, gasPrice, []byte{})
 	signedTx, _ := types.SignTx(unsignedTx, types.NewEIP155Signer(chainID), privateKey)
-	ethTxBytes, err := rlp.EncodeToBytes(signedTx)
-	var tx evmtypes.MsgEthereumTx
-	_ = rlp.DecodeBytes(ethTxBytes, &tx)
-	txBytes, err := utils.GetTxEncoder(gosdktypes.NewCodec())(&tx)
-	txHash := common.BytesToHash(tmhash.Sum(txBytes))
 
 	err = client.SendTransaction(context.Background(), signedTx)
-	fmt.Println("sendTx err:", err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	receipt, err := client.TransactionReceipt(context.Background(), txHash)
-	fmt.Println("recipt", receipt, err)
+	time.Sleep(time.Second * 4)
+	fmt.Println("txHash", signedTx.Hash())
+
+	receipt, err := client.TransactionReceipt(context.Background(), signedTx.Hash())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("recipt %+v\n", receipt)
 
 	pendingCode, err := client.PendingCodeAt(context.Background(), common.HexToAddress(alice))
-	fmt.Println("pendingCode", pendingCode, err)
-	code, err := client.CodeAt(context.Background(), common.HexToAddress(alice), big.NewInt(1))
-	fmt.Println("code", code, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("pendingCode", pendingCode)
+	code, err := client.CodeAt(context.Background(), common.HexToAddress(alice), big.NewInt(int64(blockNumber)))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("code", code)
 
 	to := common.HexToAddress(bob)
 	msg := ethereum.CallMsg{From: common.HexToAddress(alice), To: &to, GasPrice: gasPrice, Value: big.NewInt(1), Data: []byte{}}
 	estimateGas, err := client.EstimateGas(context.Background(), msg)
-	fmt.Println("estimateGas", estimateGas, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("estimateGas", estimateGas)
 
-	re, err := client.CallContract(context.Background(), msg, big.NewInt(1))
-	fmt.Println("callContract", re, err)
+	re, err := client.CallContract(context.Background(), msg, big.NewInt(int64(blockNumber)))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("callContract", re)
 
 	block, err := client.BlockByNumber(context.Background(), nil)
-	fmt.Println("block", block, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("block", block)
 
 	ss, err := client.SubscribeNewHead(context.Background(), make(chan *types.Header))
-	fmt.Println("subscription", ss, err)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("subscription", ss)
+	}
 	es, err := client.EthSubscribe(context.Background(), make(chan *types.Header), "newHeads")
-	fmt.Println("ethSubscribe", es, err)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("ethSubscribe", es)
+	}
 
 	var hex hexutil.Big
 	err = client.CallContext(context.Background(), &hex, "eth_gasPrice")
-	fmt.Println("CallContext", hex, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("CallContext", hex)
 }

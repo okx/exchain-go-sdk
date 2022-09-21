@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/minio/highwayhash v1.0.1 // indirect
-	github.com/okex/exchain v1.5.6
+	github.com/okex/exchain v1.6.3
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect

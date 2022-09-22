@@ -1,6 +1,8 @@
 package exposed
 
 import (
+	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
 	"github.com/okex/exchain/x/wasm/types"
 )
@@ -14,6 +16,23 @@ type Wasm interface {
 }
 
 type wasmTx interface {
+	// StoreCode upload a wasm binary to the chain
+	StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, wasmFilePath string, onlyAddr string, everybody, nobody bool) (*sdk.TxResponse, error)
+
+	// InstantiateContract instantiate a wasm contract by given the codeID
+	InstantiateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, initMsg string, amount string, label string, adminAddr string, noAdmin bool) (*sdk.TxResponse, error)
+
+	// ExecuteContract execute a command on a wasm contract
+	ExecuteContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string, execMsg string, amount string) (*sdk.TxResponse, error)
+
+	// MigrateContract migrate a wasm contract to a new code version
+	MigrateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, contractAddr string, migrateMsg string) (*sdk.TxResponse, error)
+
+	// UpdateContractAdmin set new admin for a contract
+	UpdateContractAdmin(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string, adminAddr string) (*sdk.TxResponse, error)
+
+	// ClearContractAdmin clears admin for a contract to prevent further migrations
+	ClearContractAdmin(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string) (*sdk.TxResponse, error)
 }
 
 type wasmQuery interface {

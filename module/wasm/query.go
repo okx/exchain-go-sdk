@@ -130,7 +130,7 @@ func (c wasmClient) QueryContractStateSmart(address string, queryData string) (*
 		return nil, errors.New("query data must not be empty")
 	}
 
-	decoder := newArgDecoder(hex.DecodeString)
+	decoder := newArgDecoder(asciiDecodeString)
 	qData, err := decoder.DecodeString(queryData)
 	if err != nil {
 		return nil, fmt.Errorf("decode query: %s", err)

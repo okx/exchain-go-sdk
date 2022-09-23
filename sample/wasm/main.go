@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/hex"
+	"fmt"
 	gosdk "github.com/okex/exchain-go-sdk"
 	"github.com/okex/exchain-go-sdk/utils"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
@@ -69,41 +71,36 @@ func main() {
 	log.Println(accInfo)
 
 	//-------------------- 3. transfer to other address --------------------//
-
-	//sequence number of the account must be increased by 1 whenever a transaction of the account takes effect
 	accountNum, sequenceNum := accInfo.GetAccountNumber(), accInfo.GetSequence()
 
-	wasmFile := "/Users/finefine/workspace/cosmos/cw-contracts/contracts/nameservice/target/wasm32-unknown-unknown/release/cw_nameservice.wasm"
+	wasmFile := "sample/wasm/hackatom.wasm"
 	res, err := cli.Wasm().StoreCode(fromInfo, passWd, accountNum, sequenceNum, "memo", wasmFile, "", false, false)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	index := strings.LastIndex(res.RawLog, ":")
-	codeIDStr := res.RawLog[index:]
-	codeIDStr = codeIDStr[2 : strings.Index(codeIDStr, "}")-1]
-	codeID, _ := strconv.Atoi(codeIDStr)
+	codeID := GetCodeID(res.RawLog)
 
-	log.Println("=============================================================StoreCode===============================================================")
+	log.Println("=============================================================StoreCode1===============================================================")
 	log.Println(codeID)
 	log.Println(res)
 
 	// instantiate a wasm contract
 	sequenceNum++
-	initMsg := `{"purchase_price":{"amount":"1","denom":"okt"},"transfer_price":{"amount":"1","denom":"okt"}}`
-	instantiateRes, err := cli.Wasm().InstantiateContract(fromInfo, passWd, accountNum, sequenceNum, "memo", uint64(codeID), initMsg, "1okt", "name service", "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u", false)
+	initMsg := `{"verifier": "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u", "beneficiary": "ex1fsfwwvl93qv6r56jpu084hxxzn9zphnyxhske5"}`
+	instantiateRes, err := cli.Wasm().InstantiateContract(fromInfo, passWd, accountNum, sequenceNum, "memo", uint64(codeID), initMsg, "1okt", "local0.1.0", "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u", false)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("=========================================================InstantiateContract==========================================================")
 	log.Println(instantiateRes)
-	index = strings.Index(instantiateRes.RawLog, "address")
+	index := strings.Index(instantiateRes.RawLog, "address")
 	contractAddr := instantiateRes.RawLog[index+18 : index+18+61]
 	log.Println("contract address: ", contractAddr)
 
 	// execute a wasm contract
 	sequenceNum++
-	execMsg := `{"register":{"name":"fred"}}`
+	execMsg := `{"release":{}}`
 	executeRes, err := cli.Wasm().ExecuteContract(fromInfo, passWd, accountNum, sequenceNum, "memo", contractAddr, execMsg, "2okt")
 	if err != nil {
 		log.Fatal(err)
@@ -121,6 +118,40 @@ func main() {
 	log.Println("=========================================================UpdateContractAdmin==========================================================")
 	log.Println(updateAdminRes)
 
+	// query contract state all
+	contractStateAll, err := cli.Wasm().QueryContractStateAll(contractAddr, &query.PageRequest{
+		Key:        nil,
+		Offset:     0,
+		Limit:      50,
+		CountTotal: false,
+	})
+	log.Println("=========================================================QueryContractStateAll==========================================================")
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println(contractStateAll)
+	}
+
+	// query contract state raw
+	// 0006636f6e666967 is hex of the key "config"
+	fmt.Println(hex.EncodeToString([]byte(`"config"`)))
+	contractStateRaw, err := cli.Wasm().QueryContractStateRaw(contractAddr, "22636f6e66696722")
+	log.Println("=========================================================QueryContractStateRaw==========================================================")
+	if err != nil {
+		log.Println("err:", err)
+	} else {
+		log.Println(contractStateRaw)
+	}
+
+	// query contract state smart
+	contractStateSmart, err := cli.Wasm().QueryContractStateSmart(contractAddr, `{"verifier":{}}`)
+	log.Println("=========================================================QueryContractStateSmart==========================================================")
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println(contractStateSmart)
+	}
+
 	// migrate contract to the new code
 	accInfo2, err := cli.Auth().QueryAccount(fromInfo2.GetAddress().String())
 	if err != nil {
@@ -128,16 +159,29 @@ func main() {
 	}
 
 	log.Println(accInfo2)
-	//migrateMsg := initMsg
-	//migrateRes, err := cli.Wasm().MigrateContract(fromInfo2, passWd, accInfo2.GetAccountNumber(), accInfo2.GetSequence(), "memo", 2, contractAddr, migrateMsg)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//log.Println("=========================================================MigrateContract==========================================================")
-	//log.Println(migrateRes)
+
+	// store new code
+	sequenceNum++
+	migrateWasmFile := "sample/wasm/burner.wasm"
+	storeCodeRes, err := cli.Wasm().StoreCode(fromInfo, passWd, accountNum, sequenceNum, "memo", migrateWasmFile, "", false, false)
+	if err != nil {
+		log.Fatal(err)
+	}
+	codeID = GetCodeID(storeCodeRes.RawLog)
+	log.Println("=============================================================StoreCode2===============================================================")
+	log.Println(codeID)
+	log.Println(res)
+
+	migrateMsg := `{"payout": "ex1fsfwwvl93qv6r56jpu084hxxzn9zphnyxhske5"}`
+	migrateRes, err := cli.Wasm().MigrateContract(fromInfo2, passWd, accInfo2.GetAccountNumber(), accInfo2.GetSequence(), "memo", codeID, contractAddr, migrateMsg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("=========================================================MigrateContract==========================================================")
+	log.Println(migrateRes)
 
 	// clear admin for the contract
-	clearAdminRes, err := cli.Wasm().ClearContractAdmin(fromInfo2, passWd, accInfo2.GetAccountNumber(), accInfo2.GetSequence(), "memo", contractAddr)
+	clearAdminRes, err := cli.Wasm().ClearContractAdmin(fromInfo2, passWd, accInfo2.GetAccountNumber(), accInfo2.GetSequence()+1, "memo", contractAddr)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -215,38 +259,6 @@ func main() {
 		log.Println(contractHistory)
 	}
 
-	// query contract state all
-	contractStateAll, err := cli.Wasm().QueryContractStateAll(contractAddr, &query.PageRequest{
-		Key:        nil,
-		Offset:     0,
-		Limit:      50,
-		CountTotal: false,
-	})
-	log.Println("=========================================================QueryContractStateAll==========================================================")
-	if err != nil {
-		log.Println(err)
-	} else {
-		log.Println(contractStateAll)
-	}
-
-	// query contract state raw
-	contractStateRaw, err := cli.Wasm().QueryContractStateRaw(contractAddr, "")
-	log.Println("=========================================================QueryContractStateRaw==========================================================")
-	if err != nil {
-		log.Println(err)
-	} else {
-		log.Println(contractStateRaw)
-	}
-
-	// query contract state smart
-	contractStateSmart, err := cli.Wasm().QueryContractStateSmart(contractAddr, "")
-	log.Println("=========================================================QueryContractStateSmart==========================================================")
-	if err != nil {
-		log.Println(err)
-	} else {
-		log.Println(contractStateSmart)
-	}
-
 	// query contract ListPinnedCode
 	pinnedCode, err := cli.Wasm().QueryListPinnedCode(&query.PageRequest{
 		Key:        nil,
@@ -260,4 +272,13 @@ func main() {
 	} else {
 		log.Println(pinnedCode)
 	}
+}
+
+func GetCodeID(str string) uint64 {
+	index := strings.LastIndex(str, ":")
+	codeIDStr := str[index:]
+	codeIDStr = codeIDStr[2 : strings.Index(codeIDStr, "}")-1]
+	codeID, _ := strconv.Atoi(codeIDStr)
+
+	return uint64(codeID)
 }

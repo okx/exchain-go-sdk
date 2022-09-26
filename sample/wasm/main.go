@@ -12,7 +12,6 @@ import (
 )
 
 const (
-	// TODO: link to mainnet of ExChain later
 	rpcURL = "tcp://52.199.88.250:26657"
 	// user's name
 	name = "alice"

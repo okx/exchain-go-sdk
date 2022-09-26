@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
@@ -165,12 +164,6 @@ type argumentDecoder struct {
 
 func newArgDecoder(def func(string) ([]byte, error)) *argumentDecoder {
 	return &argumentDecoder{dec: def}
-}
-
-func (a *argumentDecoder) RegisterFlags(f *flag.FlagSet, argName string) {
-	f.BoolVar(&a.asciiF, "ascii", false, "ascii encoded "+argName)
-	f.BoolVar(&a.hexF, "hex", false, "hex encoded  "+argName)
-	f.BoolVar(&a.b64F, "b64", false, "base64 encoded "+argName)
 }
 
 func (a *argumentDecoder) DecodeString(s string) ([]byte, error) {

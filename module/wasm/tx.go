@@ -83,6 +83,11 @@ func (c wasmClient) MigrateContract(fromInfo keys.Info, passWd string, accNum, s
 }
 
 func (c wasmClient) UpdateContractAdmin(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string, adminAddr string) (*sdk.TxResponse, error) {
+	_, err := sdk.AccAddressFromBech32(contractAddr)
+	if err != nil {
+		return nil, err
+	}
+
 	msg := types.MsgUpdateAdmin{
 		Sender:   fromInfo.GetAddress().String(),
 		Contract: contractAddr,
@@ -102,6 +107,11 @@ func (c wasmClient) UpdateContractAdmin(fromInfo keys.Info, passWd string, accNu
 }
 
 func (c wasmClient) ClearContractAdmin(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string) (*sdk.TxResponse, error) {
+	_, err := sdk.AccAddressFromBech32(contractAddr)
+	if err != nil {
+		return nil, err
+	}
+
 	msg := types.MsgClearAdmin{
 		Sender:   fromInfo.GetAddress().String(),
 		Contract: contractAddr,
@@ -171,10 +181,10 @@ func parseInstantiateMsg(codeID uint64, initMsg string, sender sdk.AccAddress, a
 
 	// ensure sensible admin is set (or explicitly immutable)
 	if adminStr == "" && !noAdmin {
-		return types.MsgInstantiateContract{}, fmt.Errorf("you must set an admin or explicitly pass --no-admin to make it immutible (wasmd issue #719)")
+		return types.MsgInstantiateContract{}, fmt.Errorf("you must set an admin or explicitly pass no-admin to make it immutible (wasmd issue #719)")
 	}
 	if adminStr != "" && noAdmin {
-		return types.MsgInstantiateContract{}, fmt.Errorf("you set an admin and passed --no-admin, those cannot both be true")
+		return types.MsgInstantiateContract{}, fmt.Errorf("you set an admin and passed no-admin, those cannot both be true")
 	}
 
 	// build and sign the transaction, then broadcast to Tendermint
@@ -204,6 +214,11 @@ func parseExecuteMsg(contractAddr string, execMsg string, sender sdk.AccAddress,
 }
 
 func parseMigrateContractMsg(codeID uint64, contractAddr string, sender sdk.AccAddress, migrateMsg string) (types.MsgMigrateContract, error) {
+	_, err := sdk.AccAddressFromBech32(contractAddr)
+	if err != nil {
+		return types.MsgMigrateContract{}, err
+	}
+
 	msg := types.MsgMigrateContract{
 		Sender:   sender.String(),
 		Contract: contractAddr,

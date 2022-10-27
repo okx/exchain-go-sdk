@@ -31,8 +31,6 @@ type FeesplitTx interface {
 	// UpdateFeeSplit update withdraw address for a contract registered for fee distribution.
 	// Only the contract deployer can update the withdraw address.
 	UpdateFeeSplit(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddress string, withdrawAddress string) (*sdk.TxResponse, error)
-
-	FeeSplitSharesProposal(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string)
 }
 
 // FeesplitQuery shows the expected query behavior for inner Feesplit client

@@ -7,6 +7,13 @@ import (
 	"github.com/okex/exchain/x/feesplit/types"
 )
 
+const (
+	// Amino names
+	registerFeeSplitName = "okexchain/MsgRegisterFeeSplit"
+	updateFeeSplitName   = "okexchain/MsgUpdateFeeSplit"
+	cancelFeeSplitName   = "okexchain/MsgCancelFeeSplit"
+)
+
 var (
 	_ gosdktypes.Module = (*feesplitClient)(nil)
 )
@@ -17,8 +24,9 @@ type feesplitClient struct {
 }
 
 func (ibc feesplitClient) RegisterCodec(cdc *codec.Codec) {
-	//proto.RegisterType((*types.MsgTransfer)(nil), "/ibc.applications.transfer.v1.MsgTransfer")
-	//cdc.RegisterConcrete(types.MsgTransfer{}, "/ibc.applications.transfer.v1.MsgTransfer", nil)
+	cdc.RegisterConcrete(types.MsgRegisterFeeSplit{}, registerFeeSplitName, nil)
+	cdc.RegisterConcrete(types.MsgUpdateFeeSplit{}, updateFeeSplitName, nil)
+	cdc.RegisterConcrete(types.MsgCancelFeeSplit{}, cancelFeeSplitName, nil)
 }
 
 // Name returns the module name

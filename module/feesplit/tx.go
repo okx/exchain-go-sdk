@@ -16,12 +16,12 @@ func (c feesplitClient) RegisterFeeSplit(fromInfo keys.Info, passWd string, accN
 		return nil, fmt.Errorf("invalid nonces")
 	}
 
-	if _, err := sdk.AccAddressFromBech32(withdrawAddress); err != nil {
-		return nil, fmt.Errorf("invalid withdraw bech32 address %w", err)
-	}
-
 	if withdrawAddress == "" {
 		withdrawAddress = fromInfo.GetAddress().String()
+	}
+
+	if _, err := sdk.AccAddressFromBech32(withdrawAddress); err != nil {
+		return nil, fmt.Errorf("invalid withdraw bech32 address %w", err)
 	}
 
 	msg := &types.MsgRegisterFeeSplit{

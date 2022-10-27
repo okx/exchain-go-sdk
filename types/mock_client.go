@@ -5,6 +5,7 @@
 package types
 
 import (
+	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 	reflect "reflect"
 
 	codec "github.com/okex/exchain/libs/cosmos-sdk/codec"
@@ -19,6 +20,16 @@ import (
 type MockBaseClient struct {
 	ctrl     *gomock.Controller
 	recorder *MockBaseClientMockRecorder
+}
+
+func (m *MockBaseClient) BlockInfo(height *int64) (*tmtypes.BlockMeta, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m *MockBaseClient) LatestBlockNumber() (int64, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 // MockBaseClientMockRecorder is the mock recorder for MockBaseClient.

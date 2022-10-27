@@ -8,10 +8,10 @@ import (
 	tmtypes "github.com/okex/exchain/libs/tendermint/types"
 	reflect "reflect"
 
+	gomock "github.com/golang/mock/gomock"
 	codec "github.com/okex/exchain/libs/cosmos-sdk/codec"
 	types "github.com/okex/exchain/libs/cosmos-sdk/types"
 	types0 "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	gomock "github.com/golang/mock/gomock"
 	bytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 	types1 "github.com/okex/exchain/libs/tendermint/rpc/core/types"
 )

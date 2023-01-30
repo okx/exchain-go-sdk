@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/okex/exchain-go-sdk/module/feesplit"
 	"github.com/okex/exchain-go-sdk/module/ibc"
+	"github.com/okex/exchain-go-sdk/module/icamauth"
+	icamauthtypes "github.com/okex/exchain-go-sdk/module/icamauth/types"
 	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	feesplitTypes "github.com/okex/exchain/x/feesplit/types"
 
@@ -34,14 +36,17 @@ import (
 	tokentypes "github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	"github.com/okex/exchain/libs/cosmos-sdk/codec"
+	"github.com/okex/exchain/libs/cosmos-sdk/codec/types"
+	"github.com/okex/exchain/libs/cosmos-sdk/x/bank"
 	farmtypes "github.com/okex/exchain/x/farm/types"
 )
 
 // Client - structure of the main client of ExChain GoSDK
 type Client struct {
-	config  gosdktypes.ClientConfig
-	cdc     *codec.Codec
-	modules map[string]gosdktypes.Module
+	config   gosdktypes.ClientConfig
+	cdc      *codec.Codec
+	protoCdc *codec.ProtoCodec
+	modules  map[string]gosdktypes.Module
 }
 
 // NewClient creates a new instance of Client
@@ -54,6 +59,7 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 	}
 	pBaseClient := module.NewBaseClient(cdc, &pClient.config)
 
+	protoCdc := codec.NewProtoCodec(RegistryProto())
 	pClient.registerModule(
 		ammswap.NewAmmSwapClient(pBaseClient),
 		auth.NewAuthClient(pBaseClient),
@@ -61,6 +67,7 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 		distribution.NewDistrClient(pBaseClient),
 		evm.NewEvmClient(pBaseClient),
 		farm.NewFarmClient(pBaseClient),
+		icamauth.NewIcamauthClient(pBaseClient, protoCdc),
 		governance.NewGovClient(pBaseClient),
 		order.NewOrderClient(pBaseClient),
 		staking.NewStakingClient(pBaseClient),
@@ -72,6 +79,12 @@ func NewClient(config gosdktypes.ClientConfig) Client {
 	)
 
 	return *pClient
+}
+
+func RegistryProto() types.InterfaceRegistry {
+	interfaceReg := types.NewInterfaceRegistry()
+	bank.RegisterInterface(interfaceReg)
+	return interfaceReg
 }
 
 func (cli *Client) registerModule(mods ...gosdktypes.Module) {
@@ -137,4 +150,8 @@ func (cli *Client) Ibc() exposed.Ibc {
 
 func (cli *Client) Feesplit() exposed.Feesplit {
 	return cli.modules[feesplitTypes.ModuleName].(exposed.Feesplit)
+}
+
+func (cli *Client) Icamauth() exposed.Icamauth {
+	return cli.modules[icamauthtypes.ModuleName].(exposed.Icamauth)
 }

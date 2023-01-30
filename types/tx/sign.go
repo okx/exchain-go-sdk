@@ -1,9 +1,10 @@
 package tx
 
 import (
+	"github.com/okex/exchain/app/crypto/hd"
 	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
 	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	"github.com/okex/exchain/app/crypto/hd"
+	"github.com/okex/exchain/libs/tendermint/crypto"
 )
 
 var (
@@ -25,4 +26,8 @@ func MakeSignature(name, passphrase string, msg authtypes.StdSignMsg) (sig autht
 		PubKey:    pubkey,
 		Signature: sigBytes,
 	}, nil
+}
+
+func ExportPrivateKeyObject(name, passphrase string) (crypto.PrivKey, error) {
+	return Kb.ExportPrivateKeyObject(name, passphrase)
 }

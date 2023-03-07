@@ -11,7 +11,7 @@ require (
 	github.com/okex/exchain v1.6.4
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/stretchr/testify v1.8.0
-	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect
+	golang.org/x/net v0.7.0 // indirect
 )
 
 replace (

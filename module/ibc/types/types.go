@@ -1,7 +1,7 @@
 package types
 
 import (
-	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
+	ibcTypes "github.com/okx/okbchain/libs/ibc-go/modules/apps/transfer/types"
 )
 
 // const

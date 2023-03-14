@@ -1,11 +1,11 @@
 package staking
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/x/staking"
+	"github.com/okx/okbchain/libs/cosmos-sdk/codec"
+	"github.com/okx/okbchain/x/staking"
 )
 
 var _ gosdktypes.Module = (*stakingClient)(nil)

@@ -1,13 +1,13 @@
 package types
 
 import (
-	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
-	tmtypes "github.com/okex/exchain/libs/tendermint/types"
+	ctypes "github.com/okx/okbchain/libs/tendermint/rpc/core/types"
+	tmtypes "github.com/okx/okbchain/libs/tendermint/types"
 )
 
 // const
 const (
-	ModuleName = "tendermint"
+	ModuleName  = "tendermint"
 	EventFormat = "{eventType}.{eventAttribute}={value}"
 )
 

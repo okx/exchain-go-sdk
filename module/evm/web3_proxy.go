@@ -11,13 +11,13 @@ import (
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	"github.com/okex/exchain-go-sdk/utils"
-	rpctypes "github.com/okex/exchain/app/rpc/types"
-	apptypes "github.com/okex/exchain/app/types"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth/exported"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	rpctypes "github.com/okx/okbchain/app/rpc/types"
+	apptypes "github.com/okx/okbchain/app/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/x/auth"
+	"github.com/okx/okbchain/libs/cosmos-sdk/x/auth/exported"
+	authtypes "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/types"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 )
 
 // Web3Proxy returns the client with exposed.Web3Proxy's behaviour

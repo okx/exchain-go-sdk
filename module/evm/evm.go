@@ -1,11 +1,11 @@
 package evm
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	evm "github.com/okex/exchain/x/evm/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/codec"
+	evm "github.com/okx/okbchain/x/evm/types"
 )
 
 var _ gosdktypes.Module = (*evmClient)(nil)

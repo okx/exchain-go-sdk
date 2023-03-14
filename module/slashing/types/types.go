@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/okex/exchain/x/slashing"
+	"github.com/okx/okbchain/x/slashing"
 )
 
 // const

@@ -3,14 +3,14 @@ package exposed
 import (
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
-	ibcTypes "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
-	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
-	chantypes "github.com/okex/exchain/libs/ibc-go/modules/core/04-channel/types"
-	ibcexported "github.com/okex/exchain/libs/ibc-go/modules/core/exported"
-	tmcrypto "github.com/okex/exchain/libs/tendermint/crypto"
-	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/types/query"
+	ibcTypes "github.com/okx/okbchain/libs/ibc-go/modules/apps/transfer/types"
+	client_types "github.com/okx/okbchain/libs/ibc-go/modules/core/02-client/types"
+	chantypes "github.com/okx/okbchain/libs/ibc-go/modules/core/04-channel/types"
+	ibcexported "github.com/okx/okbchain/libs/ibc-go/modules/core/exported"
+	tmcrypto "github.com/okx/okbchain/libs/tendermint/crypto"
+	ctypes "github.com/okx/okbchain/libs/tendermint/rpc/core/types"
 )
 
 // Ibc shows the expected behavior for inner ibc client

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/okex/exchain/x/common"
+	"github.com/okx/okbchain/x/common"
 )
 
 // UnmarshalListResponse unmarshals the list response from data bytes

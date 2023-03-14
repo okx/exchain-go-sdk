@@ -3,12 +3,12 @@ package staking
 import (
 	"fmt"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/types/params"
 	"github.com/okex/exchain-go-sdk/utils"
-	"github.com/okex/exchain/x/common"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/x/common"
+	stakingtypes "github.com/okx/okbchain/x/staking/types"
 )
 
 // Deposit deposits an amount of okt to delegator account

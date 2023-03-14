@@ -3,10 +3,10 @@ package staking
 import (
 	"fmt"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/staking/types"
 	"github.com/okex/exchain-go-sdk/utils"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	stakingtypes "github.com/okx/okbchain/x/staking/types"
 )
 
 // QueryValidators gets all the validators info

@@ -3,9 +3,9 @@ package evm
 import (
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	ethcore "github.com/ethereum/go-ethereum/core/types"
-	authcli "github.com/okex/exchain/libs/cosmos-sdk/x/auth/client/utils"
-	"github.com/okex/exchain/libs/tendermint/crypto/etherhash"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	authcli "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/client/utils"
+	"github.com/okx/okbchain/libs/tendermint/crypto/etherhash"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 )
 
 // GetTxHash calculates the tx hash

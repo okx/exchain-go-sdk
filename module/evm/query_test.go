@@ -11,7 +11,7 @@ import (
 	"github.com/okex/exchain-go-sdk/mocks"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
 	"github.com/okex/exchain-go-sdk/utils"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 	"github.com/stretchr/testify/require"
 )
 

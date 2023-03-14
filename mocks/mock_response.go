@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 )
 
 // DefaultMockSuccessTxResponse returns the default mock success tx response for transaction testing

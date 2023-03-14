@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/okex/exchain/x/common"
+	"github.com/okx/okbchain/x/common"
 	"github.com/stretchr/testify/require"
 )
 

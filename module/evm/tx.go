@@ -7,8 +7,8 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/rlp"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 )
 
 // SendTxEthereum sends an ethereum tx

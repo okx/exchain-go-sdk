@@ -3,12 +3,12 @@ package token
 import (
 	"fmt"
 
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/token/types"
 	"github.com/okex/exchain-go-sdk/types/params"
 	"github.com/okex/exchain-go-sdk/utils"
-	tokentypes "github.com/okex/exchain/x/token/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	tokentypes "github.com/okx/okbchain/x/token/types"
 )
 
 // Send transfers coins to other receiver

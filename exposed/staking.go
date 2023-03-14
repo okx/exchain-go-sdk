@@ -1,10 +1,10 @@
 package exposed
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/staking/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 )
 
 // Staking shows the expected behavior for inner staking client

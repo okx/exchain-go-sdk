@@ -5,7 +5,7 @@ import (
 
 	"github.com/okex/exchain-go-sdk/module/token/types"
 	"github.com/okex/exchain-go-sdk/types/params"
-	"github.com/okex/exchain/x/token"
+	"github.com/okx/okbchain/x/token"
 )
 
 // QueryTokenInfo gets token info with a specific symbol or the owner address

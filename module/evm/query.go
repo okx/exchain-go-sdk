@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/okex/exchain-go-sdk/module/evm/types"
 	"github.com/okex/exchain-go-sdk/utils"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 )
 
 // QueryCode gets the contract code from ExChain

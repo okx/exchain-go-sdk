@@ -11,7 +11,7 @@ import (
 	"github.com/okex/exchain-go-sdk/mocks"
 	"github.com/okex/exchain-go-sdk/module/auth"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 

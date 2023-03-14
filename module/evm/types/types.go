@@ -3,9 +3,9 @@ package types
 import (
 	"math/big"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	apptypes "github.com/okex/exchain/app/types"
-	evmtypes "github.com/okex/exchain/x/evm/types"
+	apptypes "github.com/okx/okbchain/app/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	evmtypes "github.com/okx/okbchain/x/evm/types"
 )
 
 // const

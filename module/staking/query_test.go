@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/mocks"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	tmbytes "github.com/okx/okbchain/libs/tendermint/libs/bytes"
+	stakingtypes "github.com/okx/okbchain/x/staking/types"
 	"github.com/stretchr/testify/require"
-	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
 )
 
 const (

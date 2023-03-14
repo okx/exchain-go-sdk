@@ -2,10 +2,10 @@ package exposed
 
 import (
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
-	"github.com/okex/exchain/x/feesplit/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/types/query"
+	"github.com/okx/okbchain/x/feesplit/types"
 )
 
 // Feesplit shows the expected behavior for inner Feesplit client

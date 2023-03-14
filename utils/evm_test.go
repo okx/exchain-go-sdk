@@ -5,9 +5,9 @@ import (
 	"math/big"
 	"testing"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	ethcmn "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -6,9 +6,9 @@ import (
 
 	"github.com/okex/exchain-go-sdk/module/auth/types"
 	"github.com/okex/exchain-go-sdk/utils"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/x/auth"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/x/auth"
+	authtypes "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/types"
 )
 
 // QueryAccount gets the account info

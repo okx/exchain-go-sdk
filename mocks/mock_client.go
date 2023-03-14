@@ -2,7 +2,6 @@ package mocks
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
@@ -10,30 +9,26 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/exposed"
 	auth "github.com/okex/exchain-go-sdk/module/auth/types"
-	dex "github.com/okex/exchain-go-sdk/module/dex/types"
 	distribution "github.com/okex/exchain-go-sdk/module/distribution/types"
 	evm "github.com/okex/exchain-go-sdk/module/evm/types"
-	farm "github.com/okex/exchain-go-sdk/module/farm/types"
 	governance "github.com/okex/exchain-go-sdk/module/governance/types"
-	order "github.com/okex/exchain-go-sdk/module/order/types"
 	slashing "github.com/okex/exchain-go-sdk/module/slashing/types"
 	staking "github.com/okex/exchain-go-sdk/module/staking/types"
 	tendermint "github.com/okex/exchain-go-sdk/module/tendermint/types"
 	token "github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	evmtypes "github.com/okex/exchain/app/types"
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	abci "github.com/okex/exchain/libs/tendermint/abci/types"
-	"github.com/okex/exchain/libs/tendermint/crypto"
-	tmbytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
-	"github.com/okex/exchain/libs/tendermint/libs/kv"
-	ctypes "github.com/okex/exchain/libs/tendermint/rpc/core/types"
-	tmtypes "github.com/okex/exchain/libs/tendermint/types"
-	govtypes "github.com/okex/exchain/x/gov/types"
-	orderkeeper "github.com/okex/exchain/x/order/keeper"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
+	evmtypes "github.com/okx/okbchain/app/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/codec"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	authtypes "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/types"
+	abci "github.com/okx/okbchain/libs/tendermint/abci/types"
+	"github.com/okx/okbchain/libs/tendermint/crypto"
+	tmbytes "github.com/okx/okbchain/libs/tendermint/libs/bytes"
+	"github.com/okx/okbchain/libs/tendermint/libs/kv"
+	ctypes "github.com/okx/okbchain/libs/tendermint/rpc/core/types"
+	tmtypes "github.com/okx/okbchain/libs/tendermint/types"
+	govtypes "github.com/okx/okbchain/x/gov/types"
+	stakingtypes "github.com/okx/okbchain/x/staking/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -89,24 +84,18 @@ func (mc *MockClient) GetCodec() *codec.Codec {
 func (mc *MockClient) Auth() exposed.Auth {
 	return mc.modules[auth.ModuleName].(exposed.Auth)
 }
-func (mc *MockClient) Dex() exposed.Dex {
-	return mc.modules[dex.ModuleName].(exposed.Dex)
-}
+
 func (mc *MockClient) Distribution() exposed.Distribution {
 	return mc.modules[distribution.ModuleName].(exposed.Distribution)
 }
 func (mc *MockClient) Evm() exposed.Evm {
 	return mc.modules[evm.ModuleName].(exposed.Evm)
 }
-func (mc *MockClient) Farm() exposed.Farm {
-	return mc.modules[farm.ModuleName].(exposed.Farm)
-}
+
 func (mc *MockClient) Governance() exposed.Governance {
 	return mc.modules[governance.ModuleName].(exposed.Governance)
 }
-func (mc *MockClient) Order() exposed.Order {
-	return mc.modules[order.ModuleName].(exposed.Order)
-}
+
 func (mc *MockClient) Slashing() exposed.Slashing {
 	return mc.modules[slashing.ModuleName].(exposed.Slashing)
 }
@@ -144,91 +133,6 @@ func (mc *MockClient) BuildAccountBytes(accAddrStr, accPubkeyStr, codeHash, coin
 	require.NoError(mc.t, err)
 
 	return bytes
-}
-
-// BuildTokenPairsResponseBytes generates the response of token pairs bytes for test
-func (mc *MockClient) BuildTokenPairsResponseBytes(baseAssetSymbol1, baseAssetSymbol2, quoteAssetSymbol string, initPrice,
-	minQuantity sdk.Dec, maxPriceDigit, maxQuantityDigit, blockHeight1, blockHeight2 int64, ID1, ID2 uint64, delisting bool,
-	owner sdk.AccAddress, deposits sdk.DecCoin) []byte {
-	tokenPairs := []dex.TokenPair{
-		{
-			BaseAssetSymbol:  baseAssetSymbol1,
-			QuoteAssetSymbol: quoteAssetSymbol,
-			InitPrice:        initPrice,
-			MaxPriceDigit:    maxPriceDigit,
-			MaxQuantityDigit: maxQuantityDigit,
-			MinQuantity:      minQuantity,
-			ID:               ID1,
-			Delisting:        delisting,
-			Owner:            owner,
-			Deposits:         deposits,
-			BlockHeight:      blockHeight1,
-		},
-		{
-			BaseAssetSymbol:  baseAssetSymbol2,
-			QuoteAssetSymbol: quoteAssetSymbol,
-			InitPrice:        initPrice,
-			MaxPriceDigit:    maxPriceDigit,
-			MaxQuantityDigit: maxQuantityDigit,
-			MinQuantity:      minQuantity,
-			ID:               ID2,
-			Delisting:        delisting,
-			Owner:            owner,
-			Deposits:         deposits,
-			BlockHeight:      blockHeight2,
-		},
-	}
-
-	response := dex.ListResponse{
-		Data: dex.ListDataRes{
-			Data: tokenPairs,
-		},
-	}
-
-	res, err := json.Marshal(response)
-	require.NoError(mc.t, err)
-	return res
-}
-
-// BuildOrderDetailBytes generates the order detail bytes for test
-func (mc *MockClient) BuildOrderDetailBytes(txHash, orderID, extraInfo, product, side string, status, timestamp,
-	orderExpireBlocks int64, sender sdk.AccAddress, price, quantity, filledAvgPrice, remainQuantity, remainLocked sdk.Dec,
-	feePerBlock sdk.DecCoin) []byte {
-	orderDetail := order.OrderDetail{
-		TxHash:            txHash,
-		OrderID:           orderID,
-		Sender:            sender,
-		Product:           product,
-		Side:              side,
-		Price:             price,
-		Quantity:          quantity,
-		Status:            status,
-		FilledAvgPrice:    filledAvgPrice,
-		RemainQuantity:    remainQuantity,
-		RemainLocked:      remainLocked,
-		Timestamp:         timestamp,
-		OrderExpireBlocks: orderExpireBlocks,
-		FeePerBlock:       feePerBlock,
-		ExtraInfo:         extraInfo,
-	}
-
-	return mc.cdc.MustMarshalJSON(orderDetail)
-}
-
-// BuildBookResBytes generates the book result bytes for test
-func (mc *MockClient) BuildBookResBytes(askPrice, askQuantity, bidPrice, bidQuantity string) []byte {
-	var bookRes orderkeeper.BookRes
-	bookRes.Asks = append(bookRes.Asks, orderkeeper.BookResItem{
-		Price:    askPrice,
-		Quantity: askQuantity,
-	})
-
-	bookRes.Bids = append(bookRes.Bids, orderkeeper.BookResItem{
-		Price:    bidPrice,
-		Quantity: bidQuantity,
-	})
-
-	return mc.cdc.MustMarshalJSON(bookRes)
 }
 
 // BuildTokenInfoBytes generates the token info bytes for test
@@ -459,73 +363,6 @@ func (mc *MockClient) BuildProposalsBytes(proposalID uint64, status govtypes.Pro
 	return mc.cdc.MustMarshalJSON(proposals)
 }
 
-// BuildFarmPoolsBytes generates the farm pools bytes for test
-func (mc *MockClient) BuildFarmPoolsBytes(poolName1, poolName2, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
-	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
-	require.NoError(mc.t, err)
-
-	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
-	farmPools := []farm.FarmPool{
-		{
-			Owner:            ownerAddr,
-			Name:             poolName1,
-			MinLockAmount:    testDecCoin,
-			DepositAmount:    testDecCoin,
-			TotalValueLocked: testDecCoin,
-			YieldedTokenInfos: farm.YieldedTokenInfos{
-				{
-					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-					StartBlockHeightToYield: height,
-					AmountYieldedPerBlock:   amountDec,
-				},
-			},
-			TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
-		},
-		{
-			Owner:            ownerAddr,
-			Name:             poolName2,
-			MinLockAmount:    testDecCoin,
-			DepositAmount:    testDecCoin,
-			TotalValueLocked: testDecCoin,
-			YieldedTokenInfos: farm.YieldedTokenInfos{
-				{
-					RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-					StartBlockHeightToYield: height,
-					AmountYieldedPerBlock:   amountDec,
-				},
-			},
-			TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
-		},
-	}
-
-	return mc.cdc.MustMarshalJSON(farmPools)
-}
-
-// BuildFarmPoolBytes generates the farm pool bytes for test
-func (mc *MockClient) BuildFarmPoolBytes(poolName, ownerAddrStr, tokenSymbol string, height int64, amountDec sdk.Dec) []byte {
-	ownerAddr, err := sdk.AccAddressFromBech32(ownerAddrStr)
-	require.NoError(mc.t, err)
-
-	testDecCoin := sdk.NewDecCoinFromDec(tokenSymbol, amountDec)
-	farmPool := farm.FarmPool{
-		Owner:            ownerAddr,
-		Name:             poolName,
-		MinLockAmount:    testDecCoin,
-		DepositAmount:    testDecCoin,
-		TotalValueLocked: testDecCoin,
-		YieldedTokenInfos: farm.YieldedTokenInfos{
-			{
-				RemainingAmount:         sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-				StartBlockHeightToYield: height,
-				AmountYieldedPerBlock:   amountDec,
-			},
-		},
-		TotalAccumulatedRewards: sdk.SysCoins{testDecCoin},
-	}
-
-	return mc.cdc.MustMarshalJSON(farmPool)
-}
-
 // BuildFarmPoolNameList generates the farm pool name list bytes for test
 func (mc *MockClient) BuildFarmPoolNameListBytes(poolName ...string) []byte {
 	return mc.cdc.MustMarshalJSON(poolName)
@@ -534,19 +371,6 @@ func (mc *MockClient) BuildFarmPoolNameListBytes(poolName ...string) []byte {
 // BuildAccAddrList generates the account address list bytes for test
 func (mc *MockClient) BuildAccAddrListBytes(accAddr ...sdk.AccAddress) []byte {
 	return mc.cdc.MustMarshalJSON(accAddr)
-}
-
-// BuildLockInfoBytes generates the lock info bytes for test
-func (mc *MockClient) BuildLockInfoBytes(accAddr sdk.AccAddress, poolName, tokenSymbol string, amountDec sdk.Dec, height int64,
-	referencePeriod uint64) []byte {
-	info := farm.LockInfo{
-		Owner:            accAddr,
-		PoolName:         poolName,
-		Amount:           sdk.NewDecCoinFromDec(tokenSymbol, amountDec),
-		StartBlockHeight: height,
-		ReferencePeriod:  referencePeriod,
-	}
-	return mc.cdc.MustMarshalJSON(info)
 }
 
 // BuildQueryResCode generates query res code bytes for test

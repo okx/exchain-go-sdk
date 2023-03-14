@@ -1,9 +1,9 @@
 package exposed
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 )
 
 // Distribution shows the expected behavior for inner distribution client

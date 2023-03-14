@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/okex/exchain/libs/cosmos-sdk/types/query"
-	"github.com/okex/exchain/x/feesplit/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/types/query"
+	"github.com/okx/okbchain/x/feesplit/types"
 )
 
 func (c feesplitClient) QueryFeesplits(pageReq *query.PageRequest) (*types.QueryFeeSplitsResponse, error) {

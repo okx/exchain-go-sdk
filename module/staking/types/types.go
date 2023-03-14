@@ -1,8 +1,8 @@
 package types
 
 import (
-	stakingcli "github.com/okex/exchain/x/staking/client/cli"
-	stakingtypes "github.com/okex/exchain/x/staking/types"
+	stakingcli "github.com/okx/okbchain/x/staking/client/cli"
+	stakingtypes "github.com/okx/okbchain/x/staking/types"
 )
 
 // const

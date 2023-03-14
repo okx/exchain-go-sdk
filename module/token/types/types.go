@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/okex/exchain/x/token"
-	tokentypes "github.com/okex/exchain/x/token/types"
+	"github.com/okx/okbchain/x/token"
+	tokentypes "github.com/okx/okbchain/x/token/types"
 )
 
 // const

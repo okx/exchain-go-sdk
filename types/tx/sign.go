@@ -1,9 +1,9 @@
 package tx
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	authtypes "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	"github.com/okex/exchain/app/crypto/hd"
+	"github.com/okx/okbchain/app/crypto/hd"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	authtypes "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/types"
 )
 
 var (

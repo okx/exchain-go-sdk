@@ -1,19 +1,15 @@
 package governance
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/types/params"
-	dexutils "github.com/okex/exchain/x/dex/client/utils"
-	dextypes "github.com/okex/exchain/x/dex/types"
-	distrcli "github.com/okex/exchain/x/distribution/client/cli"
-	distrtypes "github.com/okex/exchain/x/distribution/types"
-	farmutils "github.com/okex/exchain/x/farm/client/utils"
-	farmtypes "github.com/okex/exchain/x/farm/types"
-	govutils "github.com/okex/exchain/x/gov/client/utils"
-	govtypes "github.com/okex/exchain/x/gov/types"
-	paramsutils "github.com/okex/exchain/x/params/client/utils"
-	paramstypes "github.com/okex/exchain/x/params/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	distrcli "github.com/okx/okbchain/x/distribution/client/cli"
+	distrtypes "github.com/okx/okbchain/x/distribution/types"
+	govutils "github.com/okx/okbchain/x/gov/client/utils"
+	govtypes "github.com/okx/okbchain/x/gov/types"
+	paramsutils "github.com/okx/okbchain/x/params/client/utils"
+	paramstypes "github.com/okx/okbchain/x/params/types"
 )
 
 // SubmitTextProposal submits the text proposal on ExChain
@@ -68,33 +64,6 @@ func (gc govClient) SubmitParamsChangeProposal(fromInfo keys.Info, passWd, propo
 	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 }
 
-// SubmitDelistProposal submits the proposal to delist a token pair from dex
-func (gc govClient) SubmitDelistProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum, seqNum uint64) (
-	resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return
-	}
-
-	proposal, err := dexutils.ParseDelistProposalJSON(gc.GetCodec(), proposalPath)
-	if err != nil {
-		return
-	}
-
-	msg := govtypes.NewMsgSubmitProposal(
-		dextypes.NewDelistProposal(
-			proposal.Title,
-			proposal.Description,
-			fromInfo.GetAddress(),
-			proposal.BaseAsset,
-			proposal.QuoteAsset,
-		),
-		proposal.Deposit,
-		fromInfo.GetAddress(),
-	)
-
-	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-}
-
 // SubmitCommunityPoolSpendProposal submits the proposal to spend the tokens from the community pool on ExChain
 func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
 	seqNum uint64) (resp sdk.TxResponse, err error) {
@@ -113,32 +82,6 @@ func (gc govClient) SubmitCommunityPoolSpendProposal(fromInfo keys.Info, passWd,
 			proposal.Description,
 			proposal.Recipient,
 			proposal.Amount,
-		),
-		proposal.Deposit,
-		fromInfo.GetAddress(),
-	)
-
-	return gc.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
-}
-
-// SubmitManageWhiteList submits the proposal to manage the white list member of farm module
-func (gc govClient) SubmitManageWhiteListProposal(fromInfo keys.Info, passWd, proposalPath, memo string, accNum,
-	seqNum uint64) (resp sdk.TxResponse, err error) {
-	if err = params.CheckKeyParams(fromInfo, passWd); err != nil {
-		return
-	}
-
-	proposal, err := farmutils.ParseManageWhiteListProposalJSON(gc.GetCodec(), proposalPath)
-	if err != nil {
-		return
-	}
-
-	msg := govtypes.NewMsgSubmitProposal(
-		farmtypes.NewManageWhiteListProposal(
-			proposal.Title,
-			proposal.Description,
-			proposal.PoolName,
-			proposal.IsAdded,
 		),
 		proposal.Deposit,
 		fromInfo.GetAddress(),

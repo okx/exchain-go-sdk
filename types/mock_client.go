@@ -5,15 +5,15 @@
 package types
 
 import (
-	tmtypes "github.com/okex/exchain/libs/tendermint/types"
+	tmtypes "github.com/okx/okbchain/libs/tendermint/types"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	codec "github.com/okex/exchain/libs/cosmos-sdk/codec"
-	types "github.com/okex/exchain/libs/cosmos-sdk/types"
-	types0 "github.com/okex/exchain/libs/cosmos-sdk/x/auth/types"
-	bytes "github.com/okex/exchain/libs/tendermint/libs/bytes"
-	types1 "github.com/okex/exchain/libs/tendermint/rpc/core/types"
+	codec "github.com/okx/okbchain/libs/cosmos-sdk/codec"
+	types "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	types0 "github.com/okx/okbchain/libs/cosmos-sdk/x/auth/types"
+	bytes "github.com/okx/okbchain/libs/tendermint/libs/bytes"
+	types1 "github.com/okx/okbchain/libs/tendermint/rpc/core/types"
 )
 
 // MockBaseClient is a mock of BaseClient interface.

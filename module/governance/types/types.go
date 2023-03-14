@@ -1,7 +1,7 @@
 package types
 
 import (
-	govtypes "github.com/okex/exchain/x/gov/types"
+	govtypes "github.com/okx/okbchain/x/gov/types"
 )
 
 // const

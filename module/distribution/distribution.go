@@ -1,11 +1,11 @@
 package distribution
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	"github.com/okex/exchain-go-sdk/exposed"
 	"github.com/okex/exchain-go-sdk/module/distribution/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/x/distribution"
+	"github.com/okx/okbchain/libs/cosmos-sdk/codec"
+	"github.com/okx/okbchain/x/distribution"
 )
 
 var _ gosdktypes.Module = (*distrClient)(nil)

@@ -1,10 +1,10 @@
 package exposed
 
 import (
-	"github.com/okex/exchain/libs/cosmos-sdk/crypto/keys"
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/okex/exchain-go-sdk/module/token/types"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
+	"github.com/okx/okbchain/libs/cosmos-sdk/crypto/keys"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
 )
 
 // Token shows the expected behavior for inner token client

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"testing"
 
-	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/okex/exchain-go-sdk/mocks"
 	gosdktypes "github.com/okex/exchain-go-sdk/types"
-	"github.com/okex/exchain/x/token"
+	sdk "github.com/okx/okbchain/libs/cosmos-sdk/types"
+	"github.com/okx/okbchain/x/token"
 	"github.com/stretchr/testify/require"
 )
 

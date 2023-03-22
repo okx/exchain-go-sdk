@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"encoding/hex"
 	"fmt"
+	"strings"
 
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"
 )
@@ -34,4 +36,22 @@ func ValAddrPrefixConvert(srcPrefx, srcValAddrStr, dstPrefix string) (dstValAddr
 	// set destination prefix
 	config.SetBech32PrefixForValidator(dstPrefix, fmt.Sprintf("%s%s", dstPrefix, sdk.PrefixPublic))
 	return valAddr.String(), err
+}
+
+// IsValidHexAdress
+func IsValidHexAdress(address string) bool {
+	if address == "" {
+		return false
+	}
+
+	if !strings.HasPrefix(address, "0x") {
+		return false
+	}
+
+	_, err := hex.DecodeString(address[2:])
+	if err != nil {
+		return false
+	}
+
+	return true
 }

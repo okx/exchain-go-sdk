@@ -138,10 +138,9 @@ func (cli *Client) Ibc() exposed.Ibc {
 	return cli.modules[ibcTypes.ModuleName].(exposed.Ibc)
 }
 
-
 func (cli *Client) Wasm() exposed.Wasm {
 	return cli.modules[wasmTypes.ModuleName].(exposed.Wasm)
-
+}
 func (cli *Client) Feesplit() exposed.Feesplit {
 	return cli.modules[feesplitTypes.ModuleName].(exposed.Feesplit)
 }

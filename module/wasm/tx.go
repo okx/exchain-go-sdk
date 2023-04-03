@@ -20,7 +20,7 @@ func (c wasmClient) StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum 
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (c wasmClient) InstantiateContract(fromInfo keys.Info, passWd string, accNu
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c wasmClient) ExecuteContract(fromInfo keys.Info, passWd string, accNum, s
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (c wasmClient) MigrateContract(fromInfo keys.Info, passWd string, accNum, s
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (c wasmClient) UpdateContractAdmin(fromInfo keys.Info, passWd string, accNu
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (c wasmClient) ClearContractAdmin(fromInfo keys.Info, passWd string, accNum
 		return nil, err
 	}
 
-	res, err := c.BuildAndBroadcast(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
+	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
 		return nil, err
 	}

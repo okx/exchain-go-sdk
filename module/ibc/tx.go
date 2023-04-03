@@ -3,6 +3,7 @@ package ibc
 import (
 	"fmt"
 	"github.com/okex/exchain-go-sdk/module/auth"
+	"github.com/okex/exchain/libs/cosmos-sdk/types/errors"
 	ibcmsg "github.com/okex/exchain/libs/cosmos-sdk/types/ibc-adapter"
 	"math/big"
 	"strings"
@@ -19,6 +20,7 @@ import (
 	ibc_type "github.com/okex/exchain/libs/ibc-go/modules/apps/transfer/types"
 	client_types "github.com/okex/exchain/libs/ibc-go/modules/core/02-client/types"
 	tmcrypto "github.com/okex/exchain/libs/tendermint/crypto"
+	cmwraptx "github.com/okex/exchain/libs/tendermint/types"
 )
 
 const (
@@ -113,7 +115,17 @@ func (ibc ibcClient) Transfer(priKey tmcrypto.PrivKey, srcChannel string, receiv
 		return sdk.TxResponse{}, err
 	}
 
-	return ibc.Broadcast(txBytes, "sync")
+	wrapedTx := &cmwraptx.WrapCMTx{
+		Tx:    txBytes,
+		Nonce: accountInfo.GetSequence(),
+	}
+
+	txBytes, err = ibc.GetCodec().MarshalJSON(wrapedTx)
+	if err != nil {
+		return sdk.TxResponse{}, errors.Wrap(err, "MarshalJSON fail")
+	}
+
+	return ibc.Broadcast(txBytes, ibc.BroadcastMode)
 }
 
 // get Client Height from destination chain

@@ -8,8 +8,7 @@ import (
 	"github.com/okex/exchain-go-sdk/types/tx"
 	"github.com/okex/exchain-go-sdk/utils"
 
-	// extypes "github.com/okex/exchain/libs/tendermint/types"
-	extypes "exchain_lyh/libs/tendermint/types" // #######
+	extypes "github.com/okex/exchain/libs/tendermint/types"
 
 	"github.com/okex/exchain/libs/cosmos-sdk/codec"
 	sdk "github.com/okex/exchain/libs/cosmos-sdk/types"

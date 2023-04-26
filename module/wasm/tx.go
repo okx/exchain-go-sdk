@@ -8,42 +8,51 @@ import (
 	"github.com/okex/exchain/x/wasm/ioutils"
 	"github.com/okex/exchain/x/wasm/types"
 	"io/ioutil"
+	"strconv"
+	"strings"
 )
 
-func (c wasmClient) StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, wasmFilePath string, onlyAddr string, everybody, nobody bool) (*sdk.TxResponse, error) {
+func (c wasmClient) StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, wasmFilePath string, onlyAddr string, everybody, nobody bool) (int, error) {
 	msg, err := parseStoreCodeMsg(wasmFilePath, fromInfo.GetAddress(), onlyAddr, everybody, nobody)
 	if err != nil {
-		return nil, errors.Wrapf(err, "parse StoreCodeMsg failed")
+		return 0, errors.Wrapf(err, "parse StoreCodeMsg failed")
 	}
 
 	if err = msg.ValidateBasic(); err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &res, nil
+	if res.Code != 0 {
+		return 0, errors.New("wasm", res.Code, "send tx failed"+res.String())
+	}
+
+	return parseCodeID(res.RawLog), nil
 }
 
-func (c wasmClient) InstantiateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, initMsg string, amount string, label string, adminAddr string, noAdmin bool) (*sdk.TxResponse, error) {
+func (c wasmClient) InstantiateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, initMsg string, amount string, label string, adminAddr string, noAdmin bool) (string, error) {
 	msg, err := parseInstantiateMsg(codeID, initMsg, fromInfo.GetAddress(), amount, label, adminAddr, noAdmin)
 	if err != nil {
-		return nil, errors.Wrapf(err, "parse InstantiateContractMsg failed")
+		return "", errors.Wrapf(err, "parse InstantiateContractMsg failed")
 	}
 
 	if err = msg.ValidateBasic(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	res, err := c.BuildAndBroadcastWithNonce(fromInfo.GetName(), passWd, memo, []sdk.Msg{msg}, accNum, seqNum)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return &res, nil
+	if res.Code != 0 {
+		return "", errors.New("wasm", res.Code, "send tx failed"+res.String())
+	}
+	return parseContractAddress(res.RawLog), nil
 }
 
 func (c wasmClient) ExecuteContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string, execMsg string, amount string) (*sdk.TxResponse, error) {
@@ -226,4 +235,19 @@ func parseMigrateContractMsg(codeID uint64, contractAddr string, sender sdk.AccA
 		Msg:      []byte(migrateMsg),
 	}
 	return msg, nil
+}
+
+func parseCodeID(str string) int {
+	index := strings.LastIndex(str, ":")
+	codeIDStr := str[index:]
+	codeIDStr = codeIDStr[2 : strings.Index(codeIDStr, "}")-1]
+	codeID, _ := strconv.Atoi(codeIDStr)
+
+	return codeID
+}
+
+func parseContractAddress(str string) string {
+	index := strings.Index(str, "address")
+	contractAddr := str[index+18 : index+18+42]
+	return contractAddr
 }

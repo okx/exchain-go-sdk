@@ -17,10 +17,10 @@ type Wasm interface {
 
 type wasmTx interface {
 	// StoreCode upload a wasm binary to the chain
-	StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, wasmFilePath string, onlyAddr string, everybody, nobody bool) (*sdk.TxResponse, error)
+	StoreCode(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, wasmFilePath string, onlyAddr string, everybody, nobody bool) (int, error)
 
 	// InstantiateContract instantiate a wasm contract by given the codeID
-	InstantiateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, initMsg string, amount string, label string, adminAddr string, noAdmin bool) (*sdk.TxResponse, error)
+	InstantiateContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, codeID uint64, initMsg string, amount string, label string, adminAddr string, noAdmin bool) (string, error)
 
 	// ExecuteContract execute a command on a wasm contract
 	ExecuteContract(fromInfo keys.Info, passWd string, accNum, seqNum uint64, memo string, contractAddr string, execMsg string, amount string) (*sdk.TxResponse, error)

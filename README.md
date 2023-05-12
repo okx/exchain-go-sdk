@@ -27,7 +27,7 @@ The developer can get the ExChain Go SDK directly by `git clone` from github : h
 
 ### 3. API
 
-The api functions of transactions and queries are all under the path `expose`. You can find more details in ExChain-docs : https://exchain-docs.readthedocs.io/en/latest/api/sdk/go-sdk.html
+The api functions of transactions and queries are all under the path `expose`. You can find more details in OKTC docs : https://www.okx.com/cn/oktc/docs/dev/sdk/go-sdk
 
 ### 4. Tendermint query
 

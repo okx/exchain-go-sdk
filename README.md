@@ -71,4 +71,3 @@ All changes and addition of codes will be pushed with unit tests strictly.
 ### 7. Contributing
 
 No doubt that it's admirable to make contributions to ExChain Go SDK. You can provide your code as long as you have tested it with a local client and your unit test showed its validity.  
-

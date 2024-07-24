@@ -20,13 +20,13 @@ const (
 	// user's name
 	name = "admin17"
 	// user's mnemonic
-	mnemonic = "antique onion adult slot sad dizzy sure among cement demise submit scare"
+	mnemonic = ""
 	// user's password
 	passWd = "12345678"
 	// target address
 	addr            = "cosmos1n064mg7jcxt2axur29mmek5ys7ghta4u4mhcjp"
 	baseCoin        = "okt"
-	aliceKey string = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
+	aliceKey string = ""
 )
 
 func main() {

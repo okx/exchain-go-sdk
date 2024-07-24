@@ -44,7 +44,7 @@ The tendermint query functions could be found in the file `exposed/tendermint.go
 	rpcURL   = "https://exchaintesttmrpc.okex.org"
 	name     = "alice"
 	passWd   = "12345678"
-	mnemonic = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
+	mnemonic = ""
 	addr     = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 	
 	// build the client with own config

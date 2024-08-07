@@ -15,7 +15,7 @@ const (
 	// user's name
 	name = "alice"
 	// user's mnemonic
-	mnemonic = "giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool"
+	mnemonic = ""
 	// user's password
 	passWd = "12345678"
 	// target address
